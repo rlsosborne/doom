@@ -130,9 +130,7 @@ byte    *dc_source;      // first pixel in a column (possibly virtual)
 //  will always have constant z depth.
 // Thus a special case loop for very fast rendering can
 //  be used. It has also been used with Wolfenstein 3D.
-// 
-
-#ifndef I386_ASM     // killough 2/15/98
+//
 
 void R_DrawColumn_Normal (void) 
 {
@@ -287,8 +285,6 @@ void R_DrawColumn_HighRes (void)
         R_DrawColumn_Normal();
 }
 
-#endif
-
 // Here is the version of R_DrawColumn that deals with translucent  // phares
 // textures and sprites. It's identical to R_DrawColumn except      //    |
 // for the spot where the color index is stuffed into *dest. At     //    V
@@ -300,8 +296,6 @@ void R_DrawColumn_HighRes (void)
 // Since we're concerned about performance, the 'translucent or
 // opaque' decision is made outside this routine, not down where the
 // actual code differences are.
-
-#ifndef I386_ASM                       // killough 2/21/98: converted to x86 asm
 
 void R_DrawTLColumn_Normal (void)                                           
 { 
@@ -391,8 +385,6 @@ void R_DrawTLColumn_HighRes (void)
 {
 	R_DrawTLColumn_Normal();
 }
-#endif  // killough 2/21/98: converted to x86 asm
-
 //
 // Spectre/Invisibility.
 //
@@ -618,9 +610,7 @@ fixed_t ds_xstep;
 fixed_t ds_ystep;
 
 // start of a 64*64 tile image 
-byte *ds_source;        
-
-#ifndef I386_ASM      // killough 2/15/98
+byte *ds_source;
 
 void R_DrawSpan (void) 
 { 
@@ -688,9 +678,7 @@ void R_DrawSpan (void)
       *dest++ = colormap[source[spot]]; 
       count--;
     } 
-} 
-
-#endif
+}
 
 //
 // R_InitBuffer 

@@ -59,32 +59,6 @@ typedef int fixed_t;
  * Fixed Point Multiplication
  */
 
-#ifdef I386_ASM
-
-/* killough 5/10/98: In djgpp, use inlined assembly for performance
- * CPhipps - made __inline__ to inline, as specified in the gcc docs
- * Also made const */
-inline static const fixed_t FixedMul(fixed_t a, fixed_t b)
-{
-  fixed_t result;
-  int dummy;
-
-  asm("  imull %3 ;"
-      "  shrdl $16,%1,%0 ;"
-      : "=a" (result),          /* eax is always the result */
-        "=d" (dummy)		/* cphipps - fix compile problem with gcc-2.95.1
-				   edx is clobbered, but it might be an input */
-      : "0" (a),                /* eax is also first operand */
-        "r" (b)                 /* second operand could be mem or reg before,
-				   but gcc compile problems mean i can only us reg */
-      : "%cc"                   /* edx and condition codes clobbered */
-      );
-
-  return result;
-}
-
-#else /* I386_ASM */
-
 /* CPhipps - made __inline__ to inline, as specified in the gcc docs
  * Also made const */
 inline static const fixed_t FixedMul(fixed_t a, fixed_t b)
@@ -92,39 +66,10 @@ inline static const fixed_t FixedMul(fixed_t a, fixed_t b)
   return (fixed_t)((int_64_t) a*b >> FRACBITS);
 }
 
-#endif /* I386_ASM */
-
 /*
  * Fixed Point Division
  */
 
-#ifdef I386_ASM
-
-/* killough 5/10/98: In djgpp, use inlined assembly for performance
- * killough 9/5/98: optimized to reduce the number of branches
- * CPhipps - made __inline__ to inline, as specified in the gcc docs
- * Also made const */
-inline static const fixed_t FixedDiv(fixed_t a, fixed_t b)
-{
-  if (abs(a) >> 14 < abs(b))
-    {
-      fixed_t result;
-      int dummy;
-      asm(" idivl %4 ;"
-	  : "=a" (result),
-	    "=d" (dummy)  /* cphipps - fix compile problems with gcc 2.95.1
-			     edx is clobbered, but also an input */
-	  : "0" (a<<16),
-	    "1" (a>>16),
-	    "r" (b)
-	  : "%cc"
-	  );
-      return result;
-    }
-  return ((a^b)>>31) ^ INT_MAX;
-}
-
-#else /* I386_ASM */
 /* CPhipps - made __inline__ to inline, as specified in the gcc docs
  * Also made const */
 inline static const fixed_t FixedDiv(fixed_t a, fixed_t b)
@@ -132,8 +77,6 @@ inline static const fixed_t FixedDiv(fixed_t a, fixed_t b)
   return (abs(a)>>14) >= abs(b) ? ((a^b)>>31) ^ INT_MAX :
     (fixed_t)(((int_64_t) a << FRACBITS) / b);
 }
-
-#endif /* I386_ASM */
 
 /* CPhipps - 
  * FixedMod - returns a % b, guaranteeing 0<=a<b
