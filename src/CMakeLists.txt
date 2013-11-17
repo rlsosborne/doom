@@ -59,8 +59,6 @@ add_executable(
   l_sound_sdl.c
   l_system.c
   l_video_sdl.c
-  l_video_trans.c
-  l_video_trans.h
   lprintf.c
   lprintf.h
   m_argv.c

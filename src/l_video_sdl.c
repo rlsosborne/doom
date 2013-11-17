@@ -46,7 +46,6 @@ rcsid[] = "$Id: l_video_x.c,v 1.27 1999/10/12 13:01:11 cphipps Exp $";
 #include "r_draw.h"
 #include "d_main.h"
 #include "d_event.h"
-#include "l_video_trans.h"
 #include "i_joy.h"
 #include "i_video.h"
 #include "z_zone.h"
@@ -66,9 +65,6 @@ static SDL_Renderer *sdlrenderer;
 static SDL_Texture *sdltexture;
 static SDL_Palette *sdlpalette;
 static SDL_Surface *screen;
-
-// This is the pointer to the buffer to blit
-pval     *      out_buffer = NULL;
 
 // Common const strings
 static const char lcase_lxdoom[] = { "lsdldoom" };
@@ -339,10 +335,7 @@ static void I_UploadNewPalette(int pal)
 void I_ShutdownGraphics(void)
 {
   fprintf(stderr, "I_ShutdownGraphics : ");
-
-  // Free internal structures
-  if (pixelvals != NULL) free(pixelvals);
-  I_EndImageTranslation();
+  // TODO free SDL stuff...
   fprintf(stderr, "\n");
 }
 
@@ -365,10 +358,6 @@ void I_FinishUpdate (void)
     return;
   }
 #endif
-  
-  // scales the screen size before blitting it
-  if (expand_buffer)
-    (*I_ExpandImage)(out_buffer, screens[0]);
   
   // Update the display buffer
   SDL_Surface *converted =
@@ -394,13 +383,7 @@ void I_ReadScreen (byte* scr)
 //
 void I_SetPalette (int pal)
 {
-  if (true_color) {
-    int            lump = W_GetNumForName("PLAYPAL");
-    const byte *palette = W_CacheLumpNum(lump);
-    I_SetPaletteTranslation(palette + (3*256)*pal);
-    W_UnlockLumpNum(lump);
-  } else
-    I_UploadNewPalette(pal);
+  I_UploadNewPalette(pal);
 }
 
 // I_PreInitGraphics
@@ -439,6 +422,7 @@ void I_InitGraphics(void)
 {
   int           w, h;
   int		n;
+  int		multiply = 1;
   Uint32        init_flags;
   
   {  
@@ -459,8 +443,8 @@ void I_InitGraphics(void)
     }
   }
   
-  w = SCREENWIDTH * multiply;
-  h = SCREENHEIGHT * multiply;
+  w = SCREENWIDTH;
+  h = SCREENHEIGHT;
   
   // Initialize SDL with this graphics mode
   if ( SDL_Init(SDL_INIT_VIDEO) < 0 ) {
@@ -474,35 +458,21 @@ void I_InitGraphics(void)
   sdlwindow = SDL_CreateWindow(lcase_lxdoom,
                                SDL_WINDOWPOS_UNDEFINED,
                                SDL_WINDOWPOS_UNDEFINED,
-                               w, h,
+                               w * multiply, h * multiply,
                                init_flags);
   sdlrenderer = SDL_CreateRenderer(sdlwindow, -1, 0);
+  SDL_RenderSetScale(sdlrenderer, multiply, multiply);
   sdltexture = SDL_CreateTexture(sdlrenderer, SDL_PIXELFORMAT_RGBX8888,
                                  SDL_TEXTUREACCESS_STREAMING, w, h);
   screen = SDL_CreateRGBSurface(0, w, h, 8, 0, 0, 0, 0);
   sdlpalette = SDL_AllocPalette(256);
   SDL_SetSurfacePalette(screen, sdlpalette);
-  dest_bpp = screen->format->BitsPerPixel;
 
-  I_InitImageTranslation();
-  if (true_color) {
-    // Set up colour shifts
-    I_SetColourShift(screen->format->Rmask, &redshift);
-    I_SetColourShift(screen->format->Gmask, &greenshift);
-    I_SetColourShift(screen->format->Bmask, &blueshift);
-  }
+  lprintf(LO_INFO,"I_InitGraphics: SDL\n");
 
-  lprintf(LO_INFO,"I_InitGraphics:");
-  lprintf(LO_INFO, " SDL %d bpp %s, scale x%d\n", dest_bpp,
-	  screen->format->palette ? "PseudoColor" : "TrueColor", multiply);
-
-  // Get the info needed to render to the display
-  out_buffer = (pval *)screen->pixels;
-  if (!expand_buffer) {
-    // Render directly into SDL display memory
-    Z_Free(screens[0]);
-    screens[0] = (unsigned char *) (screen->pixels); 
-  }
+  // Render directly into SDL display memory
+  Z_Free(screens[0]);
+  screens[0] = (unsigned char *) (screen->pixels);
 
   atexit(I_ShutdownGraphics);
 
