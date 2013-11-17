@@ -7,6 +7,8 @@ set(CMAKE_MODULE_PATH
   "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules"
   )
 
+find_package(SDL2_mixer)
+
 include(TestBigEndian)
 include(CheckIncludeFiles)
 include(CheckSymbolExists)
@@ -18,6 +20,9 @@ check_include_files("sys/ioctl.h" HAVE_SYS_IOCTL_H)
 check_symbol_exists(strcasecmp strings.h LSDLDOOM_HAVE_STRCASECMP)
 check_symbol_exists(socket "sys/socket.h" HAVE_NET)
 check_symbol_exists(inet_aton "arpa/inet.h" HAVE_INET_ATON)
+if(SDL2_MIXER_FOUND)
+  set(HAVE_MIXER True)
+endif()
 set(DOOMWADDIR "${CMAKE_INSTALL_PREFIX}/share/games/doom")
 set(SNDSERV_PATH "")
 if (NOT "${SNDSERV_PATH}" MATCHES "")
