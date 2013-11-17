@@ -31,6 +31,8 @@
 static const char rcsid[] = "$Id: l_video_trans.c,v 1.16 1999/12/13 17:22:43 cphipps Exp $";
 #endif /* lint */
 
+#include <stdint.h>
+
 #ifdef LINUX
 
 // Use the standard ffz
@@ -39,9 +41,9 @@ static const char rcsid[] = "$Id: l_video_trans.c,v 1.16 1999/12/13 17:22:43 cph
 #else
 
 // Portable equivalent
-static const inline unsigned long ffz(unsigned long x)
+static const inline uint32_t ffz(uint32_t x)
 {
-  unsigned long r = 0;
+  uint32_t r = 0;
   while (x & 1) {
     x >>= 1;
     r++;
@@ -84,7 +86,7 @@ colourshift_t redshift, greenshift, blueshift;
 //
 // Constructs the shifts necessary to set one element of an RGB colour value
 
-void I_SetColourShift(unsigned long mask, colourshift_t* ps)
+void I_SetColourShift(uint32_t mask, colourshift_t* ps)
 {
   // Find first 1 bit; pshift is the position of the 1 bit
   // Also add 1 to this bit; as bits are contiguous, this should 
@@ -104,7 +106,7 @@ void I_SetPaletteTranslation(const byte* palette)
 {
   // This builds a suitable palette for DirectColor and TrueColor modes
   register unsigned short int i = 256;
-  register unsigned long*     ppnum;
+  register uint32_t*     ppnum;
   register const byte *const  gtable = gammatable[usegamma];
 
   pv_changed = true; // Flag the buffer copying routines that palette
@@ -130,8 +132,8 @@ void I_SetPaletteTranslation(const byte* palette)
 
 static void I_Double8Buf(pval* out_buffer, const byte* src)
 {
-  register unsigned long *olineptr = out_buffer;
-  register const unsigned long *ilineptr = (const unsigned long*)src;
+  register uint32_t *olineptr = out_buffer;
+  register const uint32_t *ilineptr = (const uint32_t*)src;
   int y = SCREENHEIGHT;
 
   do {
@@ -139,7 +141,7 @@ static void I_Double8Buf(pval* out_buffer, const byte* src)
     do {
       register unsigned int twoopixels;
       register unsigned int twomoreopixels;
-      unsigned long* oline2ptr = olineptr + SCREENWIDTH*2 / sizeof(*olineptr);
+      uint32_t* oline2ptr = olineptr + SCREENWIDTH*2 / sizeof(*olineptr);
 #ifndef I386_ASM
       unsigned int fouripixels = *ilineptr++;
       twoopixels =	(fouripixels & 0xff000000)
@@ -180,8 +182,8 @@ static void I_Double8Buf(pval* out_buffer, const byte* src)
 
 static void I_Triple8Buf(pval* out_buffer, const byte* src)
 {
-  register unsigned long *olineptr = out_buffer;
-  const unsigned long *ilineptr = (const unsigned long*)src;
+  register uint32_t *olineptr = out_buffer;
+  const uint32_t *ilineptr = (const uint32_t*)src;
   int x, y;
   unsigned int fouropixels[3];
   unsigned int fouripixels;
@@ -274,9 +276,9 @@ static void I_Copyto16Buf(pval* out_buffer, const byte* src)
 static void I_Double16Buf(pval* out_buffer, const byte* src)
 {
   register const byte* iptr = src;
-  register unsigned long* optr = out_buffer;
+  register uint32_t* optr = out_buffer;
   int y = SCREENHEIGHT;
-  static unsigned long* pixelpair = NULL;
+  static uint32_t* pixelpair = NULL;
 
   if (pixelvals == NULL) return;
 
@@ -299,7 +301,7 @@ static void I_Double16Buf(pval* out_buffer, const byte* src)
     int x = SCREENWIDTH/4;
 
     do {
-      unsigned long* optr2 = optr + 4*SCREENWIDTH / sizeof(*optr);
+      uint32_t* optr2 = optr + 4*SCREENWIDTH / sizeof(*optr);
 
       optr[0] = optr2[0] = pixelpair[iptr[0]];
       optr[1] = optr2[1] = pixelpair[iptr[1]];
@@ -317,7 +319,7 @@ static void I_Double16Buf(pval* out_buffer, const byte* src)
 
 #ifdef I386
 // Nasty cast needed for outputting 3-byte pixelvals
-#define LONG_AT(p) *((unsigned long*)(p))
+#define LONG_AT(p) *((uint32_t*)(p))
 
 static byte buffor24bpp[4*3+1];
 
@@ -377,7 +379,7 @@ static void I_Double24Buf(pval* out_buffer, const byte* src)
 static void I_Copyto32Buf(pval* out_buffer, const byte* src)
 {
   register const byte* iptr = src;
-  register unsigned long* optr = (unsigned long*)out_buffer;
+  register uint32_t* optr = (uint32_t*)out_buffer;
   int count = SCREENHEIGHT * SCREENWIDTH / 4;
 
   if (pixelvals == NULL) return;
@@ -418,7 +420,7 @@ static void I_Copyto32Buf(pval* out_buffer, const byte* src)
 static void I_Double32Buf(pval* out_buffer, const byte* src)
 {
   register const byte* iptr = src;
-  register unsigned long* optr = (unsigned long*)out_buffer;
+  register uint32_t* optr = (uint32_t*)out_buffer;
   int y = SCREENHEIGHT;
 
   if (pixelvals == NULL) return;
@@ -427,7 +429,7 @@ static void I_Double32Buf(pval* out_buffer, const byte* src)
     int x = SCREENWIDTH/4;
 
     do {
-      unsigned long* optr2 = optr + 4*SCREENWIDTH / sizeof(*optr);
+      uint32_t* optr2 = optr + 4*SCREENWIDTH / sizeof(*optr);
 
       optr[0] = optr[1] = optr2[0] = optr2[1] = pixelvals[iptr[0]];
       optr[2] = optr[3] = optr2[2] = optr2[3] = pixelvals[iptr[1]];

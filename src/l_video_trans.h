@@ -35,7 +35,7 @@
 #define _L_VIDEO_TRANS_H_
 
 /* LxDoom may support 24bpp and 32bpp */
-typedef unsigned long pval;
+typedef uint32_t pval;
 
 typedef struct {
   unsigned char pshift; /* Shifts color value to correct place in pixel       */
@@ -46,7 +46,7 @@ typedef struct {
  * This is the TrueColor palette construction stuff
  */
 extern colourshift_t redshift, greenshift, blueshift;
-void I_SetColourShift(unsigned long mask, colourshift_t* ps);
+void I_SetColourShift(uint32_t mask, colourshift_t* ps);
 void I_SetPaletteTranslation(const byte* palette);
 
 /* These vars must be set before using the functions below */
