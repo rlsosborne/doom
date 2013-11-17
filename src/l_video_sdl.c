@@ -326,7 +326,7 @@ static void I_UploadNewPalette(int pal)
 #ifdef RANGECHECK
   if (pal >= num_pals) 
     I_Error("I_UploadNewPalette: Palette number out of range (%d>=%d)", 
-	    pal, num_pals);
+	    pal, (int)num_pals);
 #endif
   
   // store the colors to the current display
