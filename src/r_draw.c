@@ -246,7 +246,7 @@ void R_DrawColumn_Normal (void)
     {
       while (count>0)   // texture height is a power of 2 -- killough
       {
-        *dest = dc_colormap[dc_source[(frac>>FRACBITS) & heightmask]];
+        *dest = dc_colormap[dc_source[(int)((frac>>FRACBITS) & heightmask)]];
         dest += SCREENWIDTH;
         frac += fracstep;
         count--;
@@ -367,7 +367,7 @@ void R_DrawTLColumn_Normal (void)
     else
       {
         do {
-          *dest = tranmap[(*dest<<8)+colormap[source[(frac>>FRACBITS) & heightmask]]];
+          *dest = tranmap[(*dest<<8)+colormap[source[(int)((frac>>FRACBITS) & heightmask)]]];
           dest += SCREENWIDTH;
           frac += fracstep;
         } while (--count);
