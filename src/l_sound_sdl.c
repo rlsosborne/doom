@@ -502,11 +502,9 @@ void I_UpdateSound(void *unused, Uint8 *stream, int len)
     //  that is 512 values for two channels.
     while (leftout != leftend)
     {
-	// Reset left/right value. 
-	//dl = 0;
-	//dr = 0;
-	dl = *leftout;
-	dr = *rightout;
+	// Reset left/right value.
+	dl = 0;
+	dr = 0;
 
 	// Love thy L2 chache - made this a loop.
 	// Now more channels could be set at compile time
