@@ -1,14 +1,16 @@
-/* Emacs style mode select   -*- C++ -*- 
+/* Emacs style mode select   -*- C++ -*-
  *-----------------------------------------------------------------------------
  *
- * $Id: z_zone.h,v 1.4 1999/10/12 13:01:16 cphipps Exp $
  *
- *  LxDoom, a Doom port for Linux/Unix
+ *  PrBoom: a Doom port merged with LxDoom and LSDLDoom
  *  based on BOOM, a modified and improved DOOM engine
  *  Copyright (C) 1999 by
  *  id Software, Chi Hoang, Lee Killough, Jim Flynn, Rand Phares, Ty Halderman
- *   and Colin Phipps
- *  
+ *  Copyright (C) 1999-2000 by
+ *  Jess Haas, Nicolas Kalkhof, Colin Phipps, Florian Schulze
+ *  Copyright 2005, 2006 by
+ *  Florian Schulze, Colin Phipps, Neil Stevens, Andrey Budko
+ *
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
  *  as published by the Free Software Foundation; either version 2
@@ -21,7 +23,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
  *  02111-1307, USA.
  *
  * DESCRIPTION:
@@ -41,17 +43,12 @@
 #define __attribute__(x)
 #endif
 
-// Remove all definitions before including system definitions
-
-#undef malloc
-#undef free
-#undef realloc
-#undef calloc
-#undef strdup
-
 // Include system definitions so that prototypes become
 // active before macro replacements below are in effect.
 
+#ifdef HAVE_CONFIG_H
+#include "../config.h"
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -61,21 +58,33 @@
 // PU - purge tags.
 
 enum {PU_FREE, PU_STATIC, PU_SOUND, PU_MUSIC, PU_LEVEL, PU_LEVSPEC, PU_CACHE,
-      /* Must always be last -- killough */ PU_MAX};
+  /* Must always be last -- killough */ PU_MAX};
 
 #define PU_PURGELEVEL PU_CACHE        /* First purgable tag's level */
 
-void *(Z_Malloc)(size_t size, int tag, void **ptr, const char *, int);
-void (Z_Free)(void *ptr, const char *, int);
-void (Z_FreeTags)(int lowtag, int hightag, const char *, int);
-void (Z_ChangeTag)(void *ptr, int tag, const char *, int);
+#ifdef INSTRUMENTED
+#define DA(x,y) ,x,y
+#define DAC(x,y) x,y
+#else
+#define DA(x,y)
+#define DAC(x,y)
+#endif
+
+void *(Z_Malloc)(size_t size, int tag, void **ptr DA(const char *, int));
+void (Z_Free)(void *ptr DA(const char *, int));
+void (Z_FreeTags)(int lowtag, int hightag DA(const char *, int));
+void (Z_ChangeTag)(void *ptr, int tag DA(const char *, int));
 void (Z_Init)(void);
-void *(Z_Calloc)(size_t n, size_t n2, int tag, void **user, const char *, int);
-void *(Z_Realloc)(void *p, size_t n, int tag, void **user, const char *, int);
-char *(Z_Strdup)(const char *s, int tag, void **user, const char *, int);
-void (Z_CheckHeap)(const char *,int);   // killough 3/22/98: add file/line info
+void Z_Close(void);
+void *(Z_Calloc)(size_t n, size_t n2, int tag, void **user DA(const char *, int));
+void *(Z_Realloc)(void *p, size_t n, int tag, void **user DA(const char *, int));
+char *(Z_Strdup)(const char *s, int tag, void **user DA(const char *, int));
+void (Z_CheckHeap)(DAC(const char *,int));   // killough 3/22/98: add file/line info
 void Z_DumpHistory(char *);
 
+#ifdef INSTRUMENTED
+/* cph - save space if not debugging, don't require file
+ * and line to memory calls */
 #define Z_Free(a)          (Z_Free)     (a,      __FILE__,__LINE__)
 #define Z_FreeTags(a,b)    (Z_FreeTags) (a,b,    __FILE__,__LINE__)
 #define Z_ChangeTag(a,b)   (Z_ChangeTag)(a,b,    __FILE__,__LINE__)
@@ -84,57 +93,37 @@ void Z_DumpHistory(char *);
 #define Z_Calloc(a,b,c,d)  (Z_Calloc)   (a,b,c,d,__FILE__,__LINE__)
 #define Z_Realloc(a,b,c,d) (Z_Realloc)  (a,b,c,d,__FILE__,__LINE__)
 #define Z_CheckHeap()      (Z_CheckHeap)(__FILE__,__LINE__)
+#endif
+
+/* cphipps 2001/11/18 -
+ * If we're using memory mapped file access to WADs, we won't need to maintain
+ * our own heap. So we *could* let "normal" malloc users use the libc malloc
+ * directly, for efficiency. Except we do need a wrapper to handle out of memory
+ * errors... damn, ok, we'll leave it for now.
+ */
+#ifndef HAVE_LIBDMALLOC
+// Remove all definitions before including system definitions
+
+#undef malloc
+#undef free
+#undef realloc
+#undef calloc
+#undef strdup
 
 #define malloc(n)          Z_Malloc(n,PU_STATIC,0)
 #define free(p)            Z_Free(p)
 #define realloc(p,n)       Z_Realloc(p,n,PU_STATIC,0)
 #define calloc(n1,n2)      Z_Calloc(n1,n2,PU_STATIC,0)
-#undef strdup
-char *strdup(const char *s);
 #define strdup(s)          Z_Strdup(s,PU_STATIC,0)
 
-// Doom-style printf
-void doom_printf(const char *, ...) __attribute__((format(printf,1,2)));
+#else
+
+#ifdef HAVE_LIBDMALLOC
+#include <dmalloc.h>
+#endif
+
+#endif
 
 void Z_ZoneHistory(char *);
 
 #endif
-
-//----------------------------------------------------------------------------
-//
-// $Log: z_zone.h,v $
-// Revision 1.4  1999/10/12 13:01:16  cphipps
-// Changed header to GPL
-//
-// Revision 1.3  1999/03/02 13:16:22  cphipps
-// Fix header declarations for glibc2.1
-//
-// Revision 1.2  1998/10/20 07:03:22  cphipps
-// dprintf -> doom_printf
-//
-// Revision 1.1  1998/09/13 16:49:50  cphipps
-// Initial revision
-//
-// Revision 1.7  1998/05/08  20:32:12  killough
-// fix __attribute__ redefinition
-//
-// Revision 1.6  1998/05/03  22:38:11  killough
-// Remove unnecessary #include
-//
-// Revision 1.5  1998/04/27  01:49:42  killough
-// Add history of malloc/free and scrambler (INSTRUMENTED only)
-//
-// Revision 1.4  1998/03/23  03:43:54  killough
-// Make Z_CheckHeap() more diagnostic
-//
-// Revision 1.3  1998/02/02  13:28:06  killough
-// Add dprintf
-//
-// Revision 1.2  1998/01/26  19:28:04  phares
-// First rev with no ^Ms
-//
-// Revision 1.1.1.1  1998/01/19  14:03:06  rand
-// Lee's Jan 19 sources
-//
-//
-//----------------------------------------------------------------------------
