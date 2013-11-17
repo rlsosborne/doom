@@ -366,17 +366,11 @@ void R_DrawTLColumn_Normal (void)
       }
     else
       {
-        while ((count-=2)>=0)   // texture height is a power of 2 -- killough
-          {
-            *dest = tranmap[(*dest<<8)+colormap[source[(frac>>FRACBITS) & heightmask]]]; // phares
-            dest += SCREENWIDTH; 
-            frac += fracstep;
-            *dest = tranmap[(*dest<<8)+colormap[source[(frac>>FRACBITS) & heightmask]]]; // phares
-            dest += SCREENWIDTH; 
-            frac += fracstep;
-          }
-        if (count & 1)
-          *dest = tranmap[(*dest<<8)+colormap[source[(frac>>FRACBITS) & heightmask]]]; // phares
+        do {
+          *dest = tranmap[(*dest<<8)+colormap[source[(frac>>FRACBITS) & heightmask]]];
+          dest += SCREENWIDTH;
+          frac += fracstep;
+        } while (--count);
       }
   }
 } 
@@ -632,52 +626,16 @@ void R_DrawSpan (void)
   source = ds_source;
   colormap = ds_colormap;
   dest = topleft + ds_y*SCREENWIDTH + ds_x1;       
-  count = ds_x2 - ds_x1 + 1; 
-        
-  while (count >= 4)
-    { 
-      ytemp = position>>4;
-      ytemp = ytemp & 4032;
-      xtemp = position>>26;
-      spot = xtemp | ytemp;
-      position += step;
-      dest[0] = colormap[source[spot]]; 
+  count = ds_x2 - ds_x1 + 1;
 
-      ytemp = position>>4;
-      ytemp = ytemp & 4032;
-      xtemp = position>>26;
-      spot = xtemp | ytemp;
-      position += step;
-      dest[1] = colormap[source[spot]];
-        
-      ytemp = position>>4;
-      ytemp = ytemp & 4032;
-      xtemp = position>>26;
-      spot = xtemp | ytemp;
-      position += step;
-      dest[2] = colormap[source[spot]];
-        
-      ytemp = position>>4;
-      ytemp = ytemp & 4032;
-      xtemp = position>>26;
-      spot = xtemp | ytemp;
-      position += step;
-      dest[3] = colormap[source[spot]]; 
-                
-      dest += 4;
-      count -= 4;
-    } 
-
-  while (count)
-    { 
-      ytemp = position>>4;
-      ytemp = ytemp & 4032;
-      xtemp = position>>26;
-      spot = xtemp | ytemp;
-      position += step;
-      *dest++ = colormap[source[spot]]; 
-      count--;
-    } 
+  while (count--) {
+    ytemp = position>>4;
+    ytemp = ytemp & 4032;
+    xtemp = position>>26;
+    spot = xtemp | ytemp;
+    position += step;
+    *dest++ = colormap[source[spot]];
+  }
 }
 
 //

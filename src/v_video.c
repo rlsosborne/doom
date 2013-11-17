@@ -456,60 +456,21 @@ void V_DrawMemPatch(int x, int y, int scrn, const patch_t *patch,
       
 	// step through the posts in a column
       while (column->topdelta != 0xff ) {
-	// killough 2/21/98: Unrolled and performance-tuned
-	
 	const byte *source = (byte *)column + 3;
 	byte *dest = desttop + column->topdelta*SCREENWIDTH;
 	int count = column->length;
 	
 	if (!(flags & VPT_TRANS)) {
-	  if ((count-=4)>=0)
-	    do {
-	      byte s0,s1;
-	      s0 = source[0];
-	      s1 = source[1];
-	      dest[0] = s0;
-	      dest[SCREENWIDTH] = s1;
-	      dest += SCREENWIDTH*2;
-	      s0 = source[2];
-	      s1 = source[3];
-	      source += 4;
-	      dest[0] = s0;
-	      dest[SCREENWIDTH] = s1;
-	      dest += SCREENWIDTH*2;
-	    } while ((count-=4)>=0);
-	  if (count+=4)
-	    do {
-	      *dest = *source++;
-	      dest += SCREENWIDTH;
-	    } while (--count);
+          while (count--) {
+            *dest = *source++;
+            dest += SCREENWIDTH;
+          }
 	  column = (column_t *)(source+1); //killough 2/21/98 even faster
 	} else {
-	  // CPhipps - merged translation code here
-	  if ((count-=4)>=0)
-	    do {
-	      byte s0,s1;
-	      s0 = source[0];
-	      s1 = source[1];
-	      s0 = trans[s0];
-	      s1 = trans[s1];
-	      dest[0] = s0;
-	      dest[SCREENWIDTH] = s1;
-	      dest += SCREENWIDTH*2;
-	      s0 = source[2];
-	      s1 = source[3];
-	      s0 = trans[s0];
-	      s1 = trans[s1];
-	      source += 4;
-	      dest[0] = s0;
-	      dest[SCREENWIDTH] = s1;
-	      dest += SCREENWIDTH*2;
-	    } while ((count-=4)>=0);
-	  if (count+=4)
-	    do {
-	      *dest = trans[*source++];
-	      dest += SCREENWIDTH;
-	    } while (--count);
+          while (count--) {
+            *dest = trans[*source++];
+            dest += SCREENWIDTH;
+          }
 	  column = (column_t *)(source+1);
 	}
       }
