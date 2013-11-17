@@ -242,8 +242,6 @@ int defaultskill;               //note 1-based
 int    bodyqueslot, bodyquesize;        // killough 2/8/98
 mobj_t **bodyque = 0;                   // phares 8/10/98
 
-void   *statcopy;       // for statistics driver
-
 //
 // G_BuildTiccmd
 // Builds a ticcmd from all of the available inputs
@@ -1292,9 +1290,6 @@ void G_DoCompleted (void)
 
   gamestate = GS_INTERMISSION;
   automapmode &= ~am_active;
-
-  if (statcopy)
-    memcpy (statcopy, &wminfo, sizeof(wminfo));
 
   WI_Start (&wminfo);
 }
