@@ -1,4 +1,4 @@
-find_package(SDL REQUIRED)
+find_package(SDL2 REQUIRED)
 
 include(CheckCCompilerFlag)
 
@@ -164,15 +164,15 @@ add_executable(
 
 set_property(SOURCE ${CMAKE_CURRENT_BINARY_DIR}/../config.h PROPERTY GENERATED)
 
-target_link_libraries(lsdldoom ${SDL_LIBRARIES} m)
-target_link_libraries(lsdldoom_game_server ${SDL_LIBRARIES} m)
-include_directories(${SDL_INCLUDE_DIRS} ${CMAKE_CURRENT_BINARY_DIR})
+target_link_libraries(lsdldoom ${SDL2_LIBRARIES} m)
+target_link_libraries(lsdldoom_game_server ${SDL2_LIBRARIES} m)
+include_directories(${SDL2_INCLUDE_DIRS} ${CMAKE_CURRENT_BINARY_DIR})
 target_compile_definitions(
   lsdldoom PUBLIC
-  ${SDL_DEFINITIONS} HAVE_CONFIG_H)
+  ${SDL2_DEFINITIONS} HAVE_CONFIG_H)
 target_compile_definitions(
   lsdldoom_game_server PUBLIC
-  ${SDL_DEFINITIONS} HAVE_CONFIG_H)
+  ${SDL2_DEFINITIONS} HAVE_CONFIG_H)
 if (${HAVE_NET})
   target_compile_definitions(lsdldoom PRIVATE HAVE_NET HAVE_BSD_NET)
   target_compile_definitions(lsdldoom_game_server PRIVATE HAVE_NET HAVE_BSD_NET)

@@ -35,6 +35,7 @@ rcsid[] = "$Id: l_video_x.c,v 1.27 1999/10/12 13:01:11 cphipps Exp $";
 #include <unistd.h>
 
 #include "SDL.h"
+#include "SDL_surface.h"
 
 #include "i_system.h"
 #include "m_argv.h"
@@ -60,6 +61,10 @@ void (*R_DrawTLColumn)(void);
 extern void M_QuitDOOM(int choice);
 
 int use_vsync = 0; // Included not to break m_misc, but not relevant to SDL
+static SDL_Window *sdlwindow;
+static SDL_Renderer *sdlrenderer;
+static SDL_Texture *sdltexture;
+static SDL_Palette *sdlpalette;
 static SDL_Surface *screen;
 
 // This is the pointer to the buffer to blit
@@ -84,7 +89,7 @@ static boolean grabMouse;       // internal var
 //  Translates the key currently in key
 //
 
-static int I_TranslateKey(SDL_keysym* key)
+static int I_TranslateKey(SDL_Keysym* key)
 {
   int rc = 0;
 
@@ -113,16 +118,16 @@ static int I_TranslateKey(SDL_keysym* key)
   case SDLK_PAUSE:	rc = KEYD_PAUSE;	break;
   case SDLK_EQUALS:	rc = KEYD_EQUALS;	break;
   case SDLK_MINUS:	rc = KEYD_MINUS;	break;
-  case SDLK_KP0:	rc = KEYD_KEYPAD0;	break;
-  case SDLK_KP1:	rc = KEYD_KEYPAD1;	break;
-  case SDLK_KP2:	rc = KEYD_KEYPAD2;	break;
-  case SDLK_KP3:	rc = KEYD_KEYPAD3;	break;
-  case SDLK_KP4:	rc = KEYD_KEYPAD4;	break;
-  case SDLK_KP5:	rc = KEYD_KEYPAD0;	break;
-  case SDLK_KP6:	rc = KEYD_KEYPAD6;	break;
-  case SDLK_KP7:	rc = KEYD_KEYPAD7;	break;
-  case SDLK_KP8:	rc = KEYD_KEYPAD8;	break;
-  case SDLK_KP9:	rc = KEYD_KEYPAD9;	break;
+  case SDLK_KP_0:	rc = KEYD_KEYPAD0;	break;
+  case SDLK_KP_1:	rc = KEYD_KEYPAD1;	break;
+  case SDLK_KP_2:	rc = KEYD_KEYPAD2;	break;
+  case SDLK_KP_3:	rc = KEYD_KEYPAD3;	break;
+  case SDLK_KP_4:	rc = KEYD_KEYPAD4;	break;
+  case SDLK_KP_5:	rc = KEYD_KEYPAD0;	break;
+  case SDLK_KP_6:	rc = KEYD_KEYPAD6;	break;
+  case SDLK_KP_7:	rc = KEYD_KEYPAD7;	break;
+  case SDLK_KP_8:	rc = KEYD_KEYPAD8;	break;
+  case SDLK_KP_9:	rc = KEYD_KEYPAD9;	break;
   case SDLK_KP_PLUS:	rc = KEYD_KEYPADPLUS;	break;
   case SDLK_KP_MINUS:	rc = KEYD_KEYPADMINUS;	break;
   case SDLK_KP_DIVIDE:	rc = KEYD_KEYPADDIVIDE;	break;
@@ -133,9 +138,9 @@ static int I_TranslateKey(SDL_keysym* key)
   case SDLK_LCTRL:
   case SDLK_RCTRL:	rc = KEYD_RCTRL;	break;
   case SDLK_LALT:
-  case SDLK_LMETA:
+  case SDLK_LGUI:
   case SDLK_RALT:
-  case SDLK_RMETA:	rc = KEYD_RALT;		break;
+  case SDLK_RGUI:	rc = KEYD_RALT;		break;
   default:		rc = key->sym;		break;
   }
 
@@ -202,7 +207,7 @@ static void I_GetEvent(SDL_Event *Event)
            (Event->motion.x > ((screen->w/2)+(screen->w/4))) ||
            (Event->motion.y < ((screen->h/2)-(screen->h/4))) ||
            (Event->motion.y > ((screen->h/2)+(screen->h/4))) )
-        SDL_WarpMouse(screen->w/2, screen->h/2);
+        SDL_WarpMouseInWindow(sdlwindow, screen->w/2, screen->h/2);
     }
     event.type = ev_mouse;
     event.data1 = 0
@@ -310,6 +315,7 @@ static void I_UploadNewPalette(int pal)
       colours[i].r = gtable[palette[0]];
       colours[i].g = gtable[palette[1]];
       colours[i].b = gtable[palette[2]];
+      colours[i].a = 0;
       palette += 3;
     }
   
@@ -324,7 +330,7 @@ static void I_UploadNewPalette(int pal)
 #endif
   
   // store the colors to the current display
-  SDL_SetColors(SDL_GetVideoSurface(), colours+256*pal, 0, 256);
+  SDL_SetPaletteColors(sdlpalette, colours+256*pal, 0, 256);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -364,8 +370,15 @@ void I_FinishUpdate (void)
   if (expand_buffer)
     (*I_ExpandImage)(out_buffer, screens[0]);
   
-  // Update the display buffer (flipping video pages if supported)
-  SDL_Flip(screen);
+  // Update the display buffer
+  SDL_Surface *converted =
+    SDL_ConvertSurfaceFormat(screen, SDL_PIXELFORMAT_RGBX8888, 0);
+  SDL_UpdateTexture(sdltexture, NULL, converted->pixels,
+                    converted->pitch);
+  SDL_FreeSurface(converted);
+  SDL_RenderClear(sdlrenderer);
+  SDL_RenderCopy(sdlrenderer, sdltexture, NULL, NULL);
+  SDL_RenderPresent(sdlrenderer);
 }
 
 //
@@ -454,20 +467,22 @@ void I_InitGraphics(void)
     I_Error("Could not initialize SDL [%s]", SDL_GetError());
   }
 
-  init_flags = SDL_SWSURFACE|SDL_HWPALETTE;
+  init_flags = 0;
   if ( M_CheckParm("-fullscreen") ) {
-    init_flags |= SDL_FULLSCREEN;
+    init_flags |= SDL_WINDOW_FULLSCREEN;
   }
-  if(SDL_VideoModeOK(w, h, 8, init_flags) == 8) {
-    screen = SDL_SetVideoMode(w, h, 8, init_flags);
-  } else {
-    screen = SDL_SetVideoMode(w, h, 0, init_flags);
-  }
-  if(screen == NULL || !I_QueryImageTranslation()) {
-    I_Error("Couldn't set %dx%d video mode [%s]", w, h, SDL_GetError());
-  }
+  sdlwindow = SDL_CreateWindow(lcase_lxdoom,
+                               SDL_WINDOWPOS_UNDEFINED,
+                               SDL_WINDOWPOS_UNDEFINED,
+                               w, h,
+                               init_flags);
+  sdlrenderer = SDL_CreateRenderer(sdlwindow, -1, 0);
+  sdltexture = SDL_CreateTexture(sdlrenderer, SDL_PIXELFORMAT_RGBX8888,
+                                 SDL_TEXTUREACCESS_STREAMING, w, h);
+  screen = SDL_CreateRGBSurface(0, w, h, 8, 0, 0, 0, 0);
+  sdlpalette = SDL_AllocPalette(256);
+  SDL_SetSurfacePalette(screen, sdlpalette);
   dest_bpp = screen->format->BitsPerPixel;
-  SDL_WM_SetCaption(lcase_lxdoom, ucase_lxdoom);
 
   I_InitImageTranslation();
   if (true_color) {
