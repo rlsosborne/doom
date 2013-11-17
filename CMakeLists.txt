@@ -40,12 +40,6 @@ option(CHECKHEAP "Exhaustively run memory checks" Off)
 option(ZONEIDCHECK "Perform id checks on zone blocks" On)
 option(SIMPLECHECKS "Quick checks" On)
 option(TIMEDIAG "Lumps locked for long periods of time are reported" Off)
-if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-  set(LINUX True)
-endif()
-if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "i686")
-  set(I386 True)
-endif()
 
 configure_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/cmake_config.h.in

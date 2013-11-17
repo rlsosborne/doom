@@ -7,12 +7,6 @@
 #define strnicmp strncasecmp
 #endif
 
-/* Define for gnu-linux target */
-#cmakedefine LINUX
-
-/* Define on I386 target */
-#cmakedefine I386
-
 /* Define on big endian target */
 #cmakedefine __BIG_ENDIAN__
 

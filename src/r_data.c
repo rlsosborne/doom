@@ -666,22 +666,11 @@ void R_InitSpriteLumps(void)
 // killough 4/4/98: Add support for C_START/C_END markers
 //
 
-// CPhipps - reinstate 256-byte alignment of colourmaps for I386 targets
 static void* R_GetColourmaps(int lump)
 {
-#ifdef I386
-  // Load in the light tables, 
-  //  256 byte align tables.
-  void  *colormaps;
-  size_t length = W_LumpLength (lump) + 255; 
-  colormaps = Z_Malloc (length, PU_STATIC, 0); 
-  colormaps = (byte *)( ((int)colormaps + 255)&~0xff); 
-  W_ReadLump (lump,colormaps); 
-  return colormaps;
-#else
-  return W_CacheLumpNum(lump);
-#endif
+  return (void *)W_CacheLumpNum(lump);
 }
+
 void R_InitColormaps(void)
 {
   int i;
