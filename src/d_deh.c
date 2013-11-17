@@ -2247,7 +2247,7 @@ void deh_procCheat(DEHFILE *fpin, FILE* fpout, char *line) // done
 		      cheat[i].deh_modified = true;
                 }
 #endif
-                cheat[iy].cheat = strdup(p);
+                cheat[iy].cheat = (byte *)strdup(p);
                 if (fpout) fprintf(fpout,
                                    "Assigned new cheat '%s' to cheat '%s'at index %d\n",
                                    p, cheat[ix].deh_cheat, iy); // killough 4/18/98

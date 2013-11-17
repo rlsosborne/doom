@@ -425,7 +425,7 @@ void HU_Start(void)
     HU_MSGHEIGHT,
     hu_font,
     HU_FONTSTART,
-    colrngs[hudcolor_mesg],
+    (const char *)colrngs[hudcolor_mesg],
     &message_on
   );
 
@@ -438,7 +438,7 @@ void HU_Start(void)
     HU_TITLEY,
     hu_font,
     HU_FONTSTART,
-    colrngs[hudcolor_titl]
+    (const char *)colrngs[hudcolor_titl]
   );
 
   // create the hud health widget
@@ -451,7 +451,7 @@ void HU_Start(void)
     hud_distributed? HU_HEALTHY_D : HU_HEALTHY,
     hu_font2,
     HU_FONTSTART,
-    colrngs[CR_GREEN]
+    (const char *)colrngs[CR_GREEN]
   );
 
   // create the hud armor widget
@@ -464,7 +464,7 @@ void HU_Start(void)
     hud_distributed? HU_ARMORY_D : HU_ARMORY,
     hu_font2,
     HU_FONTSTART,
-    colrngs[CR_GREEN]
+    (const char *)colrngs[CR_GREEN]
   );
 
   // create the hud ammo widget
@@ -477,7 +477,7 @@ void HU_Start(void)
     hud_distributed? HU_AMMOY_D : HU_AMMOY,
     hu_font2,
     HU_FONTSTART,
-    colrngs[CR_GOLD]
+    (const char *)colrngs[CR_GOLD]
   );
 
   // create the hud weapons widget
@@ -490,7 +490,7 @@ void HU_Start(void)
     hud_distributed? HU_WEAPY_D : HU_WEAPY,
     hu_font2,
     HU_FONTSTART,
-    colrngs[CR_GRAY]
+    (const char *)colrngs[CR_GRAY]
   );
 
   // create the hud keys widget
@@ -503,7 +503,7 @@ void HU_Start(void)
     hud_distributed? HU_KEYSY_D : HU_KEYSY,
     hu_font2,
     HU_FONTSTART,
-    colrngs[CR_GRAY]
+    (const char *)colrngs[CR_GRAY]
   );
 
   // create the hud graphic keys widget
@@ -516,7 +516,7 @@ void HU_Start(void)
     hud_distributed? HU_KEYSY_D : HU_KEYSY,
     hu_fontk,
     HU_FONTSTART,
-    colrngs[CR_RED]
+    (const char *)colrngs[CR_RED]
   );
 
   // create the hud monster/secret widget
@@ -529,7 +529,7 @@ void HU_Start(void)
     hud_distributed? HU_MONSECY_D : HU_MONSECY,
     hu_font2,
     HU_FONTSTART,
-    colrngs[CR_GRAY]
+    (const char *)colrngs[CR_GRAY]
   );
 
   // create the hud text refresh widget
@@ -548,7 +548,7 @@ void HU_Start(void)
     (hud_msg_lines+2)*HU_REFRESHSPACING,
     hu_font,
     HU_FONTSTART,
-    colrngs[hudcolor_list],
+    (const char *)colrngs[hudcolor_list],
     hu_msgbg,
     &message_list
   );
@@ -581,7 +581,7 @@ void HU_Start(void)
     HU_COORDX_Y,
     hu_font,
     HU_FONTSTART,
-    colrngs[hudcolor_xyco]
+    (const char *)colrngs[hudcolor_xyco]
   );
   HUlib_initTextLine
   (
@@ -590,7 +590,7 @@ void HU_Start(void)
     HU_COORDY_Y,
     hu_font,
     HU_FONTSTART,
-    colrngs[hudcolor_xyco]
+    (const char *)colrngs[hudcolor_xyco]
   );
   HUlib_initTextLine
   (
@@ -599,7 +599,7 @@ void HU_Start(void)
     HU_COORDZ_Y,
     hu_font,
     HU_FONTSTART,
-    colrngs[hudcolor_xyco]
+    (const char *)colrngs[hudcolor_xyco]
   );
   
   // initialize the automaps coordinate widget
@@ -670,7 +670,7 @@ void HU_Start(void)
     HU_INPUTY,
     hu_font,
     HU_FONTSTART,
-    colrngs[hudcolor_chat],
+    (const char *)colrngs[hudcolor_chat],
     &chat_on
   );
 
@@ -683,7 +683,7 @@ void HU_Start(void)
       0,
       0,
       0,
-      colrngs[hudcolor_chat],
+      (const char *)colrngs[hudcolor_chat],
       &always_off
     );
 
@@ -801,7 +801,7 @@ void HU_Drawer(void)
       if (weaponinfo[plr->readyweapon].ammo == am_noammo)
       { // special case for weapon with no ammo selected - blank bargraph + N/A
         strcat(hud_ammostr,"\x7f\x7f\x7f\x7f\x7f\x7f\x7f N/A");
-        w_ammo.cr = colrngs[CR_GRAY];
+        w_ammo.cr = (const char *)colrngs[CR_GRAY];
       }
       else
       {
@@ -839,11 +839,11 @@ void HU_Drawer(void)
 
         // set the display color from the percentage of total ammo held
         if (ammopct<ammo_red)
-          w_ammo.cr = colrngs[CR_RED];
+          w_ammo.cr = (const char *)colrngs[CR_RED];
         else if (ammopct<ammo_yellow)
-          w_ammo.cr = colrngs[CR_GOLD];
+          w_ammo.cr = (const char *)colrngs[CR_GOLD];
         else
-          w_ammo.cr = colrngs[CR_GREEN];
+          w_ammo.cr = (const char *)colrngs[CR_GREEN];
       }
       // transfer the init string to the widget
       s = hud_ammostr;
@@ -891,13 +891,13 @@ void HU_Drawer(void)
 
       // set the display color from the amount of health posessed
       if (health<health_red)
-        w_health.cr = colrngs[CR_RED];
+        w_health.cr = (const char *)colrngs[CR_RED];
       else if (health<health_yellow)
-        w_health.cr = colrngs[CR_GOLD];
+        w_health.cr = (const char *)colrngs[CR_GOLD];
       else if (health<=health_green)
-        w_health.cr = colrngs[CR_GREEN];
+        w_health.cr = (const char *)colrngs[CR_GREEN];
       else
-        w_health.cr = colrngs[CR_BLUE];
+        w_health.cr = (const char *)colrngs[CR_BLUE];
 
       // transfer the init string to the widget
       s = hud_healthstr;
@@ -944,13 +944,13 @@ void HU_Drawer(void)
 
       // set the display color from the amount of armor posessed
       if (armor<armor_red)
-        w_armor.cr = colrngs[CR_RED];
+        w_armor.cr = (const char *)colrngs[CR_RED];
       else if (armor<armor_yellow)
-        w_armor.cr = colrngs[CR_GOLD];
+        w_armor.cr = (const char *)colrngs[CR_GOLD];
       else if (armor<=armor_green)
-        w_armor.cr = colrngs[CR_GREEN];
+        w_armor.cr = (const char *)colrngs[CR_GREEN];
       else
-        w_armor.cr = colrngs[CR_BLUE];
+        w_armor.cr = (const char *)colrngs[CR_BLUE];
 
       // transfer the init string to the widget
       s = hud_armorstr;

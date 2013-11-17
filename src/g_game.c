@@ -589,8 +589,8 @@ void G_DoLoadLevel (void)
   joyxmove = joyymove = 0;
   mousex = mousey = 0;
   special_event = 0; paused = false;
-  memset (mousebuttons, 0, sizeof(mousebuttons));
-  memset (joybuttons, 0, sizeof(joybuttons));
+  memset (mousearray, 0, sizeof(mousearray));
+  memset (joyarray, 0, sizeof(joyarray));
 
   // killough 5/13/98: in case netdemo has consoleplayer other than green
   ST_Start();
@@ -1433,7 +1433,7 @@ void G_DoLoadGame(void)
     // killough 2/22/98: "proprietary" version string :-)
     sprintf (vcheck, version_headers[i].ver_printf, version_headers[i].version);
 
-    if (!strncmp(save_p, vcheck, VERSIONSIZE)) {
+    if (!strncmp((char *)save_p, vcheck, VERSIONSIZE)) {
       savegame_compatibility = version_headers[i].comp_level;
       i = num_version_headers;
     }
@@ -1456,10 +1456,11 @@ void G_DoLoadGame(void)
 
     if (memcmp(&checksum, save_p, sizeof checksum)) {
       if (!forced_loadgame) {
-        char *msg = malloc(strlen(save_p + sizeof checksum) + 128);
+        char *msg = malloc(strlen((char *)save_p + sizeof checksum) + 128);
         strcpy(msg,"Incompatible Savegame!!!\n");
         if (save_p[sizeof checksum])
-          strcat(strcat(msg,"Wads expected:\n\n"), save_p + sizeof checksum);
+          strcat(strcat(msg,"Wads expected:\n\n"),
+                 (char *)save_p + sizeof checksum);
         strcat(msg, "\nAre you sure?");
         G_LoadGameErr(msg);
         free(msg);
@@ -1470,7 +1471,7 @@ void G_DoLoadGame(void)
    }
 
   save_p += sizeof(unsigned long);
-  save_p += strlen(save_p)+1;
+  save_p += strlen((char *)save_p)+1;
 
   if (savegame_compatibility == boom_compatibility)
     compatibility_level = 2 - *save_p++; // CPhipps - Load compatibility level
@@ -1602,7 +1603,7 @@ void G_DoSaveGame (void)
   if (i == num_version_headers) {
     doom_printf("No savegame signature known for\nthis compatibility level\n"
 		"%d/%d, %u registered", compatibility_level, 
-		MAX_COMPATIBILITY_LEVEL, num_version_headers);
+		MAX_COMPATIBILITY_LEVEL, (unsigned int)num_version_headers);
     free(savebuffer); // cph - free data
     return;
   }
@@ -1627,9 +1628,9 @@ void G_DoSaveGame (void)
       {
 	const char *const w = wadfiles[i].name;
         CheckSaveGame(strlen(w)+2);
-        strcat(strcat(save_p, w), "\n");
+        strcat(strcat((char *)save_p, w), "\n");
       }
-    save_p += strlen(save_p)+1;
+    save_p += strlen((char *)save_p)+1;
   }
 
   CheckSaveGame(GAME_OPTION_SIZE+MIN_MAXPLAYERS+10);

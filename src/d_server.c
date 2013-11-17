@@ -267,7 +267,7 @@ int main(int argc, char** argv)
 		  sinfo->yourplayer = n;
 		  sinfo->numwads = numwads;
 		  for (i=0; i<numwads; i++) {
-		    strcpy(sinfo->wadnames + extrabytes, wadname[i]);
+		    strcpy((char *)sinfo->wadnames + extrabytes, wadname[i]);
 		    extrabytes += strlen(wadname[i]) + 1;
 		  }
 		  I_SendPacketTo(packet, sizeof *packet + sizeof setupinfo + extrabytes, 

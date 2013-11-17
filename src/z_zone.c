@@ -46,6 +46,7 @@ static const char rcsid[] = "$Id: z_zone.c,v 1.10 1999/10/31 12:49:44 cphipps Ex
 #endif
 
 #include <stdlib.h>
+#include <stdint.h>
 #include <stdio.h>
 
 #include "z_zone.h"
@@ -64,7 +65,6 @@ static const char rcsid[] = "$Id: z_zone.c,v 1.10 1999/10/31 12:49:44 cphipps Ex
 
 // size of block header
 #define HEADER_SIZE 32
-
 // Minimum chunk size at which blocks are allocated
 #define CHUNK_SIZE 32
 
@@ -244,7 +244,7 @@ void Z_Init(void)
   // Align on cache boundary
 
   zone = (memblock_t *) ((char *) zonebase + CACHE_ALIGN -
-                         ((unsigned) zonebase & (CACHE_ALIGN-1)));
+                         ((intptr_t) zonebase & (CACHE_ALIGN-1)));
 
   rover = zone;                            // Rover points to base of zone mem
   zone->next = zone->prev = zone;          // Single node

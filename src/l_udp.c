@@ -136,7 +136,7 @@ struct sockaddr_in sentfrom;
 
 size_t I_GetPacket(packet_header_t* buffer, size_t buflen)
 {
-  size_t sfsize = sizeof(sentfrom);
+  socklen_t sfsize = sizeof(sentfrom);
   int n = recvfrom(recvsocket, buffer, buflen, 0, 
 		   (struct sockaddr*)&sentfrom, &sfsize);
   if (n >= 0) recvdbytes += n;

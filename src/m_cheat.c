@@ -106,151 +106,151 @@ static void cheat_health();
 //-----------------------------------------------------------------------------
 
 struct cheat_s cheat[] = {
-  {"idmus",      "Change music",      always,
+  {(const byte *)"idmus",      "Change music",      always,
    cheat_mus,      -2},
 
-  {"idchoppers", "Chainsaw",          not_net | not_demo,
+  {(const byte *)"idchoppers", "Chainsaw",          not_net | not_demo,
    cheat_choppers },
 
-  {"iddqd",      "God mode",          not_net | not_demo,
+  {(const byte *)"iddqd",      "God mode",          not_net | not_demo,
    cheat_god      },
 
 #if 0
-  {"idk",        NULL,                not_net | not_demo | not_deh,
+  {(const byte *)"idk",        NULL,                not_net | not_demo | not_deh,
    cheat_k },  // The most controversial cheat code in Doom history!!!
 #endif
 
-  {"idkfa",      "Ammo & Keys",       not_net | not_demo,
+  {(const byte *)"idkfa",      "Ammo & Keys",       not_net | not_demo,
    cheat_kfa },
 
-  {"idfa",       "Ammo",              not_net | not_demo,
+  {(const byte *)"idfa",       "Ammo",              not_net | not_demo,
    cheat_fa  },
 
-  {"idspispopd", "No Clipping 1",     not_net | not_demo,
+  {(const byte *)"idspispopd", "No Clipping 1",     not_net | not_demo,
    cheat_noclip },
 
-  {"idclip",     "No Clipping 2",     not_net | not_demo,
+  {(const byte *)"idclip",     "No Clipping 2",     not_net | not_demo,
    cheat_noclip },
 
-  {"idbeholdh",  "Invincibility",     not_net | not_demo,
+  {(const byte *)"idbeholdh",  "Invincibility",     not_net | not_demo,
    cheat_health },
 
-  {"idbeholdm",  "Invincibility",     not_net | not_demo,
+  {(const byte *)"idbeholdm",  "Invincibility",     not_net | not_demo,
    cheat_megaarmour },
 
-  {"idbeholdv",  "Invincibility",     not_net | not_demo,
+  {(const byte *)"idbeholdv",  "Invincibility",     not_net | not_demo,
    cheat_pw,  pw_invulnerability },
 
-  {"idbeholds",  "Berserk",           not_net | not_demo,
+  {(const byte *)"idbeholds",  "Berserk",           not_net | not_demo,
    cheat_pw,  pw_strength        },
 
-  {"idbeholdi",  "Invisibility",      not_net | not_demo,  
+  {(const byte *)"idbeholdi",  "Invisibility",      not_net | not_demo,
    cheat_pw,  pw_invisibility    },
 
-  {"idbeholdr",  "Radiation Suit",    not_net | not_demo,
+  {(const byte *)"idbeholdr",  "Radiation Suit",    not_net | not_demo,
    cheat_pw,  pw_ironfeet        },
 
-  {"idbeholda",  "Auto-map",          not_net | not_demo,
+  {(const byte *)"idbeholda",  "Auto-map",          not_net | not_demo,
    cheat_pw,  pw_allmap          },
 
-  {"idbeholdl",  "Lite-Amp Goggles",  not_net | not_demo,
+  {(const byte *)"idbeholdl",  "Lite-Amp Goggles",  not_net | not_demo,
    cheat_pw,  pw_infrared        },
 
-  {"idbehold",   "BEHOLD menu",       not_net | not_demo,
+  {(const byte *)"idbehold",   "BEHOLD menu",       not_net | not_demo,
    cheat_behold   },
 
-  {"idclev",     "Level Warp",        not_net | not_demo | not_menu,
+  {(const byte *)"idclev",     "Level Warp",        not_net | not_demo | not_menu,
    cheat_clev,    -2},
 
-  {"idmypos",    "Player Position",   not_net | not_demo,
+  {(const byte *)"idmypos",    "Player Position",   not_net | not_demo,
    cheat_mypos    },
 
-  {"idrate",     "Frame rate",        0,
+  {(const byte *)"idrate",     "Frame rate",        0,
    cheat_rate     },
 
-  {"tntcomp",    NULL,                not_net | not_demo,
+  {(const byte *)"tntcomp",    NULL,                not_net | not_demo,
    cheat_comp     },     // phares
 
-  {"tntem",      NULL,                not_net | not_demo,
+  {(const byte *)"tntem",      NULL,                not_net | not_demo,
    cheat_massacre },     // jff 2/01/98 kill all monsters
 
-  {"iddt",       "Map cheat",         not_dm  | not_demo,
+  {(const byte *)"iddt",       "Map cheat",         not_dm  | not_demo,
    cheat_ddt      },     // killough 2/07/98: moved from am_map.c
 
-  {"tnthom",     NULL,                not_net | not_demo,
+  {(const byte *)"tnthom",     NULL,                not_net | not_demo,
    cheat_hom      },     // killough 2/07/98: HOM autodetector
 
-  {"tntkey",     NULL,                not_net | not_demo, 
+  {(const byte *)"tntkey",     NULL,                not_net | not_demo,
    cheat_tntkey   },     // killough 2/16/98: generalized key cheats
 
-  {"tntkeyr",    NULL,                not_net | not_demo,
+  {(const byte *)"tntkeyr",    NULL,                not_net | not_demo,
    cheat_tntkeyx  },
 
-  {"tntkeyy",    NULL,                not_net | not_demo,
+  {(const byte *)"tntkeyy",    NULL,                not_net | not_demo,
    cheat_tntkeyx  },
 
-  {"tntkeyb",    NULL,                not_net | not_demo,
+  {(const byte *)"tntkeyb",    NULL,                not_net | not_demo,
    cheat_tntkeyx  },
 
-  {"tntkeyrc",   NULL,                not_net | not_demo, 
+  {(const byte *)"tntkeyrc",   NULL,                not_net | not_demo,
    cheat_tntkeyxx, it_redcard    },
 
-  {"tntkeyyc",   NULL,                not_net | not_demo,
+  {(const byte *)"tntkeyyc",   NULL,                not_net | not_demo,
    cheat_tntkeyxx, it_yellowcard },
 
-  {"tntkeybc",   NULL,                not_net | not_demo, 
+  {(const byte *)"tntkeybc",   NULL,                not_net | not_demo,
    cheat_tntkeyxx, it_bluecard   },
 
-  {"tntkeyrs",   NULL,                not_net | not_demo,
+  {(const byte *)"tntkeyrs",   NULL,                not_net | not_demo,
    cheat_tntkeyxx, it_redskull   },
 
-  {"tntkeyys",   NULL,                not_net | not_demo,
+  {(const byte *)"tntkeyys",   NULL,                not_net | not_demo,
    cheat_tntkeyxx, it_yellowskull},
 
-  {"tntkeybs",   NULL,                not_net | not_demo,
+  {(const byte *)"tntkeybs",   NULL,                not_net | not_demo,
    cheat_tntkeyxx, it_blueskull  },  // killough 2/16/98: end generalized keys
 
-  {"tntka",      NULL,                not_net | not_demo,
+  {(const byte *)"tntka",      NULL,                not_net | not_demo,
    cheat_k    },         // Ty 04/11/98 - Added TNTKA
 
-  {"tntweap",    NULL,                not_net | not_demo,
+  {(const byte *)"tntweap",    NULL,                not_net | not_demo,
    cheat_tntweap  },     // killough 2/16/98: generalized weapon cheats
 
-  {"tntweap",    NULL,                not_net | not_demo,
+  {(const byte *)"tntweap",    NULL,                not_net | not_demo,
    cheat_tntweapx, -1},
 
-  {"tntammo",    NULL,                not_net | not_demo,
+  {(const byte *)"tntammo",    NULL,                not_net | not_demo,
    cheat_tntammo  },
 
-  {"tntammo",    NULL,                not_net | not_demo,
+  {(const byte *)"tntammo",    NULL,                not_net | not_demo,
    cheat_tntammox, -1},  // killough 2/16/98: end generalized weapons
 
-  {"tnttran",    NULL,                always,
+  {(const byte *)"tnttran",    NULL,                always,
    cheat_tnttran  },     // invoke translucency         // phares
 
-  {"tntsmart",   NULL,                not_net | not_demo,
+  {(const byte *)"tntsmart",   NULL,                not_net | not_demo,
    cheat_smart},         // killough 2/21/98: smart monster toggle
 
-  {"tntpitch",   NULL,                always,
+  {(const byte *)"tntpitch",   NULL,                always,
    cheat_pitch},         // killough 2/21/98: pitched sound toggle
 
   // killough 2/21/98: reduce RSI injury by adding simpler alias sequences:
-  {"tntran",     NULL,                always, 
+  {(const byte *)"tntran",     NULL,                always,
    cheat_tnttran    },   // killough 2/21/98: same as tnttran
 
-  {"tntamo",     NULL,                not_net | not_demo,
+  {(const byte *)"tntamo",     NULL,                not_net | not_demo,
    cheat_tntammo    },   // killough 2/21/98: same as tntammo
 
-  {"tntamo",     NULL,                not_net | not_demo,
+  {(const byte *)"tntamo",     NULL,                not_net | not_demo,
    cheat_tntammox, -1},  // killough 2/21/98: same as tntammo
 
-  {"tntfast",    NULL,                not_net | not_demo,
+  {(const byte *)"tntfast",    NULL,                not_net | not_demo,
    cheat_fast       },   // killough 3/6/98: -fast toggle
 
-  {"tntice",     NULL,                not_net | not_demo,
+  {(const byte *)"tntice",     NULL,                not_net | not_demo,
    cheat_friction   },   // phares 3/10/98: toggle variable friction effects
 
-  {"tntpush",    NULL,                not_net | not_demo, 
+  {(const byte *)"tntpush",    NULL,                not_net | not_demo, 
    cheat_pushers    },   // phares 3/10/98: toggle pushers
 
   {NULL}                 // end-of-list marker

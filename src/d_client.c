@@ -109,7 +109,7 @@ void D_InitNetGame (void)
 	    doomcom->consoleplayer+1, doomcom->numplayers, sinfo->numwads);
     {
       int i = sinfo->numwads;
-      char *p = sinfo->wadnames;
+      char *p = (char *)sinfo->wadnames;
 
       while (i--) {
 	D_AddFile(p, source_net);

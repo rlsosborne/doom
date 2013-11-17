@@ -32,6 +32,7 @@
 static const char
 rcsid[] = "$Id: p_saveg.c,v 1.11 1999/10/31 11:52:23 cphipps Exp $";
 
+#include <stdint.h>
 #include "doomstat.h"
 #include "r_main.h"
 #include "p_maputl.h"
@@ -47,7 +48,7 @@ byte *save_p;
 
 // Pads save_p to a 4-byte boundary
 //  so that the load/save works on SGI&Gecko.
-#define PADSAVEP()    do { save_p += (4 - ((int) save_p & 3)) & 3; } while (0)
+#define PADSAVEP() do { save_p += (4 - ((intptr_t) save_p & 3)) & 3; } while (0)
 //
 // P_ArchivePlayers
 //

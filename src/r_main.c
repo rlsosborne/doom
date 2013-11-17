@@ -659,7 +659,8 @@ void R_RenderPlayerView (player_t* player)
         }
       if (gametic-lastshottic < TICRATE*2 && gametic-lastshottic > TICRATE/8)
         V_DrawBlock(viewwindowx +  viewwidth/2 - 24,
-                    viewwindowy + viewheight/2 - 24, 0, 47, 47, c, VPT_NONE);
+                    viewwindowy + viewheight/2 - 24, 0, 47, 47, (const byte *)c,
+                    VPT_NONE);
       R_DrawViewBorder();
     }
 #ifdef HAVE_NET

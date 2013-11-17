@@ -179,7 +179,7 @@ void HUlib_drawTextLine
     {                    //jff 3/26/98 changed to actual escape char
       if (++i<l->len)
         if (l->l[i]>='0' && l->l[i]<='9')
-          l->cr = colrngs[l->l[i]-'0'];
+          l->cr = (const char *)colrngs[l->l[i]-'0'];
     }
     else  if (c != ' ' && c >= l->sc && c <= 127)
     {
@@ -188,7 +188,7 @@ void HUlib_drawTextLine
         break;
       // killough 1/18/98 -- support multiple lines:
       // CPhipps - patch drawing updated
-      V_DrawMemPatch(x, y, FG, l->f[c - l->sc], l->cr, VPT_TRANS);
+      V_DrawMemPatch(x, y, FG, l->f[c - l->sc], (const byte *)l->cr, VPT_TRANS);
       x += w;
     }
     else
