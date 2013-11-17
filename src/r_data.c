@@ -690,7 +690,7 @@ void R_InitColormaps(void)
 
 int R_ColormapNumForName(const char *name)
 {
-  register int i = 0;
+  int i = 0;
   if (strncasecmp(name,"COLORMAP",8))     // COLORMAP predefined to return 0
     if ((i = (W_CheckNumForName)(name, ns_colormaps)) != -1)
       i -= firstcolormaplump;
@@ -751,11 +751,11 @@ void R_InitTranMap(int progress)
           // for fast inner-loop calculations. Precompute tot array.
 
           {
-            register int i = 255;
-            register const unsigned char *p = playpal+255*3;
+            int i = 255;
+            const unsigned char *p = playpal+255*3;
             do
               {
-                register long t,d;
+                long t,d;
                 pal_w1[0][i] = (pal[0][i] = t = p[0]) * w1;
                 d = t*t;
                 pal_w1[1][i] = (pal[1][i] = t = p[1]) * w1;
@@ -783,8 +783,8 @@ void R_InitTranMap(int progress)
                   lprintf(LO_INFO,".");
                 for (j=0;j<256;j++,tp++)
                   {
-                    register int color = 255;
-                    register long err;
+                    int color = 255;
+                    long err;
                     long r = pal_w1[0][j] + r1;
                     long g = pal_w1[1][j] + g1;
                     long b = pal_w1[2][j] + b1;
@@ -898,8 +898,8 @@ int R_TextureNumForName(const char *name)  // const added -- killough
 
 void R_PrecacheLevel(void)
 {
-  register int i;
-  register byte *hitlist;
+  int i;
+  byte *hitlist;
 
   if (demoplayback)
     return;

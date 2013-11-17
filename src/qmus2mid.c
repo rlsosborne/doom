@@ -121,10 +121,10 @@ void TWriteByte( unsigned char MIDItrack, char byte, struct Track track[] )
 }
 
 
-void TWriteVarLen( int tracknum, register int4 value, 
+void TWriteVarLen( int tracknum, int4 value,
                   struct Track track[] )
 {
-  register int4 buffer ;
+  int4 buffer ;
 
   buffer = value & 0x7f ;
   while( (value >>= 7) )
@@ -193,7 +193,7 @@ int WriteMIDheader( int2 ntrks, int2 division, FILE *file )
 void TWriteString( char tracknum, const char *string, int length,
                    struct Track track[] )
 {
-  register int i ;
+  int i ;
 
   for( i = 0 ; i < length ; i++ )
     TWriteByte( tracknum, string[i], track ) ;
@@ -238,7 +238,7 @@ void WriteFirstTrack( FILE *file )
 
 int4 ReadTime( buflen_t *buflen )
 {
-  register int4 time = 0 ;
+  int4 time = 0 ;
   int byte ;
 
   do

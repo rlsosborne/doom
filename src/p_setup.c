@@ -436,7 +436,7 @@ static void P_LoadLineDefs (int lump)
 static void P_LoadLineDefs2(int lump)
 {
   int i = numlines;
-  register line_t *ld = lines;
+  line_t *ld = lines;
   for (;i--;ld++)
     {
       // CPhipps - compatibility selected
@@ -497,9 +497,9 @@ static void P_LoadSideDefs2(int lump)
 
   for (i=0; i<numsides; i++)
     {
-      register mapsidedef_t *msd = (mapsidedef_t *) data + i;
-      register side_t *sd = sides + i;
-      register sector_t *sec;
+      mapsidedef_t *msd = (mapsidedef_t *) data + i;
+      side_t *sd = sides + i;
+      sector_t *sec;
 
       sd->textureoffset = SHORT(msd->textureoffset)<<FRACBITS;
       sd->rowoffset = SHORT(msd->rowoffset)<<FRACBITS;
@@ -932,8 +932,8 @@ static void P_AddLineToSector(line_t* li, sector_t* sector)
 
 void P_GroupLines (void)
 {
-  register line_t *li;
-  register sector_t* sector;
+  line_t *li;
+  sector_t* sector;
   int i, total = numlines;
 
   // look up sector number for each subsector

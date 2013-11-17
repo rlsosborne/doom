@@ -210,7 +210,7 @@ static boolean P_CrossBSPNode(int bspnum)
 {
   while (!(bspnum & NF_SUBSECTOR))
     {
-      register const node_t *bsp = nodes + bspnum;
+      const node_t *bsp = nodes + bspnum;
       int side = R_PointOnSide(los.strace.x, los.strace.y, bsp);
       if (side == R_PointOnSide(los.t2x, los.t2y, bsp))
          bspnum = bsp->children[side]; // doesn't touch the other side

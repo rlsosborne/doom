@@ -136,10 +136,10 @@ byte    *dc_source;      // first pixel in a column (possibly virtual)
 
 void R_DrawColumn_Normal (void) 
 {
-  int              count; 
-  register byte    *dest;            // killough
-  register fixed_t frac;            // killough
-  fixed_t          fracstep;     
+  int     count;
+  byte    *dest;            // killough
+  fixed_t frac;            // killough
+  fixed_t fracstep;
 
   // leban 1/17/99:
   // on powerpc, this routine currently does not have a stack frame,
@@ -243,7 +243,7 @@ void R_DrawColumn_Normal (void)
   }
   else
   {
-    register unsigned heightmask = dc_texheight-1; // CPhipps - specify type
+    unsigned heightmask = dc_texheight-1; // CPhipps - specify type
     if (! (dc_texheight & heightmask) )   // power of 2 -- killough
     {
       while (count>0)   // texture height is a power of 2 -- killough
@@ -305,10 +305,10 @@ void R_DrawColumn_HighRes (void)
 
 void R_DrawTLColumn_Normal (void)                                           
 { 
-  int              count; 
-  register byte    *dest;           // killough
-  register fixed_t frac;            // killough
-  fixed_t          fracstep;
+  int      count;
+  byte    *dest;           // killough
+  fixed_t frac;            // killough
+  fixed_t fracstep;
 
   count = dc_yh - dc_yl + 1; 
 
@@ -342,9 +342,9 @@ void R_DrawTLColumn_Normal (void)
   // killough 2/1/98, 2/21/98: more performance tuning
   
   {
-    register const byte *source = dc_source;            
-    register const lighttable_t *colormap = dc_colormap; 
-    register unsigned heightmask = dc_texheight-1; // CPhipps - specify type
+    const byte *source = dc_source;
+    const lighttable_t *colormap = dc_colormap; 
+    unsigned heightmask = dc_texheight-1; // CPhipps - specify type
     if (dc_texheight & heightmask)   // not a power of 2 -- killough
       {
         heightmask++;
@@ -624,7 +624,7 @@ byte *ds_source;
 
 void R_DrawSpan (void) 
 { 
-  register unsigned position;
+  unsigned position;
   unsigned step;
 
   byte *source;

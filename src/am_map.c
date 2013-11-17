@@ -892,9 +892,9 @@ boolean AM_clipMline
     TOP     =8
   };
 
-  register int outcode1 = 0;
-  register int outcode2 = 0;
-  register int outside;
+  int outcode1 = 0;
+  int outcode2 = 0;
+  int outside;
 
   fpoint_t  tmp;
   int   dx;
@@ -1019,15 +1019,15 @@ void AM_drawFline
 ( fline_t*  fl,
   int   color )
 {
-  register int x;
-  register int y;
-  register int dx;
-  register int dy;
-  register int sx;
-  register int sy;
-  register int ax;
-  register int ay;
-  register int d;
+  int x;
+  int y;
+  int dx;
+  int dy;
+  int sx;
+  int sy;
+  int ax;
+  int ay;
+  int d;
 
 #ifdef RANGECHECK         // killough 2/22/98    
   static int fuck = 0;

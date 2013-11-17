@@ -193,7 +193,7 @@ static const crdef_t crdefs[] = {
 // killough 5/2/98: tiny engine driven by table above
 void V_InitColorTranslation(void)
 {
-  register const crdef_t *p;
+  const crdef_t *p;
   for (p=crdefs; p->name; p++)
     *p->map1 = *p->map2 = W_CacheLumpName(p->name);
 }
@@ -458,14 +458,14 @@ void V_DrawMemPatch(int x, int y, int scrn, const patch_t *patch,
       while (column->topdelta != 0xff ) {
 	// killough 2/21/98: Unrolled and performance-tuned
 	
-	register const byte *source = (byte *)column + 3;
-	register byte *dest = desttop + column->topdelta*SCREENWIDTH;
-	register int count = column->length;
+	const byte *source = (byte *)column + 3;
+	byte *dest = desttop + column->topdelta*SCREENWIDTH;
+	int count = column->length;
 	
 	if (!(flags & VPT_TRANS)) {
 	  if ((count-=4)>=0)
 	    do {
-	      register byte s0,s1;
+	      byte s0,s1;
 	      s0 = source[0];
 	      s1 = source[1];
 	      dest[0] = s0;
@@ -488,7 +488,7 @@ void V_DrawMemPatch(int x, int y, int scrn, const patch_t *patch,
 	  // CPhipps - merged translation code here
 	  if ((count-=4)>=0)
 	    do {
-	      register byte s0,s1;
+	      byte s0,s1;
 	      s0 = source[0];
 	      s1 = source[1];
 	      s0 = trans[s0];
@@ -527,7 +527,7 @@ void V_DrawMemPatch(int x, int y, int scrn, const patch_t *patch,
     int   DX  = (SCREENWIDTH<<16)  / 320;
     int   DXI = (320<<16)          / SCREENWIDTH;
     int   DY  = (SCREENHEIGHT<<16) / 200;
-    register int DYI = (200<<16)   / SCREENHEIGHT;
+    int DYI = (200<<16)   / SCREENHEIGHT;
     int   DY2, DYI2;
     
     stretchx = ( x * DX ) >> 16;
@@ -549,10 +549,10 @@ void V_DrawMemPatch(int x, int y, int scrn, const patch_t *patch,
       }
       
       while ( column->topdelta != 0xff ) {
-	register const byte *source = ( byte* ) column + 3;
-	register byte       *dest = desttop + (( column->topdelta * DY ) >> 16 ) * SCREENWIDTH;
-	register int         count  = ( column->length * DY ) >> 16;
-	register int         srccol = 0x8000;
+	const byte *source = ( byte* ) column + 3;
+	byte       *dest = desttop + (( column->topdelta * DY ) >> 16 ) * SCREENWIDTH;
+	int         count  = ( column->length * DY ) >> 16;
+	int         srccol = 0x8000;
 	
 	if (flags & VPT_TRANS)
 	  while (count--) {

@@ -318,12 +318,12 @@ unsigned W_LumpNameHash(const char *s)
 // between different resources such as flats, sprites, colormaps
 //
 
-int (W_CheckNumForName)(register const char *name, register int namespace)
+int (W_CheckNumForName)(const char *name, int namespace)
 {
   // Hash function maps the name to one of possibly numlump chains.
   // It has been tuned so that the average chain length never exceeds 2.
 
-  register int i = lumpinfo[W_LumpNameHash(name) % (unsigned) numlumps].index;
+  int i = lumpinfo[W_LumpNameHash(name) % (unsigned) numlumps].index;
 
   // We search along the chain until end, looking for case-insensitive
   // matches which also match a namespace tag. Separate hash tables are
