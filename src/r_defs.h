@@ -326,7 +326,7 @@ typedef struct
   short width, height;  // bounding box size 
   short leftoffset;     // pixels to the left of origin 
   short topoffset;      // pixels below the origin 
-  int columnofs[8];     // only [width] used
+  int columnofs[];     // only [width] used
 } patch_t;
 
 //
