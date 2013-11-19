@@ -799,7 +799,7 @@ void G_Ticker (void)
           if ((netgame || demoplayback) && cmd->forwardmove > TURBOTHRESHOLD &&
               !(gametic&31) && ((gametic>>5)&3) == i )
             {
-	      extern char *player_names[];
+	      extern const char *player_names[];
 	      /* cph - don't use sprintf, use doom_printf */
               doom_printf ("%s is turbo!", player_names[i]);
             }

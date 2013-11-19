@@ -61,7 +61,7 @@ typedef struct
 // included, and removes all extra code which is only there for them
 // Saves a little memory normally, lots if any were overridden, and makes 
 // the executable smaller
-#define NO_PREDEFINED_LUMPS
+// #define NO_PREDEFINED_LUMPS
 
 #endif
 

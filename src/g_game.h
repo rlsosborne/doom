@@ -86,7 +86,11 @@ void G_ChangedPlayerColour(int pn, int cl); // CPhipps - On-the-fly player colou
 
 // killough 1/18/98: Doom-style printf;   killough 4/25/98: add gcc attributes
 // CPhipps - renames to doom_printf to avoid name collision with glibc
+#ifndef __XMOS__
 void doom_printf(const char *, ...) __attribute__((format(printf,1,2)));
+#else
+void doom_printf(const char *, ...);
+#endif
 
 // killough 5/2/98: moved from m_misc.c:
 

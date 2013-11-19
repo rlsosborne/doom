@@ -115,14 +115,14 @@ const byte *main_tranmap;     // killough 4/11/98
 // Source is the top of the column to scale.
 //
 
-lighttable_t *dc_colormap; 
+const lighttable_t *dc_colormap; 
 int     dc_x; 
 int     dc_yl; 
 int     dc_yh; 
 fixed_t dc_iscale; 
 fixed_t dc_texturemid;
 int     dc_texheight;    // killough
-byte    *dc_source;      // first pixel in a column (possibly virtual) 
+const byte    *dc_source;      // first pixel in a column (possibly virtual) 
 
 //
 // A column is a vertical slice/span from a wall texture that,
@@ -486,7 +486,8 @@ void R_DrawFuzzColumn(void)
 //  identical sprites, kinda brightened up.
 //
 
-byte *dc_translation, *translationtables;
+const byte *dc_translation;
+byte *translationtables;
 
 void R_DrawTranslatedColumn (void) 
 { 
@@ -604,7 +605,7 @@ fixed_t ds_xstep;
 fixed_t ds_ystep;
 
 // start of a 64*64 tile image 
-byte *ds_source;
+const byte *ds_source;
 
 void R_DrawSpan (void) 
 { 

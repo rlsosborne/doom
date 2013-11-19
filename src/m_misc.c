@@ -61,7 +61,7 @@ rcsid[] = "$Id: m_misc.c,v 1.43 2000/03/17 20:50:30 cph Exp $";
 // Returns the final X coordinate
 // HU_Init must have been called to init the font
 //
-extern patch_t* hu_font[HU_FONTSIZE];
+extern const patch_t* hu_font[HU_FONTSIZE];
 
 int M_DrawText(int x,int y,boolean direct,char* string)
 {
@@ -179,7 +179,7 @@ extern const char* chat_macros[];
 
 // CPhipps - new stuff. Autoloaded wads, and endoom and misc X options
 extern const char* auto_load_wads;
-extern int endoom_mode;
+extern unsigned endoom_mode;
 int X_opt;
 
 #define UL (-123456789) /* magic number for no min or max for parameter */
