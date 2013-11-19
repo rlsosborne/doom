@@ -39,7 +39,9 @@
 
 /* Endianess handling. */
 
+#ifndef __XMOS__
 #include "SDL.h"
+#endif
 
 /* cph - First the macros to do the actual byte swapping */
 

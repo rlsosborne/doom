@@ -34,7 +34,9 @@ rcsid[] = "$Id: l_video_x.c,v 1.27 1999/10/12 13:01:11 cphipps Exp $";
 #include <stdlib.h>
 #include <unistd.h>
 
+#ifndef __XMOS__
 #include "SDL.h"
+#endif
 #include "SDL_surface.h"
 
 #include "i_system.h"

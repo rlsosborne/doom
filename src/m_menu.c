@@ -38,7 +38,9 @@ rcsid[] = "$Id: m_menu.c,v 1.24 2000/03/17 20:50:30 cph Exp $";
 
 #include <fcntl.h>
 #include <unistd.h>
+#ifndef __XMOS__
 #include "SDL.h"
+#endif
 
 #include "doomdef.h"
 #include "doomstat.h"

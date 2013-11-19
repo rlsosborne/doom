@@ -33,7 +33,9 @@
 
 static const char rcsid[] = "$Id: r_main.c,v 1.20 1999/10/31 15:51:45 cphipps Exp $";
 
+#ifndef __XMOS__
 #include "SDL.h"
+#endif
 #include "doomstat.h"
 #include "w_wad.h"
 #include "r_main.h"

@@ -1,5 +1,7 @@
 #include <stdlib.h>
+#ifndef __XMOS__
 #include "SDL.h"
+#endif
 #include "l_sdl.h"
 
 void I_ShutdownSDL(void)
