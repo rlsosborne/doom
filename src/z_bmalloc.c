@@ -26,9 +26,7 @@
  *-----------------------------------------------------------------------------
  */
 
-#ifndef __XMOS__
-#include <memory.h>
-#endif
+#include <string.h>
 
 #include "doomtype.h"
 #include "z_zone.h"
