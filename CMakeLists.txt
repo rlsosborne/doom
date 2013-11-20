@@ -47,7 +47,7 @@ option(SIMPLECHECKS "Quick checks" On)
 option(TIMEDIAG "Lumps locked for long periods of time are reported" Off)
 
 configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/cmake_config.h.in
+  ${CMAKE_CURRENT_SOURCE_DIR}/config.h.in
   ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
 add_subdirectory(data)
