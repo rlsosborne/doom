@@ -40,7 +40,9 @@ rcsid[] = "$Id: l_system.c,v 1.33 2000/02/26 19:18:23 cph Exp $";
 #include <stdlib.h>
 #include <ctype.h>
 #include <signal.h>
+#ifndef __XMOS__
 #include "SDL.h"
+#endif
 
 #include "i_system.h"
 #include "doomtype.h"

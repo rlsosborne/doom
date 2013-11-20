@@ -237,10 +237,10 @@ extern int armor_green;
 // Ty 03/27/98 - externalized map name arrays - now in d_deh.c
 // and converted to arrays of pointers to char *
 // See modified HUTITLEx macros
-extern char **mapnames[];
-extern char **mapnames2[];
-extern char **mapnamesp[];
-extern char **mapnamest[];
+extern const char **const mapnames[];
+extern const char **const mapnames2[];
+extern const char **const mapnamesp[];
+extern const char **const mapnamest[];
 
 // key tables
 // jff 5/10/98 french support removed, 

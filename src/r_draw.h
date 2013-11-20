@@ -93,7 +93,7 @@ extern fixed_t ds_ystep;
 // start of a 64*64 tile image
 extern const byte *ds_source;              
 extern byte playernumtotrans[MAXPLAYERS]; // CPhipps - what translation table for what player
-extern const byte *translationtables;
+extern byte *translationtables;
 extern const byte *dc_translation;
 
 // Span blitting for rows, floor/ceiling. No Spectre effect needed.

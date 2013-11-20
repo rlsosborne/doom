@@ -39,7 +39,9 @@ static const char rcsid[] = "$Id: d_main.c,v 1.46 2000/03/27 10:33:49 cph Exp $"
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#ifndef __XMOS__
 #include "SDL.h"
+#endif
 
 #include "doomdef.h"
 #include "doomstat.h"
@@ -799,6 +801,7 @@ boolean WadFileStatus(char *filename,boolean *isdir)
 
 static char* FindWADFile(const char* wfname, const char* ext)
 {
+#ifndef __XMOS__
   int		i;
   /* Precalculate a length we will need in the loop */
   size_t	pl = strlen(wfname) + strlen(ext) + 4;
@@ -855,6 +858,7 @@ static char* FindWADFile(const char* wfname, const char* ext)
     }
     free(p);
   }
+#endif
   return NULL;
 }
 

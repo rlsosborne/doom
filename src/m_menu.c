@@ -38,7 +38,9 @@ rcsid[] = "$Id: m_menu.c,v 1.24 2000/03/17 20:50:30 cph Exp $";
 
 #include <fcntl.h>
 #include <unistd.h>
+#ifndef __XMOS__
 #include "SDL.h"
+#endif
 
 #include "doomdef.h"
 #include "doomstat.h"
@@ -58,14 +60,14 @@ rcsid[] = "$Id: m_menu.c,v 1.24 2000/03/17 20:50:30 cph Exp $";
 #include "lprintf.h"
 #include "am_map.h"
 
-extern patch_t* hu_font[HU_FONTSIZE];
+extern const patch_t* hu_font[HU_FONTSIZE];
 extern boolean  message_dontfuckwithme;
           
 extern boolean chat_on;          // in heads-up code
 extern int     hud_active;       // in heads-up code
 extern int     hud_displayed;    // in heads-up code
 extern int     hud_distributed;  // in heads-up code
-extern int     HU_MoveHud(void); // jff 3/9/98 avoid glitch in HUD display
+extern void     HU_MoveHud(void); // jff 3/9/98 avoid glitch in HUD display
 
 //
 // defaulted values
@@ -212,7 +214,7 @@ extern int hudcolor_mesg; // color range of scrolling messages
 extern int hudcolor_chat; // color range of chat lines
 extern int hudcolor_list; // color of list of past messages
 
-extern char* chat_macros[];  // chat macros
+extern const char* chat_macros[];  // chat macros
 extern const char* shiftxform;
 extern int map_secret_after; //secrets do not appear til after bagged
 extern default_t defaults[];

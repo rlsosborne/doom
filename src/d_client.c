@@ -52,7 +52,9 @@
 #include "lprintf.h"
 #include <unistd.h>
 #include <sys/types.h>
+#ifndef __XMOS__
 #include "SDL.h"
+#endif
 
 static boolean   server;
 static int       remotetic; // Tic expected from the remote
