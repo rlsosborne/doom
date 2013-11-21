@@ -60,6 +60,10 @@ rcsid[] = "$Id: m_menu.c,v 1.24 2000/03/17 20:50:30 cph Exp $";
 #include "lprintf.h"
 #include "am_map.h"
 
+#ifdef __XMOS__
+#define SDL_Delay(a) 0
+#endif
+
 extern const patch_t* hu_font[HU_FONTSIZE];
 extern boolean  message_dontfuckwithme;
           

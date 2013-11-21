@@ -43,6 +43,10 @@ static const char rcsid[] = "$Id: lprintf.c,v 1.4 2000/02/26 19:17:54 cph Exp $"
 #include "../config.h"
 #endif
 
+#ifdef __XMOS__
+#define isatty(a) 0
+#endif
+
 int cons_error_mask = -1-LO_INFO; /* all but LO_INFO when redir'd */
 int cons_output_mask = -1;        /* all output enabled */
 

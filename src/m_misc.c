@@ -56,6 +56,12 @@ rcsid[] = "$Id: m_misc.c,v 1.43 2000/03/17 20:50:30 cph Exp $";
 #include <fcntl.h>
 #include <sys/stat.h>
 
+#ifdef __XMOS__
+#define access(a, b) 0
+#define fstat(a, b) 0
+#define unlink(a) 0
+#endif
+
 //
 // M_DrawText
 // Returns the final X coordinate

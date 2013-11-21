@@ -73,6 +73,13 @@ static const char rcsid[] = "$Id: d_main.c,v 1.46 2000/03/27 10:33:49 cph Exp $"
 #include "lprintf.h"  // jff 08/03/98 - declaration of lprintf
 #include "am_map.h"
 
+#ifdef __XMOS__
+#define access(a, b) 0
+#define mkdir(a, b) 0
+#define stat(a, b) 0
+#define SDL_Delay(a) 0
+#endif
+
 // DEHacked support - Ty 03/09/97 // CPhipps - const char*'s
 void ProcessDehFile(const char *filename, const char *outfilename, int lumpnum);
 

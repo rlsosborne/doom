@@ -56,6 +56,10 @@
 #include "SDL.h"
 #endif
 
+#ifdef __XMOS__
+#define SDL_Delay(a)
+#endif
+
 static boolean   server;
 static int       remotetic; // Tic expected from the remote
 #ifdef HAVE_NET

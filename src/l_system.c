@@ -57,6 +57,10 @@ rcsid[] = "$Id: l_system.c,v 1.33 2000/02/26 19:18:23 cph Exp $";
 #include "../config.h"
 #endif
 
+#ifdef __XMOS__
+#define SDL_GetTicks() 0
+#endif
+
 int I_GetTime_RealTime (void)
 {
   return (SDL_GetTicks()*TICRATE)/1000;

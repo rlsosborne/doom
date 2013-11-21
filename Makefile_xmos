@@ -25,7 +25,7 @@ SOURCE_DIRS = src
 # If the variable XCC_MAP_FLAGS is set it overrides the flags passed to 
 # xcc for the final link (mapping) stage.
 
-XCC_FLAGS = -Os -save-temps -g -report -Xmapper --map -Xmapper MAPFILE -D__XMOS__
+XCC_FLAGS = -Xmapper --errdemote53 -Xmapper --image-size -Xmapper 0x160000 -Xmapper --image-base -Xmapper 0x160000 -Os -save-temps -g -report -Xmapper --map -Xmapper MAPFILE -D__XMOS__
 
 XCC_FLAGS += -DPATH_MAX=64 -DVERSION=1
 
