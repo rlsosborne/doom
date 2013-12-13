@@ -32,6 +32,7 @@
 static const char
 rcsid[] = "$Id: r_bsp.c,v 1.13 1999/10/17 09:35:14 cphipps Exp $";
 
+#include "compiler.h"
 #include "doomstat.h"
 #include "m_bbox.h"
 #include "i_system.h"
@@ -60,7 +61,7 @@ unsigned  maxdrawsegs;
 // R_ClearDrawSegs
 //
 
-void R_ClearDrawSegs(void)
+OVERLAY void R_ClearDrawSegs(void)
 {
   ds_p = drawsegs;
 }
@@ -77,7 +78,7 @@ byte solidcol[MAX_SCREENWIDTH];
 // Replaces the old R_Clip*WallSegment functions. It draws bits of walls in those 
 // columns which aren't solid, and updates the solidcol[] array appropriately
 
-void R_ClipWallSegment(int first, int last, boolean solid)
+OVERLAY void R_ClipWallSegment(int first, int last, boolean solid)
 {
   byte *p;
   while (first < last) {
@@ -104,7 +105,7 @@ void R_ClipWallSegment(int first, int last, boolean solid)
 // R_ClearClipSegs
 //
 
-void R_ClearClipSegs (void)
+OVERLAY void R_ClearClipSegs (void)
 {
   memset(solidcol, 0, SCREENWIDTH);
 }
@@ -115,7 +116,7 @@ void R_ClearClipSegs (void)
 // cph - converted to R_RecalcLineFlags. This recalculates all the flags for 
 // a line, including closure and texture tiling.
 
-static void R_RecalcLineFlags(void)
+OVERLAY static void R_RecalcLineFlags(void)
 {
   linedef->r_validcount = gametic;
 
@@ -199,7 +200,7 @@ static void R_RecalcLineFlags(void)
 // killough 4/11/98, 4/13/98: fix bugs, add 'back' parameter
 //
 
-sector_t *R_FakeFlat(sector_t *sec, sector_t *tempsec,
+OVERLAY sector_t *R_FakeFlat(sector_t *sec, sector_t *tempsec,
                      int *floorlightlevel, int *ceilinglightlevel,
                      boolean back)
 {
@@ -295,7 +296,7 @@ sector_t *R_FakeFlat(sector_t *sec, sector_t *tempsec,
 // and adds any visible pieces to the line list.
 //
 
-static void R_AddLine (seg_t *line)
+OVERLAY static void R_AddLine (seg_t *line)
 {
   int      x1;
   int      x2;
@@ -398,7 +399,7 @@ static const int checkcoord[12][4] = // killough -- static const
 };
 
 // killough 1/28/98: static // CPhipps - const parameter, reformatted
-static boolean R_CheckBBox(const fixed_t *bspcoord) 
+OVERLAY static boolean R_CheckBBox(const fixed_t *bspcoord) 
 {
   angle_t angle1, angle2;
 
@@ -465,7 +466,7 @@ static boolean R_CheckBBox(const fixed_t *bspcoord)
 //
 // killough 1/31/98 -- made static, polished
 
-static void R_Subsector(int num)
+OVERLAY static void R_Subsector(int num)
 {
   int         count;
   seg_t       *line;
@@ -543,7 +544,7 @@ static void R_Subsector(int num)
 //
 // killough 5/2/98: reformatted, removed tail recursion
 
-void R_RenderBSPNode(int bspnum)
+OVERLAY void R_RenderBSPNode(int bspnum)
 {
   while (!(bspnum & NF_SUBSECTOR))  // Found a subsector?
     {

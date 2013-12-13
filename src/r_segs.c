@@ -34,6 +34,7 @@
 static const char
 rcsid[] = "$Id: r_segs.c,v 1.14 1999/10/17 08:52:04 cphipps Exp $";
 
+#include "compiler.h"
 #include "doomstat.h"
 #include "r_main.h"
 #include "r_bsp.h"
@@ -98,7 +99,7 @@ static short    *maskedtexturecol;
 // killough 5/2/98: reformatted, cleaned up
 // CPhipps - moved here from r_main.c
 
-static fixed_t R_ScaleFromGlobalAngle(angle_t visangle)
+OVERLAY static fixed_t R_ScaleFromGlobalAngle(angle_t visangle)
 {
   int     anglea = ANG90 + (visangle-viewangle);
   int     angleb = ANG90 + (visangle-rw_normalangle);
@@ -113,7 +114,7 @@ static fixed_t R_ScaleFromGlobalAngle(angle_t visangle)
 // R_RenderMaskedSegRange
 //
 
-void R_RenderMaskedSegRange(drawseg_t *ds, int x1, int x2)
+OVERLAY void R_RenderMaskedSegRange(drawseg_t *ds, int x1, int x2)
 {
   column_t *col;
   int      lightnum;
@@ -249,7 +250,7 @@ extern byte solidcol[MAX_SCREENWIDTH];
 #define HEIGHTUNIT (1<<HEIGHTBITS)
 static int didsolidcol; /* True if at least one column was marked solid */
 
-static void R_RenderSegLoop (void)
+OVERLAY static void R_RenderSegLoop (void)
 {
   fixed_t  texturecolumn = 0;   // shut up compiler warning
   rendered_segs++;
@@ -415,7 +416,7 @@ static void R_RenderSegLoop (void)
 
 // killough 5/2/98: move from r_main.c, made static, simplified
 
-static fixed_t R_PointToDist(fixed_t x, fixed_t y)
+OVERLAY static fixed_t R_PointToDist(fixed_t x, fixed_t y)
 {
   fixed_t dx = abs(x - viewx);
   fixed_t dy = abs(y - viewy);
@@ -436,7 +437,7 @@ static fixed_t R_PointToDist(fixed_t x, fixed_t y)
 // A wall segment will be drawn
 //  between start and stop pixels (inclusive).
 //
-void R_StoreWallRange(const int start, const int stop)
+OVERLAY void R_StoreWallRange(const int start, const int stop)
 {
   fixed_t hyp;
   fixed_t sineval;

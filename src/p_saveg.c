@@ -32,6 +32,7 @@
 static const char
 rcsid[] = "$Id: p_saveg.c,v 1.11 1999/10/31 11:52:23 cphipps Exp $";
 
+#include "compiler.h"
 #include <stdint.h>
 #include "doomstat.h"
 #include "r_main.h"
@@ -52,7 +53,7 @@ byte *save_p;
 //
 // P_ArchivePlayers
 //
-void P_ArchivePlayers (void)
+OVERLAY void P_ArchivePlayers (void)
 {
   int i;
 
@@ -77,7 +78,7 @@ void P_ArchivePlayers (void)
 //
 // P_UnArchivePlayers
 //
-void P_UnArchivePlayers (void)
+OVERLAY void P_UnArchivePlayers (void)
 {
   int i;
 
@@ -107,7 +108,7 @@ void P_UnArchivePlayers (void)
 //
 // P_ArchiveWorld
 //
-void P_ArchiveWorld (void)
+OVERLAY void P_ArchiveWorld (void)
 {
   int            i;
   const sector_t *sec;
@@ -218,7 +219,7 @@ void P_ArchiveWorld (void)
 //
 // P_UnArchiveWorld
 //
-void P_UnArchiveWorld (void)
+OVERLAY void P_UnArchiveWorld (void)
 {
   int          i;
   sector_t     *sec;
@@ -306,7 +307,7 @@ typedef enum {
 
 static int number_of_thinkers;
 
-void P_ThinkerToIndex(void)
+OVERLAY void P_ThinkerToIndex(void)
   {
   thinker_t *th;
 
@@ -323,7 +324,7 @@ void P_ThinkerToIndex(void)
 // phares 9/13/98: Moved this code outside of P_ArchiveThinkers so the
 // thinker indices could be used by the code that saves sector info.
 
-void P_IndexToThinker(void)
+OVERLAY void P_IndexToThinker(void)
   {
   // killough 2/14/98: restore prev pointers
   thinker_t *th;
@@ -341,7 +342,7 @@ const size_t mobjsize = sizeof(mobj_t) - sizeof(int);
 //
 // 2/14/98 killough: substantially modified to fix savegame bugs
 
-void P_ArchiveThinkers (void)
+OVERLAY void P_ArchiveThinkers (void)
 {
   thinker_t *th;
 
@@ -425,7 +426,7 @@ void P_ArchiveThinkers (void)
   
 }
 
-static void P_SetNewTarget(mobj_t**p, mobj_t* v)
+OVERLAY static void P_SetNewTarget(mobj_t**p, mobj_t* v)
 {
   *p = NULL; P_SetTarget(p, v);
 }
@@ -436,7 +437,7 @@ static void P_SetNewTarget(mobj_t**p, mobj_t* v)
 // 2/14/98 killough: substantially modified to fix savegame bugs
 //
 
-void P_UnArchiveThinkers (void)
+OVERLAY void P_UnArchiveThinkers (void)
 {
   thinker_t *th;
   mobj_t    **mobj_p;    // killough 2/14/98: Translation table
@@ -579,7 +580,7 @@ enum {
 // T_Pusher                                                 // phares 3/22/98
 //
 
-void P_ArchiveSpecials (void)
+OVERLAY void P_ArchiveSpecials (void)
 {
   thinker_t *th;
   size_t    size = 0;          // killough
@@ -800,7 +801,7 @@ void P_ArchiveSpecials (void)
 //
 // P_UnArchiveSpecials
 //
-void P_UnArchiveSpecials (void)
+OVERLAY void P_UnArchiveSpecials (void)
 {
   byte tclass;
 
@@ -976,7 +977,7 @@ void P_UnArchiveSpecials (void)
 // killough 2/16/98: save/restore random number generator state information
 // CPhipps - fixed compatibility with Boom v2.02
 
-void P_ArchiveRNG(void)
+OVERLAY void P_ArchiveRNG(void)
 {
   CheckSaveGame(sizeof rng);
   if (compatibility_level >= lxdoom_1_compatibility) {
@@ -992,7 +993,7 @@ void P_ArchiveRNG(void)
   }
 }
 
-void P_UnArchiveRNG(void)
+OVERLAY void P_UnArchiveRNG(void)
 {
   if (compatibility_level >= lxdoom_1_compatibility) {
     memcpy(&rng, save_p, sizeof rng);
@@ -1007,7 +1008,7 @@ void P_UnArchiveRNG(void)
 }
 
 // killough 2/22/98: Save/restore automap state
-void P_ArchiveMap(void)
+OVERLAY void P_ArchiveMap(void)
 {
   int zero = 0, one = 1;
   CheckSaveGame(2 * sizeof zero + sizeof markpointnum +
@@ -1032,7 +1033,7 @@ void P_ArchiveMap(void)
     }
 }
 
-void P_UnArchiveMap(void)
+OVERLAY void P_UnArchiveMap(void)
 {
   int unused;
   memcpy(&automapmode, save_p, sizeof automapmode);

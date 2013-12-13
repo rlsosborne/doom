@@ -32,6 +32,7 @@
  *-----------------------------------------------------------------------------*/
 
 static const char rcsid[] = "$Id: lprintf.c,v 1.4 2000/02/26 19:17:54 cph Exp $";
+#include "compiler.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -55,7 +56,7 @@ int cons_output_mask = -1;        /* all output enabled */
  */
 #define MAX_MESSAGE_SIZE 2048
 
-int lprintf(OutputLevels pri, const char *s, ...)
+OVERLAY int lprintf(OutputLevels pri, const char *s, ...)
 {
   int r=0;
   char msg[MAX_MESSAGE_SIZE];
@@ -87,7 +88,7 @@ int lprintf(OutputLevels pri, const char *s, ...)
  * killough 3/20/98: add const
  */
 
-void I_Error(const char *error, ...)
+OVERLAY void I_Error(const char *error, ...)
 {
   char errmsg[MAX_MESSAGE_SIZE];
   va_list argptr;

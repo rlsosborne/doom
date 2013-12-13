@@ -33,6 +33,7 @@
 static const char
 rcsid[] = "$Id: r_data.c,v 1.13 2000/01/25 22:40:45 cphipps Exp $";
 
+#include "compiler.h"
 #include "doomstat.h"
 #include "w_wad.h"
 #include "r_main.h"
@@ -146,7 +147,7 @@ fixed_t   *spritewidth, *spriteoffset, *spritetopoffset;
 // Rewritten by Lee Killough for performance and to fix Medusa bug
 //
 
-void R_DrawColumnInCache(const column_t *patch, byte *cache,
+OVERLAY void R_DrawColumnInCache(const column_t *patch, byte *cache,
                          int originy, int cacheheight, byte *marks)
 {
   while (patch->topdelta != 0xff)
@@ -186,7 +187,7 @@ void R_DrawColumnInCache(const column_t *patch, byte *cache,
 //
 // Rewritten by Lee Killough for performance and to fix Medusa bug
 
-void R_GenerateComposite(int texnum)
+OVERLAY void R_GenerateComposite(int texnum)
 {
   texture_t *texture = textures[texnum];
   byte *block = Z_Malloc(texture->compositesize, PU_STATIC,
@@ -264,7 +265,7 @@ void R_GenerateComposite(int texnum)
 // Rewritten by Lee Killough for performance and to fix Medusa bug
 //
 
-static void R_GenerateLookup(int texnum, int *const errors)
+OVERLAY static void R_GenerateLookup(int texnum, int *const errors)
 {
   texture_t *texture = textures[texnum];
 
@@ -365,7 +366,7 @@ static void R_GenerateLookup(int texnum, int *const errors)
 // R_GetColumn
 //
 
-const byte *R_GetColumn(int tex, int col)
+OVERLAY const byte *R_GetColumn(int tex, int col)
 {
   const texture_t *texture = textures[tex];
   if (!texture->columnlump) R_GenerateLookup(tex, NULL);
@@ -409,7 +410,7 @@ const byte *R_GetColumn(int tex, int col)
 //  with the textures from the world map.
 //
 
-void R_InitTextures (void)
+OVERLAY void R_InitTextures (void)
 {
   maptexture_t *mtexture;
   texture_t    *texture;
@@ -605,7 +606,7 @@ void R_InitTextures (void)
 //
 // R_InitFlats
 //
-void R_InitFlats(void)
+OVERLAY void R_InitFlats(void)
 {
   int i;
 
@@ -630,7 +631,7 @@ void R_InitFlats(void)
 // so the sprite does not need to be cached completely
 // just for having the header info ready during rendering.
 //
-void R_InitSpriteLumps(void)
+OVERLAY void R_InitSpriteLumps(void)
 {
   int i;
   const patch_t *patch;
@@ -666,12 +667,12 @@ void R_InitSpriteLumps(void)
 // killough 4/4/98: Add support for C_START/C_END markers
 //
 
-static void* R_GetColourmaps(int lump)
+OVERLAY static void* R_GetColourmaps(int lump)
 {
   return (void *)W_CacheLumpNum(lump);
 }
 
-void R_InitColormaps(void)
+OVERLAY void R_InitColormaps(void)
 {
   int i;
   firstcolormaplump = W_GetNumForName("C_START");
@@ -688,7 +689,7 @@ void R_InitColormaps(void)
 // killough 4/11/98: changed to return -1 for illegal names
 // killough 4/17/98: changed to use ns_colormaps tag
 
-int R_ColormapNumForName(const char *name)
+OVERLAY int R_ColormapNumForName(const char *name)
 {
   int i = 0;
   if (strncasecmp(name,"COLORMAP",8))     // COLORMAP predefined to return 0
@@ -709,7 +710,7 @@ int tran_filter_pct = 66;       // filter percent
 
 #define TSC 12        /* number of fixed point digits in filter percent */
 
-void R_InitTranMap(int progress)
+OVERLAY void R_InitTranMap(int progress)
 {
   int lump = W_CheckNumForName("TRANMAP");
 
@@ -822,7 +823,7 @@ void R_InitTranMap(int progress)
 // Must be called after W_Init.
 //
 
-void R_InitData(void)
+OVERLAY void R_InitData(void)
 {
   lprintf(LO_INFO, "Textures ");
   R_InitTextures();
@@ -842,7 +843,7 @@ void R_InitData(void)
 // killough 4/17/98: changed to use ns_flats namespace
 //
 
-int R_FlatNumForName(const char *name)    // killough -- const added
+OVERLAY int R_FlatNumForName(const char *name)    // killough -- const added
 {
   int i = (W_CheckNumForName)(name, ns_flats);
   if (i == -1)
@@ -862,7 +863,7 @@ int R_FlatNumForName(const char *name)    // killough -- const added
 // killough 1/21/98, 1/31/98
 //
 
-int R_CheckTextureNumForName(const char *name)
+OVERLAY int R_CheckTextureNumForName(const char *name)
 {
   int i = 0;
   if (*name != '-')     // "NoTexture" marker.
@@ -880,7 +881,7 @@ int R_CheckTextureNumForName(const char *name)
 //  aborts with error message.
 //
 
-int R_TextureNumForName(const char *name)  // const added -- killough
+OVERLAY int R_TextureNumForName(const char *name)  // const added -- killough
 {
   int i = R_CheckTextureNumForName(name);
   if (i == -1)
@@ -896,7 +897,7 @@ int R_TextureNumForName(const char *name)  // const added -- killough
 // to avoid using alloca(), and to improve performance.
 // cph - new wad lump handling, calls cache functions but acquires no locks
 
-void R_PrecacheLevel(void)
+OVERLAY void R_PrecacheLevel(void)
 {
   int i;
   byte *hitlist;

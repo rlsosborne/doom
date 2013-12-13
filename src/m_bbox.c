@@ -40,14 +40,15 @@ rcsid[] = "$Id: m_bbox.c,v 1.3 1999/10/12 13:00:56 cphipps Exp $";
 #pragma implementation "m_bbox.h"
 #endif
 #include "m_bbox.h"
+#include "compiler.h"
 
-void M_ClearBox (fixed_t *box)
+OVERLAY void M_ClearBox (fixed_t *box)
 {
   box[BOXTOP] = box[BOXRIGHT] = INT_MIN;
   box[BOXBOTTOM] = box[BOXLEFT] = INT_MAX;
 }
 
-void M_AddToBox(fixed_t* box,fixed_t x,fixed_t y)
+OVERLAY void M_AddToBox(fixed_t* box,fixed_t x,fixed_t y)
   {
   if (x<box[BOXLEFT])
     box[BOXLEFT] = x;

@@ -35,6 +35,7 @@ static const char
 rcsid[] = "$Id: d_deh.c,v 1.16 1999/10/27 18:35:50 cphipps Exp $";
 
 // killough 5/2/98: fixed headers, removed rendunant external declarations:
+#include "compiler.h"
 #include "doomdef.h"
 #include "doomstat.h"
 #include "sounds.h"
@@ -55,7 +56,7 @@ rcsid[] = "$Id: d_deh.c,v 1.16 1999/10/27 18:35:50 cphipps Exp $";
 // CPhipps - hmm, odd...
 #include <ctype.h>
 
-char* strlwr(char* str)
+OVERLAY char* strlwr(char* str)
 {
   char* p;
   for (p=str; *p; p++) *p = tolower(*p);
@@ -73,7 +74,7 @@ typedef struct {
 
 // killough 10/98: emulate IO whether input really comes from a file or not
 
-char *dehfgets(char *buf, size_t n, DEHFILE *fp)
+OVERLAY char *dehfgets(char *buf, size_t n, DEHFILE *fp)
 {
   if (!fp->lump)                                     // If this is a real file,
     return (fgets)(buf, n, (FILE *) fp->inp);        // return regular fgets
@@ -92,12 +93,12 @@ char *dehfgets(char *buf, size_t n, DEHFILE *fp)
   return buf;                                        // Return buffer pointer
 }
 
-int dehfeof(DEHFILE *fp)
+OVERLAY int dehfeof(DEHFILE *fp)
 {
   return !fp->lump ? (feof)((FILE *) fp->inp) : !*fp->inp || fp->size<=0;
 }
 
-int dehfgetc(DEHFILE *fp)
+OVERLAY int dehfgetc(DEHFILE *fp)
 {
   return !fp->lump ? (fgetc)((FILE *) fp->inp) : fp->size > 0 ?
     fp->size--, *fp->inp++ : EOF;
@@ -1438,7 +1439,7 @@ static actionf_t deh_codeptr[NUMSTATES];
 // killough 10/98:
 // substantially modified to allow input from wad lumps instead of .deh files.
 
-void ProcessDehFile(const char *filename, const char *outfilename, int lumpnum)
+OVERLAY void ProcessDehFile(const char *filename, const char *outfilename, int lumpnum)
 {
   static FILE *fileout;       // In case -dehout was used
   DEHFILE infile, *filein = &infile;    // killough 10/98
@@ -1574,7 +1575,7 @@ void ProcessDehFile(const char *filename, const char *outfilename, int lumpnum)
 //          line  -- current line in file to process
 // Returns: void
 //
-void deh_procBexCodePointers(DEHFILE *fpin, FILE* fpout, char *line)
+OVERLAY void deh_procBexCodePointers(DEHFILE *fpin, FILE* fpout, char *line)
 {
   char key[DEH_MAXKEYLEN];
   char inbuffer[DEH_BUFFERMAX];
@@ -1650,7 +1651,7 @@ void deh_procBexCodePointers(DEHFILE *fpin, FILE* fpout, char *line)
 // bit masks for monster attributes
 //
 
-void deh_procThing(DEHFILE *fpin, FILE* fpout, char *line)
+OVERLAY void deh_procThing(DEHFILE *fpin, FILE* fpout, char *line)
 {
   char key[DEH_MAXKEYLEN];
   char inbuffer[DEH_BUFFERMAX];
@@ -1742,7 +1743,7 @@ void deh_procThing(DEHFILE *fpin, FILE* fpout, char *line)
 //          line  -- current line in file to process
 // Returns: void
 //
-void deh_procFrame(DEHFILE *fpin, FILE* fpout, char *line)
+OVERLAY void deh_procFrame(DEHFILE *fpin, FILE* fpout, char *line)
 {
   char key[DEH_MAXKEYLEN];
   char inbuffer[DEH_BUFFERMAX];
@@ -1822,7 +1823,7 @@ void deh_procFrame(DEHFILE *fpin, FILE* fpout, char *line)
 //          line  -- current line in file to process
 // Returns: void
 //
-void deh_procPointer(DEHFILE *fpin, FILE* fpout, char *line) // done
+OVERLAY void deh_procPointer(DEHFILE *fpin, FILE* fpout, char *line) // done
 {
   char key[DEH_MAXKEYLEN];
   char inbuffer[DEH_BUFFERMAX];
@@ -1897,7 +1898,7 @@ void deh_procPointer(DEHFILE *fpin, FILE* fpout, char *line) // done
 //          line  -- current line in file to process
 // Returns: void
 //
-void deh_procSounds(DEHFILE *fpin, FILE* fpout, char *line)
+OVERLAY void deh_procSounds(DEHFILE *fpin, FILE* fpout, char *line)
 {
   char key[DEH_MAXKEYLEN];
   char inbuffer[DEH_BUFFERMAX];
@@ -1965,7 +1966,7 @@ void deh_procSounds(DEHFILE *fpin, FILE* fpout, char *line)
 //          line  -- current line in file to process
 // Returns: void
 //
-void deh_procAmmo(DEHFILE *fpin, FILE* fpout, char *line)
+OVERLAY void deh_procAmmo(DEHFILE *fpin, FILE* fpout, char *line)
 {
   char key[DEH_MAXKEYLEN];
   char inbuffer[DEH_BUFFERMAX];
@@ -2011,7 +2012,7 @@ void deh_procAmmo(DEHFILE *fpin, FILE* fpout, char *line)
 //          line  -- current line in file to process
 // Returns: void
 //
-void deh_procWeapon(DEHFILE *fpin, FILE* fpout, char *line)
+OVERLAY void deh_procWeapon(DEHFILE *fpin, FILE* fpout, char *line)
 {
   char key[DEH_MAXKEYLEN];
   char inbuffer[DEH_BUFFERMAX];
@@ -2069,7 +2070,7 @@ void deh_procWeapon(DEHFILE *fpin, FILE* fpout, char *line)
 //          line  -- current line in file to process
 // Returns: void
 //
-void deh_procSprite(DEHFILE *fpin, FILE* fpout, char *line) // Not supported
+OVERLAY void deh_procSprite(DEHFILE *fpin, FILE* fpout, char *line) // Not supported
 {
   char key[DEH_MAXKEYLEN];
   char inbuffer[DEH_BUFFERMAX];
@@ -2103,7 +2104,7 @@ void deh_procSprite(DEHFILE *fpin, FILE* fpout, char *line) // Not supported
 //          line  -- current line in file to process
 // Returns: void
 //
-void deh_procPars(DEHFILE *fpin, FILE* fpout, char *line) // extension
+OVERLAY void deh_procPars(DEHFILE *fpin, FILE* fpout, char *line) // extension
 {
   char key[DEH_MAXKEYLEN];
   char inbuffer[DEH_BUFFERMAX];
@@ -2189,7 +2190,7 @@ void deh_procPars(DEHFILE *fpin, FILE* fpout, char *line) // extension
 //          line  -- current line in file to process
 // Returns: void
 //
-void deh_procCheat(DEHFILE *fpin, FILE* fpout, char *line) // done
+OVERLAY void deh_procCheat(DEHFILE *fpin, FILE* fpout, char *line) // done
 {
   char key[DEH_MAXKEYLEN];
   char inbuffer[DEH_BUFFERMAX];
@@ -2266,7 +2267,7 @@ void deh_procCheat(DEHFILE *fpin, FILE* fpout, char *line) // done
 //          line  -- current line in file to process
 // Returns: void
 //
-void deh_procMisc(DEHFILE *fpin, FILE* fpout, char *line) // done
+OVERLAY void deh_procMisc(DEHFILE *fpin, FILE* fpout, char *line) // done
 {
   char key[DEH_MAXKEYLEN];
   char inbuffer[DEH_BUFFERMAX];
@@ -2351,7 +2352,7 @@ void deh_procMisc(DEHFILE *fpin, FILE* fpout, char *line) // done
 //          line  -- current line in file to process
 // Returns: void
 //
-void deh_procText(DEHFILE *fpin, FILE* fpout, char *line)
+OVERLAY void deh_procText(DEHFILE *fpin, FILE* fpout, char *line)
 {
   char key[DEH_MAXKEYLEN];
   char inbuffer[DEH_BUFFERMAX*2];  // can't use line -- double size buffer too.
@@ -2478,7 +2479,7 @@ void deh_procText(DEHFILE *fpin, FILE* fpout, char *line)
   return;
 }
 
-void deh_procError(DEHFILE *fpin, FILE* fpout, char *line)
+OVERLAY void deh_procError(DEHFILE *fpin, FILE* fpout, char *line)
 {
   char inbuffer[DEH_BUFFERMAX];
 
@@ -2495,7 +2496,7 @@ void deh_procError(DEHFILE *fpin, FILE* fpout, char *line)
 //          line  -- current line in file to process
 // Returns: void
 //
-void deh_procStrings(DEHFILE *fpin, FILE* fpout, char *line)
+OVERLAY void deh_procStrings(DEHFILE *fpin, FILE* fpout, char *line)
 {
   char key[DEH_MAXKEYLEN];
   char inbuffer[DEH_BUFFERMAX];
@@ -2575,7 +2576,7 @@ void deh_procStrings(DEHFILE *fpin, FILE* fpout, char *line)
 //          fpout     -- file stream pointer for log file (DEHOUT.TXT)
 // Returns: boolean: True if string found, false if not
 //
-boolean deh_procStringSub(char *key, char *lookfor, char *newstring, FILE *fpout)
+OVERLAY boolean deh_procStringSub(char *key, char *lookfor, char *newstring, FILE *fpout)
 {
   boolean found; // loop exit flag
   int i;  // looper
@@ -2643,7 +2644,7 @@ boolean deh_procStringSub(char *key, char *lookfor, char *newstring, FILE *fpout
 // Args:    string -- the string to convert
 // Returns: the converted string (converted in a static buffer)
 //
-char *dehReformatStr(char *string)
+OVERLAY char *dehReformatStr(char *string)
 {
   static char buff[DEH_BUFFERMAX]; // only processing the changed string,
   //  don't need double buffer
@@ -2672,7 +2673,7 @@ char *dehReformatStr(char *string)
 //
 // killough 10/98: only strip at end of line, not entire string
 
-void lfstrip(char *s)  // strip the \r and/or \n off of a line
+OVERLAY void lfstrip(char *s)  // strip the \r and/or \n off of a line
 {
   char *p = s+strlen(s);
   while (p > s && (*--p=='\r' || *p=='\n'))
@@ -2685,7 +2686,7 @@ void lfstrip(char *s)  // strip the \r and/or \n off of a line
 // Args:    s -- the string to work on
 // Returns: void -- the string is modified in place
 //
-void rstrip(char *s)  // strip trailing whitespace
+OVERLAY void rstrip(char *s)  // strip trailing whitespace
 {
   char *p = s+strlen(s);         // killough 4/4/98: same here
   while (p > s && isspace(*--p)) // break on first non-whitespace
@@ -2699,7 +2700,7 @@ void rstrip(char *s)  // strip trailing whitespace
 // Returns: char * pointing to the first nonblank character in the
 //          string.  The original string is not changed.
 //
-char *ptr_lstrip(char *p)  // point past leading whitespace
+OVERLAY char *ptr_lstrip(char *p)  // point past leading whitespace
 {
   while (isspace(*p))
     p++;
@@ -2720,7 +2721,7 @@ char *ptr_lstrip(char *p)  // point past leading whitespace
 //          as a long just in case.  The passed pointer to hold
 //          the key must be DEH_MAXKEYLEN in size.
 
-boolean deh_GetData(char *s, char *k, long *l, char **strval, FILE *fpout)
+OVERLAY boolean deh_GetData(char *s, char *k, long *l, char **strval, FILE *fpout)
 {
   char *t;  // current char
   long val; // to hold value of pair

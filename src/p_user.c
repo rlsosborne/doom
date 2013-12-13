@@ -34,6 +34,7 @@
 static const char
 rcsid[] = "$Id: p_user.c,v 1.3 1999/10/12 13:01:13 cphipps Exp $";
 
+#include "compiler.h"
 #include "doomstat.h"
 #include "d_event.h"
 #include "r_main.h"
@@ -60,7 +61,7 @@ boolean onground; // whether player is on ground or in air
 // Moves the given origin along a given angle.
 //
 
-void P_Thrust(player_t* player,angle_t angle,fixed_t move)
+OVERLAY void P_Thrust(player_t* player,angle_t angle,fixed_t move)
   {
   angle >>= ANGLETOFINESHIFT;
   player->mo->momx += FixedMul(move,finecosine[angle]);
@@ -73,7 +74,7 @@ void P_Thrust(player_t* player,angle_t angle,fixed_t move)
 // Calculate the walking / running height adjustment
 //
 
-void P_CalcHeight (player_t* player)
+OVERLAY void P_CalcHeight (player_t* player)
   {
   int     angle;
   fixed_t bob;
@@ -162,7 +163,7 @@ void P_CalcHeight (player_t* player)
 //
 // Adds momentum if the player is not in the air
 
-void P_MovePlayer (player_t* player)
+OVERLAY void P_MovePlayer (player_t* player)
   {
   ticcmd_t* cmd;
   int       movefactor;       // movement factor                    // phares
@@ -198,7 +199,7 @@ void P_MovePlayer (player_t* player)
 // Decrease POV height to floor height.
 //
 
-void P_DeathThink (player_t* player)
+OVERLAY void P_DeathThink (player_t* player)
   {
   angle_t angle;
   angle_t delta;
@@ -253,7 +254,7 @@ void P_DeathThink (player_t* player)
 // P_PlayerThink
 //
 
-void P_PlayerThink (player_t* player)
+OVERLAY void P_PlayerThink (player_t* player)
   {
   ticcmd_t*    cmd;
   weapontype_t newweapon;

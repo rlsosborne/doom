@@ -20,6 +20,7 @@
    Ripped for the lsdldoom port by Sam Lantinga - Thanks! :)
 */
 
+#include "compiler.h"
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -37,7 +38,7 @@ typedef struct {
 } buflen_t;
 
 /* Read a 16-bit little-endian value */
-int read1(buflen_t *buflen)
+OVERLAY int read1(buflen_t *buflen)
 {
   int value;
 
@@ -49,7 +50,7 @@ int read1(buflen_t *buflen)
   buflen->len--;
   return(value);
 }
-int read2(int2 *intp, buflen_t *buflen)
+OVERLAY int read2(int2 *intp, buflen_t *buflen)
 {
   int i;
 
@@ -65,7 +66,7 @@ int read2(int2 *intp, buflen_t *buflen)
   return(1);
 }
 /* Read a 32-bit little-endian value */
-int read4(int4 *intp, buflen_t *buflen)
+OVERLAY int read4(int4 *intp, buflen_t *buflen)
 {
   int i;
 
@@ -81,7 +82,7 @@ int read4(int4 *intp, buflen_t *buflen)
   return(1);
 }
 
-size_t fwrite2(const int2 *ptr, size_t size, FILE *file)
+OVERLAY size_t fwrite2(const int2 *ptr, size_t size, FILE *file)
 {
   int4 rev = 0;
   int i;
@@ -93,7 +94,7 @@ size_t fwrite2(const int2 *ptr, size_t size, FILE *file)
 }
 
 
-void FreeTracks( struct Track track[] )
+OVERLAY void FreeTracks( struct Track track[] )
 {
   int i ;
 
@@ -103,7 +104,7 @@ void FreeTracks( struct Track track[] )
 }
 
 
-void TWriteByte( unsigned char MIDItrack, char byte, struct Track track[] )
+OVERLAY void TWriteByte( unsigned char MIDItrack, char byte, struct Track track[] )
 {
   int4 pos ;
 
@@ -121,7 +122,7 @@ void TWriteByte( unsigned char MIDItrack, char byte, struct Track track[] )
 }
 
 
-void TWriteVarLen( int tracknum, int4 value,
+OVERLAY void TWriteVarLen( int tracknum, int4 value,
                   struct Track track[] )
 {
   int4 buffer ;
@@ -144,7 +145,7 @@ void TWriteVarLen( int tracknum, int4 value,
 }
 
 
-int ReadMUSheader( MUSheader *MUSh, buflen_t *buflen )
+OVERLAY int ReadMUSheader( MUSheader *MUSh, buflen_t *buflen )
 {
   if ( buflen->len < 4 ) {
     return NOTMUSFILE ;
@@ -177,7 +178,7 @@ int ReadMUSheader( MUSheader *MUSh, buflen_t *buflen )
 }
 
 
-int WriteMIDheader( int2 ntrks, int2 division, FILE *file )
+OVERLAY int WriteMIDheader( int2 ntrks, int2 division, FILE *file )
 {
   fwrite( MIDIMAGIC , 10, 1, file ) ;
   fwrite2( &ntrks, 2, file) ;
@@ -190,7 +191,7 @@ int WriteMIDheader( int2 ntrks, int2 division, FILE *file )
 #define event_type(e)   ((unsigned char)((e & 0x7F) >> 4))
 #define channel(e)      ((unsigned char)(e & 0x0F))
 
-void TWriteString( char tracknum, const char *string, int length,
+OVERLAY void TWriteString( char tracknum, const char *string, int length,
                    struct Track track[] )
 {
   int i ;
@@ -200,7 +201,7 @@ void TWriteString( char tracknum, const char *string, int length,
 }
 
 
-void WriteTrack( int tracknum, FILE *file, struct Track track[] )
+OVERLAY void WriteTrack( int tracknum, FILE *file, struct Track track[] )
 {
   int2 size ;
   size_t quot, rem ;
@@ -222,7 +223,7 @@ void WriteTrack( int tracknum, FILE *file, struct Track track[] )
 }
 
 
-void WriteFirstTrack( FILE *file )
+OVERLAY void WriteFirstTrack( FILE *file )
 {
   int2 size ;
 
@@ -236,7 +237,7 @@ void WriteFirstTrack( FILE *file )
   fwrite( TRACKMAGIC6, 4, 1, file ) ;
 }
 
-int4 ReadTime( buflen_t *buflen )
+OVERLAY int4 ReadTime( buflen_t *buflen )
 {
   int4 time = 0 ;
   int byte ;
@@ -250,7 +251,7 @@ int4 ReadTime( buflen_t *buflen )
   return time ;
 }
 
-char FirstChannelAvailable( signed char MUS2MIDchannel[] )
+OVERLAY char FirstChannelAvailable( signed char MUS2MIDchannel[] )
 {
   int i ;
   signed char old15 = MUS2MIDchannel[15], max = -1 ;
@@ -264,7 +265,7 @@ char FirstChannelAvailable( signed char MUS2MIDchannel[] )
 }
 
 
-int qmus2mid( const void *mus, size_t len, FILE *file_mid,
+OVERLAY int qmus2mid( const void *mus, size_t len, FILE *file_mid,
               int nodisplay, int2 division, int BufferSize, int nocomp )
 {
   struct Track track[16] ;

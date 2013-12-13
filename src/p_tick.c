@@ -32,6 +32,7 @@
 static const char
 rcsid[] = "$Id: p_tick.c,v 1.5 1999/10/12 13:01:13 cphipps Exp $";
 
+#include "compiler.h"
 #include "doomstat.h"
 #include "p_user.h"
 #include "p_spec.h"
@@ -59,7 +60,7 @@ static thinker_t *currentthinker;
 // P_InitThinkers
 //
 
-void P_InitThinkers(void)
+OVERLAY void P_InitThinkers(void)
 {
   thinkercap.prev = thinkercap.next  = &thinkercap;
 }
@@ -69,7 +70,7 @@ void P_InitThinkers(void)
 // Adds a new thinker at the end of the list.
 //
 
-void P_AddThinker(thinker_t* thinker)
+OVERLAY void P_AddThinker(thinker_t* thinker)
 {
   thinkercap.prev->next = thinker;
   thinker->next = &thinkercap;
@@ -81,7 +82,7 @@ void P_AddThinker(thinker_t* thinker)
 // CPhipps - reference counting for mobjs from MBF
 //
 
-void P_SetTarget(mobj_t **mop, mobj_t *targ) 
+OVERLAY void P_SetTarget(mobj_t **mop, mobj_t *targ) 
 {
   if (*mop) {            // If there was a target already, decrease its refcount
 #ifdef SIMPLECHECKS
@@ -108,14 +109,14 @@ void P_SetTarget(mobj_t **mop, mobj_t *targ)
 
 // cph - separate function for mobj deletion, to worry about references
 
-static void P_RemoveThinkerDelayed(thinker_t *thinker)
+OVERLAY static void P_RemoveThinkerDelayed(thinker_t *thinker)
 {
   thinker_t *next = thinker->next;
   (next->prev = currentthinker = thinker->prev)->next = next;
   Z_Free(thinker);
 }
 
-static void P_RemoveMobjDelayed(mobj_t *mobj)
+OVERLAY static void P_RemoveMobjDelayed(mobj_t *mobj)
 {
   if (!mobj->references)
     P_RemoveThinkerDelayed((thinker_t *)mobj);
@@ -134,7 +135,7 @@ static void P_RemoveMobjDelayed(mobj_t *mobj)
 // promoted to P_RemoveThinker() automatically as part of the thinker process.
 //
 
-void P_RemoveThinker(thinker_t *thinker)
+OVERLAY void P_RemoveThinker(thinker_t *thinker)
 {
   /* cph - Different removal function if it's an mobj
    * since for an mobj we have to check references first */
@@ -166,7 +167,7 @@ void P_RemoveThinker(thinker_t *thinker)
 // external and using P_RemoveThinkerDelayed() implicitly.
 //
 
-static void P_RunThinkers (void)
+OVERLAY static void P_RunThinkers (void)
 {
   for (currentthinker = thinkercap.next;
        currentthinker != &thinkercap;
@@ -179,7 +180,7 @@ static void P_RunThinkers (void)
 // P_Ticker
 //
 
-void P_Ticker (void)
+OVERLAY void P_Ticker (void)
 {
   int i;
 

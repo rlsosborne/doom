@@ -33,6 +33,7 @@
 static const char
 rcsid[] = "$Id: wi_stuff.c,v 1.14 1999/10/27 18:35:50 cphipps Exp $";
 
+#include "compiler.h"
 #include "doomstat.h"
 #include "m_random.h"
 #include "w_wad.h"
@@ -402,7 +403,7 @@ void WI_unloadData(void);
 // Args:    none
 // Returns: void
 //
-void WI_slamBackground(void)
+OVERLAY void WI_slamBackground(void)
 {
   memcpy(screens[0], screens[1], SCREENWIDTH * SCREENHEIGHT);
   V_MarkRect (0, 0, SCREENWIDTH, SCREENHEIGHT);
@@ -417,7 +418,7 @@ void WI_slamBackground(void)
 //
 // The ticker is used to detect keys
 //  because of timing issues in netgames.
-boolean WI_Responder(event_t* ev)
+OVERLAY boolean WI_Responder(event_t* ev)
 {
   return false;
 }
@@ -429,7 +430,7 @@ boolean WI_Responder(event_t* ev)
 // Args:    none
 // Returns: void
 //
-void WI_drawLF(void)
+OVERLAY void WI_drawLF(void)
 {
   int y = WI_TITLEY;
 
@@ -453,7 +454,7 @@ void WI_drawLF(void)
 // Args:    none
 // Returns: void
 //
-void WI_drawEL(void)
+OVERLAY void WI_drawEL(void)
 {
   int y = WI_TITLEY;
 
@@ -477,7 +478,7 @@ void WI_drawEL(void)
 //          c[] -- array of patches to be drawn
 // Returns: void
 //
-void
+OVERLAY void
 WI_drawOnLnode  // draw stuff at a location by episode/map#
 ( int   n,
   const patch_t*  c[] )
@@ -531,7 +532,7 @@ WI_drawOnLnode  // draw stuff at a location by episode/map#
 // Args:    none
 // Returns: void
 //
-void WI_initAnimatedBack(void)
+OVERLAY void WI_initAnimatedBack(void)
 {
   int   i;
   anim_t* a;
@@ -568,7 +569,7 @@ void WI_initAnimatedBack(void)
 // Args:    none
 // Returns: void
 //
-void WI_updateAnimatedBack(void)
+OVERLAY void WI_updateAnimatedBack(void)
 {
   int   i;
   anim_t* a;
@@ -625,7 +626,7 @@ void WI_updateAnimatedBack(void)
 // Args:    none
 // Returns: void
 //
-void WI_drawAnimatedBack(void)
+OVERLAY void WI_drawAnimatedBack(void)
 {
   int     i;
   anim_t*   a;
@@ -656,7 +657,7 @@ void WI_drawAnimatedBack(void)
 //          digits -- number of digits minimum or zero
 // Returns: new x position after drawing (note we are going to the left)
 // CPhipps - static
-static int WI_drawNum (int x, int y, int n, int digits)
+OVERLAY static int WI_drawNum (int x, int y, int n, int digits)
 {
   int   fontwidth = SHORT(num[0]->width);
   int   neg;
@@ -717,7 +718,7 @@ static int WI_drawNum (int x, int y, int n, int digits)
 //          p      -- the percentage value to be drawn, no negatives
 // Returns: void
 // CPhipps - static
-static void WI_drawPercent(int x, int y, int p)
+OVERLAY static void WI_drawPercent(int x, int y, int p)
 {
   if (p < 0)
     return;
@@ -739,7 +740,7 @@ static void WI_drawPercent(int x, int y, int p)
 // CPhipps - static
 //         - largely rewritten to display hours and use slightly better algorithm
 
-static void WI_drawTime(int x, int y, int t)
+OVERLAY static void WI_drawTime(int x, int y, int t)
 { 
   int   n;
 
@@ -769,7 +770,7 @@ static void WI_drawTime(int x, int y, int t)
 // Args:    none
 // Returns: void
 //
-void WI_End(void)
+OVERLAY void WI_End(void)
 {
   WI_unloadData();
 
@@ -788,7 +789,7 @@ void WI_End(void)
 // Args:    none
 // Returns: void
 //
-void WI_initNoState(void)
+OVERLAY void WI_initNoState(void)
 {
   state = NoState;
   acceleratestage = 0;
@@ -804,7 +805,7 @@ void WI_initNoState(void)
 //
 // cph - pulled from WI_drawStats below
 
-static void WI_drawTimeStats(int cnt_time, int cnt_total_time, int cnt_par)
+OVERLAY static void WI_drawTimeStats(int cnt_time, int cnt_total_time, int cnt_par)
 {
   V_DrawMemPatch(SP_TIMEX, SP_TIMEY, FB, time, NULL, VPT_STRETCH);
   WI_drawTime(320/2 - SP_TIMEX, SP_TIMEY, cnt_time);
@@ -833,7 +834,7 @@ static void WI_drawTimeStats(int cnt_time, int cnt_total_time, int cnt_par)
 // Args:    none
 // Returns: void
 //
-void WI_updateNoState(void) 
+OVERLAY void WI_updateNoState(void) 
 {
 
   WI_updateAnimatedBack();
@@ -851,7 +852,7 @@ static boolean    snl_pointeron = false;
 // Args:    none
 // Returns: void
 //
-void WI_initShowNextLoc(void)
+OVERLAY void WI_initShowNextLoc(void)
 {
   if ((gamemode != commercial) && (gamemap == 8)) {
     G_WorldDone();
@@ -872,7 +873,7 @@ void WI_initShowNextLoc(void)
 // Args:    none
 // Returns: void
 //
-void WI_updateShowNextLoc(void)
+OVERLAY void WI_updateShowNextLoc(void)
 {
   WI_updateAnimatedBack();
 
@@ -889,7 +890,7 @@ void WI_updateShowNextLoc(void)
 // Args:    none
 // Returns: void
 //
-void WI_drawShowNextLoc(void)
+OVERLAY void WI_drawShowNextLoc(void)
 {
   int   i;
   int   last;
@@ -934,7 +935,7 @@ void WI_drawShowNextLoc(void)
 // Args:    none
 // Returns: void
 //
-void WI_drawNoState(void)
+OVERLAY void WI_drawNoState(void)
 {
   snl_pointeron = true;
   WI_drawShowNextLoc();
@@ -947,7 +948,7 @@ void WI_drawNoState(void)
 // Args:    playernum -- the player to be calculated
 // Returns: the total frags for this player
 //
-int WI_fragSum(int playernum)
+OVERLAY int WI_fragSum(int playernum)
 {
   int   i;
   int   frags = 0;
@@ -980,7 +981,7 @@ static short int   *dm_totals;  // totals by player
 // Args:    none
 // Returns: void
 //
-void WI_initDeathmatchStats(void)
+OVERLAY void WI_initDeathmatchStats(void)
 {
   int   i; // looping variables
 
@@ -1014,7 +1015,7 @@ void WI_initDeathmatchStats(void)
 // Returns: void
 //
 
-void WI_endDeathmatchStats(void)
+OVERLAY void WI_endDeathmatchStats(void)
 {
   int i;
   for (i=0; i<MAXPLAYERS; i++)
@@ -1031,7 +1032,7 @@ void WI_endDeathmatchStats(void)
 // Args:    none
 // Returns: void
 //
-void WI_updateDeathmatchStats(void)
+OVERLAY void WI_updateDeathmatchStats(void)
 {
   int   i;
   int   j;
@@ -1139,7 +1140,7 @@ void WI_updateDeathmatchStats(void)
 //
 // proff/nicolas 09/20/98 -- changed for hi-res
 // CPhipps - patch drawing updated
-void WI_drawDeathmatchStats(void)
+OVERLAY void WI_drawDeathmatchStats(void)
 {
   int   i;
   int   j;
@@ -1231,7 +1232,7 @@ static int    ng_state;
 // Args:    none
 // Returns: void
 //
-static void WI_endNetgameStats(void)
+OVERLAY static void WI_endNetgameStats(void)
 {
   free(cnt_frags);
   free(cnt_secret);
@@ -1245,7 +1246,7 @@ static void WI_endNetgameStats(void)
 // Args:    none
 // Returns: void
 //
-void WI_initNetgameStats(void)
+OVERLAY void WI_initNetgameStats(void)
 {
   int i;
 
@@ -1278,7 +1279,7 @@ void WI_initNetgameStats(void)
 // Returns: void
 // Comment: This stuff sure is complicated for what it does
 //
-void WI_updateNetgameStats(void)
+OVERLAY void WI_updateNetgameStats(void)
 {
   int   i;
   int   fsum;
@@ -1444,7 +1445,7 @@ void WI_updateNetgameStats(void)
 //
 // proff/nicolas 09/20/98 -- changed for hi-res
 // CPhipps - patch drawing updated
-void WI_drawNetgameStats(void)
+OVERLAY void WI_drawNetgameStats(void)
 {
   int   i;
   int   x;
@@ -1515,7 +1516,7 @@ static int  sp_state;
 // Comment: Seems like we could do all these stats in a more generic
 //          set of routines that weren't duplicated for dm, coop, sp
 //
-void WI_initStats(void)
+OVERLAY void WI_initStats(void)
 {
   state = StatCount;
   acceleratestage = 0;
@@ -1537,7 +1538,7 @@ void WI_initStats(void)
 // Args:    none
 // Returns: void
 //
-void WI_updateStats(void)
+OVERLAY void WI_updateStats(void)
 {
   WI_updateAnimatedBack();
 
@@ -1661,7 +1662,7 @@ void WI_updateStats(void)
 //
 // proff/nicolas 09/20/98 -- changed for hi-res
 // CPhipps - patch drawing updated
-void WI_drawStats(void)
+OVERLAY void WI_drawStats(void)
 {
   // line height
   int lh; 
@@ -1695,7 +1696,7 @@ void WI_drawStats(void)
 // Args:    none
 // Returns: void
 //
-void WI_checkForAccelerate(void)
+OVERLAY void WI_checkForAccelerate(void)
 {
   int   i;
   player_t  *player;
@@ -1733,7 +1734,7 @@ void WI_checkForAccelerate(void)
 // Args:    none
 // Returns: void
 //
-void WI_Ticker(void)
+OVERLAY void WI_Ticker(void)
 {
   // counter for general background animation
   bcnt++;  
@@ -1801,7 +1802,7 @@ static const struct {
   { "", NULL } // Terminating entry
 };
 
-void WI_loadData(void)
+OVERLAY void WI_loadData(void)
 {
   int   i;
   int   j;
@@ -1907,7 +1908,7 @@ void WI_loadData(void)
 // Returns: void
 //
 // CPhipps - reverse of WI_loadData, goes through the same lumps, but unlocking
-void WI_unloadData(void)
+OVERLAY void WI_unloadData(void)
 {
   int   i,j;
   char  name[9];  // limited to 8 characters
@@ -1967,7 +1968,7 @@ void WI_unloadData(void)
 // Args:    none
 // Returns: void
 //
-void WI_Drawer (void)
+OVERLAY void WI_Drawer (void)
 {
   switch (state)
   {
@@ -1998,7 +1999,7 @@ void WI_Drawer (void)
 // Args:    wbstartstruct -- pointer to the structure with the data
 // Returns: void
 //
-void WI_initVariables(wbstartstruct_t* wbstartstruct)
+OVERLAY void WI_initVariables(wbstartstruct_t* wbstartstruct)
 {
 
   wbs = wbstartstruct;
@@ -2051,7 +2052,7 @@ void WI_initVariables(wbstartstruct_t* wbstartstruct)
 //          intermission data
 // Returns: void
 //
-void WI_Start(wbstartstruct_t* wbstartstruct)
+OVERLAY void WI_Start(wbstartstruct_t* wbstartstruct)
 {
   WI_initVariables(wbstartstruct);
   WI_loadData();

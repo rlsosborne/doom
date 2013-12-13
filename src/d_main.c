@@ -43,6 +43,7 @@ static const char rcsid[] = "$Id: d_main.c,v 1.46 2000/03/27 10:33:49 cph Exp $"
 #include "SDL.h"
 #endif
 
+#include "compiler.h"
 #include "doomdef.h"
 #include "doomstat.h"
 #include "dstrings.h"
@@ -154,7 +155,7 @@ int eventhead, eventtail;
 // D_PostEvent
 // Called by the I/O functions when input is detected
 //
-void D_PostEvent(event_t *ev)
+OVERLAY void D_PostEvent(event_t *ev)
 {
   /* cph - suppress all input events at game start
    * FIXME: This is a lousy kludge */
@@ -168,7 +169,7 @@ void D_PostEvent(event_t *ev)
 // Send all the events of the given timestamp down the responder chain
 //
 
-void D_ProcessEvents (void)
+OVERLAY void D_ProcessEvents (void)
 {
   // IF STORE DEMO, DO NOT ACCEPT INPUT
   if (gamemode != commercial || W_CheckNumForName("map01") >= 0)
@@ -184,7 +185,7 @@ void D_ProcessEvents (void)
 // The screens to wipe between are already stored, this just does the timing
 // and screen updating
 
-static void D_Wipe(void)
+OVERLAY static void D_Wipe(void)
 {
   boolean done;
   int wipestart = I_GetTime () - 1;
@@ -218,7 +219,7 @@ gamestate_t    wipegamestate = GS_DEMOSCREEN;
 extern boolean setsizeneeded;
 extern int     showMessages;
 
-void D_Display (void)
+OVERLAY void D_Display (void)
 {
   static boolean inhelpscreensstate = false;
   static boolean isborderstate        = false;
@@ -352,7 +353,7 @@ static const char *auto_shot_fname;
 
 extern boolean demorecording;
 
-static void D_DoomLoop(void)
+OVERLAY static void D_DoomLoop(void)
 {
   if (demorecording)
     G_BeginRecording ();
@@ -412,7 +413,7 @@ static const char *pagename; // CPhipps - const
 // D_PageTicker
 // Handles timing for warped projection
 //
-void D_PageTicker(void)
+OVERLAY void D_PageTicker(void)
 {
   if (--pagetic < 0)
     D_AdvanceDemo();
@@ -421,7 +422,7 @@ void D_PageTicker(void)
 //
 // D_PageDrawer
 //
-void D_PageDrawer(void)
+OVERLAY void D_PageDrawer(void)
 {
   // proff/nicolas 09/14/98 -- now stretchs bitmaps to fullscreen!
   // CPhipps - updated for new patch drawing
@@ -432,7 +433,7 @@ void D_PageDrawer(void)
 // D_AdvanceDemo
 // Called after each demo or intro demosequence finishes
 //
-void D_AdvanceDemo (void)
+OVERLAY void D_AdvanceDemo (void)
 {
   advancedemo = true;
 }
@@ -441,19 +442,19 @@ void D_AdvanceDemo (void)
  * cphipps 10/99: constness fixes
  */
 
-static void D_SetPageName(const char *name)
+OVERLAY static void D_SetPageName(const char *name)
 {
   pagename = name;
 }
 
-static void D_DrawTitle1(const char *name)
+OVERLAY static void D_DrawTitle1(const char *name)
 {
   S_StartMusic(mus_intro);
   pagetic = (TICRATE*170)/35;
   D_SetPageName(name);
 }
 
-static void D_DrawTitle2(const char *name)
+OVERLAY static void D_DrawTitle2(const char *name)
 {
   S_StartMusic(mus_dm2ttl);
   D_SetPageName(name);
@@ -536,7 +537,7 @@ static struct
  * killough 11/98: made table-driven
  */
 
-void D_DoAdvanceDemo(void)
+OVERLAY void D_DoAdvanceDemo(void)
 {
   players[consoleplayer].playerstate = PST_LIVE;  /* not reborn */
   advancedemo = usergame = paused = false;
@@ -554,7 +555,7 @@ void D_DoAdvanceDemo(void)
 //
 // D_StartTitle
 //
-void D_StartTitle (void)
+OVERLAY void D_StartTitle (void)
 {
   gameaction = ga_nothing;
   demosequence = -1;
@@ -570,7 +571,7 @@ void D_StartTitle (void)
 // CPhipps - static, const char* parameter
 //         - source is an enum
 //         - modified to allocate & use new wadfiles array
-void D_AddFile (const char *file, wad_source_t source)
+OVERLAY void D_AddFile (const char *file, wad_source_t source)
 {
   wadfiles = realloc(wadfiles, sizeof(*wadfiles)*(numwadfiles+1));
   wadfiles[numwadfiles].name =
@@ -586,7 +587,7 @@ void D_AddFile (const char *file, wad_source_t source)
 #ifndef _WIN32
 static const char lsdldoom_dir[] = {"/.lsdldoom/"};
 
-char *D_DoomExeDir(void)
+OVERLAY char *D_DoomExeDir(void)
 {
   static char *base;
   if (!base)        // cache multiple requests
@@ -614,7 +615,7 @@ char *D_DoomExeDir(void)
 
 // killough 10/98: support -dehout filename
 // cph - made const, don't cache results
-static const char *D_dehout(void)
+OVERLAY static const char *D_dehout(void)
 {
   int p = M_CheckParm("-dehout");
   if (!p)
@@ -635,7 +636,7 @@ static const char *D_dehout(void)
 // jff 4/19/98 Add routine to test IWAD for validity and determine
 // the gamemode from it. Also note if DOOM II, whether secret levels exist
 // CPhipps - const char* for iwadname, made static
-static void CheckIWAD(const char *iwadname,GameMode_t *gmode,boolean *hassec)
+OVERLAY static void CheckIWAD(const char *iwadname,GameMode_t *gmode,boolean *hassec)
 {
   if ( !access (iwadname,R_OK) )
   {
@@ -728,7 +729,7 @@ static void CheckIWAD(const char *iwadname,GameMode_t *gmode,boolean *hassec)
 //
 // jff 4/19/98 Make killoughs slash fixer a subroutine
 //
-void NormalizeSlashes(char *str)
+OVERLAY void NormalizeSlashes(char *str)
 {
   int l;
 
@@ -750,7 +751,7 @@ void NormalizeSlashes(char *str)
  * cphipps - simple test for trailing slash on dir names
  */
 
-static boolean HasTrailingSlash(const char* dn)
+OVERLAY static boolean HasTrailingSlash(const char* dn)
 {
   return (dn[strlen(dn)-1] == '/');
 }
@@ -759,7 +760,7 @@ static boolean HasTrailingSlash(const char* dn)
 // a file or directory. If neither append .wad and check if it
 // exists as a file then. Else return non-existent.
 
-boolean WadFileStatus(char *filename,boolean *isdir)
+OVERLAY boolean WadFileStatus(char *filename,boolean *isdir)
 {
   struct stat sbuf;
   int i;
@@ -806,7 +807,7 @@ boolean WadFileStatus(char *filename,boolean *isdir)
  * ~
  */
 
-static char* FindWADFile(const char* wfname, const char* ext)
+OVERLAY static char* FindWADFile(const char* wfname, const char* ext)
 {
 #ifndef __XMOS__
   int		i;
@@ -876,7 +877,7 @@ static char* FindWADFile(const char* wfname, const char* ext)
  * CPhipps	- static, proper prototype
  *		- 12/1999 - rewritten to use FindWADFile
  */
-static char *FindIWADFile(void)
+OVERLAY static char *FindIWADFile(void)
 {
   int		i;
   char	*	iwad	= NULL;
@@ -912,7 +913,7 @@ static char *FindIWADFile(void)
 //
 // jff 4/19/98 rewritten to use a more advanced search algorithm
 
-void IdentifyVersion (void)
+OVERLAY void IdentifyVersion (void)
 {
   int         i;    //jff 3/24/98 index of args on commandline
   struct stat sbuf; //jff 3/24/98 used to test save path for existence
@@ -998,7 +999,7 @@ void IdentifyVersion (void)
 
 #define MAXARGVS 100
 
-void FindResponseFile (void)
+OVERLAY void FindResponseFile (void)
 {
   int i;
 
@@ -1091,7 +1092,7 @@ void FindResponseFile (void)
 //
 // CPhipps - OUCH! Writing into *myargv is too dodgy, damn
 
-void DoLooseFiles(void)
+OVERLAY void DoLooseFiles(void)
 {
   char *wads[MAXARGVS];  // store the respective loose filenames
   char *lmps[MAXARGVS];
@@ -1212,7 +1213,7 @@ unsigned int desired_screenwidth, desired_screenheight;
 // CPhipps - the old contents of D_DoomMain, but moved out of the main 
 //  line of execution so its stack space can be freed
 
-void D_DoomMainSetup(void)
+OVERLAY void D_DoomMainSetup(void)
 {
   int p,i,slot;
   const char *cena="ICWEFDA",*pos;  //jff 9/3/98 use this for parsing console masks // CPhipps - const char*'s
@@ -1686,7 +1687,7 @@ void D_DoomMainSetup(void)
 // D_DoomMain
 //
 
-void D_DoomMain(void)
+OVERLAY void D_DoomMain(void)
 {
   D_DoomMainSetup(); // CPhipps - setup out of main execution stack
 
@@ -1699,7 +1700,7 @@ void D_DoomMain(void)
 // Ty 08/29/98 - determine first available map from the loaded wads and run it
 // 
 
-void GetFirstMap(int *ep, int *map)
+OVERLAY void GetFirstMap(int *ep, int *map)
 {
   int i,j; // used to generate map name
   boolean done = false;  // Ty 09/13/98 - to exit inner loops

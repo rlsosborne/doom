@@ -34,6 +34,7 @@
 static const char
 rcsid[] = "$Id: p_lights.c,v 1.3 1999/10/12 13:01:12 cphipps Exp $";
 
+#include "compiler.h"
 #include "doomstat.h" //jff 5/18/98
 #include "doomdef.h"
 #include "m_random.h"
@@ -55,7 +56,7 @@ rcsid[] = "$Id: p_lights.c,v 1.3 1999/10/12 13:01:12 cphipps Exp $";
 // Passed a fireflicker_t structure containing light levels and timing
 // Returns nothing
 //
-void T_FireFlicker (fireflicker_t* flick)
+OVERLAY void T_FireFlicker (fireflicker_t* flick)
 {
   int amount;
   
@@ -80,7 +81,7 @@ void T_FireFlicker (fireflicker_t* flick)
 // Passed a lightflash_t structure containing light levels and timing
 // Returns nothing
 //
-void T_LightFlash (lightflash_t* flash)
+OVERLAY void T_LightFlash (lightflash_t* flash)
 {
   if (--flash->count)
     return;
@@ -106,7 +107,7 @@ void T_LightFlash (lightflash_t* flash)
 // Passed a strobe_t structure containing light levels and timing
 // Returns nothing
 //
-void T_StrobeFlash (strobe_t*   flash)
+OVERLAY void T_StrobeFlash (strobe_t*   flash)
 {
   if (--flash->count)
     return;
@@ -132,7 +133,7 @@ void T_StrobeFlash (strobe_t*   flash)
 // Returns nothing
 //
 
-void T_Glow(glow_t* g)
+OVERLAY void T_Glow(glow_t* g)
 {
   switch(g->direction)
   {
@@ -175,7 +176,7 @@ void T_Glow(glow_t* g)
 // Passed the sector that spawned the thinker
 // Returns nothing
 //
-void P_SpawnFireFlicker (sector_t*  sector)
+OVERLAY void P_SpawnFireFlicker (sector_t*  sector)
 {
   fireflicker_t*  flick;
 
@@ -202,7 +203,7 @@ void P_SpawnFireFlicker (sector_t*  sector)
 // Passed the sector that spawned the thinker
 // Returns nothing
 //
-void P_SpawnLightFlash (sector_t* sector)
+OVERLAY void P_SpawnLightFlash (sector_t* sector)
 {
   lightflash_t* flash;
 
@@ -233,7 +234,7 @@ void P_SpawnLightFlash (sector_t* sector)
 //
 // Returns nothing
 //
-void P_SpawnStrobeFlash
+OVERLAY void P_SpawnStrobeFlash
 ( sector_t* sector,
   int   fastOrSlow,
   int   inSync )
@@ -271,7 +272,7 @@ void P_SpawnStrobeFlash
 // Passed the sector that spawned the thinker
 // Returns nothing
 //
-void P_SpawnGlowingLight(sector_t*  sector)
+OVERLAY void P_SpawnGlowingLight(sector_t*  sector)
 {
   glow_t* g;
 
@@ -304,7 +305,7 @@ void P_SpawnGlowingLight(sector_t*  sector)
 //
 // jff 2/12/98 added int return value, fixed return
 //
-int EV_StartLightStrobing(line_t* line)
+OVERLAY int EV_StartLightStrobing(line_t* line)
 {
   int   secnum;
   sector_t* sec;
@@ -333,7 +334,7 @@ int EV_StartLightStrobing(line_t* line)
 //
 // jff 2/12/98 added int return value, fixed return
 //
-int EV_TurnTagLightsOff(line_t* line)
+OVERLAY int EV_TurnTagLightsOff(line_t* line)
 {
   int j;
   
@@ -365,7 +366,7 @@ int EV_TurnTagLightsOff(line_t* line)
 //
 // jff 2/12/98 added int return value, fixed return
 //
-int EV_LightTurnOn(line_t *line, int bright)
+OVERLAY int EV_LightTurnOn(line_t *line, int bright)
 {
   int i;
 

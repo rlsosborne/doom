@@ -35,6 +35,7 @@
 static const char
 rcsid[] = "$Id: r_sky.c,v 1.2 1999/10/12 13:01:14 cphipps Exp $";
 
+#include "compiler.h"
 #ifdef __GNUG__
 #pragma implementation "r_sky.h"
 #endif
@@ -51,7 +52,7 @@ int skytexturemid;
 // R_InitSkyMap
 // Called whenever the view size changes.
 //
-void R_InitSkyMap (void)
+OVERLAY void R_InitSkyMap (void)
 {
   skytexturemid = 100*FRACUNIT;
 }

@@ -32,6 +32,7 @@
 static const char
 rcsid[] = "$Id: p_sight.c,v 1.4 1999/11/01 17:09:15 cphipps Exp $";
 
+#include "compiler.h"
 #include "r_main.h"
 #include "p_maputl.h"
 #include "p_setup.h"
@@ -60,7 +61,7 @@ static los_t los; // cph - made static
 //
 // killough 4/19/98: made static, cleaned up
 
-static int P_DivlineSide(fixed_t x, fixed_t y, const divline_t *node)
+OVERLAY static int P_DivlineSide(fixed_t x, fixed_t y, const divline_t *node)
 {
   fixed_t left, right;
   return
@@ -78,7 +79,7 @@ static int P_DivlineSide(fixed_t x, fixed_t y, const divline_t *node)
 //
 // killough 4/19/98: made static, cleaned up
 
-static fixed_t P_InterceptVector2(const divline_t *v2, const divline_t *v1)
+OVERLAY static fixed_t P_InterceptVector2(const divline_t *v2, const divline_t *v1)
 {
   fixed_t den;
   return (den = FixedMul(v1->dy>>8, v2->dx) - FixedMul(v1->dx>>8, v2->dy)) ?
@@ -93,7 +94,7 @@ static fixed_t P_InterceptVector2(const divline_t *v2, const divline_t *v1)
 //
 // killough 4/19/98: made static and cleaned up
 
-static boolean P_CrossSubsector(int num)
+OVERLAY static boolean P_CrossSubsector(int num)
 {
   seg_t *seg = segs + subsectors[num].firstline;
   int count;
@@ -206,7 +207,7 @@ static boolean P_CrossSubsector(int num)
 //  could return 2 which was ambigous, and the former is 
 //  better optimised; also removes two casts :-)
 
-static boolean P_CrossBSPNode(int bspnum)
+OVERLAY static boolean P_CrossBSPNode(int bspnum)
 {
   while (!(bspnum & NF_SUBSECTOR))
     {
@@ -231,7 +232,7 @@ static boolean P_CrossBSPNode(int bspnum)
 //
 // killough 4/20/98: cleaned up, made to use new LOS struct
 
-boolean P_CheckSight(mobj_t *t1, mobj_t *t2)
+OVERLAY boolean P_CheckSight(mobj_t *t1, mobj_t *t2)
 {
   const sector_t *s1 = t1->subsector->sector;
   const sector_t *s2 = t2->subsector->sector;

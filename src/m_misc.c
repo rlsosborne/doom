@@ -34,6 +34,7 @@
 static const char
 rcsid[] = "$Id: m_misc.c,v 1.43 2000/03/17 20:50:30 cph Exp $";
 
+#include "compiler.h"
 #include "doomstat.h"
 #include "m_argv.h"
 #include "g_game.h"
@@ -69,7 +70,7 @@ rcsid[] = "$Id: m_misc.c,v 1.43 2000/03/17 20:50:30 cph Exp $";
 //
 extern const patch_t* hu_font[HU_FONTSIZE];
 
-int M_DrawText(int x,int y,boolean direct,char* string)
+OVERLAY int M_DrawText(int x,int y,boolean direct,char* string)
 {
   int c;
   int w;
@@ -99,7 +100,7 @@ int M_DrawText(int x,int y,boolean direct,char* string)
 // M_WriteFile
 //
 
-boolean M_WriteFile(char const* name,void* source,int length)
+OVERLAY boolean M_WriteFile(char const* name,void* source,int length)
 {
   int handle;
   int count;
@@ -125,7 +126,7 @@ boolean M_WriteFile(char const* name,void* source,int length)
 // M_ReadFile
 //
 
-int M_ReadFile(char const* name,byte** buffer)
+OVERLAY int M_ReadFile(char const* name,byte** buffer)
 {
   int handle, count, length;
   struct stat fileinfo;
@@ -600,7 +601,7 @@ static const char* defaultfile; // CPhipps - static, const
 // M_SaveDefaults
 //
 
-void M_SaveDefaults (void)
+OVERLAY void M_SaveDefaults (void)
   {
   int   i;
   FILE* f;
@@ -646,7 +647,7 @@ void M_SaveDefaults (void)
 
 #define NUMCHATSTRINGS 10 // phares 4/13/98
 
-void M_LoadDefaults (void)
+OVERLAY void M_LoadDefaults (void)
 {
   int   i;
   int   len;
@@ -794,7 +795,7 @@ static boolean screenshot_write_error;
 // WritePCXfile
 //
 // CPhipps - static, const parameters, formatting
-static void WritePCXfile(const char* filename, const byte* data,
+OVERLAY static void WritePCXfile(const char* filename, const byte* data,
 		  int width, int height, const byte* palette)
 {
   int    i;
@@ -891,7 +892,7 @@ typedef struct tagBITMAPINFOHEADER
   
 // jff 3/30/98 binary file write with error detection
 // CPhipps - static, const on parameter
-static void SafeWrite(const void *data, size_t size, size_t number, FILE *st)
+OVERLAY static void SafeWrite(const void *data, size_t size, size_t number, FILE *st)
 {
   if (fwrite(data,size,number,st)<number)
     screenshot_write_error = true; // CPhipps - made non-fatal
@@ -903,7 +904,7 @@ static void SafeWrite(const void *data, size_t size, size_t number, FILE *st)
 //
 
 // CPhipps - static, const on parameters
-static void WriteBMPfile(const char* filename, const byte* data, 
+OVERLAY static void WriteBMPfile(const char* filename, const byte* data, 
 			 int width, int height, const byte* palette)
 {
   int i,wid;
@@ -990,7 +991,7 @@ static void WriteBMPfile(const char* filename, const byte* data,
 // M_DoScreenShot
 // Takes a screenshot into the names file
 
-void M_DoScreenShot (const char* fname)
+OVERLAY void M_DoScreenShot (const char* fname)
 {
   byte       *linear;
   const byte *pal;
@@ -1021,7 +1022,7 @@ void M_DoScreenShot (const char* fname)
     doom_printf("M_ScreenShot: Error writing screenshot");
 }
 
-void M_ScreenShot(void)
+OVERLAY void M_ScreenShot(void)
 {
   static int shot;
   char       lbmname[32];

@@ -33,6 +33,7 @@
 static const char
 rcsid[] = "$Id: p_floor.c,v 1.4 1999/10/12 13:01:12 cphipps Exp $";
 
+#include "compiler.h"
 #include "doomstat.h"
 #include "r_main.h"
 #include "p_map.h"
@@ -63,7 +64,7 @@ rcsid[] = "$Id: p_floor.c,v 1.4 1999/10/12 13:01:12 cphipps Exp $";
 //  pastdest - plane moved normally and is now at destination height
 //  crushed - plane encountered an obstacle, is holding until removed
 //
-result_e T_MovePlane
+OVERLAY result_e T_MovePlane
 ( sector_t*     sector,
   fixed_t       speed,
   fixed_t       dest,
@@ -225,7 +226,7 @@ result_e T_MovePlane
 // jff 02/08/98 all cases with labels beginning with gen added to support 
 // generalized line type behaviors.
 
-void T_MoveFloor(floormove_t* floor)
+OVERLAY void T_MoveFloor(floormove_t* floor)
 {
   result_e      res;
 
@@ -336,7 +337,7 @@ void T_MoveFloor(floormove_t* floor)
 //
 // jff 02/22/98 added to support parallel floor/ceiling motion
 //
-void T_MoveElevator(elevator_t* elevator)
+OVERLAY void T_MoveElevator(elevator_t* elevator)
 {
   result_e      res;
 
@@ -414,7 +415,7 @@ void T_MoveElevator(elevator_t* elevator)
 // Passed the line that activated the floor and the type of floor motion
 // Returns true if a thinker was created.
 //
-int EV_DoFloor
+OVERLAY int EV_DoFloor
 ( line_t*       line,
   floor_e       floortype )
 {
@@ -636,7 +637,7 @@ int EV_DoFloor
 //
 // jff 3/15/98 added to better support generalized sector types
 //
-int EV_DoChange
+OVERLAY int EV_DoChange
 ( line_t*       line,
   change_e      changetype )
 {
@@ -688,7 +689,7 @@ int EV_DoChange
 // Passed the linedef triggering the stairs and the type of stair rise
 // Returns true if any thinkers are created
 //
-int EV_BuildStairs
+OVERLAY int EV_BuildStairs
 ( line_t*       line,
   stair_e       type )
 {
@@ -826,7 +827,7 @@ int EV_BuildStairs
 // Passed the linedef that triggered the donut
 // Returns whether a thinker was created
 //
-int EV_DoDonut(line_t*  line)
+OVERLAY int EV_DoDonut(line_t*  line)
 {
   sector_t* s1;
   sector_t* s2;
@@ -913,7 +914,7 @@ int EV_DoDonut(line_t*  line)
 //
 // jff 2/22/98 new type to move floor and ceiling in parallel
 //
-int EV_DoElevator
+OVERLAY int EV_DoElevator
 ( line_t*       line,
   elevator_e    elevtype )
 {

@@ -33,6 +33,7 @@
 static const char
 rcsid[] = "$Id: p_genlin.c,v 1.4 1999/10/12 13:01:12 cphipps Exp $";
 
+#include "compiler.h"
 #include "doomstat.h" //jff 6/19/98 for demo_compatibility
 #include "r_main.h"
 #include "p_spec.h"
@@ -58,7 +59,7 @@ rcsid[] = "$Id: p_genlin.c,v 1.4 1999/10/12 13:01:12 cphipps Exp $";
 // jff 02/04/98 Added this routine (and file) to handle generalized
 // floor movers using bit fields in the line special type.
 //
-int EV_DoGenFloor
+OVERLAY int EV_DoGenFloor
 ( line_t*       line )
 {
   int                   secnum;
@@ -260,7 +261,7 @@ manual_floor:
 // jff 02/04/98 Added this routine (and file) to handle generalized
 // floor movers using bit fields in the line special type.
 //
-int EV_DoGenCeiling
+OVERLAY int EV_DoGenCeiling
 ( line_t*       line )
 {
   int                   secnum;
@@ -465,7 +466,7 @@ manual_ceiling:
 // Passed the linedef activating the lift
 // Returns true if a thinker is created
 //
-int EV_DoGenLift
+OVERLAY int EV_DoGenLift
 ( line_t*       line )
 {
   plat_t*         plat;
@@ -614,7 +615,7 @@ manual_lift:
 // Passed the linedef activating the stairs
 // Returns true if a thinker is created
 //
-int EV_DoGenStairs
+OVERLAY int EV_DoGenStairs
 ( line_t*       line )
 {
   int                   secnum;
@@ -811,7 +812,7 @@ manual_stair:
 // Passed the linedef activating the crusher
 // Returns true if a thinker created
 //
-int EV_DoGenCrusher
+OVERLAY int EV_DoGenCrusher
 ( line_t*       line )
 {
   int                   secnum;
@@ -908,7 +909,7 @@ manual_crusher:
 // Passed the linedef activating the generalized locked door
 // Returns true if a thinker created
 //
-int EV_DoGenLockedDoor
+OVERLAY int EV_DoGenLockedDoor
 ( line_t* line )
 {
   int   secnum,rtn;
@@ -1010,7 +1011,7 @@ manual_locked:
 // Passed the linedef activating the generalized door
 // Returns true if a thinker created
 //
-int EV_DoGenDoor
+OVERLAY int EV_DoGenDoor
 ( line_t* line )
 {
   int   secnum,rtn;

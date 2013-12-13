@@ -35,6 +35,7 @@
 static const char
 rcsid[] = "$Id: p_maputl.c,v 1.4 1999/10/12 13:01:13 cphipps Exp $";
 
+#include "compiler.h"
 #include "doomstat.h"
 #include "m_bbox.h"
 #include "r_main.h"
@@ -47,7 +48,7 @@ rcsid[] = "$Id: p_maputl.c,v 1.4 1999/10/12 13:01:13 cphipps Exp $";
 // Gives an estimation of distance (not exact)
 //
 
-fixed_t CONSTFUNC P_AproxDistance(fixed_t dx, fixed_t dy)
+OVERLAY fixed_t CONSTFUNC P_AproxDistance(fixed_t dx, fixed_t dy)
 {
   dx = abs(dx);
   dy = abs(dy);
@@ -62,7 +63,7 @@ fixed_t CONSTFUNC P_AproxDistance(fixed_t dx, fixed_t dy)
 //
 // killough 5/3/98: reformatted, cleaned up
 
-int CONSTFUNC P_PointOnLineSide(fixed_t x, fixed_t y, const line_t *line)
+OVERLAY int CONSTFUNC P_PointOnLineSide(fixed_t x, fixed_t y, const line_t *line)
 {
   return
     !line->dx ? x <= line->v1->x ? line->dy > 0 : line->dy < 0 :
@@ -78,7 +79,7 @@ int CONSTFUNC P_PointOnLineSide(fixed_t x, fixed_t y, const line_t *line)
 //
 // killough 5/3/98: reformatted, cleaned up
 
-int CONSTFUNC P_BoxOnLineSide(const fixed_t *tmbox, const line_t *ld)
+OVERLAY int CONSTFUNC P_BoxOnLineSide(const fixed_t *tmbox, const line_t *ld)
 {
   switch (ld->slopetype)
     {
@@ -109,7 +110,7 @@ int CONSTFUNC P_BoxOnLineSide(const fixed_t *tmbox, const line_t *ld)
 //
 // killough 5/3/98: reformatted, cleaned up
 
-int CONSTFUNC P_PointOnDivlineSide(fixed_t x, fixed_t y, const divline_t *line)
+OVERLAY int CONSTFUNC P_PointOnDivlineSide(fixed_t x, fixed_t y, const divline_t *line)
 {
   return
     !line->dx ? x <= line->x ? line->dy > 0 : line->dy < 0 :
@@ -122,7 +123,7 @@ int CONSTFUNC P_PointOnDivlineSide(fixed_t x, fixed_t y, const divline_t *line)
 // P_MakeDivline
 //
 
-void P_MakeDivline(const line_t *li, divline_t *dl)
+OVERLAY void P_MakeDivline(const line_t *li, divline_t *dl)
 {
   dl->x = li->v1->x;
   dl->y = li->v1->y;
@@ -139,7 +140,7 @@ void P_MakeDivline(const line_t *li, divline_t *dl)
 //
 // killough 5/3/98: reformatted, cleaned up
 
-fixed_t CONSTFUNC P_InterceptVector(const divline_t *v2, const divline_t *v1)
+OVERLAY fixed_t CONSTFUNC P_InterceptVector(const divline_t *v2, const divline_t *v1)
 {
   fixed_t den = FixedMul(v1->dy>>8, v2->dx) - FixedMul(v1->dx>>8, v2->dy);
   return den ? FixedDiv((FixedMul((v1->x-v2->x)>>8, v1->dy) +
@@ -164,7 +165,7 @@ fixed_t lowfloor;
 sector_t *openfrontsector; // made global                    // phares
 sector_t *openbacksector;  // made global
 
-void P_LineOpening(const line_t *linedef)
+OVERLAY void P_LineOpening(const line_t *linedef)
 {
   if (linedef->sidenum[1] == -1)      // single sided line
     {
@@ -205,7 +206,7 @@ void P_LineOpening(const line_t *linedef)
 // these structures need to be updated.
 //
 
-void P_UnsetThingPosition (mobj_t *thing)
+OVERLAY void P_UnsetThingPosition (mobj_t *thing)
 {
   if (!(thing->flags & MF_NOSECTOR))
     {
@@ -264,7 +265,7 @@ void P_UnsetThingPosition (mobj_t *thing)
 //
 // killough 5/3/98: reformatted, cleaned up
 
-void P_SetThingPosition(mobj_t *thing)
+OVERLAY void P_SetThingPosition(mobj_t *thing)
 {                                                      // link into subsector
   subsector_t *ss = thing->subsector = R_PointInSubsector(thing->x, thing->y);
   if (!(thing->flags & MF_NOSECTOR))
@@ -322,7 +323,7 @@ void P_SetThingPosition(mobj_t *thing)
 //
 // A fast function for testing intersections between things and linedefs.
 
-boolean CONSTFUNC ThingIsOnLine(const mobj_t *t, const line_t *l)
+OVERLAY boolean CONSTFUNC ThingIsOnLine(const mobj_t *t, const line_t *l)
 {
   int dx = l->dx >> FRACBITS;                             // Linedef vector
   int dy = l->dy >> FRACBITS;
@@ -372,7 +373,7 @@ boolean CONSTFUNC ThingIsOnLine(const mobj_t *t, const line_t *l)
 //
 // killough 5/3/98: reformatted, cleaned up
 
-boolean P_BlockLinesIterator(int x, int y, boolean func(line_t*))
+OVERLAY boolean P_BlockLinesIterator(int x, int y, boolean func(line_t*))
 {
   int        offset;
   const long *list;   // killough 3/1/98: for removal of blockmap limit
@@ -407,7 +408,7 @@ boolean P_BlockLinesIterator(int x, int y, boolean func(line_t*))
 //
 // killough 5/3/98: reformatted, cleaned up
 
-boolean P_BlockThingsIterator(int x, int y, boolean func(mobj_t*))
+OVERLAY boolean P_BlockThingsIterator(int x, int y, boolean func(mobj_t*))
 {
   mobj_t *mobj;
   if (!(x<0 || y<0 || x>=bmapwidth || y>=bmapheight))
@@ -425,7 +426,7 @@ boolean P_BlockThingsIterator(int x, int y, boolean func(mobj_t*))
 static intercept_t *intercepts, *intercept_p;
 
 // Check for limit and double size if necessary -- killough
-static void check_intercept(void)
+OVERLAY static void check_intercept(void)
 {
   static size_t num_intercepts;
   size_t offset = intercept_p - intercepts;
@@ -449,7 +450,7 @@ divline_t trace;
 //
 // killough 5/3/98: reformatted, cleaned up
 
-boolean PIT_AddLineIntercepts(line_t *ld)
+OVERLAY boolean PIT_AddLineIntercepts(line_t *ld)
 {
   int       s1;
   int       s2;
@@ -494,7 +495,7 @@ boolean PIT_AddLineIntercepts(line_t *ld)
 //
 // killough 5/3/98: reformatted, cleaned up
 
-boolean PIT_AddThingIntercepts(mobj_t *thing)
+OVERLAY boolean PIT_AddThingIntercepts(mobj_t *thing)
 {
   fixed_t   x1, y1;
   fixed_t   x2, y2;
@@ -551,7 +552,7 @@ boolean PIT_AddThingIntercepts(mobj_t *thing)
 //
 // killough 5/3/98: reformatted, cleaned up
 
-boolean P_TraverseIntercepts(traverser_t func, fixed_t maxfrac)
+OVERLAY boolean P_TraverseIntercepts(traverser_t func, fixed_t maxfrac)
 {
   intercept_t *in = NULL;
   int count = intercept_p - intercepts;
@@ -580,7 +581,7 @@ boolean P_TraverseIntercepts(traverser_t func, fixed_t maxfrac)
 //
 // killough 5/3/98: reformatted, cleaned up
 
-boolean P_PathTraverse(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2,
+OVERLAY boolean P_PathTraverse(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2,
                        int flags, boolean trav(intercept_t *))
 {
   fixed_t xt1, yt1;

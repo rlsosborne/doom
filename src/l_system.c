@@ -34,6 +34,7 @@
 static const char
 rcsid[] = "$Id: l_system.c,v 1.33 2000/02/26 19:18:23 cph Exp $";
 
+#include "compiler.h"
 #include <stdio.h>
 
 #include <stdarg.h>
@@ -61,7 +62,7 @@ rcsid[] = "$Id: l_system.c,v 1.33 2000/02/26 19:18:23 cph Exp $";
 #define SDL_GetTicks() 0
 #endif
 
-int I_GetTime_RealTime (void)
+OVERLAY int I_GetTime_RealTime (void)
 {
   return (SDL_GetTicks()*TICRATE)/1000;
 }
@@ -71,7 +72,7 @@ int I_GetTime_RealTime (void)
  *
  * CPhipps - extracted from G_ReloadDefaults because it is O/S based
  */
-unsigned long I_GetRandomTimeSeed(void)
+OVERLAY unsigned long I_GetRandomTimeSeed(void)
 {                            
 /*  / killough 3/26/98: shuffle random seed, use the clock / 
   struct timeval tv;
@@ -85,7 +86,7 @@ unsigned long I_GetRandomTimeSeed(void)
 /* cphipps - I_SigString
  * Returns a string describing a signal number
  */
-const char* I_SigString(char* buf, size_t sz, int signum)
+OVERLAY const char* I_SigString(char* buf, size_t sz, int signum)
 {
 #ifdef SYS_SIGLIST_DECLARED
   if (strlen(sys_siglist[signum]) < sz)

@@ -32,6 +32,7 @@
 static const char
 rcsid[] = "$Id: p_ceilng.c,v 1.2 1999/10/12 13:01:12 cphipps Exp $";
 
+#include "compiler.h"
 #include "doomstat.h"
 #include "r_main.h"
 #include "p_spec.h"
@@ -59,7 +60,7 @@ ceilinglist_t *activeceilings;
 // jff 02/08/98 all cases with labels beginning with gen added to support 
 // generalized line type behaviors.
 //
-void T_MoveCeiling (ceiling_t* ceiling)
+OVERLAY void T_MoveCeiling (ceiling_t* ceiling)
 {
   result_e  res;
 
@@ -244,7 +245,7 @@ void T_MoveCeiling (ceiling_t* ceiling)
 // Passed the linedef activating the function and the type of function desired
 // returns true if a thinker started
 //
-int EV_DoCeiling
+OVERLAY int EV_DoCeiling
 ( line_t* line,
   ceiling_e type )
 {
@@ -366,7 +367,7 @@ int EV_DoCeiling
 // Returns true if a ceiling reactivated
 //
 //jff 4/5/98 return if activated
-int P_ActivateInStasisCeiling(line_t *line)
+OVERLAY int P_ActivateInStasisCeiling(line_t *line)
 {
   ceilinglist_t *cl;
   int rtn=0;
@@ -393,7 +394,7 @@ int P_ActivateInStasisCeiling(line_t *line)
 // Passed the linedef stopping the ceilings
 // Returns true if a ceiling put in stasis
 //
-int EV_CeilingCrushStop(line_t* line)
+OVERLAY int EV_CeilingCrushStop(line_t* line)
 {
   int rtn=0;
 
@@ -420,7 +421,7 @@ int EV_CeilingCrushStop(line_t* line)
 // Passed the ceiling motion structure
 // Returns nothing
 //
-void P_AddActiveCeiling(ceiling_t* ceiling)
+OVERLAY void P_AddActiveCeiling(ceiling_t* ceiling)
 {
   ceilinglist_t *list = malloc(sizeof *list);
   list->ceiling = ceiling;
@@ -439,7 +440,7 @@ void P_AddActiveCeiling(ceiling_t* ceiling)
 // Passed the ceiling motion structure
 // Returns nothing
 //
-void P_RemoveActiveCeiling(ceiling_t* ceiling)
+OVERLAY void P_RemoveActiveCeiling(ceiling_t* ceiling)
 {
   ceilinglist_t *list = ceiling->list;
   ceiling->sector->ceilingdata = NULL;  //jff 2/22/98
@@ -456,7 +457,7 @@ void P_RemoveActiveCeiling(ceiling_t* ceiling)
 //
 // Passed nothing, returns nothing
 //
-void P_RemoveAllActiveCeilings(void)
+OVERLAY void P_RemoveAllActiveCeilings(void)
 {
   while (activeceilings)
   {  

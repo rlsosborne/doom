@@ -32,6 +32,7 @@
 static const char
 rcsid[] = "$Id: p_doors.c,v 1.2 1999/10/12 13:01:12 cphipps Exp $";
 
+#include "compiler.h"
 #include "doomstat.h"
 #include "p_spec.h"
 #include "p_tick.h"
@@ -57,7 +58,7 @@ rcsid[] = "$Id: p_doors.c,v 1.2 1999/10/12 13:01:12 cphipps Exp $";
 // jff 02/08/98 all cases with labels beginning with gen added to support 
 // generalized line type behaviors.
 
-void T_VerticalDoor (vldoor_t* door)
+OVERLAY void T_VerticalDoor (vldoor_t* door)
 {
   result_e  res;
 
@@ -289,7 +290,7 @@ void T_VerticalDoor (vldoor_t* door)
 // and the thing that activated the line
 // Returns true if a thinker created
 //
-int EV_DoLockedDoor
+OVERLAY int EV_DoLockedDoor
 ( line_t* line,
   vldoor_e  type,
   mobj_t* thing )
@@ -348,7 +349,7 @@ int EV_DoLockedDoor
 // Passed the line activating the door and the type of door 
 // Returns true if a thinker created
 //
-int EV_DoDoor
+OVERLAY int EV_DoDoor
 ( line_t* line,
   vldoor_e  type )
 {
@@ -441,7 +442,7 @@ int EV_DoDoor
 //
 // jff 2/12/98 added int return value, fixed all returns
 //
-int EV_VerticalDoor
+OVERLAY int EV_VerticalDoor
 ( line_t* line,
   mobj_t* thing )
 {
@@ -609,7 +610,7 @@ int EV_VerticalDoor
 // Passed the sector of the door, whose type specified the door action
 // Returns nothing
 //
-void P_SpawnDoorCloseIn30 (sector_t* sec)
+OVERLAY void P_SpawnDoorCloseIn30 (sector_t* sec)
 {
   vldoor_t* door;
 
@@ -637,7 +638,7 @@ void P_SpawnDoorCloseIn30 (sector_t* sec)
 // Passed the sector of the door, whose type specified the door action
 // Returns nothing
 //
-void P_SpawnDoorRaiseIn5Mins
+OVERLAY void P_SpawnDoorRaiseIn5Mins
 ( sector_t* sec,
   int   secnum )
 {

@@ -32,6 +32,7 @@
 static const char
 rcsid[] = "$Id: p_telept.c,v 1.2 1999/10/12 13:01:13 cphipps Exp $";
 
+#include "compiler.h"
 #include "doomdef.h"
 #include "p_spec.h"
 #include "p_maputl.h"
@@ -47,7 +48,7 @@ rcsid[] = "$Id: p_telept.c,v 1.2 1999/10/12 13:01:13 cphipps Exp $";
 //
 // killough 5/3/98: reformatted, cleaned up
 
-int EV_Teleport(line_t *line, int side, mobj_t *thing)
+OVERLAY int EV_Teleport(line_t *line, int side, mobj_t *thing)
 {
   thinker_t *thinker;
   mobj_t    *m;
@@ -111,7 +112,7 @@ int EV_Teleport(line_t *line, int side, mobj_t *thing)
 // Primarily for rooms-over-rooms etc.
 //
 
-int EV_SilentTeleport(line_t *line, int side, mobj_t *thing)
+OVERLAY int EV_SilentTeleport(line_t *line, int side, mobj_t *thing)
 {
   int       i;
   mobj_t    *m;
@@ -196,7 +197,7 @@ int EV_SilentTeleport(line_t *line, int side, mobj_t *thing)
 // maximum fixed_t units to move object to avoid hiccups
 #define FUDGEFACTOR 10
 
-int EV_SilentLineTeleport(line_t *line, int side, mobj_t *thing,
+OVERLAY int EV_SilentLineTeleport(line_t *line, int side, mobj_t *thing,
                           boolean reverse)
 {
   int i;

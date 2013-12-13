@@ -28,6 +28,7 @@
 
 #include <string.h>
 
+#include "compiler.h"
 #include "doomtype.h"
 #include "z_zone.h"
 #include "z_bmalloc.h"
@@ -41,12 +42,12 @@ typedef struct bmalpool_s {
 
 #define SIMPLECHECKS
 
-static inline void* getelem(bmalpool_t *p, size_t size, size_t n)
+OVERLAY static inline void* getelem(bmalpool_t *p, size_t size, size_t n)
 {
   return (((byte*)p) + sizeof(bmalpool_t) + sizeof(byte)*(p->blocks) + size*n);
 }
 
-static const inline int iselem(const bmalpool_t *pool, size_t size, const void* p)
+OVERLAY static const inline int iselem(const bmalpool_t *pool, size_t size, const void* p)
 {
   // CPhipps - need portable # of bytes between pointers
   int dif = (const char*)p - (const char*)pool;
@@ -60,7 +61,7 @@ static const inline int iselem(const bmalpool_t *pool, size_t size, const void* 
 
 enum { unused_block = 0, used_block = 1};
 
-void* Z_BMalloc(struct block_memory_alloc_s *pzone)
+OVERLAY void* Z_BMalloc(struct block_memory_alloc_s *pzone)
 {
   bmalpool_t **pool = (bmalpool_t **)&(pzone->firstpool);
   while (*pool != NULL) {
@@ -93,7 +94,7 @@ void* Z_BMalloc(struct block_memory_alloc_s *pzone)
   }
 }
 
-void Z_BFree(struct block_memory_alloc_s *pzone, void* p)
+OVERLAY void Z_BFree(struct block_memory_alloc_s *pzone, void* p)
 {
   bmalpool_t **pool = (bmalpool_t**)&(pzone->firstpool);
 

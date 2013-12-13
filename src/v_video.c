@@ -36,6 +36,7 @@
 static const char
 rcsid[] = "$Id: v_video.c,v 1.18 1999/10/27 18:38:03 cphipps Exp $";
 
+#include "compiler.h"
 #include "doomdef.h"
 #include "r_main.h"
 #include "m_bbox.h"
@@ -191,7 +192,7 @@ static const crdef_t crdefs[] = {
 };
 
 // killough 5/2/98: tiny engine driven by table above
-void V_InitColorTranslation(void)
+OVERLAY void V_InitColorTranslation(void)
 {
   const crdef_t *p;
   for (p=crdefs; p->name; p++)
@@ -205,7 +206,7 @@ void V_InitColorTranslation(void)
 // upper left origin and height and width dirty to minimize
 // the amount of screen update necessary. No return.
 //
-void V_MarkRect(int x, int y, int width, int height)
+OVERLAY void V_MarkRect(int x, int y, int width, int height)
 {
   M_AddToBox(dirtybox, x, y);
   M_AddToBox(dirtybox, x+width-1, y+height-1);
@@ -223,7 +224,7 @@ void V_MarkRect(int x, int y, int width, int height)
 //
 // No return.
 //
-void V_CopyRect(int srcx, int srcy, int srcscrn, int width,
+OVERLAY void V_CopyRect(int srcx, int srcy, int srcscrn, int width,
                 int height, int destx, int desty, int destscrn )
 {
   byte *src;
@@ -268,7 +269,7 @@ void V_CopyRect(int srcx, int srcy, int srcscrn, int width,
 // CPhipps - modified  to take the patch translation flags. For now, only stretching is 
 //  implemented, to support highres in the menus
 //
-void V_DrawBlock(int x, int y, int scrn, int width, int height, 
+OVERLAY void V_DrawBlock(int x, int y, int scrn, int width, int height, 
 		 const byte *src, enum patch_translation_e flags)
 {
   byte *dest;
@@ -326,7 +327,7 @@ void V_DrawBlock(int x, int y, int scrn, int width, int height,
  * directly, so this is my code from the equivalent function in f_finale.c
  */
 
-void V_DrawBackground(const char* flatname)
+OVERLAY void V_DrawBackground(const char* flatname)
 {
   /* erase the entire screen to a tiled background */
   const byte *src;
@@ -355,7 +356,7 @@ void V_DrawBackground(const char* flatname)
 // No return
 //
 
-void V_GetBlock(int x, int y, int scrn, int width, int height, byte *dest)
+OVERLAY void V_GetBlock(int x, int y, int scrn, int width, int height, byte *dest)
 {
   byte *src;
 
@@ -384,7 +385,7 @@ void V_GetBlock(int x, int y, int scrn, int width, int height, byte *dest)
 // No return
 //
 
-void V_Init (void)
+OVERLAY void V_Init (void)
 {
   int  i;
   // CPhipps - allocate only 2 screens all the time, the rest can be allocated as and when needed
@@ -412,7 +413,7 @@ void V_Init (void)
 // (indeed, laziness of the people who wrote the 'clones' of the original V_DrawPatch
 //  means that their inner loops weren't so well optimised, so merging code may even speed them).
 //
-void V_DrawMemPatch(int x, int y, int scrn, const patch_t *patch, 
+OVERLAY void V_DrawMemPatch(int x, int y, int scrn, const patch_t *patch, 
 		    const byte *trans, enum patch_translation_e flags)
 {
   y -= SHORT(patch->topoffset);
@@ -540,7 +541,7 @@ void V_DrawMemPatch(int x, int y, int scrn, const patch_t *patch,
 // static inline; other compilers have different behaviour.
 // This inline is _only_ for the function below
 #ifdef __GNUC__
-inline
+OVERLAY inline
 #endif
 void V_DrawNumPatch(int x, int y, int scrn, int lump, 
 			   const byte *trans, enum patch_translation_e flags)
@@ -550,7 +551,7 @@ void V_DrawNumPatch(int x, int y, int scrn, int lump,
   W_UnlockLumpNum(lump);
 }
 
-void V_DrawNamePatch(int x, int y, int scrn, const char *name, 
+OVERLAY void V_DrawNamePatch(int x, int y, int scrn, const char *name, 
 		     const byte *trans, enum patch_translation_e flags)
 {
   V_DrawNumPatch(x, y, scrn, W_GetNumForName(name), trans, flags);
@@ -562,7 +563,7 @@ void V_DrawNamePatch(int x, int y, int scrn, const char *name,
 // Returns a simple bitmap which contains the patch. See-through parts of the 
 // patch will be undefined (in fact black for now)
 
-byte *V_PatchToBlock(const char* name, const byte *trans, 
+OVERLAY byte *V_PatchToBlock(const char* name, const byte *trans, 
 			      enum patch_translation_e flags, 
 			      unsigned short* width, unsigned short* height)
 {
@@ -599,7 +600,7 @@ byte *V_PatchToBlock(const char* name, const byte *trans,
 // CPhipps - New function to set the palette to palette number pal.
 // Handles loading of PLAYPAL and calls I_SetPalette
 
-void V_SetPalette(unsigned short pal)
+OVERLAY void V_SetPalette(unsigned short pal)
 {
   I_SetPalette(pal);
 }
@@ -609,7 +610,7 @@ void V_SetPalette(unsigned short pal)
 //
 // CPhipps - New function to fill a rectangle with a given colour
 
-void V_FillRect(int scrn, int x, int y, int width, int height, byte colour)
+OVERLAY void V_FillRect(int scrn, int x, int y, int width, int height, byte colour)
 {
   byte* dest = screens[scrn] + x + y*SCREENWIDTH;
   while (height--) {

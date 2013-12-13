@@ -46,6 +46,7 @@
 #include "../config.h"
 #endif
 
+#include "compiler.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -259,13 +260,13 @@ void Z_DumpHistory(char *buf)
 }
 #else
 
-void Z_DumpHistory(char *buf)
+OVERLAY void Z_DumpHistory(char *buf)
 {
 }
 
 #endif
 
-void Z_Close(void)
+OVERLAY void Z_Close(void)
 {
 #if 0
   (free)(zonebase);
@@ -273,7 +274,7 @@ void Z_Close(void)
 #endif
 }
 
-void Z_Init(void)
+OVERLAY void Z_Init(void)
 {
 #if 0
   size_t size = zone_size*1000;
@@ -336,7 +337,7 @@ void Z_Init(void)
  * free all the stuff we just pass on the way.
  */
 
-void *(Z_Malloc)(size_t size, int tag, void **user
+OVERLAY void *(Z_Malloc)(size_t size, int tag, void **user
 #ifdef INSTRUMENTED
                  , const char *file, int line
 #endif
@@ -455,7 +456,7 @@ void *(Z_Malloc)(size_t size, int tag, void **user
   return block;
 }
   
-void (Z_Free)(void *p
+OVERLAY void (Z_Free)(void *p
 #ifdef INSTRUMENTED
               , const char *file, int line
 #endif
@@ -520,7 +521,7 @@ void (Z_Free)(void *p
 #endif
 }
 
-void (Z_FreeTags)(int lowtag, int hightag
+OVERLAY void (Z_FreeTags)(int lowtag, int hightag
 #ifdef INSTRUMENTED
                   , const char *file, int line
 #endif
@@ -558,7 +559,7 @@ void (Z_FreeTags)(int lowtag, int hightag
   }
 }
 
-void (Z_ChangeTag)(void *ptr, int tag
+OVERLAY void (Z_ChangeTag)(void *ptr, int tag
 #ifdef INSTRUMENTED
                    , const char *file, int line
 #endif
@@ -639,7 +640,7 @@ void (Z_ChangeTag)(void *ptr, int tag
   block->tag = tag;
 }
 
-void *(Z_Realloc)(void *ptr, size_t n, int tag, void **user
+OVERLAY void *(Z_Realloc)(void *ptr, size_t n, int tag, void **user
 #ifdef INSTRUMENTED
                   , const char *file, int line
 #endif
@@ -657,7 +658,7 @@ void *(Z_Realloc)(void *ptr, size_t n, int tag, void **user
   return p;
 }
 
-void *(Z_Calloc)(size_t n1, size_t n2, int tag, void **user
+OVERLAY void *(Z_Calloc)(size_t n1, size_t n2, int tag, void **user
 #ifdef INSTRUMENTED
                  , const char *file, int line
 #endif
@@ -667,7 +668,7 @@ void *(Z_Calloc)(size_t n1, size_t n2, int tag, void **user
   (n1*=n2) ? memset((Z_Malloc)(n1, tag, user DA(file, line)), 0, n1) : NULL;
 }
 
-char *(Z_Strdup)(const char *s, int tag, void **user
+OVERLAY char *(Z_Strdup)(const char *s, int tag, void **user
 #ifdef INSTRUMENTED
                  , const char *file, int line
 #endif
@@ -676,7 +677,7 @@ char *(Z_Strdup)(const char *s, int tag, void **user
   return strcpy((Z_Malloc)(strlen(s)+1, tag, user DA(file, line)), s);
 }
   
-void (Z_CheckHeap)(
+OVERLAY void (Z_CheckHeap)(
 #ifdef INSTRUMENTED
                    const char *file, int line
 #else

@@ -42,6 +42,7 @@
  *
  *-----------------------------------------------------------------------------*/
 
+#include "compiler.h"
 #include "z_zone.h"  /* memory allocation wrappers -- killough */
 
 static const char
@@ -104,7 +105,7 @@ fixed_t yslope[MAX_SCREENHEIGHT], distscale[MAX_SCREENWIDTH];
 // R_InitPlanes
 // Only at game startup.
 //
-void R_InitPlanes (void)
+OVERLAY void R_InitPlanes (void)
 {
 }
 
@@ -124,7 +125,7 @@ void R_InitPlanes (void)
 // BASIC PRIMITIVE
 //
 
-static void R_MapPlane(int y, int x1, int x2)
+OVERLAY static void R_MapPlane(int y, int x1, int x2)
 {
   angle_t angle;
   fixed_t distance, length;
@@ -176,7 +177,7 @@ static void R_MapPlane(int y, int x1, int x2)
 // At begining of frame.
 //
 
-void R_ClearPlanes(void)
+OVERLAY void R_ClearPlanes(void)
 {
   int i;
   angle_t angle;
@@ -204,7 +205,7 @@ void R_ClearPlanes(void)
 
 // New function, by Lee Killough
 
-static visplane_t *new_visplane(unsigned hash)
+OVERLAY static visplane_t *new_visplane(unsigned hash)
 {
   visplane_t *check = freetail;
   if (!check)
@@ -222,7 +223,7 @@ static visplane_t *new_visplane(unsigned hash)
 //
 // killough 2/28/98: Add offsets
 
-visplane_t *R_FindPlane(fixed_t height, int picnum, int lightlevel,
+OVERLAY visplane_t *R_FindPlane(fixed_t height, int picnum, int lightlevel,
                         fixed_t xoffs, fixed_t yoffs)
 {
   visplane_t *check;
@@ -260,7 +261,7 @@ visplane_t *R_FindPlane(fixed_t height, int picnum, int lightlevel,
 //
 // R_CheckPlane
 //
-visplane_t *R_CheckPlane(visplane_t *pl, int start, int stop)
+OVERLAY visplane_t *R_CheckPlane(visplane_t *pl, int start, int stop)
 {
   int intrl, intrh, unionl, unionh, x;
 
@@ -302,7 +303,7 @@ visplane_t *R_CheckPlane(visplane_t *pl, int start, int stop)
 // R_MakeSpans
 //
 
-static void R_MakeSpans(int x, int t1, int b1, int t2, int b2)
+OVERLAY static void R_MakeSpans(int x, int t1, int b1, int t2, int b2)
 {
   for (; t1 < t2 && t1 <= b1; t1++)
     R_MapPlane(t1, spanstart[t1], x-1);
@@ -316,7 +317,7 @@ static void R_MakeSpans(int x, int t1, int b1, int t2, int b2)
 
 // New function, by Lee Killough
 
-static void R_DoDrawPlane(visplane_t *pl)
+OVERLAY static void R_DoDrawPlane(visplane_t *pl)
 {
   register int x;
   if (pl->minx <= pl->maxx) {
@@ -416,7 +417,7 @@ static void R_DoDrawPlane(visplane_t *pl)
 // At the end of each frame.
 //
 
-void R_DrawPlanes (void)
+OVERLAY void R_DrawPlanes (void)
 {
   visplane_t *pl;
   int i;

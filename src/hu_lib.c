@@ -32,6 +32,7 @@
 static const char
 rcsid[] = "$Id: hu_lib.c,v 1.6 1999/10/12 13:01:10 cphipps Exp $";
 
+#include "compiler.h"
 #include "doomdef.h"
 #include "doomstat.h"
 #include "v_video.h"
@@ -51,7 +52,7 @@ extern int  key_enter;                                              // phares
 // not used currently
 // code to initialize HUlib would go here if needed
 //
-void HUlib_init(void)
+OVERLAY void HUlib_init(void)
 {
 }
 
@@ -68,7 +69,7 @@ void HUlib_init(void)
 //
 // Passed a hu_textline_t, returns nothing
 //
-void HUlib_clearTextLine(hu_textline_t* t)
+OVERLAY void HUlib_clearTextLine(hu_textline_t* t)
 {
   t->linelen =         // killough 1/23 98: support multiple lines
     t->len = 0;
@@ -85,7 +86,7 @@ void HUlib_clearTextLine(hu_textline_t* t)
 // Passed a hu_textline_t, and the values used to initialize
 // Returns nothing
 //
-void HUlib_initTextLine(hu_textline_t* t, int x, int y,
+OVERLAY void HUlib_initTextLine(hu_textline_t* t, int x, int y,
 			const patch_t** f, int sc, const char *cr  )
   //jff 2/16/98 add color range parameter
 {
@@ -105,7 +106,7 @@ void HUlib_initTextLine(hu_textline_t* t, int x, int y,
 // Passed the hu_textline_t and the char to add
 // Returns false if already at length limit, true if the character added
 //
-boolean HUlib_addCharToTextLine
+OVERLAY boolean HUlib_addCharToTextLine
 ( hu_textline_t*  t,
   char      ch )
 {
@@ -134,7 +135,7 @@ boolean HUlib_addCharToTextLine
 // Passed the hu_textline_t
 // Returns false if already empty, true if the character deleted
 //
-boolean HUlib_delCharFromTextLine(hu_textline_t* t)
+OVERLAY boolean HUlib_delCharFromTextLine(hu_textline_t* t)
 {
   if (!t->len) return false;
   else
@@ -153,7 +154,7 @@ boolean HUlib_delCharFromTextLine(hu_textline_t* t)
 // Passed the hu_textline_t and flag whether to draw a cursor
 // Returns nothing
 //
-void HUlib_drawTextLine
+OVERLAY void HUlib_drawTextLine
 ( hu_textline_t* l,
   boolean drawcursor )
 {
@@ -218,7 +219,7 @@ void HUlib_drawTextLine
 // Passed the hu_textline_t
 // Returns nothing
 //
-void HUlib_eraseTextLine(hu_textline_t* l)
+OVERLAY void HUlib_eraseTextLine(hu_textline_t* l)
 {
   int lh;
   int y;
@@ -263,7 +264,7 @@ void HUlib_eraseTextLine(hu_textline_t* l)
 // Passed a hu_stext_t, and the values used to initialize
 // Returns nothing
 //
-void HUlib_initSText
+OVERLAY void HUlib_initSText
 ( hu_stext_t* s,
   int   x,
   int   y,
@@ -300,7 +301,7 @@ void HUlib_initSText
 // Passed a hu_stext_t
 // Returns nothing
 //
-void HUlib_addLineToSText(hu_stext_t* s)
+OVERLAY void HUlib_addLineToSText(hu_stext_t* s)
 {
 
   int i;
@@ -324,7 +325,7 @@ void HUlib_addLineToSText(hu_stext_t* s)
 // Passed a hu_stext_t, the prefix string, and a message string
 // Returns nothing
 //
-void HUlib_addMessageToSText(hu_stext_t* s, const char* prefix, const char* msg)
+OVERLAY void HUlib_addMessageToSText(hu_stext_t* s, const char* prefix, const char* msg)
 {
   HUlib_addLineToSText(s);
     if (prefix)
@@ -343,7 +344,7 @@ void HUlib_addMessageToSText(hu_stext_t* s, const char* prefix, const char* msg)
 // Passed a hu_stext_t
 // Returns nothing
 //
-void HUlib_drawSText(hu_stext_t* s)
+OVERLAY void HUlib_drawSText(hu_stext_t* s)
 {
   int i, idx;
   hu_textline_t *l;
@@ -373,7 +374,7 @@ void HUlib_drawSText(hu_stext_t* s)
 // Passed a hu_stext_t
 // Returns nothing
 //
-void HUlib_eraseSText(hu_stext_t* s)
+OVERLAY void HUlib_eraseSText(hu_stext_t* s)
 {
   int i;
 
@@ -404,7 +405,7 @@ void HUlib_eraseSText(hu_stext_t* s)
 // Passed a hu_mtext_t, and the values used to initialize
 // Returns nothing
 //
-void HUlib_initMText(hu_mtext_t *m, int x, int y, int w, int h,
+OVERLAY void HUlib_initMText(hu_mtext_t *m, int x, int y, int w, int h,
 		     const patch_t** font, int startchar, const char *cr,
 		     const patch_t** bgfont, boolean *on)
 {
@@ -441,7 +442,7 @@ void HUlib_initMText(hu_mtext_t *m, int x, int y, int w, int h,
 // Passed a hu_mtext_t
 // Returns nothing
 //
-void HUlib_addLineToMText(hu_mtext_t* m)
+OVERLAY void HUlib_addLineToMText(hu_mtext_t* m)
 {
   // add a clear line
   if (++m->cl == hud_msg_lines)
@@ -463,7 +464,7 @@ void HUlib_addLineToMText(hu_mtext_t* m)
 // Passed a hu_mtext_t, the prefix string, and a message string
 // Returns nothing
 //
-void HUlib_addMessageToMText(hu_mtext_t* m, const char* prefix, const char* msg)
+OVERLAY void HUlib_addMessageToMText(hu_mtext_t* m, const char* prefix, const char* msg)
 {
   HUlib_addLineToMText(m);
   if (prefix)
@@ -483,7 +484,7 @@ void HUlib_addMessageToMText(hu_mtext_t* m, const char* prefix, const char* msg)
 // Passed position, width, height, and the background patches
 // Returns nothing
 //
-void HUlib_drawMBg
+OVERLAY void HUlib_drawMBg
 ( int x,
   int y,
   int w,
@@ -526,7 +527,7 @@ void HUlib_drawMBg
 // Passed a hu_mtext_t
 // Returns nothing
 //
-void HUlib_drawMText(hu_mtext_t* m)
+OVERLAY void HUlib_drawMText(hu_mtext_t* m)
 {
   int i, idx, y;
   hu_textline_t *l;
@@ -569,7 +570,7 @@ void HUlib_drawMText(hu_mtext_t* m)
 // Passed a hu_mtext_t
 // Returns nothing
 //
-static void HUlib_eraseMBg(hu_mtext_t* m)
+OVERLAY static void HUlib_eraseMBg(hu_mtext_t* m)
 {
   int     lh;
   int     y;
@@ -606,7 +607,7 @@ static void HUlib_eraseMBg(hu_mtext_t* m)
 // Passed a hu_mtext_t
 // Returns nothing
 //
-void HUlib_eraseMText(hu_mtext_t* m)
+OVERLAY void HUlib_eraseMText(hu_mtext_t* m)
 {
   int i;
 
@@ -635,7 +636,7 @@ void HUlib_eraseMText(hu_mtext_t* m)
 // Passed a hu_itext_t, and the values used to initialize
 // Returns nothing
 //
-void HUlib_initIText
+OVERLAY void HUlib_initIText
 ( hu_itext_t* it,
   int   x,
   int   y,
@@ -660,7 +661,7 @@ void HUlib_initIText
 // Passed the hu_itext_t
 // Returns nothing
 //
-void HUlib_delCharFromIText(hu_itext_t* it)
+OVERLAY void HUlib_delCharFromIText(hu_itext_t* it)
 {
   if (it->l.len != it->lm)
     HUlib_delCharFromTextLine(&it->l);
@@ -674,7 +675,7 @@ void HUlib_delCharFromIText(hu_itext_t* it)
 // Passed the hu_itext_t
 // Returns nothing
 //
-void HUlib_eraseLineFromIText(hu_itext_t* it)
+OVERLAY void HUlib_eraseLineFromIText(hu_itext_t* it)
 {
   while (it->lm != it->l.len)
     HUlib_delCharFromTextLine(&it->l);
@@ -689,7 +690,7 @@ void HUlib_eraseLineFromIText(hu_itext_t* it)
 // Passed the hu_itext_t
 // Returns nothing
 //
-void HUlib_resetIText(hu_itext_t* it)
+OVERLAY void HUlib_resetIText(hu_itext_t* it)
 {
   it->lm = 0;
     HUlib_clearTextLine(&it->l);
@@ -704,7 +705,7 @@ void HUlib_resetIText(hu_itext_t* it)
 // Passed the hu_itext_t and the prefix string
 // Returns nothing
 //
-void HUlib_addPrefixToIText
+OVERLAY void HUlib_addPrefixToIText
 ( hu_itext_t* it,
   char*   str )
 {
@@ -721,7 +722,7 @@ void HUlib_addPrefixToIText
 // Passed the hu_itext_t and the char input
 // Returns true if it ate the key
 //
-boolean HUlib_keyInIText
+OVERLAY boolean HUlib_keyInIText
 ( hu_itext_t* it,
   unsigned char ch )
 {
@@ -744,7 +745,7 @@ boolean HUlib_keyInIText
 // Passed the hu_itext_t
 // Returns nothing
 //
-void HUlib_drawIText(hu_itext_t* it)
+OVERLAY void HUlib_drawIText(hu_itext_t* it)
 {
   hu_textline_t *l = &it->l;
 
@@ -761,7 +762,7 @@ void HUlib_drawIText(hu_itext_t* it)
 // Passed the hu_itext_t
 // Returns nothing
 //
-void HUlib_eraseIText(hu_itext_t* it)
+OVERLAY void HUlib_eraseIText(hu_itext_t* it)
 {
   if (it->laston && !*it->on)
     it->l.needsupdate = 4;

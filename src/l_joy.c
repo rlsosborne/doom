@@ -31,6 +31,7 @@
 static const char rcsid[] = "$Id: l_joy.c,v 1.12 1999/10/31 09:12:17 cphipps Exp $";
 #endif /* lint */
 
+#include "compiler.h"
 #include "doomdef.h"
 #include "doomtype.h"
 #include "m_argv.h"
@@ -62,7 +63,7 @@ int joydown;
 
 int usejoystick;
 
-void I_EndJoystick(void)
+OVERLAY void I_EndJoystick(void)
 {
 #ifndef NO_JOY_CODE
   lprintf(LO_DEBUG, "I_EndJoystick : closing joystick\n");
@@ -118,7 +119,7 @@ static int I_WaitButton(void)
 }
 #endif
 
-void I_PollJoystick(void)
+OVERLAY void I_PollJoystick(void)
 {
 #ifndef NO_JOY_CODE
   if (!usejoystick || (joy_fd == -1)) return;
@@ -164,7 +165,7 @@ void I_PollJoystick(void)
 #endif
 }
 
-void I_InitJoystick(void)
+OVERLAY void I_InitJoystick(void)
 {
 #ifndef NO_JOY_CODE
   char jdev[10];

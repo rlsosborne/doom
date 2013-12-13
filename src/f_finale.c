@@ -33,6 +33,7 @@
 static const char
 rcsid[] = "$Id: f_finale.c,v 1.14 1999/10/27 12:01:44 cphipps Exp $";
 
+#include "compiler.h"
 #include "doomstat.h"
 #include "d_event.h"
 #include "v_video.h"
@@ -73,7 +74,7 @@ static int midstage;                 // whether we're in "mid-stage"
 //
 // F_StartFinale
 //
-void F_StartFinale (void)
+OVERLAY void F_StartFinale (void)
 {
   gameaction = ga_nothing;
   gamestate = GS_FINALE;
@@ -179,7 +180,7 @@ void F_StartFinale (void)
 
 
 
-boolean F_Responder (event_t *event)
+OVERLAY boolean F_Responder (event_t *event)
 {
   if (finalestage == 2)
     return F_CastResponder (event);
@@ -190,7 +191,7 @@ boolean F_Responder (event_t *event)
 // Get_TextSpeed() returns the value of the text display speed  // phares
 // Rewritten to allow user-directed acceleration -- killough 3/28/98
 
-static float Get_TextSpeed(void)
+OVERLAY static float Get_TextSpeed(void)
 {
   return midstage ? NEWTEXTSPEED : (midstage=acceleratestage) ? 
     acceleratestage=0, NEWTEXTSPEED : TEXTSPEED;
@@ -210,7 +211,7 @@ static float Get_TextSpeed(void)
 // killough 5/10/98: add back v1.9 demo compatibility
 //
 
-void F_Ticker(void)
+OVERLAY void F_Ticker(void)
 {
   int i;
   if (!demo_compatibility)
@@ -271,7 +272,7 @@ void F_Ticker(void)
 extern const patch_t* hu_font[HU_FONTSIZE];
 
 
-void F_TextWrite (void)
+OVERLAY void F_TextWrite (void)
 {
   V_DrawBackground(finaleflat);
   { // draw some of the text onto the screen
@@ -358,7 +359,7 @@ boolean         castattacking;
 //
 extern  gamestate_t     wipegamestate;
 
-void F_StartCast (void)
+OVERLAY void F_StartCast (void)
 {
   wipegamestate = -1;         // force a screen wipe
   castnum = 0;
@@ -376,7 +377,7 @@ void F_StartCast (void)
 //
 // F_CastTicker
 //
-void F_CastTicker (void)
+OVERLAY void F_CastTicker (void)
 {
   int st;
   int sfx;
@@ -483,7 +484,7 @@ void F_CastTicker (void)
 // F_CastResponder
 //
 
-boolean F_CastResponder (event_t* ev)
+OVERLAY boolean F_CastResponder (event_t* ev)
 {
   if (ev->type != ev_keydown)
     return false;
@@ -504,7 +505,7 @@ boolean F_CastResponder (event_t* ev)
 }
 
 
-static void F_CastPrint (const char* text) // CPhipps - static, const char*
+OVERLAY static void F_CastPrint (const char* text) // CPhipps - static, const char*
 {
   const char* ch; // CPhipps - const
   int         c;
@@ -559,7 +560,7 @@ static void F_CastPrint (const char* text) // CPhipps - static, const char*
 // F_CastDrawer
 //
 
-void F_CastDrawer (void)
+OVERLAY void F_CastDrawer (void)
 {
   spritedef_t*        sprdef;
   spriteframe_t*      sprframe;
@@ -589,7 +590,7 @@ void F_CastDrawer (void)
 static const char pfub2[] = { "PFUB2" };
 static const char pfub1[] = { "PFUB1" };
 
-static void F_BunnyScroll (void)
+OVERLAY static void F_BunnyScroll (void)
 {
   char        name[10];
   int         stage;
@@ -643,7 +644,7 @@ static void F_BunnyScroll (void)
 //
 // F_Drawer
 //
-void F_Drawer (void)
+OVERLAY void F_Drawer (void)
 {
   if (finalestage == 2)
   {

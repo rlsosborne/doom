@@ -34,6 +34,7 @@ rcsid[] = "$Id: hu_stuff.c,v 1.11 2000/02/26 19:18:54 cph Exp $";
 
 // killough 5/3/98: remove unnecessary headers
 
+#include "compiler.h"
 #include "doomstat.h"
 #include "hu_stuff.h"
 #include "hu_lib.h"
@@ -296,7 +297,7 @@ const char english_shiftxform[] =
 //
 // Passed nothing, returns nothing
 //
-void HU_Init(void)
+OVERLAY void HU_Init(void)
 {
 
   int   i;
@@ -384,7 +385,7 @@ void HU_Init(void)
 //
 // Passed nothing, returns nothing
 //
-void HU_Stop(void)
+OVERLAY void HU_Stop(void)
 {
   headsupactive = false;
 }
@@ -400,7 +401,7 @@ void HU_Stop(void)
 //
 // Passed nothing, returns nothing
 //
-void HU_Start(void)
+OVERLAY void HU_Start(void)
 {
 
   int   i;
@@ -701,7 +702,7 @@ void HU_Start(void)
 //jff 3/9/98 create this externally callable to avoid glitch
 // when menu scatter's HUD due to delay in change of position
 //
-void HU_MoveHud(void)
+OVERLAY void HU_MoveHud(void)
 {
   static int ohud_distributed=-1;
 
@@ -733,7 +734,7 @@ void HU_MoveHud(void)
 //
 // Passed nothing, returns nothing
 //
-void HU_Drawer(void)
+OVERLAY void HU_Drawer(void)
 {
   char *s;
   player_t *plr;
@@ -1279,7 +1280,7 @@ void HU_Drawer(void)
 //
 // Passed nothing, returns nothing
 //
-void HU_Erase(void)
+OVERLAY void HU_Erase(void)
 {
   // erase the message display or the message review display
   if (!message_list)
@@ -1301,7 +1302,7 @@ void HU_Erase(void)
 //
 // Passed nothing, returns nothing
 //
-void HU_Ticker(void)
+OVERLAY void HU_Ticker(void)
 {
   int i, rc;
   char c;
@@ -1396,7 +1397,7 @@ static int  tail = 0;
 //
 // Passed the character to queue, returns nothing
 //
-void HU_queueChatChar(char c)
+OVERLAY void HU_queueChatChar(char c)
 {
   if (((head + 1) & (QUEUESIZE-1)) == tail)
   {
@@ -1416,7 +1417,7 @@ void HU_queueChatChar(char c)
 //
 // Passed nothing, returns the character dequeued
 //
-char HU_dequeueChatChar(void)
+OVERLAY char HU_dequeueChatChar(void)
 {
   char c;
 
@@ -1439,7 +1440,7 @@ char HU_dequeueChatChar(void)
 //
 // Passed the event to respond to, returns true if the event was handled
 //
-boolean HU_Responder(event_t *ev)
+OVERLAY boolean HU_Responder(event_t *ev)
 {
 
   static char   lastmessage[HU_MAXLINELENGTH+1];

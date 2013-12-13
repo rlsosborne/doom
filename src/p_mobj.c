@@ -32,6 +32,7 @@
 static const char
 rcsid[] = "$Id: p_mobj.c,v 1.13 1999/10/17 09:35:58 cphipps Exp $";
 
+#include "compiler.h"
 #include "doomdef.h"
 #include "doomstat.h"
 #include "m_random.h"
@@ -52,7 +53,7 @@ rcsid[] = "$Id: p_mobj.c,v 1.13 1999/10/17 09:35:58 cphipps Exp $";
 // Returns true if the mobj is still present.
 //
 
-boolean P_SetMobjState(mobj_t* mobj,statenum_t state)
+OVERLAY boolean P_SetMobjState(mobj_t* mobj,statenum_t state)
   {
   state_t*  st;
 
@@ -110,7 +111,7 @@ boolean P_SetMobjState(mobj_t* mobj,statenum_t state)
 // P_ExplodeMissile
 //
 
-void P_ExplodeMissile (mobj_t* mo)
+OVERLAY void P_ExplodeMissile (mobj_t* mo)
   {
   mo->momx = mo->momy = mo->momz = 0;
 
@@ -134,7 +135,7 @@ void P_ExplodeMissile (mobj_t* mo)
 // Attempts to move something if it has momentum.
 //
 
-void P_XYMovement (mobj_t* mo)
+OVERLAY void P_XYMovement (mobj_t* mo)
   {
   fixed_t   ptryx;
   fixed_t   ptryy;
@@ -315,7 +316,7 @@ void P_XYMovement (mobj_t* mo)
 //
 // Attempt vertical movement.
 
-void P_ZMovement (mobj_t* mo)
+OVERLAY void P_ZMovement (mobj_t* mo)
   {
   fixed_t dist;
   fixed_t delta;
@@ -418,7 +419,7 @@ void P_ZMovement (mobj_t* mo)
 // P_NightmareRespawn
 //
 
-void P_NightmareRespawn(mobj_t* mobj)
+OVERLAY void P_NightmareRespawn(mobj_t* mobj)
   {
   fixed_t      x;
   fixed_t      y;
@@ -484,7 +485,7 @@ void P_NightmareRespawn(mobj_t* mobj)
 // P_MobjThinker
 //
 
-void P_MobjThinker (mobj_t* mobj)
+OVERLAY void P_MobjThinker (mobj_t* mobj)
   {
   // killough 11/98: 
   // removed old code which looked at target references
@@ -549,7 +550,7 @@ void P_MobjThinker (mobj_t* mobj)
 //
 // P_SpawnMobj
 //
-mobj_t* P_SpawnMobj(fixed_t x,fixed_t y,fixed_t z,mobjtype_t type)
+OVERLAY mobj_t* P_SpawnMobj(fixed_t x,fixed_t y,fixed_t z,mobjtype_t type)
   {
   mobj_t*     mobj;
   state_t*    st;
@@ -619,7 +620,7 @@ int        iquetail;
 // P_RemoveMobj
 //
 
-void P_RemoveMobj (mobj_t* mobj)
+OVERLAY void P_RemoveMobj (mobj_t* mobj)
   {
   if ((mobj->flags & MF_SPECIAL)
       && !(mobj->flags & MF_DROPPED)
@@ -678,7 +679,7 @@ void P_RemoveMobj (mobj_t* mobj)
 // P_RespawnSpecials
 //
 
-void P_RespawnSpecials (void)
+OVERLAY void P_RespawnSpecials (void)
   {
   fixed_t       x;
   fixed_t       y;
@@ -745,7 +746,7 @@ void P_RespawnSpecials (void)
 
 extern byte playernumtotrans[MAXPLAYERS];
 
-void P_SpawnPlayer (mapthing_t* mthing)
+OVERLAY void P_SpawnPlayer (mapthing_t* mthing)
   {
   player_t* p;
   fixed_t   x;
@@ -812,7 +813,7 @@ void P_SpawnPlayer (mapthing_t* mthing)
 // already be in host byte order.
 //
 
-void P_SpawnMapThing (mapthing_t* mthing)
+OVERLAY void P_SpawnMapThing (mapthing_t* mthing)
   {
   int     i;
   int     bit;
@@ -973,7 +974,7 @@ void P_SpawnMapThing (mapthing_t* mthing)
 
 extern fixed_t attackrange;
 
-void P_SpawnPuff(fixed_t x,fixed_t y,fixed_t z)
+OVERLAY void P_SpawnPuff(fixed_t x,fixed_t y,fixed_t z)
   {
   mobj_t* th;
   // killough 5/5/98: remove dependence on order of evaluation:
@@ -997,7 +998,7 @@ void P_SpawnPuff(fixed_t x,fixed_t y,fixed_t z)
 //
 // P_SpawnBlood
 //
-void P_SpawnBlood(fixed_t x,fixed_t y,fixed_t z,int damage)
+OVERLAY void P_SpawnBlood(fixed_t x,fixed_t y,fixed_t z,int damage)
   {
   mobj_t* th;
   // killough 5/5/98: remove dependence on order of evaluation:
@@ -1023,7 +1024,7 @@ void P_SpawnBlood(fixed_t x,fixed_t y,fixed_t z,int damage)
 //  and possibly explodes it right there.
 //
 
-void P_CheckMissileSpawn (mobj_t* th)
+OVERLAY void P_CheckMissileSpawn (mobj_t* th)
   {
   th->tics -= P_Random(pr_missile)&3;
   if (th->tics < 1)
@@ -1047,7 +1048,7 @@ void P_CheckMissileSpawn (mobj_t* th)
 // P_SpawnMissile
 //
 
-mobj_t* P_SpawnMissile(mobj_t* source,mobj_t* dest,mobjtype_t type)
+OVERLAY mobj_t* P_SpawnMissile(mobj_t* source,mobj_t* dest,mobjtype_t type)
   {
   mobj_t* th;
   angle_t an;
@@ -1092,7 +1093,7 @@ mobj_t* P_SpawnMissile(mobj_t* source,mobj_t* dest,mobjtype_t type)
 // Tries to aim at a nearby monster
 //
 
-void P_SpawnPlayerMissile(mobj_t* source,mobjtype_t type)
+OVERLAY void P_SpawnPlayerMissile(mobj_t* source,mobjtype_t type)
   {
   mobj_t* th;
   angle_t an;

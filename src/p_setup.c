@@ -33,6 +33,7 @@
 static const char
 rcsid[] = "$Id: p_setup.c,v 1.14 1999/11/04 12:33:38 cphipps Exp $";
 
+#include "compiler.h"
 #include <math.h>
 
 #include "doomstat.h"
@@ -124,7 +125,7 @@ mapthing_t playerstarts[MAXPLAYERS];
 //
 // killough 5/3/98: reformatted, cleaned up
 
-static void P_LoadVertexes (int lump)
+OVERLAY static void P_LoadVertexes (int lump)
 {
   const byte *data; // cph - const
   int i;
@@ -157,7 +158,7 @@ static void P_LoadVertexes (int lump)
 //
 // killough 5/3/98: reformatted, cleaned up
 
-static void P_LoadSegs (int lump)
+OVERLAY static void P_LoadSegs (int lump)
 {
   int  i;
   const byte *data; // cph - const
@@ -202,7 +203,7 @@ static void P_LoadSegs (int lump)
 //
 // killough 5/3/98: reformatted, cleaned up
 
-static void P_LoadSubsectors (int lump)
+OVERLAY static void P_LoadSubsectors (int lump)
 {
   const byte *data; // cph - const*
   int  i;
@@ -225,7 +226,7 @@ static void P_LoadSubsectors (int lump)
 //
 // killough 5/3/98: reformatted, cleaned up
 
-static void P_LoadSectors (int lump)
+OVERLAY static void P_LoadSectors (int lump)
 {
   const byte *data; // cph - const*
   int  i;
@@ -281,7 +282,7 @@ static void P_LoadSectors (int lump)
 //
 // killough 5/3/98: reformatted, cleaned up
 
-static void P_LoadNodes (int lump)
+OVERLAY static void P_LoadNodes (int lump)
 {
   const byte *data; // cph - const*
   int  i;
@@ -319,7 +320,7 @@ static void P_LoadNodes (int lump)
 //
 // killough 5/3/98: reformatted, cleaned up
 
-static void P_LoadThings (int lump)
+OVERLAY static void P_LoadThings (int lump)
 {
   int  i, numthings = W_LumpLength (lump) / sizeof(mapthing_t);
   const byte *data = W_CacheLumpNum (lump); // cph - wad lump handling updated, const*
@@ -369,7 +370,7 @@ static void P_LoadThings (int lump)
 //
 // killough 5/3/98: reformatted, cleaned up
 
-static void P_LoadLineDefs (int lump)
+OVERLAY static void P_LoadLineDefs (int lump)
 {
   const byte *data; // cph - const*
   int  i;
@@ -433,7 +434,7 @@ static void P_LoadLineDefs (int lump)
 // killough 4/4/98: delay using sidedefs until they are loaded
 // killough 5/3/98: reformatted, cleaned up
 
-static void P_LoadLineDefs2(int lump)
+OVERLAY static void P_LoadLineDefs2(int lump)
 {
   int i = numlines;
   line_t *ld = lines;
@@ -480,7 +481,7 @@ static void P_LoadLineDefs2(int lump)
 //
 // killough 4/4/98: split into two functions
 
-static void P_LoadSideDefs (int lump)
+OVERLAY static void P_LoadSideDefs (int lump)
 {
   numsides = W_LumpLength(lump) / sizeof(mapsidedef_t);
   sides = Z_Calloc(numsides,sizeof(side_t),PU_LEVEL,0);
@@ -490,7 +491,7 @@ static void P_LoadSideDefs (int lump)
 // after linedefs are loaded, to allow overloading.
 // killough 5/3/98: reformatted, cleaned up
 
-static void P_LoadSideDefs2(int lump)
+OVERLAY static void P_LoadSideDefs2(int lump)
 {
   const byte *data = W_CacheLumpNum(lump); // cph - const*, wad lump handling updated
   int  i;
@@ -567,7 +568,7 @@ typedef struct linelist_t        // type used to list lines in each block
 // It simply returns if the line is already in the block
 //
 
-static void AddBlockLine
+OVERLAY static void AddBlockLine
 (
   linelist_t **lists,
   int *count,
@@ -597,7 +598,7 @@ static void AddBlockLine
 // adds the line to all block lists touching the intersection.
 //
 
-void P_CreateBlockMap()
+OVERLAY void P_CreateBlockMap()
 {
   int xorg,yorg;                 // blockmap origin (lower left)
   int nrows,ncols;               // blockmap dimensions
@@ -869,7 +870,7 @@ void P_CreateBlockMap()
 // though current algorithm is brute-force and unoptimal.
 //
 
-static void P_LoadBlockMap (int lump)
+OVERLAY static void P_LoadBlockMap (int lump)
 {
   long count;
 
@@ -921,7 +922,7 @@ static void P_LoadBlockMap (int lump)
 // It makes things more complicated, but saves seconds on big levels
 
 // cph - convenient sub-function
-static void P_AddLineToSector(line_t* li, sector_t* sector)
+OVERLAY static void P_AddLineToSector(line_t* li, sector_t* sector)
 {
   fixed_t *bbox = (void*)sector->blockbox;
   
@@ -930,7 +931,7 @@ static void P_AddLineToSector(line_t* li, sector_t* sector)
   M_AddToBox (bbox, li->v2->x, li->v2->y);
 }
 
-void P_GroupLines (void)
+OVERLAY void P_GroupLines (void)
 {
   line_t *li;
   sector_t* sector;
@@ -1043,7 +1044,7 @@ void P_GroupLines (void)
 // Firelines (TM) is a Rezistered Trademark of MBF Productions
 //
 
-void P_RemoveSlimeTrails(void)                // killough 10/98
+OVERLAY void P_RemoveSlimeTrails(void)                // killough 10/98
 {
   byte *hit = calloc(1, numvertexes);         // Hitlist for vertices
   int i;
@@ -1079,7 +1080,7 @@ void P_RemoveSlimeTrails(void)                // killough 10/98
 //
 // killough 5/3/98: reformatted, cleaned up
 
-void P_SetupLevel(int episode, int map, int playermask, skill_t skill)
+OVERLAY void P_SetupLevel(int episode, int map, int playermask, skill_t skill)
 {
   int   i;
   char  lumpname[9];
@@ -1181,7 +1182,7 @@ void P_SetupLevel(int episode, int map, int playermask, skill_t skill)
 //
 // P_Init
 //
-void P_Init (void)
+OVERLAY void P_Init (void)
 {
   P_InitSwitchList();
   P_InitPicAnims();

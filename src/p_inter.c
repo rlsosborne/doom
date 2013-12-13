@@ -32,6 +32,7 @@
 static const char
 rcsid[] = "$Id: p_inter.c,v 1.9 1999/10/31 11:51:23 cphipps Exp $";
 
+#include "compiler.h"
 #include "doomstat.h"
 #include "dstrings.h"
 #include "m_random.h"
@@ -90,7 +91,7 @@ int clipammo[NUMAMMO] = { 10,  4,  20,  1};
 // Returns false if the ammo can't be picked up at all
 //
 
-boolean P_GiveAmmo(player_t *player, ammotype_t ammo, int num)
+OVERLAY boolean P_GiveAmmo(player_t *player, ammotype_t ammo, int num)
 {
   int oldammo;
 
@@ -165,7 +166,7 @@ boolean P_GiveAmmo(player_t *player, ammotype_t ammo, int num)
 // The weapon name may have a MF_DROPPED flag ored in.
 //
 
-boolean P_GiveWeapon(player_t *player, weapontype_t weapon, boolean dropped)
+OVERLAY boolean P_GiveWeapon(player_t *player, weapontype_t weapon, boolean dropped)
 {
   boolean gaveammo;
   boolean gaveweapon;
@@ -211,7 +212,7 @@ boolean P_GiveWeapon(player_t *player, weapontype_t weapon, boolean dropped)
 // Returns false if the body isn't needed at all
 //
 
-boolean P_GiveBody(player_t *player, int num)
+OVERLAY boolean P_GiveBody(player_t *player, int num)
 {
   if (player->health >= maxhealth)
     return false; // Ty 03/09/98 externalized MAXHEALTH to maxhealth
@@ -228,7 +229,7 @@ boolean P_GiveBody(player_t *player, int num)
 // than the current armor.
 //
 
-boolean P_GiveArmor(player_t *player, int armortype)
+OVERLAY boolean P_GiveArmor(player_t *player, int armortype)
 {
   int hits = armortype*100;
   if (player->armorpoints >= hits)
@@ -242,7 +243,7 @@ boolean P_GiveArmor(player_t *player, int armortype)
 // P_GiveCard
 //
 
-void P_GiveCard(player_t *player, card_t card)
+OVERLAY void P_GiveCard(player_t *player, card_t card)
 {
   if (player->cards[card])
     return;
@@ -256,7 +257,7 @@ void P_GiveCard(player_t *player, card_t card)
 // Rewritten by Lee Killough
 //
 
-boolean P_GivePower(player_t *player, int power)
+OVERLAY boolean P_GivePower(player_t *player, int power)
 {
   static const int tics[NUMPOWERS] = {
     INVULNTICS, 1 /* strength */, INVISTICS,
@@ -288,7 +289,7 @@ boolean P_GivePower(player_t *player, int power)
 // P_TouchSpecialThing
 //
 
-void P_TouchSpecialThing(mobj_t *special, mobj_t *toucher)
+OVERLAY void P_TouchSpecialThing(mobj_t *special, mobj_t *toucher)
 {
   player_t *player;
   int      i;
@@ -607,7 +608,7 @@ void P_TouchSpecialThing(mobj_t *special, mobj_t *toucher)
 // KillMobj
 //
 // killough 11/98: make static
-static void P_KillMobj(mobj_t *source, mobj_t *target)
+OVERLAY static void P_KillMobj(mobj_t *source, mobj_t *target)
 {
   mobjtype_t item;
   mobj_t     *mo;
@@ -728,7 +729,7 @@ static void P_KillMobj(mobj_t *source, mobj_t *target)
 // and other environmental stuff.
 //
 
-void P_DamageMobj(mobj_t *target,mobj_t *inflictor, mobj_t *source, int damage)
+OVERLAY void P_DamageMobj(mobj_t *target,mobj_t *inflictor, mobj_t *source, int damage)
 {
   player_t *player;
 

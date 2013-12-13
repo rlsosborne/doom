@@ -40,6 +40,7 @@
 static const char
 rcsid[] = "$Id: p_spec.c,v 1.14 1999/10/31 11:52:23 cphipps Exp $";
 
+#include "compiler.h"
 #include "doomstat.h"
 #include "p_spec.h"
 #include "p_tick.h"
@@ -130,7 +131,7 @@ extern int variable_friction;         // phares 3/20/98
 // source text file DEFSWANI.DAT also in the BOOM util distribution.
 //
 //
-void P_InitPicAnims (void)
+OVERLAY void P_InitPicAnims (void)
 {
   int         i;
   const animdef_t *animdefs; //jff 3/23/98 pointer to animation lump
@@ -199,7 +200,7 @@ void P_InitPicAnims (void)
 //
 // Note: if side=1 is specified, it must exist or results undefined
 //
-side_t* getSide
+OVERLAY side_t* getSide
 ( int           currentSector,
   int           line,
   int           side )
@@ -217,7 +218,7 @@ side_t* getSide
 //
 // Note: if side=1 is specified, it must exist or results undefined
 //
-sector_t* getSector
+OVERLAY sector_t* getSector
 ( int           currentSector,
   int           line,
   int           side )
@@ -235,7 +236,7 @@ sector_t* getSector
 // modified to return actual two-sidedness rather than presence
 // of 2S flag unless compatibility optioned
 //
-int twoSided
+OVERLAY int twoSided
 ( int   sector,
   int   line )
 {
@@ -256,7 +257,7 @@ int twoSided
 //
 // Note: returns NULL if not two-sided line, or both sides refer to sector
 //
-sector_t* getNextSector
+OVERLAY sector_t* getNextSector
 ( line_t*       line,
   sector_t*     sec )
 {
@@ -286,7 +287,7 @@ sector_t* getNextSector
 // Returns the fixed point value of the lowest floor height
 // in the sector passed or its surrounding sectors.
 //
-fixed_t P_FindLowestFloorSurrounding(sector_t* sec)
+OVERLAY fixed_t P_FindLowestFloorSurrounding(sector_t* sec)
 {
   int                 i;
   line_t*             check;
@@ -317,7 +318,7 @@ fixed_t P_FindLowestFloorSurrounding(sector_t* sec)
 // NOTE: if no surrounding sector exists -32000*FRACUINT is returned
 //       if compatibility then -500*FRACUNIT is the smallest return possible
 //
-fixed_t P_FindHighestFloorSurrounding(sector_t *sec)
+OVERLAY fixed_t P_FindHighestFloorSurrounding(sector_t *sec)
 {
   int i;
   line_t* check;
@@ -354,7 +355,7 @@ fixed_t P_FindHighestFloorSurrounding(sector_t *sec)
 //
 // Rewritten by Lee Killough to avoid fixed array and to be faster
 //
-fixed_t P_FindNextHighestFloor(sector_t *sec, int currentheight)
+OVERLAY fixed_t P_FindNextHighestFloor(sector_t *sec, int currentheight)
 {
   sector_t *other;
   int i;
@@ -385,7 +386,7 @@ fixed_t P_FindNextHighestFloor(sector_t *sec, int currentheight)
 //
 // jff 02/03/98 Twiddled Lee's P_FindNextHighestFloor to make this
 //
-fixed_t P_FindNextLowestFloor(sector_t *sec, int currentheight)
+OVERLAY fixed_t P_FindNextLowestFloor(sector_t *sec, int currentheight)
 {
   sector_t *other;
   int i;
@@ -416,7 +417,7 @@ fixed_t P_FindNextLowestFloor(sector_t *sec, int currentheight)
 //
 // jff 02/03/98 Twiddled Lee's P_FindNextHighestFloor to make this
 //
-fixed_t P_FindNextLowestCeiling(sector_t *sec, int currentheight)
+OVERLAY fixed_t P_FindNextLowestCeiling(sector_t *sec, int currentheight)
 {
   sector_t *other;
   int i;
@@ -447,7 +448,7 @@ fixed_t P_FindNextLowestCeiling(sector_t *sec, int currentheight)
 //
 // jff 02/03/98 Twiddled Lee's P_FindNextHighestFloor to make this
 //
-fixed_t P_FindNextHighestCeiling(sector_t *sec, int currentheight)
+OVERLAY fixed_t P_FindNextHighestCeiling(sector_t *sec, int currentheight)
 {
   sector_t *other;
   int i;
@@ -477,7 +478,7 @@ fixed_t P_FindNextHighestCeiling(sector_t *sec, int currentheight)
 // NOTE: if no surrounding sector exists 32000*FRACUINT is returned
 //       but if compatibility then INT_MAX is the return
 //
-fixed_t P_FindLowestCeilingSurrounding(sector_t* sec)
+OVERLAY fixed_t P_FindLowestCeilingSurrounding(sector_t* sec)
 {
   int                 i;
   line_t*             check;
@@ -510,7 +511,7 @@ fixed_t P_FindLowestCeilingSurrounding(sector_t* sec)
 // NOTE: if no surrounding sector exists -32000*FRACUINT is returned
 //       but if compatibility then 0 is the smallest return possible
 //
-fixed_t P_FindHighestCeilingSurrounding(sector_t* sec)
+OVERLAY fixed_t P_FindHighestCeilingSurrounding(sector_t* sec)
 {
   int             i;
   line_t* check;
@@ -547,7 +548,7 @@ fixed_t P_FindHighestCeilingSurrounding(sector_t* sec)
 //
 // jff 02/03/98 Add routine to find shortest lower texture
 //
-fixed_t P_FindShortestTextureAround(int secnum)
+OVERLAY fixed_t P_FindShortestTextureAround(int secnum)
 {
   int minsize = INT_MAX;
   side_t*     side;
@@ -586,7 +587,7 @@ fixed_t P_FindShortestTextureAround(int secnum)
 //
 // jff 03/20/98 Add routine to find shortest upper texture
 //
-fixed_t P_FindShortestUpperAround(int secnum)
+OVERLAY fixed_t P_FindShortestUpperAround(int secnum)
 {
   int minsize = INT_MAX;
   side_t*     side;
@@ -628,7 +629,7 @@ fixed_t P_FindShortestUpperAround(int secnum)
 // jff 3/14/98 change first parameter to plain height to allow call
 //  from routine not using floormove_t
 //
-sector_t *P_FindModelFloorSector(fixed_t floordestheight,int secnum)
+OVERLAY sector_t *P_FindModelFloorSector(fixed_t floordestheight,int secnum)
 {
   int i;
   sector_t *sec=NULL;
@@ -671,7 +672,7 @@ sector_t *P_FindModelFloorSector(fixed_t floordestheight,int secnum)
 // jff 3/14/98 change first parameter to plain height to allow call
 //  from routine not using ceiling_t
 //
-sector_t *P_FindModelCeilingSector(fixed_t ceildestheight,int secnum)
+OVERLAY sector_t *P_FindModelCeilingSector(fixed_t ceildestheight,int secnum)
 {
   int i;
   sector_t *sec=NULL;
@@ -705,7 +706,7 @@ sector_t *P_FindModelCeilingSector(fixed_t ceildestheight,int secnum)
 // Find the next sector with the same tag as a linedef.
 // Rewritten by Lee Killough to use chained hashing to improve speed
 
-int P_FindSectorFromLineTag(const line_t *line, int start)
+OVERLAY int P_FindSectorFromLineTag(const line_t *line, int start)
 {
   start = start >= 0 ? sectors[start].nexttag :
     sectors[(unsigned) line->tag % (unsigned) numsectors].firsttag;
@@ -716,7 +717,7 @@ int P_FindSectorFromLineTag(const line_t *line, int start)
 
 // killough 4/16/98: Same thing, only for linedefs
 
-int P_FindLineFromLineTag(const line_t *line, int start)
+OVERLAY int P_FindLineFromLineTag(const line_t *line, int start)
 {
   start = start >= 0 ? lines[start].nexttag :
     lines[(unsigned) line->tag % (unsigned) numlines].firsttag;
@@ -726,7 +727,7 @@ int P_FindLineFromLineTag(const line_t *line, int start)
 }
 
 // Hash the sector tags across the sectors and linedefs.
-static void P_InitTagLists(void)
+OVERLAY static void P_InitTagLists(void)
 {
   int i;
 
@@ -758,7 +759,7 @@ static void P_InitTagLists(void)
 // in a surrounding sector less than that passed. If no smaller light
 // level exists, the light level passed is returned.
 //
-int P_FindMinSurroundingLight
+OVERLAY int P_FindMinSurroundingLight
 ( sector_t*     sector,
   int           max )
 {
@@ -795,7 +796,7 @@ int P_FindMinSurroundingLight
 // jff 02/05/98 routine added to test for unlockability of
 //  generalized locked doors
 //
-boolean P_CanUnlockGenDoor
+OVERLAY boolean P_CanUnlockGenDoor
 ( line_t* line,
   player_t* player)
 {
@@ -945,7 +946,7 @@ boolean P_CanUnlockGenDoor
 // jff 2/23/98 added to prevent old demos from
 //  succeeding in starting multiple specials on one sector
 //
-int P_SectorActive(special_e t,sector_t *sec)
+OVERLAY int P_SectorActive(special_e t,sector_t *sec)
 {
   if (demo_compatibility)  // return whether any thinker is active
     return sec->floordata || sec->ceilingdata || sec->lightingdata;
@@ -975,7 +976,7 @@ int P_SectorActive(special_e t,sector_t *sec)
 //
 // jff 2/27/98 Added to check for zero tag allowed for regular special types
 //
-int P_CheckTag(line_t *line)
+OVERLAY int P_CheckTag(line_t *line)
 {
   if (compatibility)        // killough: allow zero tags in compatibility mode
     return 1;
@@ -1055,7 +1056,7 @@ int P_CheckTag(line_t *line)
 // jff 3/14/98 added to simplify checks for whether sector is secret
 //  in automap and other places
 //
-boolean P_IsSecret(sector_t *sec)
+OVERLAY boolean P_IsSecret(sector_t *sec)
 {
   return (sec->special==9 || (sec->special&SECRET_MASK));
 }
@@ -1070,7 +1071,7 @@ boolean P_IsSecret(sector_t *sec)
 // jff 3/14/98 added to simplify checks for whether sector is secret
 //  in automap and other places
 //
-boolean P_WasSecret(sector_t *sec)
+OVERLAY boolean P_WasSecret(sector_t *sec)
 {
   return (sec->oldspecial==9 || (sec->oldspecial&SECRET_MASK));
 }
@@ -1097,7 +1098,7 @@ boolean P_WasSecret(sector_t *sec)
 //  crossed. Change is qualified by demo_compatibility.
 //
 // CPhipps - take a line_t pointer instead of a line number, as in MBF
-void P_CrossSpecialLine(line_t *line, int side, mobj_t *thing)
+OVERLAY void P_CrossSpecialLine(line_t *line, int side, mobj_t *thing)
 {
   int         ok;
 
@@ -1987,7 +1988,7 @@ void P_CrossSpecialLine(line_t *line, int side, mobj_t *thing)
 // of the line, should the sector already be in motion when the line is
 // impacted. Change is qualified by demo_compatibility.
 //
-void P_ShootSpecialLine
+OVERLAY void P_ShootSpecialLine
 ( mobj_t*       thing,
   line_t*       line )
 {
@@ -2168,7 +2169,7 @@ void P_ShootSpecialLine
 //
 // Changed to ignore sector types the engine does not recognize
 //
-void P_PlayerInSpecialSector (player_t* player)
+OVERLAY void P_PlayerInSpecialSector (player_t* player)
 {
   sector_t*   sector;
 
@@ -2293,7 +2294,7 @@ int             levelTimeCount;
 boolean         levelFragLimit;      // Ty 03/18/98 Added -frags support
 int             levelFragLimitCount; // Ty 03/18/98 Added -frags support
 
-void P_UpdateSpecials (void)
+OVERLAY void P_UpdateSpecials (void)
 {
   anim_t*     anim;
   int         pic;
@@ -2385,7 +2386,7 @@ void P_UpdateSpecials (void)
 //
 
 // Parses command line parameters.
-void P_SpawnSpecials (void)
+OVERLAY void P_SpawnSpecials (void)
 {
   sector_t*   sector;
   int         i;
@@ -2580,7 +2581,7 @@ void P_SpawnSpecials (void)
 // This is the main scrolling code
 // killough 3/7/98
 
-void T_Scroll(scroll_t *s)
+OVERLAY void T_Scroll(scroll_t *s)
 {
   fixed_t dx = s->dx, dy = s->dy;
 
@@ -2678,7 +2679,7 @@ void T_Scroll(scroll_t *s)
 // accel: non-zero if this is an accelerative effect
 //
 
-static void Add_Scroller(int type, fixed_t dx, fixed_t dy,
+OVERLAY static void Add_Scroller(int type, fixed_t dx, fixed_t dy,
                          int control, int affectee, int accel)
 {
   scroll_t *s = Z_Malloc(sizeof *s, PU_LEVSPEC, 0);
@@ -2705,7 +2706,7 @@ static void Add_Scroller(int type, fixed_t dx, fixed_t dy,
 // killough 10/98:
 // fix scrolling aliasing problems, caused by long linedefs causing overflowing
 
-static void Add_WallScroller(fixed_t dx, fixed_t dy, const line_t *l,
+OVERLAY static void Add_WallScroller(fixed_t dx, fixed_t dy, const line_t *l,
                              int control, int accel)
 {
   fixed_t x = abs(l->dx), y = abs(l->dy), d;
@@ -2733,7 +2734,7 @@ static void Add_WallScroller(fixed_t dx, fixed_t dy, const line_t *l,
 #define CARRYFACTOR ((fixed_t)(FRACUNIT*.09375))
 
 // Initialize the scrollers
-static void P_SpawnScrollers(void)
+OVERLAY static void P_SpawnScrollers(void)
 {
   int i;
   line_t *l = lines;
@@ -2851,7 +2852,7 @@ static void P_SpawnScrollers(void)
 // Add_Friction adds a new friction thinker to the list of active thinkers.
 //
 
-static void Add_Friction(int friction, int movefactor, int affectee)
+OVERLAY static void Add_Friction(int friction, int movefactor, int affectee)
     {
     friction_t *f = Z_Malloc(sizeof *f, PU_LEVSPEC, 0);
 
@@ -2869,7 +2870,7 @@ static void Add_Friction(int friction, int movefactor, int affectee)
 // more friction should be applied. The amount applied is proportional to
 // the length of the controlling linedef.
 
-void T_Friction(friction_t *f)
+OVERLAY void T_Friction(friction_t *f)
     {
     sector_t *sec;
     mobj_t   *thing;
@@ -2919,7 +2920,7 @@ void T_Friction(friction_t *f)
 //
 // Initialize the sectors where friction is increased or decreased
 
-static void P_SpawnFriction(void)
+OVERLAY static void P_SpawnFriction(void)
     {
     int i;
     line_t *l = lines;
@@ -3003,7 +3004,7 @@ static void P_SpawnFriction(void)
 //
 // Add a push thinker to the thinker list
 
-static void Add_Pusher(int type, int x_mag, int y_mag, mobj_t* source, int affectee)
+OVERLAY static void Add_Pusher(int type, int x_mag, int y_mag, mobj_t* source, int affectee)
     {
     pusher_t *p = Z_Malloc(sizeof *p, PU_LEVSPEC, 0);
 
@@ -3033,7 +3034,7 @@ static void Add_Pusher(int type, int x_mag, int y_mag, mobj_t* source, int affec
 
 pusher_t* tmpusher; // pusher structure for blockmap searches
 
-boolean PIT_PushThing(mobj_t* thing)
+OVERLAY boolean PIT_PushThing(mobj_t* thing)
     {
     if (thing->player &&
         !(thing->flags & (MF_NOGRAVITY | MF_NOCLIP)))
@@ -3071,7 +3072,7 @@ boolean PIT_PushThing(mobj_t* thing)
 // the effect.
 //
 
-void T_Pusher(pusher_t *p)
+OVERLAY void T_Pusher(pusher_t *p)
     {
     sector_t *sec;
     mobj_t   *thing;
@@ -3201,7 +3202,7 @@ void T_Pusher(pusher_t *p)
 // P_GetPushThing() returns a pointer to an MT_PUSH or MT_PULL thing,
 // NULL otherwise.
 
-mobj_t* P_GetPushThing(int s)
+OVERLAY mobj_t* P_GetPushThing(int s)
     {
     mobj_t* thing;
     sector_t* sec;
@@ -3228,7 +3229,7 @@ mobj_t* P_GetPushThing(int s)
 // Initialize the sectors where pushers are present
 //
 
-static void P_SpawnPushers(void)
+OVERLAY static void P_SpawnPushers(void)
     {
     int i;
     line_t *l = lines;

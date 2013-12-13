@@ -33,6 +33,7 @@
 static const char
 rcsid[] = "$Id: p_pspr.c,v 1.4 1999/10/12 13:01:13 cphipps Exp $";
 
+#include "compiler.h"
 #include "doomstat.h"
 #include "r_main.h"
 #include "p_map.h"
@@ -71,7 +72,7 @@ static const int recoil_values[] = {    // phares
 // P_SetPsprite
 //
 
-static void P_SetPsprite(player_t *player, int position, statenum_t stnum)
+OVERLAY static void P_SetPsprite(player_t *player, int position, statenum_t stnum)
 {
   pspdef_t *psp = &player->psprites[position];
 
@@ -117,7 +118,7 @@ static void P_SetPsprite(player_t *player, int position, statenum_t stnum)
 // Uses player
 //
 
-static void P_BringUpWeapon(player_t *player)
+OVERLAY static void P_BringUpWeapon(player_t *player)
 {
   statenum_t newstate;
 
@@ -151,7 +152,7 @@ int weapon_preferences[2][NUMWEAPONS+1] = {
 // because the raised weapon has no ammo anyway. When called from
 // G_BuildTiccmd you want to toggle to a different weapon regardless.
 
-int P_SwitchWeapon(player_t *player)
+OVERLAY int P_SwitchWeapon(player_t *player)
 {
   int *prefer = weapon_preferences[demo_compatibility!=0]; // killough 3/22/98
   int currentweapon = player->readyweapon;
@@ -210,7 +211,7 @@ int P_SwitchWeapon(player_t *player)
 }
 
 // killough 5/2/98: whether consoleplayer prefers weapon w1 over weapon w2.
-int P_WeaponPreferred(int w1, int w2)
+OVERLAY int P_WeaponPreferred(int w1, int w2)
 {
   return
     (weapon_preferences[0][0] != ++w2 && (weapon_preferences[0][0] == ++w1 ||
@@ -231,7 +232,7 @@ int P_WeaponPreferred(int w1, int w2)
 // (only in demo_compatibility mode -- killough 3/22/98)
 //
 
-boolean P_CheckAmmo(player_t *player)
+OVERLAY boolean P_CheckAmmo(player_t *player)
 {
   ammotype_t ammo = weaponinfo[player->readyweapon].ammo;
   int count = 1;  // Regular
@@ -271,7 +272,7 @@ boolean P_CheckAmmo(player_t *player)
 
 int lastshottic; // killough 3/22/98
 
-static void P_FireWeapon(player_t *player)
+OVERLAY static void P_FireWeapon(player_t *player)
 {
   statenum_t newstate;
 
@@ -290,7 +291,7 @@ static void P_FireWeapon(player_t *player)
 // Player died, so put the weapon away.
 //
 
-void P_DropWeapon(player_t *player)
+OVERLAY void P_DropWeapon(player_t *player)
 {
   P_SetPsprite(player, ps_weapon, weaponinfo[player->readyweapon].downstate);
 }
@@ -303,7 +304,7 @@ void P_DropWeapon(player_t *player)
 // or after previous attack/fire sequence.
 //
 
-void A_WeaponReady(player_t *player, pspdef_t *psp)
+OVERLAY void A_WeaponReady(player_t *player, pspdef_t *psp)
 {
   // get out of attack state
   if (player->mo->state == &states[S_PLAY_ATK1]
@@ -355,7 +356,7 @@ void A_WeaponReady(player_t *player, pspdef_t *psp)
 // without lowering it entirely.
 //
 
-void A_ReFire(player_t *player, pspdef_t *psp)
+OVERLAY void A_ReFire(player_t *player, pspdef_t *psp)
 {
   // check for fire
   //  (if a weaponchange is pending, let it go through instead)
@@ -373,7 +374,7 @@ void A_ReFire(player_t *player, pspdef_t *psp)
     }
 }
 
-void A_CheckReload(player_t *player, pspdef_t *psp)
+OVERLAY void A_CheckReload(player_t *player, pspdef_t *psp)
 {
   P_CheckAmmo(player);
 }
@@ -384,7 +385,7 @@ void A_CheckReload(player_t *player, pspdef_t *psp)
 //  and changes weapon at bottom.
 //
 
-void A_Lower(player_t *player, pspdef_t *psp)
+OVERLAY void A_Lower(player_t *player, pspdef_t *psp)
 {
   psp->sy += LOWERSPEED;
 
@@ -417,7 +418,7 @@ void A_Lower(player_t *player, pspdef_t *psp)
 // A_Raise
 //
 
-void A_Raise(player_t *player, pspdef_t *psp)
+OVERLAY void A_Raise(player_t *player, pspdef_t *psp)
 {
   statenum_t newstate;
 
@@ -444,7 +445,7 @@ void A_Raise(player_t *player, pspdef_t *psp)
 // muzzle flash, rather than the pressing of the trigger.
 // The BFG delay caused this to be necessary.
 
-static void A_FireSomething(player_t* player,int adder)
+OVERLAY static void A_FireSomething(player_t* player,int adder)
 {
   P_SetPsprite(player, ps_flash,
                weaponinfo[player->readyweapon].flashstate+adder);
@@ -461,7 +462,7 @@ static void A_FireSomething(player_t* player,int adder)
 // A_GunFlash
 //
 
-void A_GunFlash(player_t *player, pspdef_t *psp)
+OVERLAY void A_GunFlash(player_t *player, pspdef_t *psp)
 {
   P_SetMobjState(player->mo, S_PLAY_ATK2);
 
@@ -476,7 +477,7 @@ void A_GunFlash(player_t *player, pspdef_t *psp)
 // A_Punch
 //
 
-void A_Punch(player_t *player, pspdef_t *psp)
+OVERLAY void A_Punch(player_t *player, pspdef_t *psp)
 {
   angle_t angle;
   int t, slope, damage = (P_Random(pr_punch)%10+1)<<1;
@@ -507,7 +508,7 @@ void A_Punch(player_t *player, pspdef_t *psp)
 // A_Saw
 //
 
-void A_Saw(player_t *player, pspdef_t *psp)
+OVERLAY void A_Saw(player_t *player, pspdef_t *psp)
 {
   int slope, damage = 2*(P_Random(pr_saw)%10+1);
   angle_t angle = player->mo->angle;
@@ -550,7 +551,7 @@ void A_Saw(player_t *player, pspdef_t *psp)
 // A_FireMissile
 //
 
-void A_FireMissile(player_t *player, pspdef_t *psp)
+OVERLAY void A_FireMissile(player_t *player, pspdef_t *psp)
 {
   player->ammo[weaponinfo[player->readyweapon].ammo]--;
   P_SpawnPlayerMissile(player->mo, MT_ROCKET);
@@ -560,7 +561,7 @@ void A_FireMissile(player_t *player, pspdef_t *psp)
 // A_FireBFG
 //
 
-void A_FireBFG(player_t *player, pspdef_t *psp)
+OVERLAY void A_FireBFG(player_t *player, pspdef_t *psp)
 {
   player->ammo[weaponinfo[player->readyweapon].ammo] -= BFGCELLS;
   P_SpawnPlayerMissile(player->mo, MT_BFG);
@@ -570,7 +571,7 @@ void A_FireBFG(player_t *player, pspdef_t *psp)
 // A_FirePlasma
 //
 
-void A_FirePlasma(player_t *player, pspdef_t *psp)
+OVERLAY void A_FirePlasma(player_t *player, pspdef_t *psp)
 {
   player->ammo[weaponinfo[player->readyweapon].ammo]--;
 
@@ -586,7 +587,7 @@ void A_FirePlasma(player_t *player, pspdef_t *psp)
 
 static fixed_t bulletslope;
 
-static void P_BulletSlope(mobj_t *mo)
+OVERLAY static void P_BulletSlope(mobj_t *mo)
 {
   angle_t an = mo->angle;    // see which target is to be aimed at
 
@@ -608,7 +609,7 @@ static void P_BulletSlope(mobj_t *mo)
 // P_GunShot
 //
 
-void P_GunShot(mobj_t *mo, boolean accurate)
+OVERLAY void P_GunShot(mobj_t *mo, boolean accurate)
 {
   int damage = 5*(P_Random(pr_gunshot)%3+1);
   angle_t angle = mo->angle;
@@ -626,7 +627,7 @@ void P_GunShot(mobj_t *mo, boolean accurate)
 // A_FirePistol
 //
 
-void A_FirePistol(player_t *player, pspdef_t *psp)
+OVERLAY void A_FirePistol(player_t *player, pspdef_t *psp)
 {
   S_StartSound(player->mo, sfx_pistol);
 
@@ -642,7 +643,7 @@ void A_FirePistol(player_t *player, pspdef_t *psp)
 // A_FireShotgun
 //
 
-void A_FireShotgun(player_t *player, pspdef_t *psp)
+OVERLAY void A_FireShotgun(player_t *player, pspdef_t *psp)
 {
   int i;
 
@@ -663,7 +664,7 @@ void A_FireShotgun(player_t *player, pspdef_t *psp)
 // A_FireShotgun2
 //
 
-void A_FireShotgun2(player_t *player, pspdef_t *psp)
+OVERLAY void A_FireShotgun2(player_t *player, pspdef_t *psp)
 {
   int i;
 
@@ -692,7 +693,7 @@ void A_FireShotgun2(player_t *player, pspdef_t *psp)
 // A_FireCGun
 //
 
-void A_FireCGun(player_t *player, pspdef_t *psp)
+OVERLAY void A_FireCGun(player_t *player, pspdef_t *psp)
 {
   S_StartSound(player->mo, sfx_pistol);
 
@@ -709,17 +710,17 @@ void A_FireCGun(player_t *player, pspdef_t *psp)
   P_GunShot(player->mo, !player->refire);
 }
 
-void A_Light0(player_t *player, pspdef_t *psp)
+OVERLAY void A_Light0(player_t *player, pspdef_t *psp)
 {
   player->extralight = 0;
 }
 
-void A_Light1 (player_t *player, pspdef_t *psp)
+OVERLAY void A_Light1 (player_t *player, pspdef_t *psp)
 {
   player->extralight = 1;
 }
 
-void A_Light2 (player_t *player, pspdef_t *psp)
+OVERLAY void A_Light2 (player_t *player, pspdef_t *psp)
 {
   player->extralight = 2;
 }
@@ -729,7 +730,7 @@ void A_Light2 (player_t *player, pspdef_t *psp)
 // Spawn a BFG explosion on every monster in view
 //
 
-void A_BFGSpray(mobj_t *mo)
+OVERLAY void A_BFGSpray(mobj_t *mo)
 {
   int i;
 
@@ -759,7 +760,7 @@ void A_BFGSpray(mobj_t *mo)
 // A_BFGsound
 //
 
-void A_BFGsound(player_t *player, pspdef_t *psp)
+OVERLAY void A_BFGsound(player_t *player, pspdef_t *psp)
 {
   S_StartSound(player->mo, sfx_bfg);
 }
@@ -769,7 +770,7 @@ void A_BFGsound(player_t *player, pspdef_t *psp)
 // Called at start of level for each player.
 //
 
-void P_SetupPsprites(player_t *player)
+OVERLAY void P_SetupPsprites(player_t *player)
 {
   int i;
 
@@ -787,7 +788,7 @@ void P_SetupPsprites(player_t *player)
 // Called every tic by player thinking routine.
 //
 
-void P_MovePsprites(player_t *player)
+OVERLAY void P_MovePsprites(player_t *player)
 {
   pspdef_t *psp = player->psprites;
   int i;

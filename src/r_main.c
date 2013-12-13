@@ -33,6 +33,7 @@
 
 static const char rcsid[] = "$Id: r_main.c,v 1.20 1999/10/31 15:51:45 cphipps Exp $";
 
+#include "compiler.h"
 #ifndef __XMOS__
 #include "SDL.h"
 #endif
@@ -123,7 +124,7 @@ void (*colfunc)(void);
 // killough 5/2/98: reformatted
 //
 
-const int R_PointOnSide(fixed_t x, fixed_t y, const node_t *node)
+OVERLAY const int R_PointOnSide(fixed_t x, fixed_t y, const node_t *node)
 {
   if (!node->dx)
     return x <= node->x ? node->dy > 0 : node->dy < 0;
@@ -142,7 +143,7 @@ const int R_PointOnSide(fixed_t x, fixed_t y, const node_t *node)
 
 // killough 5/2/98: reformatted
 
-const int R_PointOnSegSide(fixed_t x, fixed_t y, const seg_t *line)
+OVERLAY const int R_PointOnSegSide(fixed_t x, fixed_t y, const seg_t *line)
 {
   fixed_t lx = line->v1->x;
   fixed_t ly = line->v1->y;
@@ -177,7 +178,7 @@ const int R_PointOnSegSide(fixed_t x, fixed_t y, const seg_t *line)
 //
 // killough 5/2/98: reformatted, cleaned up
 
-angle_t R_PointToAngle(fixed_t x, fixed_t y)
+OVERLAY angle_t R_PointToAngle(fixed_t x, fixed_t y)
 {       
   return (y -= viewy, (x -= viewx) || y) ?
     x >= 0 ?
@@ -193,7 +194,7 @@ angle_t R_PointToAngle(fixed_t x, fixed_t y)
     0;
 }
 
-angle_t R_PointToAngle2(fixed_t viewx, fixed_t viewy, fixed_t x, fixed_t y)
+OVERLAY angle_t R_PointToAngle2(fixed_t viewx, fixed_t viewy, fixed_t x, fixed_t y)
 {       
   return (y -= viewy, (x -= viewx) || y) ?
     x >= 0 ?
@@ -215,7 +216,7 @@ angle_t R_PointToAngle2(fixed_t viewx, fixed_t viewy, fixed_t x, fixed_t y)
 
 int st_height, st_width, st_fgscreen, st_scalex, st_scaley;
 
-void R_InitStatusBar(void)
+OVERLAY void R_InitStatusBar(void)
 {
   st_height = 32;
   for (st_scalex = 8; st_scalex>1; st_scalex--) {
@@ -233,7 +234,7 @@ void R_InitStatusBar(void)
     st_fgscreen = 0;
 }
 
-void R_CopyStatusBar(void)
+OVERLAY void R_CopyStatusBar(void)
 {
   if ((st_scalex > 1) || (st_scaley > 1)) {
     // Enlarge
@@ -257,7 +258,7 @@ void R_CopyStatusBar(void)
 //
 // killough 5/2/98: reformatted
 
-static void R_InitTextureMapping (void)
+OVERLAY static void R_InitTextureMapping (void)
 {
   int i,x;
   fixed_t focallength;
@@ -322,7 +323,7 @@ static void R_InitTextureMapping (void)
 
 #define DISTMAP 2
 
-void R_InitLightTables (void)
+OVERLAY void R_InitLightTables (void)
 {
   int i;
     
@@ -366,7 +367,7 @@ void R_InitLightTables (void)
 boolean setsizeneeded;
 int     setblocks;
 
-void R_SetViewSize(int blocks)
+OVERLAY void R_SetViewSize(int blocks)
 {
   setsizeneeded = true;
   setblocks = blocks;
@@ -376,7 +377,7 @@ void R_SetViewSize(int blocks)
 // R_ExecuteSetViewSize
 //
 
-void R_ExecuteSetViewSize (void)
+OVERLAY void R_ExecuteSetViewSize (void)
 {
   int i;
 
@@ -469,7 +470,7 @@ void R_ExecuteSetViewSize (void)
 
 extern int screenblocks;
 
-void R_Init (void)
+OVERLAY void R_Init (void)
 {
   // CPhipps - R_DrawColumn isn't constant anymore, so must 
   //  initialise in code
@@ -498,7 +499,7 @@ void R_Init (void)
 //
 // killough 5/2/98: reformatted, cleaned up
 
-subsector_t *R_PointInSubsector(fixed_t x, fixed_t y)
+OVERLAY subsector_t *R_PointInSubsector(fixed_t x, fixed_t y)
 {
   int nodenum = numnodes-1;
   while (!(nodenum & NF_SUBSECTOR))
@@ -510,7 +511,7 @@ subsector_t *R_PointInSubsector(fixed_t x, fixed_t y)
 // R_SetupFrame
 //
 
-void R_SetupFrame (player_t *player)
+OVERLAY void R_SetupFrame (player_t *player)
 {               
   int i, cm;
     
@@ -571,7 +572,7 @@ boolean rendering_stats;
 
 static int lasttime=0, frames=0,elapsed;
 
-static void R_ShowStats(void)
+OVERLAY static void R_ShowStats(void)
 {
 	int now = SDL_GetTicks();
 
@@ -588,7 +589,7 @@ static void R_ShowStats(void)
 //
 // R_RenderView
 //
-void R_RenderPlayerView (player_t* player)
+OVERLAY void R_RenderPlayerView (player_t* player)
 {       
   R_SetupFrame (player);
 

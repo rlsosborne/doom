@@ -30,6 +30,7 @@
  *
  *-----------------------------------------------------------------------------*/
 
+#include "compiler.h"
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -68,7 +69,7 @@ size_t sentbytes, recvdbytes;
 //
 // UDPsocket
 //
-static int UDPsocket (void)
+OVERLAY static int UDPsocket (void)
 {
   int    s;
   
@@ -82,7 +83,7 @@ static int UDPsocket (void)
 //
 // BindToLocalPort
 //
-static void BindToLocalPort( int s, int port )
+OVERLAY static void BindToLocalPort( int s, int port )
 {
   struct sockaddr_in    address;
   
@@ -95,7 +96,7 @@ static void BindToLocalPort( int s, int port )
     I_Error ("BindToPort: bind: %s", strerror(errno));
 }
 
-static int GetInAddr(const char* host, struct sockaddr_in *addr)
+OVERLAY static int GetInAddr(const char* host, struct sockaddr_in *addr)
 {
   char hostname[128], *p;
 
@@ -121,7 +122,7 @@ static int GetInAddr(const char* host, struct sockaddr_in *addr)
   return 1;
 }
 
-static byte ChecksumPacket(const packet_header_t* buffer, size_t len)
+OVERLAY static byte ChecksumPacket(const packet_header_t* buffer, size_t len)
 {
   const byte* p = (void*)buffer; 
   byte sum = 0;
@@ -134,7 +135,7 @@ static byte ChecksumPacket(const packet_header_t* buffer, size_t len)
 
 struct sockaddr_in sentfrom;
 
-size_t I_GetPacket(packet_header_t* buffer, size_t buflen)
+OVERLAY size_t I_GetPacket(packet_header_t* buffer, size_t buflen)
 {
   socklen_t sfsize = sizeof(sentfrom);
   int n = recvfrom(recvsocket, buffer, buflen, 0, 
@@ -144,7 +145,7 @@ size_t I_GetPacket(packet_header_t* buffer, size_t buflen)
   return ((n>0 && (buffer->checksum == ChecksumPacket(buffer, n))) ? n : 0);
 }
 
-void I_SendPacket(packet_header_t* packet, size_t len)
+OVERLAY void I_SendPacket(packet_header_t* packet, size_t len)
 {
   packet->checksum = ChecksumPacket(packet, len);
   if (sendto(sendsocket, packet, len, 0, (struct sockaddr *)&sendtoaddr, 
@@ -153,7 +154,7 @@ void I_SendPacket(packet_header_t* packet, size_t len)
   else sentbytes+=len;
 }
 
-void I_SendPacketTo(packet_header_t* packet, size_t len, struct sockaddr_in* to)
+OVERLAY void I_SendPacketTo(packet_header_t* packet, size_t len, struct sockaddr_in* to)
 {
   packet->checksum = ChecksumPacket(packet, len);
   if (sendto(sendsocket, packet, len, 0, (struct sockaddr *)to, sizeof *to)<0)
@@ -161,7 +162,7 @@ void I_SendPacketTo(packet_header_t* packet, size_t len, struct sockaddr_in* to)
   else sentbytes+=len;
 }
 
-void I_InitSockets(int localport)
+OVERLAY void I_InitSockets(int localport)
 {
   boolean        trueval = true;
 
@@ -178,7 +179,7 @@ void I_InitSockets(int localport)
 
 }
 
-boolean I_InitNetwork(void)
+OVERLAY boolean I_InitNetwork(void)
 {
   int p, localport = 5029;
   struct { packet_header_t head; short port; char myaddr[200]; } initpacket;

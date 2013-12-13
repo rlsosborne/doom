@@ -32,6 +32,7 @@
 static const char
 rcsid[] = "$Id: p_switch.c,v 1.4 1999/12/13 17:23:12 cphipps Exp $";
 
+#include "compiler.h"
 #include "doomstat.h"
 #include "w_wad.h"
 #include "r_main.h"
@@ -68,7 +69,7 @@ button_t  buttonlist[MAXBUTTONS];
 //
 // Rewritten by Lee Killough to remove limit 2/8/98
 //
-void P_InitSwitchList(void)
+OVERLAY void P_InitSwitchList(void)
 {
   int i, index = 0;
   int episode = (gamemode == registered || gamemode==retail) ?
@@ -108,7 +109,7 @@ void P_InitSwitchList(void)
 // to remain active in gametics.
 // No return.
 //
-void P_StartButton
+OVERLAY void P_StartButton
 ( line_t*       line,
   bwhere_e      w,
   int           texture,
@@ -145,7 +146,7 @@ void P_StartButton
 //
 // No return
 //
-void P_ChangeSwitchTexture
+OVERLAY void P_ChangeSwitchTexture
 ( line_t*       line,
   int           useAgain )
 {
@@ -221,7 +222,7 @@ void P_ChangeSwitchTexture
 // Passed the thing using the line, the line being used, and the side used
 // Returns true if a thinker was created
 //
-boolean
+OVERLAY boolean
 P_UseSpecialLine
 ( mobj_t*       thing,
   line_t*       line,

@@ -34,6 +34,7 @@
 static const char
 rcsid[] = "$Id: st_stuff.c,v 1.8 1999/10/12 13:01:14 cphipps Exp $";
 
+#include "compiler.h"
 #include "doomdef.h"
 #include "doomstat.h"
 #include "m_random.h"
@@ -388,7 +389,7 @@ extern char     *mapnames[];
 
 void ST_Stop(void);
 
-void ST_refreshBackground(void)
+OVERLAY void ST_refreshBackground(void)
 {
   if (st_statusbaron)
     {
@@ -410,7 +411,7 @@ void ST_refreshBackground(void)
 
 // Respond to keyboard input events,
 //  intercept cheats.
-boolean ST_Responder(event_t *ev)
+OVERLAY boolean ST_Responder(event_t *ev)
 {
   // Filter automap on/off.
   if (ev->type == ev_keyup && (ev->data1 & 0xffff0000) == AM_MSGHEADER)
@@ -433,7 +434,7 @@ boolean ST_Responder(event_t *ev)
   return false;
 }
 
-int ST_calcPainOffset(void)
+OVERLAY int ST_calcPainOffset(void)
 {
   static int lastcalc;
   static int oldhealth = -1;
@@ -454,7 +455,7 @@ int ST_calcPainOffset(void)
 //  dead > evil grin > turned head > straight ahead
 //
 
-void ST_updateFaceWidget(void)
+OVERLAY void ST_updateFaceWidget(void)
 {
   int         i;
   angle_t     badguyangle;
@@ -626,7 +627,7 @@ void ST_updateFaceWidget(void)
 
 int sts_traditional_keys; // killough 2/28/98: traditional status bar keys
 
-void ST_updateWidgets(void)
+OVERLAY void ST_updateWidgets(void)
 {
   static int  largeammo = 1994; // means "n/a"
   int         i;
@@ -693,7 +694,7 @@ void ST_updateWidgets(void)
 
 }
 
-void ST_Ticker(void)
+OVERLAY void ST_Ticker(void)
 {
   st_clock++;
   st_randomnumber = M_Random();
@@ -703,7 +704,7 @@ void ST_Ticker(void)
 
 static int st_palette = 0;
 
-void ST_doPaletteStuff(void)
+OVERLAY void ST_doPaletteStuff(void)
 {
   int         palette;
   int cnt = plyr->damagecount;
@@ -741,7 +742,7 @@ void ST_doPaletteStuff(void)
     V_SetPalette(st_palette = palette); // CPhipps - use new palette function
 }
 
-void ST_drawWidgets(boolean refresh)
+OVERLAY void ST_drawWidgets(boolean refresh)
 {
   int i;
 
@@ -801,7 +802,7 @@ void ST_drawWidgets(boolean refresh)
 
 }
 
-void ST_doRefresh(void)
+OVERLAY void ST_doRefresh(void)
 {
 
   st_firsttime = false;
@@ -814,13 +815,13 @@ void ST_doRefresh(void)
 
 }
 
-void ST_diffDraw(void)
+OVERLAY void ST_diffDraw(void)
 {
   // update all widgets
   ST_drawWidgets(false);
 }
 
-void ST_Drawer(boolean fullscreen, boolean refresh)
+OVERLAY void ST_Drawer(boolean fullscreen, boolean refresh)
 {
   st_statusbaron = !fullscreen; /* cph - let status bar on be controlled 
 				 * completely by the call from D_Display */
@@ -840,7 +841,7 @@ void ST_Drawer(boolean fullscreen, boolean refresh)
 // CPhipps - Loads graphics needed for status bar if doload is true,
 //  unloads them otherwise
 //
-static void ST_loadGraphics(boolean doload)
+OVERLAY static void ST_loadGraphics(boolean doload)
 {
   int  i, facenum;
   char namebuf[9];
@@ -922,17 +923,17 @@ else var = (const patch_t*)W_CacheLumpName(name)
   LOADORFREE(faces[facenum++], "STFDEAD0");
 }
 
-void ST_loadData(void)
+OVERLAY void ST_loadData(void)
 {
   ST_loadGraphics(true);
 }
 
-void ST_unloadData(void)
+OVERLAY void ST_unloadData(void)
 {
   ST_loadGraphics(false);
 }
 
-void ST_initData(void)
+OVERLAY void ST_initData(void)
 {
   int i;
 
@@ -961,7 +962,7 @@ void ST_initData(void)
   STlib_init();
 }
 
-void ST_createWidgets(void)
+OVERLAY void ST_createWidgets(void)
 {
   int i;
 
@@ -1120,7 +1121,7 @@ void ST_createWidgets(void)
 
 static boolean st_stopped = true;
 
-void ST_Start(void)
+OVERLAY void ST_Start(void)
 {
   if (!st_stopped)
     ST_Stop();
@@ -1129,7 +1130,7 @@ void ST_Start(void)
   st_stopped = false;
 }
 
-void ST_Stop(void)
+OVERLAY void ST_Stop(void)
 {
   if (st_stopped)
     return;
@@ -1137,7 +1138,7 @@ void ST_Stop(void)
   st_stopped = true;
 }
 
-void ST_Init(void)
+OVERLAY void ST_Init(void)
 {
   veryfirsttime = 0;
   ST_loadData();

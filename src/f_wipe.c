@@ -32,6 +32,7 @@
 
 static const char rcsid[] = "$Id: f_wipe.c,v 1.5 1999/10/12 13:01:10 cphipps Exp $";
 
+#include "compiler.h"
 #include "z_zone.h"
 #include "doomdef.h"
 #include "i_video.h"
@@ -51,7 +52,7 @@ static byte *wipe_scr_start;
 static byte *wipe_scr_end;
 static byte *wipe_scr;
 
-static void wipe_shittyColMajorXform(short *array, int width, int height)
+OVERLAY static void wipe_shittyColMajorXform(short *array, int width, int height)
 {
   short *dest = Z_Malloc(width*height*sizeof(short), PU_STATIC, 0);
   int x, y;
@@ -65,7 +66,7 @@ static void wipe_shittyColMajorXform(short *array, int width, int height)
 
 static int *y;
 
-static int wipe_initMelt(int width, int height, int ticks)
+OVERLAY static int wipe_initMelt(int width, int height, int ticks)
 {
   int i;
 
@@ -93,7 +94,7 @@ static int wipe_initMelt(int width, int height, int ticks)
   return 0;
 }
 
-static int wipe_doMelt(int width, int height, int ticks)
+OVERLAY static int wipe_doMelt(int width, int height, int ticks)
 {
   boolean done = true;
   int i;
@@ -140,7 +141,7 @@ static int wipe_doMelt(int width, int height, int ticks)
 
 // CPhipps - modified to allocate and deallocate screens[2 to 3] as needed, saving memory 
 
-static int wipe_exitMelt(int width, int height, int ticks)
+OVERLAY static int wipe_exitMelt(int width, int height, int ticks)
 {
   Z_Free(y);
   Z_Free(wipe_scr_start);
@@ -151,14 +152,14 @@ static int wipe_exitMelt(int width, int height, int ticks)
   return 0;
 }
 
-int wipe_StartScreen(int x, int y, int width, int height)
+OVERLAY int wipe_StartScreen(int x, int y, int width, int height)
 {
   wipe_scr_start = screens[SRC_SCR] = malloc(SCREENWIDTH * SCREENHEIGHT);
   V_CopyRect(x, y, 0,       width, height, x, y, SRC_SCR ); // Copy start screen to buffer
   return 0;
 }
 
-int wipe_EndScreen(int x, int y, int width, int height)
+OVERLAY int wipe_EndScreen(int x, int y, int width, int height)
 {
   wipe_scr_end = screens[DEST_SCR] = malloc(SCREENWIDTH * SCREENHEIGHT);
   V_CopyRect(x, y, 0,       width, height, x, y, DEST_SCR); // Copy end screen to buffer
@@ -167,7 +168,7 @@ int wipe_EndScreen(int x, int y, int width, int height)
 }
 
 // killough 3/5/98: reformatted and cleaned up
-int wipe_ScreenWipe(int x, int y, int width, int height, int ticks)
+OVERLAY int wipe_ScreenWipe(int x, int y, int width, int height, int ticks)
 {
   static boolean go;                               // when zero, stop the wipe
   if (!go)                                         // initial stuff

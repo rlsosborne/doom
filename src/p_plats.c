@@ -32,6 +32,7 @@
 static const char
 rcsid[] = "$Id: p_plats.c,v 1.2 1999/10/12 13:01:13 cphipps Exp $";
 
+#include "compiler.h"
 #include "doomstat.h"
 #include "m_random.h"
 #include "r_main.h"
@@ -53,7 +54,7 @@ platlist_t *activeplats;       // killough 2/14/98: made global again
 // jff 02/08/98 all cases with labels beginning with gen added to support 
 // generalized line type behaviors.
 
-void T_PlatRaise(plat_t* plat)
+OVERLAY void T_PlatRaise(plat_t* plat)
 {
   result_e      res;
 
@@ -178,7 +179,7 @@ void T_PlatRaise(plat_t* plat)
 // and for some plat types, an amount to raise
 // Returns true if a thinker is started, or restarted from stasis
 //
-int EV_DoPlat
+OVERLAY int EV_DoPlat
 ( line_t*       line,
   plattype_e    type,
   int           amount )
@@ -339,7 +340,7 @@ int EV_DoPlat
 // Passed the tag of the plat that should be reactivated
 // Returns nothing
 //
-void P_ActivateInStasis(int tag)
+OVERLAY void P_ActivateInStasis(int tag)
 {
   platlist_t *pl;
   for (pl=activeplats; pl; pl=pl->next)   // search the active plats
@@ -366,7 +367,7 @@ void P_ActivateInStasis(int tag)
 //
 // jff 2/12/98 added int return value, fixed return
 //
-int EV_StopPlat(line_t* line)
+OVERLAY int EV_StopPlat(line_t* line)
 {
   platlist_t *pl;
   for (pl=activeplats; pl; pl=pl->next)  // search the active plats
@@ -390,7 +391,7 @@ int EV_StopPlat(line_t* line)
 // Passed a pointer to the plat to add
 // Returns nothing
 //
-void P_AddActivePlat(plat_t* plat)
+OVERLAY void P_AddActivePlat(plat_t* plat)
 {
   platlist_t *list = malloc(sizeof *list);
   list->plat = plat;
@@ -409,7 +410,7 @@ void P_AddActivePlat(plat_t* plat)
 // Passed a pointer to the plat to remove
 // Returns nothing
 //
-void P_RemoveActivePlat(plat_t* plat)
+OVERLAY void P_RemoveActivePlat(plat_t* plat)
 {
   platlist_t *list = plat->list;
   plat->sector->floordata = NULL; //jff 2/23/98 multiple thinkers
@@ -426,7 +427,7 @@ void P_RemoveActivePlat(plat_t* plat)
 //
 // Passed nothing, returns nothing
 //
-void P_RemoveAllActivePlats(void)
+OVERLAY void P_RemoveAllActivePlats(void)
 {
   while (activeplats)
   {  

@@ -42,6 +42,7 @@ rcsid[] = "$Id: g_game.c,v 1.36 2000/03/17 20:50:30 cph Exp $";
 #include "../config.h"
 #endif
 
+#include "compiler.h"
 #include "doomstat.h"
 #include "f_finale.h"
 #include "m_argv.h"
@@ -249,7 +250,7 @@ mobj_t **bodyque = 0;                   // phares 8/10/98
 // If recording a demo, write it out
 //
 
-void G_BuildTiccmd(ticcmd_t* cmd)
+OVERLAY void G_BuildTiccmd(ticcmd_t* cmd)
 {
   boolean strafe;
   boolean bstrafe;
@@ -497,7 +498,7 @@ void G_BuildTiccmd(ticcmd_t* cmd)
 // G_RestartLevel
 //
 
-void G_RestartLevel(void)
+OVERLAY void G_RestartLevel(void)
 {
   special_event = BT_SPECIAL | (BTS_RESTARTLEVEL & BT_SPECIALMASK);
 }
@@ -509,7 +510,7 @@ void G_RestartLevel(void)
 
 extern gamestate_t wipegamestate;
 
-void G_DoLoadLevel (void)
+OVERLAY void G_DoLoadLevel (void)
 {
   int i;
 
@@ -614,7 +615,7 @@ void G_DoLoadLevel (void)
 // Get info needed to make ticcmd_ts for the players.
 //
 
-boolean G_Responder (event_t* ev)
+OVERLAY boolean G_Responder (event_t* ev)
 {
   // allow spy mode changes even during the demo
   // killough 2/22/98: even during DM demo
@@ -717,7 +718,7 @@ boolean G_Responder (event_t* ev)
 
 extern int mapcolor_me;
 
-void G_Ticker (void)
+OVERLAY void G_Ticker (void)
 {
   int i, buf;
   static gamestate_t prevgamestate;
@@ -912,7 +913,7 @@ void G_Ticker (void)
 // Can when a player completes a level.
 //
 
-void G_PlayerFinishLevel(int player)
+OVERLAY void G_PlayerFinishLevel(int player)
 {
   player_t *p = &players[player];
   memset(p->powers, 0, sizeof p->powers);
@@ -932,7 +933,7 @@ void G_PlayerFinishLevel(int player)
 #include "r_draw.h"
 extern byte playernumtotrans[MAXPLAYERS];
 
-void G_ChangedPlayerColour(int pn, int cl)
+OVERLAY void G_ChangedPlayerColour(int pn, int cl)
 {
   int i;
 
@@ -957,7 +958,7 @@ void G_ChangedPlayerColour(int pn, int cl)
 // almost everything is cleared and initialized
 //
 
-void G_PlayerReborn (int player)
+OVERLAY void G_PlayerReborn (int player)
 {
   player_t *p;
   int i;
@@ -1006,7 +1007,7 @@ void G_PlayerReborn (int player)
 
 void P_SpawnPlayer(mapthing_t *mthing);
 
-boolean G_CheckSpot(int playernum, mapthing_t *mthing)
+OVERLAY boolean G_CheckSpot(int playernum, mapthing_t *mthing)
 {
   fixed_t     x,y;
   subsector_t *ss;
@@ -1076,7 +1077,7 @@ boolean G_CheckSpot(int playernum, mapthing_t *mthing)
 // called at level load and each death
 //
 
-void G_DeathMatchSpawnPlayer (int playernum)
+OVERLAY void G_DeathMatchSpawnPlayer (int playernum)
 {
   int j, selections = deathmatch_p - deathmatchstarts;
 
@@ -1102,7 +1103,7 @@ void G_DeathMatchSpawnPlayer (int playernum)
 // G_DoReborn
 //
 
-void G_DoReborn (int playernum)
+OVERLAY void G_DoReborn (int playernum)
 {
   if (!netgame)
     gameaction = ga_loadlevel;      // reload the level from scratch
@@ -1142,7 +1143,7 @@ void G_DoReborn (int playernum)
     }
 }
 
-void G_ScreenShot (void)
+OVERLAY void G_ScreenShot (void)
 {
   gameaction = ga_screenshot;
 }
@@ -1165,7 +1166,7 @@ int cpars[32] = {
 
 static boolean secretexit;
 
-void G_ExitLevel (void)
+OVERLAY void G_ExitLevel (void)
 {
   secretexit = false;
   gameaction = ga_completed;
@@ -1174,7 +1175,7 @@ void G_ExitLevel (void)
 // Here's for the german edition.
 // IF NO WOLF3D LEVELS, NO SECRET EXIT!
 
-void G_SecretExitLevel (void)
+OVERLAY void G_SecretExitLevel (void)
 {
   if (gamemode!=commercial || haswolflevels)
     secretexit = true;
@@ -1187,7 +1188,7 @@ void G_SecretExitLevel (void)
 // G_DoCompleted
 //
 
-void G_DoCompleted (void)
+OVERLAY void G_DoCompleted (void)
 {
   int i;
 
@@ -1298,7 +1299,7 @@ void G_DoCompleted (void)
 // G_WorldDone
 //
 
-void G_WorldDone (void)
+OVERLAY void G_WorldDone (void)
 {
   gameaction = ga_worlddone;
 
@@ -1325,7 +1326,7 @@ void G_WorldDone (void)
     gameaction = ga_victory; // cph - after ExM8 summary screen, show victory stuff
 }
 
-void G_DoWorldDone (void)
+OVERLAY void G_DoWorldDone (void)
 {
   idmusnum = -1;             //jff 3/17/98 allow new level's music to be loaded
   gamestate = GS_LEVEL;
@@ -1351,7 +1352,7 @@ void R_ExecuteSetViewSize(void);
 // killough 5/15/98: add forced loadgames, which allow user to override checks
 //
 
-void G_ForcedLoadGame(void)
+OVERLAY void G_ForcedLoadGame(void)
 {
   // CPhipps - net loadgames are always forced, so we only reach here 
   //  in single player
@@ -1361,7 +1362,7 @@ void G_ForcedLoadGame(void)
 
 // killough 3/16/98: add slot info
 // killough 5/15/98: add command-line
-void G_LoadGame(int slot, boolean command)
+OVERLAY void G_LoadGame(int slot, boolean command)
 {
   if (!demoplayback && !command) {
     // CPhipps - handle savegame filename in G_DoLoadGame
@@ -1382,7 +1383,7 @@ void G_LoadGame(int slot, boolean command)
 // killough 5/15/98:
 // Consistency Error when attempting to load savegame.
 
-static void G_LoadGameErr(const char *msg)
+OVERLAY static void G_LoadGameErr(const char *msg)
 {
   Z_Free(savebuffer);                // Free the savegame buffer
   M_ForcedLoadGame(msg);             // Print message asking for 'Y' to force
@@ -1407,7 +1408,7 @@ static const struct {
 
 static const size_t num_version_headers = sizeof(version_headers) / sizeof(version_headers[0]);
 
-void G_DoLoadGame(void)
+OVERLAY void G_DoLoadGame(void)
 {
   int  length, i, a, b, c;
   // CPhipps - do savegame filename stuff here
@@ -1530,7 +1531,7 @@ void G_DoLoadGame(void)
 // Description is a 24 byte text string
 //
 
-void G_SaveGame(int slot, char *description)
+OVERLAY void G_SaveGame(int slot, char *description)
 {
   strcpy(savedescription, description);
   // CPhipps - store info in special_event
@@ -1542,7 +1543,7 @@ void G_SaveGame(int slot, char *description)
 }
 
 // Check for overrun and realloc if necessary -- Lee Killough 1/22/98
-void CheckSaveGame(size_t size)
+OVERLAY void CheckSaveGame(size_t size)
 {
   size_t pos = save_p - savebuffer;
   size += 1024;  // breathing room
@@ -1556,7 +1557,7 @@ void CheckSaveGame(size_t size)
  * cph - Avoid possible buffer overflow problems by passing 
  * size to this function and using snprintf */
 
-void G_SaveGameName(char *name, size_t size, int slot)
+OVERLAY void G_SaveGameName(char *name, size_t size, int slot)
 {
 #ifdef HAVE_snprintf
   snprintf (name, size, "%s/%s%d.dsg", basesavegame, savegamename, slot);
@@ -1565,7 +1566,7 @@ void G_SaveGameName(char *name, size_t size, int slot)
 #endif
 }
 
-void G_DoSaveGame (void)
+OVERLAY void G_DoSaveGame (void)
 {
   char name[PATH_MAX+1];
   char name2[VERSIONSIZE];
@@ -1707,7 +1708,7 @@ static skill_t d_skill;
 static int     d_episode;
 static int     d_map;
 
-void G_DeferedInitNew(skill_t skill, int episode, int map)
+OVERLAY void G_DeferedInitNew(skill_t skill, int episode, int map)
 {
   d_skill = skill;
   d_episode = episode;
@@ -1731,7 +1732,7 @@ extern int monsters_remember, default_monsters_remember;
 // killough 3/1/98: function to reload all the default parameter
 // settings before a new game begins
 
-void G_ReloadDefaults(void)
+OVERLAY void G_ReloadDefaults(void)
 {
   // killough 3/1/98: Initialize options based on config file
   // (allows functions above to load different values for demos
@@ -1782,7 +1783,7 @@ void G_ReloadDefaults(void)
   rngseed += I_GetRandomTimeSeed() + gametic; // CPhipps
 }
 
-void G_DoNewGame (void)
+OVERLAY void G_DoNewGame (void)
 {
   G_ReloadDefaults();            // killough 3/1/98
   netgame = false;               // killough 3/29/98
@@ -1797,7 +1798,7 @@ void G_DoNewGame (void)
 // killough 4/10/98: New function to fix bug which caused Doom
 // lockups when idclev was used in conjunction with -fast.
 
-void G_SetFastParms(int fast_pending)
+OVERLAY void G_SetFastParms(int fast_pending)
 {
   static int fast = 0;            // remembers fast state
   int i;
@@ -1831,7 +1832,7 @@ extern int skytexture;
 // consoleplayer, displayplayer, playeringame[] should be set.
 //
 
-void G_InitNew(skill_t skill, int episode, int map)
+OVERLAY void G_InitNew(skill_t skill, int episode, int map)
 {
   int i;
 
@@ -1899,7 +1900,7 @@ void G_InitNew(skill_t skill, int episode, int map)
 
 #define DEMOMARKER    0x80
 
-void G_ReadDemoTiccmd (ticcmd_t* cmd)
+OVERLAY void G_ReadDemoTiccmd (ticcmd_t* cmd)
 {
   if (*demo_p == DEMOMARKER)
     G_CheckDemoStatus();      // end of demo data stream
@@ -1914,7 +1915,7 @@ void G_ReadDemoTiccmd (ticcmd_t* cmd)
 
 // Demo limits removed -- killough
 
-void G_WriteDemoTiccmd (ticcmd_t* cmd)
+OVERLAY void G_WriteDemoTiccmd (ticcmd_t* cmd)
 {
   ptrdiff_t position = demo_p - demobuffer;
 
@@ -1944,7 +1945,7 @@ void G_WriteDemoTiccmd (ticcmd_t* cmd)
 // G_RecordDemo
 //
 
-void G_RecordDemo (const char* name)
+OVERLAY void G_RecordDemo (const char* name)
 {
   int i;
   usergame = false;
@@ -1966,7 +1967,7 @@ void G_RecordDemo (const char* name)
 // byte(s) should still be skipped over or padded with 0's.
 // Lee Killough 3/1/98
 
-byte *G_WriteOptions(byte *demo_p)
+OVERLAY byte *G_WriteOptions(byte *demo_p)
 {
   byte *target = demo_p + GAME_OPTION_SIZE;
 
@@ -2009,7 +2010,7 @@ byte *G_WriteOptions(byte *demo_p)
 
 // Same, but read instead of write
 
-byte *G_ReadOptions(byte *demo_p)
+OVERLAY byte *G_ReadOptions(byte *demo_p)
 {
   byte *target = demo_p + GAME_OPTION_SIZE;
 
@@ -2049,7 +2050,7 @@ byte *G_ReadOptions(byte *demo_p)
   return target;
 }
 
-void G_BeginRecording (void)
+OVERLAY void G_BeginRecording (void)
 {
   int i;
 
@@ -2105,7 +2106,7 @@ void G_BeginRecording (void)
 
 static const char *defdemoname;
 
-void G_DeferedPlayDemo (const char* name)
+OVERLAY void G_DeferedPlayDemo (const char* name)
 {
   defdemoname = name;
   gameaction = ga_playdemo;
@@ -2113,7 +2114,7 @@ void G_DeferedPlayDemo (const char* name)
 
 static int demolumpnum = -1;
 
-void G_DoPlayDemo (void)
+OVERLAY void G_DoPlayDemo (void)
 {
   skill_t skill;
   int i, episode, map;
@@ -2222,7 +2223,7 @@ void G_DoPlayDemo (void)
 // G_TimeDemo
 //
 
-void G_TimeDemo(const char *name) // CPhipps - const char*
+OVERLAY void G_TimeDemo(const char *name) // CPhipps - const char*
 {
   timingdemo = true;
   singletics = true;
@@ -2238,7 +2239,7 @@ void G_TimeDemo(const char *name) // CPhipps - const char*
 //= Returns true if a new demo loop action will take place
 //===================
 
-boolean G_CheckDemoStatus (void)
+OVERLAY boolean G_CheckDemoStatus (void)
 {
   if (demorecording)
     {
@@ -2291,7 +2292,7 @@ boolean G_CheckDemoStatus (void)
 #define MAX_MESSAGE_SIZE 1024
 
 // CPhipps - renamed to doom_printf to avoid name collision with glibc
-void doom_printf(const char *s, ...)
+OVERLAY void doom_printf(const char *s, ...)
 {
   static char msg[MAX_MESSAGE_SIZE];
   va_list v;

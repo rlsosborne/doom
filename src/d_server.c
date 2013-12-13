@@ -31,6 +31,7 @@
  *-----------------------------------------------------------------------------
  */
 
+#include "compiler.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -56,11 +57,11 @@
 #define BACKUPTICS 12
 
 // Dummies to forfill l_udp.c unused client stuff
-int M_CheckParm(const char* p) { p = NULL; return 1; }
+OVERLAY int M_CheckParm(const char* p) { p = NULL; return 1; }
 int myargc;
 char** myargv;
 
-void I_Error(const char *error, ...) // killough 3/20/98: add const
+OVERLAY void I_Error(const char *error, ...) // killough 3/20/98: add const
 {
   char errmsg[1000];
   va_list argptr;
@@ -74,7 +75,7 @@ int playerjoingame[MAXPLAYERS], playerleftgame[MAXPLAYERS];
 #define playeringame(i) ((playerjoingame[i] < INT_MAX) && (playerleftgame[i] == INT_MAX))
 struct sockaddr_in remoteaddr[MAXPLAYERS];
 
-void BroadcastPacket(packet_header_t *packet, size_t len)
+OVERLAY void BroadcastPacket(packet_header_t *packet, size_t len)
 {
   int i;
   for (i=0; i<MAXPLAYERS; i++)
@@ -97,7 +98,7 @@ byte def_game_options[GAME_OPTIONS_SIZE] = \
 
 int verbose;
 
-void sig_handler(int signum)
+OVERLAY void sig_handler(int signum)
 {
   char buf[80];
   I_SigString(buf,80,signum);
@@ -107,7 +108,7 @@ void sig_handler(int signum)
   exit(1);
 }
 
-void doexit(void)
+OVERLAY void doexit(void)
 {
   packet_header_t packet;
 
@@ -117,7 +118,7 @@ void doexit(void)
   BroadcastPacket(&packet, sizeof packet);
 }
 
-int main(int argc, char** argv)
+OVERLAY int main(int argc, char** argv)
 {
   int localport = 5030, numplayers = 2, xtratics = 0, ticdup = 1;
   int exectics = 0; // gametics completed

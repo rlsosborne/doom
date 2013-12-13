@@ -37,6 +37,7 @@
 static const char
 rcsid[] = "$Id: l_main.c,v 1.14 2000/03/16 13:27:29 cph Exp $";
 
+#include "compiler.h"
 #include "doomdef.h"
 #include "m_argv.h"
 #include "d_main.h"
@@ -68,18 +69,18 @@ int broken_pipe;
 int realtic_clock_rate = 100;
 static int_64_t I_GetTime_Scale = 1<<24;
 
-static int I_GetTime_Scaled(void)
+OVERLAY static int I_GetTime_Scaled(void)
 {
   return (int_64_t) I_GetTime_RealTime() * I_GetTime_Scale >> 24;
 }
 
-static int  I_GetTime_FastDemo(void)
+OVERLAY static int  I_GetTime_FastDemo(void)
 {
   static int fasttic;
   return fasttic++;
 }
 
-static int I_GetTime_Error(void)
+OVERLAY static int I_GetTime_Error(void)
 {
   I_Error("Error: GetTime() used before initialization");
   return 0;
@@ -87,7 +88,7 @@ static int I_GetTime_Error(void)
 
 int (*I_GetTime)(void) = I_GetTime_Error;
 
-void I_Init(void)
+OVERLAY void I_Init(void)
 {
   /* killough 4/14/98: Adjustable speedup based on realtic_clock_rate */
   if (fastdemo)
@@ -114,7 +115,7 @@ void I_Init(void)
 
 /* cleanup handling -- killough:
  */
-static void I_SignalHandler(int s)
+OVERLAY static void I_SignalHandler(int s)
 {
   char buf[2048];
 
@@ -147,7 +148,7 @@ static void I_SignalHandler(int s)
  * CPhipps - made static
  */
 
-static inline int convert(int color, int *bold)
+OVERLAY static inline int convert(int color, int *bold)
 {
   if (color > 7) {
     color -= 8;
@@ -183,7 +184,7 @@ enum {
 
 unsigned int endoom_mode;
 
-static void PrintVer(void)
+OVERLAY static void PrintVer(void)
 {
   printf("LsdlDoom v%s (http://jesshaas.com/lsdldoom/)\n",VERSION);
 }
@@ -192,7 +193,7 @@ static void PrintVer(void)
  * Prints out ENDOOM or ENDBOOM, using some common sense to decide which.
  * cphipps - moved to l_main.c, made static
  */
-static void I_EndDoom(void)
+OVERLAY static void I_EndDoom(void)
 {
   int lump_eb, lump_ed, lump = -1;
 
@@ -296,7 +297,7 @@ static int has_exited;
  * Prevent infinitely recursive exits -- killough
  */
 
-void I_SafeExit(int rc)
+OVERLAY void I_SafeExit(int rc)
 {
   if (!has_exited)    /* If it hasn't exited yet, exit now -- killough */
     {
@@ -305,7 +306,7 @@ void I_SafeExit(int rc)
     }
 }
 
-void I_Quit (void)
+OVERLAY void I_Quit (void)
 {
   if (!has_exited)
     has_exited=1;   /* Prevent infinitely recursive exits -- killough */
@@ -322,7 +323,7 @@ void I_Quit (void)
 uid_t stored_euid = -1;
 #endif
 
-int main(int argc, char **argv)
+OVERLAY int main(int argc, char **argv)
 {
 #ifdef SECURE_UID
   /* First thing, revoke setuid status (if any) */

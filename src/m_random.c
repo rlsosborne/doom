@@ -37,6 +37,7 @@
 
 static const char rcsid[] = "$Id: m_random.c,v 1.3 1999/10/12 13:01:12 cphipps Exp $";
 
+#include "compiler.h"
 #include "doomstat.h"
 #include "m_random.h"
 
@@ -70,7 +71,7 @@ rng_t rng;     // the random number state
 
 unsigned long rngseed = 1993;   // killough 3/26/98: The seed
 
-int P_Random(pr_class_t pr_class)
+OVERLAY int P_Random(pr_class_t pr_class)
 {
   // killough 2/16/98:  We always update both sets of random number
   // generators, to ensure repeatability if the demo_compatibility
@@ -123,7 +124,7 @@ int P_Random(pr_class_t pr_class)
 // are added they must be added to end of pr_class_t list. killough
 //
 
-void M_ClearRandom (void)
+OVERLAY void M_ClearRandom (void)
 {
   int i;
   unsigned long seed = rngseed*2+1;    // add 3/26/98: add rngseed

@@ -34,6 +34,7 @@ rcsid[] = "$Id: s_sound.c,v 1.10 1999/10/12 13:01:14 cphipps Exp $";
 // killough 3/7/98: modified to allow arbitrary listeners in spy mode
 // killough 5/2/98: reindented, removed useless code, beautified
 
+#include "compiler.h"
 #include "doomstat.h"
 #include "s_sound.h"
 #include "i_sound.h"
@@ -114,7 +115,7 @@ static int S_getChannel(void *origin, sfxinfo_t *sfxinfo, int is_pickup);
 //  allocates channel buffer, sets S_sfx lookup.
 //
 
-void S_Init(int sfxVolume, int musicVolume)
+OVERLAY void S_Init(int sfxVolume, int musicVolume)
 {
   //jff 1/22/98 skip sound init if sound not enabled
   if (snd_card && !nosfxparm)
@@ -154,7 +155,7 @@ void S_Init(int sfxVolume, int musicVolume)
 // Kills playing sounds at start of level,
 //  determines music if any, changes music.
 //
-void S_Start(void)
+OVERLAY void S_Start(void)
 {
   int cnum,mnum;
 
@@ -202,7 +203,7 @@ void S_Start(void)
   S_ChangeMusic(mnum, true);
 }
 
-void S_StartSoundAtVolume(void *origin_p, int sfx_id, int volume)
+OVERLAY void S_StartSoundAtVolume(void *origin_p, int sfx_id, int volume)
 {
   int sep, pitch, priority, cnum, is_pickup;
   sfxinfo_t *sfx;
@@ -295,12 +296,12 @@ void S_StartSoundAtVolume(void *origin_p, int sfx_id, int volume)
   channels[cnum].handle = I_StartSound(sfx_id, volume, sep, pitch, priority);
 }
 
-void S_StartSound(void *origin, int sfx_id)
+OVERLAY void S_StartSound(void *origin, int sfx_id)
 {
   S_StartSoundAtVolume(origin, sfx_id, snd_SfxVolume);
 }
 
-void S_StopSound(void *origin)
+OVERLAY void S_StopSound(void *origin)
 {
   int cnum;
 
@@ -320,7 +321,7 @@ void S_StopSound(void *origin)
 //
 // Stop and resume music, during game PAUSE.
 //
-void S_PauseSound(void)
+OVERLAY void S_PauseSound(void)
 {
   //jff 1/22/98 return if music is not enabled
   if (!mus_card || nomusicparm)
@@ -333,7 +334,7 @@ void S_PauseSound(void)
     }
 }
 
-void S_ResumeSound(void)
+OVERLAY void S_ResumeSound(void)
 {
   //jff 1/22/98 return if music is not enabled
   if (!mus_card || nomusicparm)
@@ -350,7 +351,7 @@ void S_ResumeSound(void)
 //
 // Updates music & sounds
 //
-void S_UpdateSounds(void* listener_p)
+OVERLAY void S_UpdateSounds(void* listener_p)
 {
   mobj_t *listener = (mobj_t*) listener_p;
   int cnum;
@@ -402,7 +403,7 @@ void S_UpdateSounds(void* listener_p)
     }
 }
 
-void S_SetMusicVolume(int volume)
+OVERLAY void S_SetMusicVolume(int volume)
 {
   //jff 1/22/98 return if music is not enabled
   if (!mus_card || nomusicparm)
@@ -413,7 +414,7 @@ void S_SetMusicVolume(int volume)
   snd_MusicVolume = volume;
 }
 
-void S_SetSfxVolume(int volume)
+OVERLAY void S_SetSfxVolume(int volume)
 {
   //jff 1/22/98 return if sound is not enabled
   if (!snd_card || nosfxparm)
@@ -426,7 +427,7 @@ void S_SetSfxVolume(int volume)
 //
 // Starts some music with the music id found in sounds.h.
 //
-void S_StartMusic(int m_id)
+OVERLAY void S_StartMusic(int m_id)
 {
   //jff 1/22/98 return if music is not enabled
   if (!mus_card || nomusicparm)
@@ -434,7 +435,7 @@ void S_StartMusic(int m_id)
   S_ChangeMusic(m_id, false);
 }
 
-void S_ChangeMusic(int musicnum, int looping)
+OVERLAY void S_ChangeMusic(int musicnum, int looping)
 {
   musicinfo_t *music;
 
@@ -472,7 +473,7 @@ void S_ChangeMusic(int musicnum, int looping)
 }
 
 
-void S_StopMusic(void)
+OVERLAY void S_StopMusic(void)
 {
   //jff 1/22/98 return if music is not enabled
   if (!mus_card || nomusicparm)
@@ -492,7 +493,7 @@ void S_StopMusic(void)
     }
 }
 
-void S_StopChannel(int cnum)
+OVERLAY void S_StopChannel(int cnum)
 {
   int i;
   channel_t *c = &channels[cnum];
@@ -526,7 +527,7 @@ void S_StopChannel(int cnum)
 // Otherwise, modifies parameters and returns 1.
 //
 
-int S_AdjustSoundParams(mobj_t *listener, mobj_t *source,
+OVERLAY int S_AdjustSoundParams(mobj_t *listener, mobj_t *source,
                         int *vol, int *sep, int *pitch)
 {
   fixed_t adx, ady,approx_dist;
@@ -582,7 +583,7 @@ int S_AdjustSoundParams(mobj_t *listener, mobj_t *source,
 //
 // killough 4/25/98: made static, added is_pickup argument
 
-static int S_getChannel(void *origin, sfxinfo_t *sfxinfo, int is_pickup)
+OVERLAY static int S_getChannel(void *origin, sfxinfo_t *sfxinfo, int is_pickup)
 {
   // channel number to use
   int cnum;

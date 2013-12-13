@@ -34,6 +34,7 @@
  *-----------------------------------------------------------------------------
  */
 
+#include "compiler.h"
 #include "doomtype.h"
 #include "doomstat.h"
 #include "d_net.h"
@@ -77,7 +78,7 @@ int ticdup = 1;
 #ifdef HAVE_NET
 static int xtratics = 0;
 
-void D_InitNetGame (void)
+OVERLAY void D_InitNetGame (void)
 {
   int i;
 
@@ -151,7 +152,7 @@ void D_InitNetGame (void)
 #endif
 
 #ifdef HAVE_NET
-void D_CheckNetGame(void)
+OVERLAY void D_CheckNetGame(void)
 {
   packet_header_t *packet = Z_Malloc(sizeof(packet_header_t)+1, PU_STATIC, NULL);
 
@@ -169,7 +170,7 @@ void D_CheckNetGame(void)
   Z_Free(packet);
 }
 
-boolean D_NetGetWad(const char* name)
+OVERLAY boolean D_NetGetWad(const char* name)
 {
 #if defined(HAVE_WAIT_H)
   size_t psize = sizeof(packet_header_t) + strlen(name) + 500;
@@ -232,7 +233,7 @@ boolean D_NetGetWad(const char* name)
 #endif
 }
 
-void NetUpdate(void)
+OVERLAY void NetUpdate(void)
 {
   if (server) { // Receive network packets
     size_t recvlen;
@@ -315,7 +316,7 @@ void NetUpdate(void)
 }
 #endif
 
-void D_BuildNewTiccmds()
+OVERLAY void D_BuildNewTiccmds()
 {
     static int lastmadetic;
     int newtics = I_GetTime() - lastmadetic;
@@ -331,7 +332,7 @@ void D_BuildNewTiccmds()
 }
 
 #ifdef HAVE_NET
-void D_NetSendMisc(netmisctype_t type, size_t len, void* data) 
+OVERLAY void D_NetSendMisc(netmisctype_t type, size_t len, void* data) 
 {
   if (server) {
     size_t size = sizeof(packet_header_t) + 3*sizeof(int) + len;
@@ -348,7 +349,7 @@ void D_NetSendMisc(netmisctype_t type, size_t len, void* data)
   }
 }
 
-static void CheckQueuedPackets(void)
+OVERLAY static void CheckQueuedPackets(void)
 {
   int i;
   for (i=0; i<numqueuedpackets; i++)
@@ -400,7 +401,7 @@ static void CheckQueuedPackets(void)
 }
 #endif
 
-void TryRunTics (void)
+OVERLAY void TryRunTics (void)
 {
   int runtics;
   int entertime = I_GetTime();
@@ -442,7 +443,7 @@ void TryRunTics (void)
 }
 
 #ifdef HAVE_NET
-void D_QuitNetGame (void)
+OVERLAY void D_QuitNetGame (void)
 {
   byte buf[1 + sizeof(packet_header_t)];
   packet_header_t *packet = (void*)buf;

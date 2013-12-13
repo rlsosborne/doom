@@ -34,6 +34,7 @@
 static const char
 rcsid[] = "$Id: r_draw.c,v 1.15 1999/11/01 17:09:15 cphipps Exp $";
 
+#include "compiler.h"
 #include "doomstat.h"
 #include "w_wad.h"
 #include "r_main.h"
@@ -132,7 +133,7 @@ const byte    *dc_source;      // first pixel in a column (possibly virtual)
 //  be used. It has also been used with Wolfenstein 3D.
 //
 
-void R_DrawColumn_Normal (void) 
+OVERLAY void R_DrawColumn_Normal (void) 
 {
   int     count;
   byte    *dest;            // killough
@@ -280,7 +281,7 @@ void R_DrawColumn_Normal (void)
   }
 }
 
-void R_DrawColumn_HighRes (void)
+OVERLAY void R_DrawColumn_HighRes (void)
 {
         R_DrawColumn_Normal();
 }
@@ -297,7 +298,7 @@ void R_DrawColumn_HighRes (void)
 // opaque' decision is made outside this routine, not down where the
 // actual code differences are.
 
-void R_DrawTLColumn_Normal (void)                                           
+OVERLAY void R_DrawTLColumn_Normal (void)                                           
 { 
   int      count;
   byte    *dest;           // killough
@@ -375,7 +376,7 @@ void R_DrawTLColumn_Normal (void)
   }
 } 
 
-void R_DrawTLColumn_HighRes (void)
+OVERLAY void R_DrawTLColumn_HighRes (void)
 {
 	R_DrawTLColumn_Normal();
 }
@@ -409,7 +410,7 @@ static int fuzzpos = 0;
 //  i.e. spectres and invisible players.
 //
 
-void R_DrawFuzzColumn(void) 
+OVERLAY void R_DrawFuzzColumn(void) 
 { 
   int      count; 
   byte     *dest; 
@@ -489,7 +490,7 @@ void R_DrawFuzzColumn(void)
 const byte *dc_translation;
 byte *translationtables;
 
-void R_DrawTranslatedColumn (void) 
+OVERLAY void R_DrawTranslatedColumn (void) 
 { 
   int      count; 
   byte     *dest; 
@@ -543,7 +544,7 @@ void R_DrawTranslatedColumn (void)
 byte playernumtotrans[MAXPLAYERS];
 extern lighttable_t *(*c_zlight)[LIGHTLEVELS][MAXLIGHTZ];
 
-void R_InitTranslationTables (void)
+OVERLAY void R_InitTranslationTables (void)
 {
   int i, j;
 #define MAXTRANS 3
@@ -607,7 +608,7 @@ fixed_t ds_ystep;
 // start of a 64*64 tile image 
 const byte *ds_source;
 
-void R_DrawSpan (void) 
+OVERLAY void R_DrawSpan (void) 
 { 
   unsigned position;
   unsigned step;
@@ -647,7 +648,7 @@ void R_DrawSpan (void)
 //  of a pixel to draw.
 //
 
-void R_InitBuffer(int width, int height)
+OVERLAY void R_InitBuffer(int width, int height)
 { 
   int i=0;
   // Handle resize,
@@ -677,7 +678,7 @@ void R_InitBuffer(int width, int height)
 //
 // CPhipps - patch drawing updated
 
-void R_FillBackScreen (void) 
+OVERLAY void R_FillBackScreen (void) 
 { 
   byte    *dest;
   const byte *src;
@@ -750,7 +751,7 @@ void R_FillBackScreen (void)
 // Copy a screen buffer.
 //
 
-void R_VideoErase(unsigned ofs, int count)
+OVERLAY void R_VideoErase(unsigned ofs, int count)
 { 
   memcpy(screens[0]+ofs, screens[1]+ofs, count);   // LFB copy.
 } 
@@ -763,7 +764,7 @@ void R_VideoErase(unsigned ofs, int count)
 
 void V_MarkRect(int x, int y, int width, int height); 
  
-void R_DrawViewBorder(void) 
+OVERLAY void R_DrawViewBorder(void) 
 { 
   int top, side, ofs, i;
 // proff/nicolas 09/20/98: Added for high-res (inspired by DosDOOM)

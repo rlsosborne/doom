@@ -33,6 +33,7 @@
 static const char
 rcsid[] = "$Id: w_wad.c,v 1.12 1999/10/27 18:35:50 cphipps Exp $";
 
+#include "compiler.h"
 // use config.h if autoconf made one -- josh
 #ifdef HAVE_CONFIG_H
 #include "../config.h"
@@ -74,7 +75,7 @@ static void W_ReportLocks(void)
 }
 #endif
 
-static int internal_filelength(int handle)
+OVERLAY static int internal_filelength(int handle)
 {
   struct stat   fileinfo;
   if (fstat(handle,&fileinfo) == -1)
@@ -82,7 +83,7 @@ static int internal_filelength(int handle)
   return fileinfo.st_size;
 }
 
-void ExtractFileBase (const char *path, char *dest)
+OVERLAY void ExtractFileBase (const char *path, char *dest)
 {
   const char *src = path + strlen(path) - 1;
   int length;
@@ -109,7 +110,7 @@ void ExtractFileBase (const char *path, char *dest)
 // Note: Backslashes are treated specially, for MS-DOS.
 //
 
-char *AddDefaultExtension(char *path, const char *ext)
+OVERLAY char *AddDefaultExtension(char *path, const char *ext)
 {
   char *p = path;
   while (*p++);
@@ -138,7 +139,7 @@ char *AddDefaultExtension(char *path, const char *ext)
 // CPhipps - source is an enum
 //
 
-static void W_AddFile(const char *filename, wad_source_t source) 
+OVERLAY static void W_AddFile(const char *filename, wad_source_t source) 
 // killough 1/31/98: static, const
 {
   wadinfo_t   header;
@@ -224,7 +225,7 @@ static void W_AddFile(const char *filename, wad_source_t source)
 //
 // killough 1/24/98 modified routines to be a little faster and smaller
 
-static int IsMarker(const char *marker, const char *name)
+OVERLAY static int IsMarker(const char *marker, const char *name)
 {
   return !strncasecmp(name, marker, 8) ||
     (*name == *marker && !strncasecmp(name+1, marker, 7));
@@ -232,7 +233,7 @@ static int IsMarker(const char *marker, const char *name)
 
 // killough 4/17/98: add namespace tags
 
-static void W_CoalesceMarkedResource(const char *start_marker,
+OVERLAY static void W_CoalesceMarkedResource(const char *start_marker,
                                      const char *end_marker, int namespace)
 {
   lumpinfo_t *marked = malloc(sizeof(*marked) * numlumps);
@@ -287,7 +288,7 @@ static void W_CoalesceMarkedResource(const char *start_marker,
 // Can be used for any 8-character names.
 // by Lee Killough
 
-unsigned W_LumpNameHash(const char *s)
+OVERLAY unsigned W_LumpNameHash(const char *s)
 {
   unsigned hash;
   (void) ((hash =        toupper(s[0]), s[1]) &&
@@ -321,7 +322,7 @@ unsigned W_LumpNameHash(const char *s)
 // between different resources such as flats, sprites, colormaps
 //
 
-int (W_CheckNumForName)(const char *name, int namespace)
+OVERLAY int (W_CheckNumForName)(const char *name, int namespace)
 {
   // Hash function maps the name to one of possibly numlump chains.
   // It has been tuned so that the average chain length never exceeds 2.
@@ -347,7 +348,7 @@ int (W_CheckNumForName)(const char *name, int namespace)
 // killough 1/31/98: Initialize lump hash table
 //
 
-static void W_InitLumpHash(void)
+OVERLAY static void W_InitLumpHash(void)
 {
   int i;
 
@@ -373,7 +374,7 @@ static void W_InitLumpHash(void)
 // Calls W_CheckNumForName, but bombs out if not found.
 //
 
-int W_GetNumForName (const char* name)     // killough -- const added
+OVERLAY int W_GetNumForName (const char* name)     // killough -- const added
 {
   int i = W_CheckNumForName (name);
   if (i == -1)
@@ -400,7 +401,7 @@ struct wadfile_info *wadfiles=NULL;
 
 unsigned int numwadfiles = 0; // CPhipps - size of the wadfiles array (dynamic, no limit)
 
-void W_Init(void)
+OVERLAY void W_Init(void)
 {
 #ifndef NO_PREDEFINED_LUMPS
   // killough 1/31/98: add predefined lumps first
@@ -464,7 +465,7 @@ void W_Init(void)
 // W_LumpLength
 // Returns the buffer size needed to load the given lump.
 //
-int W_LumpLength (int lump)
+OVERLAY int W_LumpLength (int lump)
 {
   if (lump >= numlumps)
     I_Error ("W_LumpLength: %i >= numlumps",lump);
@@ -477,7 +478,7 @@ int W_LumpLength (int lump)
 //  which must be >= W_LumpLength().
 //
 
-void W_ReadLump(int lump, void *dest)
+OVERLAY void W_ReadLump(int lump, void *dest)
 {
   lumpinfo_t *l = lumpinfo + lump;
 
@@ -511,7 +512,7 @@ void W_ReadLump(int lump, void *dest)
  *           returns a const*
  */
 
-const void * (W_CacheLumpNum)(int lump, unsigned short locks)
+OVERLAY const void * (W_CacheLumpNum)(int lump, unsigned short locks)
 {
 #ifdef RANGECHECK
   if ((unsigned)lump >= numlumps)
@@ -545,7 +546,7 @@ const void * (W_CacheLumpNum)(int lump, unsigned short locks)
 //
 // CPhipps - this changes (should reduce) the number of locks on a lump
 
-void (W_UnlockLumpNum)(int lump, signed short unlocks)
+OVERLAY void (W_UnlockLumpNum)(int lump, signed short unlocks)
 {
 #ifdef SIMPLECHECKS
   if (lumpinfo[lump].locks < unlocks)
@@ -571,7 +572,7 @@ void (W_UnlockLumpNum)(int lump, signed short unlocks)
 // supplies the pwad name.
 //
 // killough 4/22/98: make endian-independent, remove tab chars
-void WritePredefinedLumpWad(const char *filename)
+OVERLAY void WritePredefinedLumpWad(const char *filename)
 {
   int handle;         // for file open
   char filenam[256];  // we may have to add ".wad" to the name they pass

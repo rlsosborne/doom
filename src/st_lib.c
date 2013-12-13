@@ -32,6 +32,7 @@
 static const char
 rcsid[] = "$Id: st_lib.c,v 1.9 1999/10/31 12:02:30 cphipps Exp $";
 
+#include "compiler.h"
 #include "doomdef.h"
 #include "doomstat.h"
 #include "v_video.h"
@@ -47,7 +48,7 @@ int sts_pct_always_gray; // killough 2/21/98: always gray %'s? bug or feature?
 //
 // STlib_init()
 //
-void STlib_init(void)
+OVERLAY void STlib_init(void)
 {
   // cph - no longer hold STMINUS pointer
 }
@@ -61,7 +62,7 @@ void STlib_init(void)
 // to the value displayed, a pointer to the on/off control, and the width
 // Returns nothing
 //
-void STlib_initNum
+OVERLAY void STlib_initNum
 ( st_number_t* n,
   int x,
   int y,
@@ -92,7 +93,7 @@ void STlib_initNum
  * jff 2/16/98 add color translation to digit output
  * cphipps 10/99 - const pointer to colour trans table, made function static
  */
-static void STlib_drawNum
+OVERLAY static void STlib_drawNum
 ( st_number_t*  n,
   const byte *outrng,
   boolean refresh )
@@ -178,7 +179,7 @@ static void STlib_drawNum
  * jff 2/16/98 add color translation to digit output
  * cphipps 10/99 - make that pointer const
  */
-void STlib_updateNum
+OVERLAY void STlib_updateNum
 ( st_number_t*    n,
   const byte *outrng,
   boolean   refresh )
@@ -196,7 +197,7 @@ void STlib_updateNum
 // for the percent sign.
 // Returns nothing.
 //
-void STlib_initPercent
+OVERLAY void STlib_initPercent
 ( st_percent_t* p,
   int x,
   int y,
@@ -221,7 +222,7 @@ void STlib_initPercent
  * cphipps - const for pointer to the colour translation table
  */
 
-void STlib_updatePercent
+OVERLAY void STlib_updatePercent
 ( st_percent_t*   per,
   const byte *outrng,
   int refresh )
@@ -248,7 +249,7 @@ void STlib_updatePercent
 // to the numbers representing what to display, and pointer to the enable flag
 // Returns nothing.
 //
-void STlib_initMultIcon
+OVERLAY void STlib_initMultIcon
 ( st_multicon_t* i,
   int x,
   int y,
@@ -274,7 +275,7 @@ void STlib_initMultIcon
 // Passed a st_multicon_t widget, and a refresh flag
 // Returns nothing.
 //
-void STlib_updateMultIcon
+OVERLAY void STlib_updateMultIcon
 ( st_multicon_t*  mi,
   boolean   refresh )
 {
@@ -315,7 +316,7 @@ void STlib_updateMultIcon
 // to the flags representing what is displayed, and pointer to the enable flag
 // Returns nothing.
 //
-void STlib_initBinIcon
+OVERLAY void STlib_initBinIcon
 ( st_binicon_t* b,
   int x,
   int y,
@@ -344,7 +345,7 @@ void STlib_initBinIcon
 // Passed a st_binicon_t widget, and a refresh flag
 // Returns nothing.
 //
-void STlib_updateBinIcon
+OVERLAY void STlib_updateBinIcon
 ( st_binicon_t*   bi,
   boolean   refresh )
 {

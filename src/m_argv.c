@@ -32,6 +32,7 @@
 static const char
 rcsid[] = "$Id: m_argv.c,v 1.4 1999/10/12 13:01:12 cphipps Exp $";
 
+#include "compiler.h"
 #include <string.h>
 // CPhipps - include the correct header
 #include "m_argv.h"
@@ -48,7 +49,7 @@ const char * const * myargv; // CPhipps - not sure if ANSI C allows you to
 // or 0 if not present
 //
 
-int M_CheckParm(const char *check)
+OVERLAY int M_CheckParm(const char *check)
 {
   signed int i = myargc;
   while (--i>0)

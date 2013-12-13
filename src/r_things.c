@@ -32,6 +32,7 @@
 static const char
 rcsid[] = "$Id: r_things.c,v 1.11 1999/11/01 17:09:14 cphipps Exp $";
 
+#include "compiler.h"
 #include "doomstat.h"
 #include "w_wad.h"
 #include "r_main.h"
@@ -92,7 +93,7 @@ static int maxframe;
 // Local function for R_InitSprites.
 //
 
-static void R_InstallSpriteLump(int lump, unsigned frame,
+OVERLAY static void R_InstallSpriteLump(int lump, unsigned frame,
                                 unsigned rotation, boolean flipped)
 {
   if (frame >= MAX_SPRITE_FRAMES || rotation > 8)
@@ -150,7 +151,7 @@ static void R_InstallSpriteLump(int lump, unsigned frame,
 
 #define R_SpriteNameHash(s) ((unsigned)((s)[0]-((s)[1]*3-(s)[3]*2-(s)[2])*2))
 
-void R_InitSpriteDefs(const char * const * namelist)
+OVERLAY void R_InitSpriteDefs(const char * const * namelist)
 {
   size_t numentries = lastspritelump-firstspritelump+1;
   struct { int index, next; } *hash;
@@ -271,7 +272,7 @@ static size_t num_vissprite, num_vissprite_alloc, num_vissprite_ptrs;
 // Called at program start.
 //
 
-void R_InitSprites(const char * const *namelist)
+OVERLAY void R_InitSprites(const char * const *namelist)
 {
   int i;
   for (i=0; i<MAX_SCREENWIDTH; i++)    // killough 2/8/98
@@ -284,7 +285,7 @@ void R_InitSprites(const char * const *namelist)
 // Called at frame start.
 //
 
-void R_ClearSprites (void)
+OVERLAY void R_ClearSprites (void)
 {
   num_vissprite = 0;            // killough
 }
@@ -293,7 +294,7 @@ void R_ClearSprites (void)
 // R_NewVisSprite
 //
 
-vissprite_t *R_NewVisSprite(void)
+OVERLAY vissprite_t *R_NewVisSprite(void)
 {
   if (num_vissprite >= num_vissprite_alloc)             // killough
     {
@@ -315,7 +316,7 @@ short   *mceilingclip;
 fixed_t spryscale;
 fixed_t sprtopscreen;
 
-void R_DrawMaskedColumn(const column_t *column)
+OVERLAY void R_DrawMaskedColumn(const column_t *column)
 {
   int     topscreen;
   int     bottomscreen;
@@ -357,7 +358,7 @@ void R_DrawMaskedColumn(const column_t *column)
 //  mfloorclip and mceilingclip should also be set.
 //
 // CPhipps - new wad lump handling, *'s to const*'s
-void R_DrawVisSprite(vissprite_t *vis, int x1, int x2)
+OVERLAY void R_DrawVisSprite(vissprite_t *vis, int x1, int x2)
 {
   const column_t *column;
   int      texturecolumn;
@@ -416,7 +417,7 @@ void R_DrawVisSprite(vissprite_t *vis, int x1, int x2)
 // Generates a vissprite for a thing if it might be visible.
 //
 
-void R_ProjectSprite (mobj_t* thing)
+OVERLAY void R_ProjectSprite (mobj_t* thing)
 {
   fixed_t   gzt;               // killough 3/27/98
   fixed_t   tx;
@@ -582,7 +583,7 @@ void R_ProjectSprite (mobj_t* thing)
 //
 // killough 9/18/98: add lightlevel as parameter, fixing underwater lighting
 
-void R_AddSprites(sector_t* sec, int lightlevel)
+OVERLAY void R_AddSprites(sector_t* sec, int lightlevel)
 {
   mobj_t *thing;
   int    lightnum;
@@ -617,7 +618,7 @@ void R_AddSprites(sector_t* sec, int lightlevel)
 // R_DrawPSprite
 //
 
-void R_DrawPSprite (pspdef_t *psp)
+OVERLAY void R_DrawPSprite (pspdef_t *psp)
 {
   fixed_t       tx;
   int           x1, x2;
@@ -709,7 +710,7 @@ void R_DrawPSprite (pspdef_t *psp)
 // R_DrawPlayerSprites
 //
 
-void R_DrawPlayerSprites(void)
+OVERLAY void R_DrawPlayerSprites(void)
 {
   int i, lightnum;
   pspdef_t *psp;
@@ -756,7 +757,7 @@ void R_DrawPlayerSprites(void)
 
 // killough 9/2/98: merge sort
 
-static void msort(vissprite_t **s, vissprite_t **t, int n)
+OVERLAY static void msort(vissprite_t **s, vissprite_t **t, int n)
 {
   if (n >= 16)
     {
@@ -792,7 +793,7 @@ static void msort(vissprite_t **s, vissprite_t **t, int n)
     }
 }
 
-void R_SortVisSprites (void)
+OVERLAY void R_SortVisSprites (void)
 {
   if (num_vissprite)
     {
@@ -823,7 +824,7 @@ void R_SortVisSprites (void)
 // R_DrawSprite
 //
 
-void R_DrawSprite (vissprite_t* spr)
+OVERLAY void R_DrawSprite (vissprite_t* spr)
 {
   drawseg_t *ds;
   short   clipbot[MAX_SCREENWIDTH];       // killough 2/8/98:
@@ -951,7 +952,7 @@ void R_DrawSprite (vissprite_t* spr)
 // R_DrawMasked
 //
 
-void R_DrawMasked(void)
+OVERLAY void R_DrawMasked(void)
 {
   int i;
   drawseg_t *ds;
