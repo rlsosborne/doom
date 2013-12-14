@@ -54,8 +54,6 @@ add_executable(
   info.h
   l_joy.c
   l_main.c
-  l_sdl.c
-  l_sdl.h
   l_sound_sdl.c
   l_system.c
   l_video_sdl.c

@@ -51,7 +51,6 @@ rcsid[] = "$Id: l_main.c,v 1.14 2000/03/16 13:27:29 cph Exp $";
 #include "m_misc.h"
 #include "i_sound.h"
 #include "i_main.h"
-#include "l_sdl.h"
 
 #include <signal.h>
 #include <stdio.h>
@@ -101,9 +100,6 @@ OVERLAY void I_Init(void)
       }
     else
       I_GetTime = I_GetTime_RealTime;
-
-  /* Jess 3/00: hack to allow lsdldoom to shutdown cleanly */ 
-  I_InitSDL();
 
   { 
     /* killough 2/21/98: avoid sound initialization if no sound & no music */

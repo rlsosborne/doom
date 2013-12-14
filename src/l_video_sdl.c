@@ -339,6 +339,7 @@ void I_ShutdownGraphics(void)
   fprintf(stderr, "I_ShutdownGraphics : ");
   // TODO free SDL stuff...
   fprintf(stderr, "\n");
+  SDL_Quit();
 }
 
 //

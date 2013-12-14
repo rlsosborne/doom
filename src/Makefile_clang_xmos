@@ -2,12 +2,12 @@ CC = clang
 CFLAGS = \
   --target=xcore \
   -mcmodel=large \
-  -Os -g -D__XMOS__ -DPATH_MAX=64 -DVERSION="\"1\""
+  -Os -fno-inline-functions -g -D__XMOS__ -DPATH_MAX=64 -DVERSION="\"1\"" -DDOOMWADDIR="\"\""
 
 LDFLAGS = \
   --target=xcore \
   -Wl,-target=XK-1A \
-  -Wl,-Xmapper,--image-size,-Xmapper,0x100000,-Xmapper,--image-base,-Xmapper,0x100000
+  -Wl,-Xmapper,--image-size,-Xmapper,0x1000000,-Xmapper,--image-base,-Xmapper,0x1000000
 
 OBJS = \
   am_map.o \
@@ -26,7 +26,6 @@ OBJS = \
   info.o \
   l_joy.o \
   l_main.o \
-  l_sdl.o \
   l_sound_xcore.o \
   l_system.o \
   l_video_xcore.o \
