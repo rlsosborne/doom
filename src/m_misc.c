@@ -1030,15 +1030,15 @@ OVERLAY void M_ScreenShot(void)
   
   screenshot_write_error = false;
 
-  if (access(".",2)) screenshot_write_error = true;
+  if (access(".", R_OK)) screenshot_write_error = true;
 
   startshot = shot; // CPhipps - prevent infinite loop
     
   do                                         //jff 3/30/98 pcx or bmp?  
     sprintf(lbmname,"DOOM%02d.%.3s", shot++,screenshot_pcx? "PCX":"BMP");
-  while (!access(lbmname,0) && (shot != startshot) && (shot < 10000));
+  while (!access(lbmname, F_OK) && (shot != startshot) && (shot < 10000));
 
-  if (!access(lbmname,0)) screenshot_write_error = true;
+  if (!access(lbmname, F_OK)) screenshot_write_error = true;
 
   if (screenshot_write_error) {
     doom_printf ("M_ScreenShot: Couldn't create a PCX"); 
