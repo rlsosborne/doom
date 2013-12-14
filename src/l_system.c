@@ -42,6 +42,7 @@ rcsid[] = "$Id: l_system.c,v 1.33 2000/02/26 19:18:23 cph Exp $";
 #include <ctype.h>
 #include <signal.h>
 #ifndef __XMOS__
+#include <unistd.h>
 #include "SDL.h"
 #endif
 
@@ -97,6 +98,36 @@ OVERLAY const char* I_SigString(char* buf, size_t sz, int signum)
   return buf;
 }
 
+int I_FileExists(const char *path)
+{
+#ifdef __XMOS__
+  return I_FileIsReadable(path);
+#else
+  return access(path, F_OK) == 0;
+#endif
+}
+
+int I_FileIsReadable(const char *path)
+{
+#ifdef __XMOS__
+  FILE *fp = fopen(path, "r");
+  if (!fp)
+    return 0;
+  fclose(fp);
+  return 1;
+#else
+  return access(path, R_OK) == 0;
+#endif
+}
+
+int I_IsATerminal(int fd)
+{
+#ifdef __XMOS__
+  return 0;
+#else
+  return isatty(fd);
+#endif
+}
 
 /********************************************************************************************
  * $Log: l_system.c,v $

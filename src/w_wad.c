@@ -48,10 +48,6 @@ rcsid[] = "$Id: w_wad.c,v 1.12 1999/10/27 18:35:50 cphipps Exp $";
 #endif
 #include "w_wad.h"
 #include "lprintf.h"
-
-#ifdef __XMOS__
-#define fstat(a, b) 0
-#endif
 //
 // GLOBALS
 //
@@ -77,10 +73,10 @@ static void W_ReportLocks(void)
 
 OVERLAY static int internal_filelength(int handle)
 {
-  struct stat   fileinfo;
-  if (fstat(handle,&fileinfo) == -1)
+  int length = M_GetFileLength(handle);
+  if (length < 0)
     I_Error("Error fstating");
-  return fileinfo.st_size;
+  return length;
 }
 
 OVERLAY void ExtractFileBase (const char *path, char *dest)

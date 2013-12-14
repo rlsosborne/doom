@@ -42,12 +42,12 @@ addsfx
 
 void I_SetChannels()
 {
-  __builtin_trap();
+  //__builtin_trap();
 }	
 
 void I_SetSfxVolume(int volume)
 {
-  __builtin_trap();
+  //__builtin_trap();
 }
 
 int I_GetSfxLumpNum(sfxinfo_t* sfx)
@@ -68,7 +68,7 @@ I_StartSound
 
 void I_StopSound (int handle)
 {
-  __builtin_trap();
+  //__builtin_trap();
 }
 
 boolean I_SoundIsPlaying(int handle)
@@ -83,53 +83,53 @@ I_UpdateSoundParams
   int	sep,
   int	pitch)
 {
-  __builtin_trap();
+  //__builtin_trap();
 }
 
 void I_ShutdownSound(void)
 {
-  __builtin_trap();
+  //__builtin_trap();
 }
 
 void
 I_InitSound()
 {
-  __builtin_trap();
+  //__builtin_trap();
 }
 
 void I_ShutdownMusic(void) 
 {
-  __builtin_trap();
+  //__builtin_trap();
 }
 
 void I_InitMusic(void)
 {
-  __builtin_trap();
+  //__builtin_trap();
 }
 
 void I_PlaySong(int handle, int looping)
 {
-  __builtin_trap();
+  //__builtin_trap();
 }
 
 void I_PauseSong (int handle)
 {
-  __builtin_trap();
+  //__builtin_trap();
 }
 
 void I_ResumeSong (int handle)
 {
-  __builtin_trap();
+  //__builtin_trap();
 }
 
 void I_StopSong(int handle)
 {
-  __builtin_trap();
+  //__builtin_trap();
 }
 
 void I_UnRegisterSong(int handle)
 {
-  __builtin_trap();
+  //__builtin_trap();
 }
 
 int I_RegisterSong(const void *data, size_t len)
@@ -139,5 +139,5 @@ int I_RegisterSong(const void *data, size_t len)
 
 void I_SetMusicVolume(int volume)
 {
-  __builtin_trap();
+  //__builtin_trap();
 }

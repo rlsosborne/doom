@@ -75,7 +75,6 @@ static const char rcsid[] = "$Id: d_main.c,v 1.46 2000/03/27 10:33:49 cph Exp $"
 #include "am_map.h"
 
 #ifdef __XMOS__
-#define access(a, b) 0
 #define mkdir(a, b) 0
 #define stat(a, b) 0
 #define SDL_Delay(a) 0
@@ -593,6 +592,8 @@ OVERLAY char *D_DoomExeDir(void)
   if (!base)        // cache multiple requests
     {
       char *home = getenv("HOME");
+      if (!home)
+        home = ".";
       size_t len = strlen(home);
 
       base = malloc(len + strlen(lsdldoom_dir) + 1);
@@ -638,7 +639,7 @@ OVERLAY static const char *D_dehout(void)
 // CPhipps - const char* for iwadname, made static
 OVERLAY static void CheckIWAD(const char *iwadname,GameMode_t *gmode,boolean *hassec)
 {
-  if ( !access (iwadname,R_OK) )
+  if (I_FileIsReadable(iwadname))
   {
     int ud=0,rg=0,sw=0,cm=0,sc=0;
     int handle;
@@ -809,7 +810,6 @@ OVERLAY boolean WadFileStatus(char *filename,boolean *isdir)
 
 OVERLAY static char* FindWADFile(const char* wfname, const char* ext)
 {
-#ifndef __XMOS__
   int		i;
   /* Precalculate a length we will need in the loop */
   size_t	pl = strlen(wfname) + strlen(ext) + 4;
@@ -857,16 +857,14 @@ OVERLAY static char* FindWADFile(const char* wfname, const char* ext)
     sprintf(p, "%s%s%s%s%s", d ? d : "", (d && !HasTrailingSlash(d)) ? "/" : "",
                              s ? s : "", (s && !HasTrailingSlash(s)) ? "/" : "",
                              wfname);
-
-    if (access(p,F_OK))
+    if (!I_FileExists(p))
       strcat(p, ext);
-    if (!access(p,F_OK)) {
+    if (I_FileExists(p)) {
       lprintf(LO_INFO, " found %s\n", p);
       return p;
     }
     free(p);
   }
-#endif
   return NULL;
 }
 
@@ -1255,10 +1253,10 @@ OVERLAY void D_DoomMainSetup(void)
       while (++p != myargc && *myargv[p] != '-')
         {
           AddDefaultExtension(strcpy(file, myargv[p]), ".bex");
-          if (access(file, F_OK))  // nope
+          if (!I_FileExists(file))  // nope
             {
               AddDefaultExtension(strcpy(file, myargv[p]), ".deh");
-              if (access(file, F_OK))  // still nope
+              if (!I_FileExists(file))  // still nope
                 I_Error("Cannot find .deh or .bex file named %s",myargv[p]);
             }
           // during the beta we have debug output to dehout.txt

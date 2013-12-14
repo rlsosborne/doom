@@ -39,13 +39,10 @@ static const char rcsid[] = "$Id: lprintf.c,v 1.4 2000/02/26 19:17:54 cph Exp $"
 #include <unistd.h>
 #include "lprintf.h"
 #include "i_main.h"
+#include "i_system.h"
 
 #ifdef HAVE_CONFIG_H
 #include "../config.h"
-#endif
-
-#ifdef __XMOS__
-#define isatty(a) 0
 #endif
 
 int cons_error_mask = -1-LO_INFO; /* all but LO_INFO when redir'd */
@@ -73,7 +70,7 @@ OVERLAY int lprintf(OutputLevels pri, const char *s, ...)
 
   if (lvl&cons_output_mask)               /* mask output as specified */
     r=fprintf(stdout,"%s",msg);
-  if (!isatty(1) && lvl&cons_error_mask)  /* if stdout redirected     */
+  if (!I_IsATerminal(1) && lvl&cons_error_mask)  /* if stdout redirected     */
     r=fprintf(stderr,"%s",msg);           /* select output at console */
 
   return r;

@@ -52,6 +52,14 @@ const char* I_GetVersionString(char* buf, size_t sz);
  */
 const char* I_SigString(char* buf, size_t sz, int signum);
 
+int I_FileExists(const char *path);
+
+int I_FileIsReadable(const char *path);
+
+int I_IsATerminal(int fd);
+
+
+
 #endif
 
 /*----------------------------------------------------------------------------

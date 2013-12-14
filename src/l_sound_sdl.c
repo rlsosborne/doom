@@ -27,9 +27,7 @@ rcsid[] = "$Id: l_sound_sdl.c,v 1.5 1997/02/03 22:45:10 b1 Exp $";
 #include <math.h>
 #include <unistd.h>
 
-#ifndef __XMOS__
 #include "SDL.h"
-#endif
 #include "SDL_audio.h"
 #include "SDL_mutex.h"
 #include "SDL_endian.h"
@@ -754,7 +752,7 @@ void I_UnRegisterSong(int handle)
     Mix_FreeMusic(music[handle]);
     music[handle] = NULL;
   }
-  unlink(MIDI_TMPFILE);
+  remove(MIDI_TMPFILE);
 #endif
 }
 

@@ -20,51 +20,51 @@ int I_ScanCode2DoomCode(int c)
 
 void I_StartTic (void)
 {
-  __builtin_trap();
+  //__builtin_trap();
 }
 
 void I_StartFrame (void)
 {
-  __builtin_trap();
+  //__builtin_trap();
 }
 
 void I_ShutdownGraphics(void)
 {
-  __builtin_trap();
+  //__builtin_trap();
 }
 
 void I_UpdateNoBlit (void)
 {
-  __builtin_trap();
+  //__builtin_trap();
 }
 
 void I_FinishUpdate (void)
 {
-  __builtin_trap();
+  //__builtin_trap();
 }
 
 void I_ReadScreen (byte* scr)
 {
-  __builtin_trap();
+  //__builtin_trap();
 }
 
 void I_SetPalette (int pal)
 {
-  __builtin_trap();
+  //__builtin_trap();
 }
 
 void I_PreInitGraphics(void)
 {
-  __builtin_trap();
+  //__builtin_trap();
 }
 
 void I_SetRes(unsigned int width, unsigned int height)
 {
-  __builtin_trap();
+  //__builtin_trap();
 }
 
 void I_InitGraphics(void)
 {
-  __builtin_trap();
+  //__builtin_trap();
 }
 

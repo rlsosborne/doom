@@ -42,6 +42,7 @@ rcsid[] = "$Id: m_misc.c,v 1.43 2000/03/17 20:50:30 cph Exp $";
 #include "am_map.h"
 #include "w_wad.h"
 #include "i_sound.h"
+#include "i_system.h"
 #include "i_video.h"
 #include "v_video.h"
 #include "hu_stuff.h"
@@ -56,12 +57,6 @@ rcsid[] = "$Id: m_misc.c,v 1.43 2000/03/17 20:50:30 cph Exp $";
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/stat.h>
-
-#ifdef __XMOS__
-#define access(a, b) 0
-#define fstat(a, b) 0
-#define unlink(a) 0
-#endif
 
 //
 // M_DrawText
@@ -114,13 +109,23 @@ OVERLAY boolean M_WriteFile(char const* name,void* source,int length)
   close (handle);
   
   if (count < length) {
-    unlink(name); // CPhipps - no corrupt data files around, they only confuse people.
+    remove(name);
     return false;
   }
     
   return true;
 }
 
+int M_GetFileLength(int fd)
+{
+  // Save off current offset.
+  off_t old = lseek(fd, 0, SEEK_CUR);
+  // Get size of the file.
+  off_t end = lseek(fd, 0, SEEK_END);
+  // Restore old offset.
+  lseek(fd, old, SEEK_SET);
+  return end;
+}
 
 //
 // M_ReadFile
@@ -129,18 +134,15 @@ OVERLAY boolean M_WriteFile(char const* name,void* source,int length)
 OVERLAY int M_ReadFile(char const* name,byte** buffer)
 {
   int handle, count, length;
-  struct stat fileinfo;
   byte   *buf;
   
   handle = open (name, O_RDONLY | O_BINARY, 0666);
-  if (handle == -1)
-    I_Error ("Couldn't read file %s", name);
-  if (fstat (handle,&fileinfo) == -1) {
+
+  length = M_GetFileLength(handle);
+  if (length < 0) {
     close(handle);
     I_Error ("Couldn't read file %s", name);
   }
-
-  length = fileinfo.st_size;
   buf = Z_Malloc (length, PU_STATIC, NULL);
   count = read (handle, buf, length);
   close (handle);
@@ -1030,15 +1032,15 @@ OVERLAY void M_ScreenShot(void)
   
   screenshot_write_error = false;
 
-  if (access(".", R_OK)) screenshot_write_error = true;
+  if (!I_FileIsReadable(".")) screenshot_write_error = true;
 
   startshot = shot; // CPhipps - prevent infinite loop
     
   do                                         //jff 3/30/98 pcx or bmp?  
     sprintf(lbmname,"DOOM%02d.%.3s", shot++,screenshot_pcx? "PCX":"BMP");
-  while (!access(lbmname, F_OK) && (shot != startshot) && (shot < 10000));
+  while (I_FileExists(lbmname) && (shot != startshot) && (shot < 10000));
 
-  if (!access(lbmname, F_OK)) screenshot_write_error = true;
+  if (I_FileExists(lbmname) == 0) screenshot_write_error = true;
 
   if (screenshot_write_error) {
     doom_printf ("M_ScreenShot: Couldn't create a PCX"); 

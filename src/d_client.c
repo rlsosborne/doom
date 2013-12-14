@@ -210,7 +210,7 @@ OVERLAY boolean D_NetGetWad(const char* name)
     }
     /* This is the parent, i.e. main LxDoom process */
     wait(&rv);
-    if (!(done = !access(name, R_OK))) {
+    if (!(done = I_FileIsReadable(name)) {
       if (!strcmp(p+strlen(p)-4, ".zip")) {
 	p = strrchr(p, '/')+1; 
 	if ((pid = fork()) == -1)
@@ -221,7 +221,7 @@ OVERLAY boolean D_NetGetWad(const char* name)
 	}
 	/* Parent waits for the file */
 	wait(&rv);
-	done = !!access(name, R_OK);
+	done = I_FileIsReadable(name, R_OK);
       }
       /* Add more decompression protocols here as desired */
     }
