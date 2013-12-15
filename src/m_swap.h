@@ -39,8 +39,11 @@
 
 /* Endianess handling. */
 
-#ifndef __XMOS__
+#ifdef __XS1B__
+#define IS_BIG_ENDIAN 0
+#else
 #include "SDL.h"
+#define IS_BIG_ENDIAN (SDL_BYTEORDER == SDL_BIG_ENDIAN)
 #endif
 
 /* cph - First the macros to do the actual byte swapping */
@@ -74,7 +77,7 @@
  * Use separate macros so network could be converted to big-endian later.
  */
 
-#if ( SDL_BYTEORDER == SDL_BIG_ENDIAN )
+#if IS_BIG_ENDIAN
 
 #define doom_wtohl(x) doom_swap_l(x)
 #define doom_htowl(x) doom_swap_l(x)
