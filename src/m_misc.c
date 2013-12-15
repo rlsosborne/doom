@@ -727,7 +727,8 @@ OVERLAY void M_LoadDefaults (void)
 	}
 
         for (i = 0 ; i < numdefaults ; i++)
-          if ((defaults[i].type != def_none) && !strcmp(def, defaults[i].name))
+          if ((defaults[i].type != def_none) &&
+              strcmp(def, defaults[i].name) == 0)
             {
 	    // CPhipps - safety check
             if (isstring != IS_STRING(defaults[i])) {

@@ -946,7 +946,7 @@ OVERLAY void M_SaveSelect(int choice)
   
   saveSlot = choice;
   strcpy(saveOldString,savegamestrings[choice]);
-  if (!strcmp(savegamestrings[choice],s_EMPTYSTRING)) // Ty 03/27/98 - externalized
+  if (strcmp(savegamestrings[choice],s_EMPTYSTRING) == 0) // Ty 03/27/98 - externalized
     savegamestrings[choice][0] = 0;
   saveCharIndex = strlen(savegamestrings[choice]);
   }

@@ -211,7 +211,7 @@ OVERLAY boolean D_NetGetWad(const char* name)
     /* This is the parent, i.e. main LxDoom process */
     wait(&rv);
     if (!(done = I_FileIsReadable(name)) {
-      if (!strcmp(p+strlen(p)-4, ".zip")) {
+      if (strcmp(p+strlen(p)-4, ".zip") == 0) {
 	p = strrchr(p, '/')+1; 
 	if ((pid = fork()) == -1)
 	  perror("fork");

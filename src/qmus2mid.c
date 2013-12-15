@@ -153,7 +153,7 @@ OVERLAY int ReadMUSheader( MUSheader *MUSh, buflen_t *buflen )
   memcpy(MUSh->ID, buflen->buf, 4);
   buflen->buf += 4;
   buflen->len -= 4;
-  if( strncmp( MUSh->ID, MUSMAGIC, 4 ) ) 
+  if( strncmp( MUSh->ID, MUSMAGIC, 4 ) != 0)
     return NOTMUSFILE ;
   if( read2( &(MUSh->ScoreLength),  buflen ) != 1 ) return COMUSFILE ;
   if( read2( &(MUSh->ScoreStart),  buflen ) != 1 ) return COMUSFILE ;

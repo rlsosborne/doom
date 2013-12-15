@@ -651,7 +651,7 @@ OVERLAY static void CheckIWAD(const char *iwadname,GameMode_t *gmode,boolean *ha
 
       // read IWAD header
       read (handle, &header, sizeof(header));
-      if (!strncmp(header.identification,"IWAD",4))
+      if (strncmp(header.identification,"IWAD",4) == 0)
       {
         size_t length;
         filelump_t *fileinfo;

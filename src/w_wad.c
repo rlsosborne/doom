@@ -180,8 +180,8 @@ OVERLAY static void W_AddFile(const char *filename, wad_source_t source)
     {
       // WAD file
       read(handle, &header, sizeof(header));
-      if (strncmp(header.identification,"IWAD",4) &&
-          strncmp(header.identification,"PWAD",4))
+      if (strncmp(header.identification,"IWAD",4) != 0 &&
+          strncmp(header.identification,"PWAD",4) != 0)
         I_Error ("Wad file %s doesn't have IWAD or PWAD id\n", filename);
       header.numlumps = LONG(header.numlumps);
       header.infotableofs = LONG(header.infotableofs);

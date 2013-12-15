@@ -1429,7 +1429,7 @@ OVERLAY void G_DoLoadGame(void)
     // killough 2/22/98: "proprietary" version string :-)
     sprintf (vcheck, version_headers[i].ver_printf, version_headers[i].version);
 
-    if (!strncmp((char *)save_p, vcheck, VERSIONSIZE)) {
+    if (strncmp((char *)save_p, vcheck, VERSIONSIZE) == 0) {
       savegame_compatibility = version_headers[i].comp_level;
       i = num_version_headers;
     }

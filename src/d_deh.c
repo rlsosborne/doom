@@ -1449,7 +1449,7 @@ OVERLAY void ProcessDehFile(const char *filename, const char *outfilename, int l
   if (outfilename && *outfilename && !fileout)
     {
       static boolean firstfile = true; // to allow append to output log
-      if (!strcmp(outfilename, "-"))
+      if (strcmp(outfilename, "-") == 0)
         fileout = stdout;
       else
         if (!(fileout=fopen(outfilename, firstfile ? "wt" : "at")))
