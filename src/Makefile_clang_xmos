@@ -1,15 +1,14 @@
 CC = clang
-CFLAGS = \
-  --target=xcore \
-  -mcmodel=large \
-  -Os -fno-inline-functions -g -D__XMOS__ -DPATH_MAX=64 -DVERSION="\"1\"" -DDOOMWADDIR="\"\""
-
+COMMON_FLAGS = \
+  -Os -fno-inline-functions -D__XMOS__ -DPATH_MAX=64 -DVERSION="\"1\"" -DDOOMWADDIR="\"\""
+CFLAGS = --target=xcore -mcmodel=large $(COMMON_FLAGS)
+XCFLAGS = $(COMMON_FLAGS)
 LDFLAGS = \
   --target=xcore \
   -Wl,-target=XK-1A \
   -Wl,-Xmapper,--image-size,-Xmapper,0x1000000,-Xmapper,--image-base,-Xmapper,0x1000000
 
-OBJS = \
+DOOM_OBJS = \
   am_map.o \
   d_client.o \
   d_deh.o \
@@ -74,6 +73,7 @@ OBJS = \
   version.o \
   w_wad.o \
   wi_stuff.o \
+  x_main.o \
   z_bmalloc.o \
   z_zone.o
 
@@ -86,6 +86,13 @@ doom.xe: $(OBJS)
 # compile and generate dependency info
 %.o: %.c
 	$(COMPILE.c) -MD -o $@ $<
+	@cp $*.d $*.P; \
+	  sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
+	      -e '/^$$/ d' -e 's/$$/ :/' < $*.d >> $*.P; \
+	  rm -f $*.d
+
+%.o: %.xc
+	xcc $(XCFLAGS) -c -MD -o $@ $<
 	@cp $*.d $*.P; \
 	  sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
 	      -e '/^$$/ d' -e 's/$$/ :/' < $*.d >> $*.P; \

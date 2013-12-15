@@ -319,6 +319,9 @@ OVERLAY void I_Quit (void)
 uid_t stored_euid = -1;
 #endif
 
+#ifdef __XMOS__
+#define main doom_main
+#endif
 OVERLAY int main(int argc, char **argv)
 {
 #ifdef SECURE_UID
