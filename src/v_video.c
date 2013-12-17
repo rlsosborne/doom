@@ -419,7 +419,7 @@ OVERLAY void V_DrawMemPatch(int x, int y, int scrn, const patch_t *patch,
   y -= SHORT(patch->topoffset);
   x -= SHORT(patch->leftoffset);
 
-#ifdef HIGHRES
+#ifndef HIGHRES
   // CPhipps - auto-no-stretch if not high-res
   if (flags & VPT_STRETCH)
     if ((SCREENWIDTH==320) && (SCREENHEIGHT==200))
