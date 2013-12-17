@@ -85,6 +85,8 @@ SUPPORT_OBJS = \
 
 OBJS = $(DOOM_OBJS) $(SUPPORT_OBJS)
 
+all : doom.xe
+
 doom.xe: $(OBJS)
 	clang $(LDFLAGS) $(OBJS) -o $@
 
