@@ -31,24 +31,12 @@
 //
 // D_Main.C
 //
-//#define D_DEVSTR      "Development mode ON.\n"
-extern const char *s_D_DEVSTR; // = D_DEVSTR;
-//#define D_CDROM       "CD-ROM Version: default.cfg from c:\\doomdata\n"
-extern const char *s_D_CDROM; // = D_CDROM;
 
 //
 //      M_Menu.C
 //
-//#define PRESSKEY      "press a key."
-extern const char *s_PRESSKEY; // = PRESSKEY;
-//#define PRESSYN       "press y or n."
-extern const char *s_PRESSYN; // = PRESSYN;
-//#define QUITMSG       "are you sure you want to\nquit this great game?"
-extern const char *s_QUITMSG; // = QUITMSG;
 //#define LOADNET       "you can't do load while in a net game!\n\n"PRESSKEY
 extern const char *s_LOADNET; // = LOADNET;
-//#define QLOADNET      "you can't quickload during a netgame!\n\n"PRESSKEY
-extern const char *s_QLOADNET; // = QLOADNET;
 //#define QSAVESPOT     "you haven't picked a quicksave slot yet!\n\n"PRESSKEY
 extern const char *s_QSAVESPOT; // = QSAVESPOT;
 //#define SAVEDEAD      "you can't save if you aren't playing!\n\n"PRESSKEY
@@ -94,10 +82,6 @@ extern const char *s_ENDGAME; // = ENDGAME;
 //#define DOSY          "(press y to quit)"
 extern const char *s_DOSY; // = DOSY;
 
-//#define DETAILHI      "High detail"
-extern const char *s_DETAILHI; // = DETAILHI;
-//#define DETAILLO      "Low detail"
-extern const char *s_DETAILLO; // = DETAILLO;
 //#define GAMMALVL0     "Gamma correction OFF"
 extern const char *s_GAMMALVL0; // = GAMMALVL0;
 //#define GAMMALVL1     "Gamma correction level 1"
@@ -235,349 +219,6 @@ extern const char *s_PD_ALL6; // = PD_ALL6;
 extern const char *s_GGSAVED; // = GGSAVED;
 
 //
-//      HU_stuff.C
-//
-//#define HUSTR_MSGU    "[Message unsent]"
-extern const char *s_HUSTR_MSGU; // = HUSTR_MSGU;
-
-//#define HUSTR_E1M1    "E1M1: Hangar"
-extern const char *s_HUSTR_E1M1; // = HUSTR_E1M1;
-//#define HUSTR_E1M2    "E1M2: Nuclear Plant"
-extern const char *s_HUSTR_E1M2; // = HUSTR_E1M2;
-//#define HUSTR_E1M3    "E1M3: Toxin Refinery"
-extern const char *s_HUSTR_E1M3; // = HUSTR_E1M3;
-//#define HUSTR_E1M4    "E1M4: Command Control"
-extern const char *s_HUSTR_E1M4; // = HUSTR_E1M4;
-//#define HUSTR_E1M5    "E1M5: Phobos Lab"
-extern const char *s_HUSTR_E1M5; // = HUSTR_E1M5;
-//#define HUSTR_E1M6    "E1M6: Central Processing"
-extern const char *s_HUSTR_E1M6; // = HUSTR_E1M6;
-//#define HUSTR_E1M7    "E1M7: Computer Station"
-extern const char *s_HUSTR_E1M7; // = HUSTR_E1M7;
-//#define HUSTR_E1M8    "E1M8: Phobos Anomaly"
-extern const char *s_HUSTR_E1M8; // = HUSTR_E1M8;
-//#define HUSTR_E1M9    "E1M9: Military Base"
-extern const char *s_HUSTR_E1M9; // = HUSTR_E1M9;
-
-//#define HUSTR_E2M1    "E2M1: Deimos Anomaly"
-extern const char *s_HUSTR_E2M1; // = HUSTR_E2M1;
-//#define HUSTR_E2M2    "E2M2: Containment Area"
-extern const char *s_HUSTR_E2M2; // = HUSTR_E2M2;
-//#define HUSTR_E2M3    "E2M3: Refinery"
-extern const char *s_HUSTR_E2M3; // = HUSTR_E2M3;
-//#define HUSTR_E2M4    "E2M4: Deimos Lab"
-extern const char *s_HUSTR_E2M4; // = HUSTR_E2M4;
-//#define HUSTR_E2M5    "E2M5: Command Center"
-extern const char *s_HUSTR_E2M5; // = HUSTR_E2M5;
-//#define HUSTR_E2M6    "E2M6: Halls of the Damned"
-extern const char *s_HUSTR_E2M6; // = HUSTR_E2M6;
-//#define HUSTR_E2M7    "E2M7: Spawning Vats"
-extern const char *s_HUSTR_E2M7; // = HUSTR_E2M7;
-//#define HUSTR_E2M8    "E2M8: Tower of Babel"
-extern const char *s_HUSTR_E2M8; // = HUSTR_E2M8;
-//#define HUSTR_E2M9    "E2M9: Fortress of Mystery"
-extern const char *s_HUSTR_E2M9; // = HUSTR_E2M9;
-
-//#define HUSTR_E3M1    "E3M1: Hell Keep"
-extern const char *s_HUSTR_E3M1; // = HUSTR_E3M1;
-//#define HUSTR_E3M2    "E3M2: Slough of Despair"
-extern const char *s_HUSTR_E3M2; // = HUSTR_E3M2;
-//#define HUSTR_E3M3    "E3M3: Pandemonium"
-extern const char *s_HUSTR_E3M3; // = HUSTR_E3M3;
-//#define HUSTR_E3M4    "E3M4: House of Pain"
-extern const char *s_HUSTR_E3M4; // = HUSTR_E3M4;
-//#define HUSTR_E3M5    "E3M5: Unholy Cathedral"
-extern const char *s_HUSTR_E3M5; // = HUSTR_E3M5;
-//#define HUSTR_E3M6    "E3M6: Mt. Erebus"
-extern const char *s_HUSTR_E3M6; // = HUSTR_E3M6;
-//#define HUSTR_E3M7    "E3M7: Limbo"
-extern const char *s_HUSTR_E3M7; // = HUSTR_E3M7;
-//#define HUSTR_E3M8    "E3M8: Dis"
-extern const char *s_HUSTR_E3M8; // = HUSTR_E3M8;
-//#define HUSTR_E3M9    "E3M9: Warrens"
-extern const char *s_HUSTR_E3M9; // = HUSTR_E3M9;
-
-//#define HUSTR_E4M1    "E4M1: Hell Beneath"
-extern const char *s_HUSTR_E4M1; // = HUSTR_E4M1;
-//#define HUSTR_E4M2    "E4M2: Perfect Hatred"
-extern const char *s_HUSTR_E4M2; // = HUSTR_E4M2;
-//#define HUSTR_E4M3    "E4M3: Sever The Wicked"
-extern const char *s_HUSTR_E4M3; // = HUSTR_E4M3;
-//#define HUSTR_E4M4    "E4M4: Unruly Evil"
-extern const char *s_HUSTR_E4M4; // = HUSTR_E4M4;
-//#define HUSTR_E4M5    "E4M5: They Will Repent"
-extern const char *s_HUSTR_E4M5; // = HUSTR_E4M5;
-//#define HUSTR_E4M6    "E4M6: Against Thee Wickedly"
-extern const char *s_HUSTR_E4M6; // = HUSTR_E4M6;
-//#define HUSTR_E4M7    "E4M7: And Hell Followed"
-extern const char *s_HUSTR_E4M7; // = HUSTR_E4M7;
-//#define HUSTR_E4M8    "E4M8: Unto The Cruel"
-extern const char *s_HUSTR_E4M8; // = HUSTR_E4M8;
-//#define HUSTR_E4M9    "E4M9: Fear"
-extern const char *s_HUSTR_E4M9; // = HUSTR_E4M9;
-
-//#define HUSTR_1       "level 1: entryway"
-extern const char *s_HUSTR_1; // = HUSTR_1;
-//#define HUSTR_2       "level 2: underhalls"
-extern const char *s_HUSTR_2; // = HUSTR_2;
-//#define HUSTR_3       "level 3: the gantlet"
-extern const char *s_HUSTR_3; // = HUSTR_3;
-//#define HUSTR_4       "level 4: the focus"
-extern const char *s_HUSTR_4; // = HUSTR_4;
-//#define HUSTR_5       "level 5: the waste tunnels"
-extern const char *s_HUSTR_5; // = HUSTR_5;
-//#define HUSTR_6       "level 6: the crusher"
-extern const char *s_HUSTR_6; // = HUSTR_6;
-//#define HUSTR_7       "level 7: dead simple"
-extern const char *s_HUSTR_7; // = HUSTR_7;
-//#define HUSTR_8       "level 8: tricks and traps"
-extern const char *s_HUSTR_8; // = HUSTR_8;
-//#define HUSTR_9       "level 9: the pit"
-extern const char *s_HUSTR_9; // = HUSTR_9;
-//#define HUSTR_10      "level 10: refueling base"
-extern const char *s_HUSTR_10; // = HUSTR_10;
-//#define HUSTR_11      "level 11: 'o' of destruction!"
-extern const char *s_HUSTR_11; // = HUSTR_11;
-
-//#define HUSTR_12      "level 12: the factory"
-extern const char *s_HUSTR_12; // = HUSTR_12;
-//#define HUSTR_13      "level 13: downtown"
-extern const char *s_HUSTR_13; // = HUSTR_13;
-//#define HUSTR_14      "level 14: the inmost dens"
-extern const char *s_HUSTR_14; // = HUSTR_14;
-//#define HUSTR_15      "level 15: industrial zone"
-extern const char *s_HUSTR_15; // = HUSTR_15;
-//#define HUSTR_16      "level 16: suburbs"
-extern const char *s_HUSTR_16; // = HUSTR_16;
-//#define HUSTR_17      "level 17: tenements"
-extern const char *s_HUSTR_17; // = HUSTR_17;
-//#define HUSTR_18      "level 18: the courtyard"
-extern const char *s_HUSTR_18; // = HUSTR_18;
-//#define HUSTR_19      "level 19: the citadel"
-extern const char *s_HUSTR_19; // = HUSTR_19;
-//#define HUSTR_20      "level 20: gotcha!"
-extern const char *s_HUSTR_20; // = HUSTR_20;
-
-//#define HUSTR_21      "level 21: nirvana"
-extern const char *s_HUSTR_21; // = HUSTR_21;
-//#define HUSTR_22      "level 22: the catacombs"
-extern const char *s_HUSTR_22; // = HUSTR_22;
-//#define HUSTR_23      "level 23: barrels o' fun"
-extern const char *s_HUSTR_23; // = HUSTR_23;
-//#define HUSTR_24      "level 24: the chasm"
-extern const char *s_HUSTR_24; // = HUSTR_24;
-//#define HUSTR_25      "level 25: bloodfalls"
-extern const char *s_HUSTR_25; // = HUSTR_25;
-//#define HUSTR_26      "level 26: the abandoned mines"
-extern const char *s_HUSTR_26; // = HUSTR_26;
-//#define HUSTR_27      "level 27: monster condo"
-extern const char *s_HUSTR_27; // = HUSTR_27;
-//#define HUSTR_28      "level 28: the spirit world"
-extern const char *s_HUSTR_28; // = HUSTR_28;
-//#define HUSTR_29      "level 29: the living end"
-extern const char *s_HUSTR_29; // = HUSTR_29;
-//#define HUSTR_30      "level 30: icon of sin"
-extern const char *s_HUSTR_30; // = HUSTR_30;
-
-//#define HUSTR_31      "level 31: wolfenstein"
-extern const char *s_HUSTR_31; // = HUSTR_31;
-//#define HUSTR_32      "level 32: grosse"
-extern const char *s_HUSTR_32; // = HUSTR_32;
-
-//#define PHUSTR_1      "level 1: congo"
-extern const char *s_PHUSTR_1; // = PHUSTR_1;
-//#define PHUSTR_2      "level 2: well of souls"
-extern const char *s_PHUSTR_2; // = PHUSTR_2;
-//#define PHUSTR_3      "level 3: aztec"
-extern const char *s_PHUSTR_3; // = PHUSTR_3;
-//#define PHUSTR_4      "level 4: caged"
-extern const char *s_PHUSTR_4; // = PHUSTR_4;
-//#define PHUSTR_5      "level 5: ghost town"
-extern const char *s_PHUSTR_5; // = PHUSTR_5;
-//#define PHUSTR_6      "level 6: baron's lair"
-extern const char *s_PHUSTR_6; // = PHUSTR_6;
-//#define PHUSTR_7      "level 7: caughtyard"
-extern const char *s_PHUSTR_7; // = PHUSTR_7;
-//#define PHUSTR_8      "level 8: realm"
-extern const char *s_PHUSTR_8; // = PHUSTR_8;
-//#define PHUSTR_9      "level 9: abattoire"
-extern const char *s_PHUSTR_9; // = PHUSTR_9;
-//#define PHUSTR_10     "level 10: onslaught"
-extern const char *s_PHUSTR_10; // = PHUSTR_10;
-//#define PHUSTR_11     "level 11: hunted"
-extern const char *s_PHUSTR_11; // = PHUSTR_11;
-
-//#define PHUSTR_12     "level 12: speed"
-extern const char *s_PHUSTR_12; // = PHUSTR_12;
-//#define PHUSTR_13     "level 13: the crypt"
-extern const char *s_PHUSTR_13; // = PHUSTR_13;
-//#define PHUSTR_14     "level 14: genesis"
-extern const char *s_PHUSTR_14; // = PHUSTR_14;
-//#define PHUSTR_15     "level 15: the twilight"
-extern const char *s_PHUSTR_15; // = PHUSTR_15;
-//#define PHUSTR_16     "level 16: the omen"
-extern const char *s_PHUSTR_16; // = PHUSTR_16;
-//#define PHUSTR_17     "level 17: compound"
-extern const char *s_PHUSTR_17; // = PHUSTR_17;
-//#define PHUSTR_18     "level 18: neurosphere"
-extern const char *s_PHUSTR_18; // = PHUSTR_18;
-//#define PHUSTR_19     "level 19: nme"
-extern const char *s_PHUSTR_19; // = PHUSTR_19;
-//#define PHUSTR_20     "level 20: the death domain"
-extern const char *s_PHUSTR_20; // = PHUSTR_20;
-
-//#define PHUSTR_21     "level 21: slayer"
-extern const char *s_PHUSTR_21; // = PHUSTR_21;
-//#define PHUSTR_22     "level 22: impossible mission"
-extern const char *s_PHUSTR_22; // = PHUSTR_22;
-//#define PHUSTR_23     "level 23: tombstone"
-extern const char *s_PHUSTR_23; // = PHUSTR_23;
-//#define PHUSTR_24     "level 24: the final frontier"
-extern const char *s_PHUSTR_24; // = PHUSTR_24;
-//#define PHUSTR_25     "level 25: the temple of darkness"
-extern const char *s_PHUSTR_25; // = PHUSTR_25;
-//#define PHUSTR_26     "level 26: bunker"
-extern const char *s_PHUSTR_26; // = PHUSTR_26;
-//#define PHUSTR_27     "level 27: anti-christ"
-extern const char *s_PHUSTR_27; // = PHUSTR_27;
-//#define PHUSTR_28     "level 28: the sewers"
-extern const char *s_PHUSTR_28; // = PHUSTR_28;
-//#define PHUSTR_29     "level 29: odyssey of noises"
-extern const char *s_PHUSTR_29; // = PHUSTR_29;
-//#define PHUSTR_30     "level 30: the gateway of hell"
-extern const char *s_PHUSTR_30; // = PHUSTR_30;
-
-//#define PHUSTR_31     "level 31: cyberden"
-extern const char *s_PHUSTR_31; // = PHUSTR_31;
-//#define PHUSTR_32     "level 32: go 2 it"
-extern const char *s_PHUSTR_32; // = PHUSTR_32;
-
-//#define THUSTR_1      "level 1: system control"
-extern const char *s_THUSTR_1; // = THUSTR_1;
-//#define THUSTR_2      "level 2: human bbq"
-extern const char *s_THUSTR_2; // = THUSTR_2;
-//#define THUSTR_3      "level 3: power control"
-extern const char *s_THUSTR_3; // = THUSTR_3;
-//#define THUSTR_4      "level 4: wormhole"
-extern const char *s_THUSTR_4; // = THUSTR_4;
-//#define THUSTR_5      "level 5: hanger"
-extern const char *s_THUSTR_5; // = THUSTR_5;
-//#define THUSTR_6      "level 6: open season"
-extern const char *s_THUSTR_6; // = THUSTR_6;
-//#define THUSTR_7      "level 7: prison"
-extern const char *s_THUSTR_7; // = THUSTR_7;
-//#define THUSTR_8      "level 8: metal"
-extern const char *s_THUSTR_8; // = THUSTR_8;
-//#define THUSTR_9      "level 9: stronghold"
-extern const char *s_THUSTR_9; // = THUSTR_9;
-//#define THUSTR_10     "level 10: redemption"
-extern const char *s_THUSTR_10; // = THUSTR_10;
-//#define THUSTR_11     "level 11: storage facility"
-extern const char *s_THUSTR_11; // = THUSTR_11;
-
-//#define THUSTR_12     "level 12: crater"
-extern const char *s_THUSTR_12; // = THUSTR_12;
-//#define THUSTR_13     "level 13: nukage processing"
-extern const char *s_THUSTR_13; // = THUSTR_13;
-//#define THUSTR_14     "level 14: steel works"
-extern const char *s_THUSTR_14; // = THUSTR_14;
-//#define THUSTR_15     "level 15: dead zone"
-extern const char *s_THUSTR_15; // = THUSTR_15;
-//#define THUSTR_16     "level 16: deepest reaches"
-extern const char *s_THUSTR_16; // = THUSTR_16;
-//#define THUSTR_17     "level 17: processing area"
-extern const char *s_THUSTR_17; // = THUSTR_17;
-//#define THUSTR_18     "level 18: mill"
-extern const char *s_THUSTR_18; // = THUSTR_18;
-//#define THUSTR_19     "level 19: shipping/respawning"
-extern const char *s_THUSTR_19; // = THUSTR_19;
-//#define THUSTR_20     "level 20: central processing"
-extern const char *s_THUSTR_20; // = THUSTR_20;
-
-//#define THUSTR_21     "level 21: administration center"
-extern const char *s_THUSTR_21; // = THUSTR_21;
-//#define THUSTR_22     "level 22: habitat"
-extern const char *s_THUSTR_22; // = THUSTR_22;
-//#define THUSTR_23     "level 23: lunar mining project"
-extern const char *s_THUSTR_23; // = THUSTR_23;
-//#define THUSTR_24     "level 24: quarry"
-extern const char *s_THUSTR_24; // = THUSTR_24;
-//#define THUSTR_25     "level 25: baron's den"
-extern const char *s_THUSTR_25; // = THUSTR_25;
-//#define THUSTR_26     "level 26: ballistyx"
-extern const char *s_THUSTR_26; // = THUSTR_26;
-//#define THUSTR_27     "level 27: mount pain"
-extern const char *s_THUSTR_27; // = THUSTR_27;
-//#define THUSTR_28     "level 28: heck"
-extern const char *s_THUSTR_28; // = THUSTR_28;
-//#define THUSTR_29     "level 29: river styx"
-extern const char *s_THUSTR_29; // = THUSTR_29;
-//#define THUSTR_30     "level 30: last call"
-extern const char *s_THUSTR_30; // = THUSTR_30;
-
-//#define THUSTR_31     "level 31: pharaoh"
-extern const char *s_THUSTR_31; // = THUSTR_31;
-//#define THUSTR_32     "level 32: caribbean"
-extern const char *s_THUSTR_32; // = THUSTR_32;
-
-//#define HUSTR_CHATMACRO1      "I'm ready to kick butt!"
-extern const char *s_HUSTR_CHATMACRO1; // = HUSTR_CHATMACRO1;
-//#define HUSTR_CHATMACRO2      "I'm OK."
-extern const char *s_HUSTR_CHATMACRO2; // = HUSTR_CHATMACRO2;
-//#define HUSTR_CHATMACRO3      "I'm not looking too good!"
-extern const char *s_HUSTR_CHATMACRO3; // = HUSTR_CHATMACRO3;
-//#define HUSTR_CHATMACRO4      "Help!"
-extern const char *s_HUSTR_CHATMACRO4; // = HUSTR_CHATMACRO4;
-//#define HUSTR_CHATMACRO5      "You suck!"
-extern const char *s_HUSTR_CHATMACRO5; // = HUSTR_CHATMACRO5;
-//#define HUSTR_CHATMACRO6      "Next time, scumbag..."
-extern const char *s_HUSTR_CHATMACRO6; // = HUSTR_CHATMACRO6;
-//#define HUSTR_CHATMACRO7      "Come here!"
-extern const char *s_HUSTR_CHATMACRO7; // = HUSTR_CHATMACRO7;
-//#define HUSTR_CHATMACRO8      "I'll take care of it."
-extern const char *s_HUSTR_CHATMACRO8; // = HUSTR_CHATMACRO8;
-//#define HUSTR_CHATMACRO9      "Yes"
-extern const char *s_HUSTR_CHATMACRO9; // = HUSTR_CHATMACRO9;
-//#define HUSTR_CHATMACRO0      "No"
-extern const char *s_HUSTR_CHATMACRO0; // = HUSTR_CHATMACRO0;
-
-//#define HUSTR_TALKTOSELF1     "You mumble to yourself"
-extern const char *s_HUSTR_TALKTOSELF1; // = HUSTR_TALKTOSELF1;
-//#define HUSTR_TALKTOSELF2     "Who's there?"
-extern const char *s_HUSTR_TALKTOSELF2; // = HUSTR_TALKTOSELF2;
-//#define HUSTR_TALKTOSELF3     "You scare yourself"
-extern const char *s_HUSTR_TALKTOSELF3; // = HUSTR_TALKTOSELF3;
-//#define HUSTR_TALKTOSELF4     "You start to rave"
-extern const char *s_HUSTR_TALKTOSELF4; // = HUSTR_TALKTOSELF4;
-//#define HUSTR_TALKTOSELF5     "You've lost it..."
-extern const char *s_HUSTR_TALKTOSELF5; // = HUSTR_TALKTOSELF5;
-
-//#define HUSTR_MESSAGESENT     "[Message Sent]"
-extern const char *s_HUSTR_MESSAGESENT; // = HUSTR_MESSAGESENT;
-
-// The following should NOT be changed unless it seems
-// just AWFULLY necessary
-
-//#define HUSTR_PLRGREEN        "Green: "
-extern const char *s_HUSTR_PLRGREEN; // = HUSTR_PLRGREEN;
-//#define HUSTR_PLRINDIGO       "Indigo: "
-extern const char *s_HUSTR_PLRINDIGO; // = HUSTR_PLRINDIGO;
-//#define HUSTR_PLRBROWN        "Brown: "
-extern const char *s_HUSTR_PLRBROWN; // = HUSTR_PLRBROWN;
-//#define HUSTR_PLRRED          "Red: "
-extern const char *s_HUSTR_PLRRED; // = HUSTR_PLRRED;
-
-// Ty - Note these are chars, not char *, so name is sc_XXX
-//#define HUSTR_KEYGREEN        'g'
-extern char sc_HUSTR_KEYGREEN; // = HUSTR_KEYGREEN;
-//#define HUSTR_KEYINDIGO       'i'
-extern char sc_HUSTR_KEYINDIGO; // = HUSTR_KEYINDIGO;
-//#define HUSTR_KEYBROWN        'b'
-extern char sc_HUSTR_KEYBROWN; // = HUSTR_KEYBROWN;
-//#define HUSTR_KEYRED  'r'
-extern char sc_HUSTR_KEYRED; // = HUSTR_KEYRED;
-
-//
 //      AM_map.C
 //
 
@@ -634,11 +275,6 @@ extern const char* s_STSTR_BEHOLDX; // = STSTR_BEHOLDX;
 extern const char* s_STSTR_CHOPPERS; // = STSTR_CHOPPERS;
 //#define STSTR_CLEV            "Changing Level..."
 extern const char* s_STSTR_CLEV; // = STSTR_CLEV;
-
-//#define STSTR_COMPON    "Compatibility Mode On"            // phares
-extern const char* s_STSTR_COMPON; // = STSTR_COMPON;
-//#define STSTR_COMPOFF   "Compatibility Mode Off"           // phares
-extern const char* s_STSTR_COMPOFF; // = STSTR_COMPOFF;
 
 //
 //      F_Finale.C
@@ -1100,6 +736,8 @@ extern const char* startup5;
 
 // from g_game.c, prefix for savegame name like "boomsav"
 extern const char* savegamename;
+
+void ProcessDehFile(const char *filename, const char *outfilename, int lumpnum);
 
 #endif
 

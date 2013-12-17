@@ -52,11 +52,11 @@ rcsid[] = "$Id: d_deh.c,v 1.16 1999/10/27 18:35:50 cphipps Exp $";
 #define TRUE 1
 #define FALSE 0
 
-#ifndef DJGPP
+#if !defined(DJGPP) && !defined(__XMOS__)
 // CPhipps - hmm, odd...
 #include <ctype.h>
 
-OVERLAY char* strlwr(char* str)
+static OVERLAY char* strlwr(char* str)
 {
   char* p;
   for (p=str; *p; p++) *p = tolower(*p);
@@ -74,7 +74,7 @@ typedef struct {
 
 // killough 10/98: emulate IO whether input really comes from a file or not
 
-OVERLAY char *dehfgets(char *buf, size_t n, DEHFILE *fp)
+OVERLAY static char *dehfgets(char *buf, size_t n, DEHFILE *fp)
 {
   if (!fp->lump)                                     // If this is a real file,
     return (fgets)(buf, n, (FILE *) fp->inp);        // return regular fgets
@@ -93,12 +93,12 @@ OVERLAY char *dehfgets(char *buf, size_t n, DEHFILE *fp)
   return buf;                                        // Return buffer pointer
 }
 
-OVERLAY int dehfeof(DEHFILE *fp)
+OVERLAY static int dehfeof(DEHFILE *fp)
 {
   return !fp->lump ? (feof)((FILE *) fp->inp) : !*fp->inp || fp->size<=0;
 }
 
-OVERLAY int dehfgetc(DEHFILE *fp)
+OVERLAY static int dehfgetc(DEHFILE *fp)
 {
   return !fp->lump ? (fgetc)((FILE *) fp->inp) : fp->size > 0 ?
     fp->size--, *fp->inp++ : EOF;
@@ -119,13 +119,13 @@ boolean deh_pars = FALSE; // in wi_stuff to allow pars in modified games
 // Any of these can be changed using the bex extensions
 #include "dstrings.h"  // to get the initial values
 // CPhipps - const's
-const char *s_D_DEVSTR    = D_DEVSTR;
-const char *s_D_CDROM     = D_CDROM;
-const char *s_PRESSKEY    = PRESSKEY;
-const char *s_PRESSYN     = PRESSYN;
-const char *s_QUITMSG     = QUITMSG;
+static const char *s_D_DEVSTR    = D_DEVSTR;
+static const char *s_D_CDROM     = D_CDROM;
+static const char *s_PRESSKEY    = PRESSKEY;
+static const char *s_PRESSYN     = PRESSYN;
+static const char *s_QUITMSG     = QUITMSG;
 const char *s_LOADNET     = LOADNET;   // PRESSKEY; // killough 4/4/98:
-const char *s_QLOADNET    = QLOADNET;  // PRESSKEY;
+static const char *s_QLOADNET    = QLOADNET;  // PRESSKEY;
 const char *s_QSAVESPOT   = QSAVESPOT; // PRESSKEY;
 const char *s_SAVEDEAD    = SAVEDEAD;  // PRESSKEY; // remove duplicate y/n
 const char *s_QSPROMPT    = QSPROMPT;  // PRESSYN;
@@ -139,8 +139,8 @@ const char *s_MSGON       = MSGON;
 const char *s_NETEND      = NETEND;    // PRESSKEY;
 const char *s_ENDGAME     = ENDGAME;   // PRESSYN; // killough 4/4/98: end
 const char *s_DOSY        = DOSY;
-const char *s_DETAILHI    = DETAILHI;
-const char *s_DETAILLO    = DETAILLO;
+static const char *s_DETAILHI    = DETAILHI;
+static const char *s_DETAILLO    = DETAILLO;
 const char *s_GAMMALVL0   = GAMMALVL0;
 const char *s_GAMMALVL1   = GAMMALVL1;
 const char *s_GAMMALVL2   = GAMMALVL2;
@@ -200,139 +200,139 @@ const char *s_PD_ANY      = PD_ANY;
 const char *s_PD_ALL3     = PD_ALL3;
 const char *s_PD_ALL6     = PD_ALL6;
 const char *s_GGSAVED     = GGSAVED;
-const char *s_HUSTR_MSGU  = HUSTR_MSGU;
-const char *s_HUSTR_E1M1  = HUSTR_E1M1;
-const char *s_HUSTR_E1M2  = HUSTR_E1M2;
-const char *s_HUSTR_E1M3  = HUSTR_E1M3;
-const char *s_HUSTR_E1M4  = HUSTR_E1M4;
-const char *s_HUSTR_E1M5  = HUSTR_E1M5;
-const char *s_HUSTR_E1M6  = HUSTR_E1M6;
-const char *s_HUSTR_E1M7  = HUSTR_E1M7;
-const char *s_HUSTR_E1M8  = HUSTR_E1M8;
-const char *s_HUSTR_E1M9  = HUSTR_E1M9;
-const char *s_HUSTR_E2M1  = HUSTR_E2M1;
-const char *s_HUSTR_E2M2  = HUSTR_E2M2;
-const char *s_HUSTR_E2M3  = HUSTR_E2M3;
-const char *s_HUSTR_E2M4  = HUSTR_E2M4;
-const char *s_HUSTR_E2M5  = HUSTR_E2M5;
-const char *s_HUSTR_E2M6  = HUSTR_E2M6;
-const char *s_HUSTR_E2M7  = HUSTR_E2M7;
-const char *s_HUSTR_E2M8  = HUSTR_E2M8;
-const char *s_HUSTR_E2M9  = HUSTR_E2M9;
-const char *s_HUSTR_E3M1  = HUSTR_E3M1;
-const char *s_HUSTR_E3M2  = HUSTR_E3M2;
-const char *s_HUSTR_E3M3  = HUSTR_E3M3;
-const char *s_HUSTR_E3M4  = HUSTR_E3M4;
-const char *s_HUSTR_E3M5  = HUSTR_E3M5;
-const char *s_HUSTR_E3M6  = HUSTR_E3M6;
-const char *s_HUSTR_E3M7  = HUSTR_E3M7;
-const char *s_HUSTR_E3M8  = HUSTR_E3M8;
-const char *s_HUSTR_E3M9  = HUSTR_E3M9;
-const char *s_HUSTR_E4M1  = HUSTR_E4M1;
-const char *s_HUSTR_E4M2  = HUSTR_E4M2;
-const char *s_HUSTR_E4M3  = HUSTR_E4M3;
-const char *s_HUSTR_E4M4  = HUSTR_E4M4;
-const char *s_HUSTR_E4M5  = HUSTR_E4M5;
-const char *s_HUSTR_E4M6  = HUSTR_E4M6;
-const char *s_HUSTR_E4M7  = HUSTR_E4M7;
-const char *s_HUSTR_E4M8  = HUSTR_E4M8;
-const char *s_HUSTR_E4M9  = HUSTR_E4M9;
-const char *s_HUSTR_1     = HUSTR_1;
-const char *s_HUSTR_2     = HUSTR_2;
-const char *s_HUSTR_3     = HUSTR_3;
-const char *s_HUSTR_4     = HUSTR_4;
-const char *s_HUSTR_5     = HUSTR_5;
-const char *s_HUSTR_6     = HUSTR_6;
-const char *s_HUSTR_7     = HUSTR_7;
-const char *s_HUSTR_8     = HUSTR_8;
-const char *s_HUSTR_9     = HUSTR_9;
-const char *s_HUSTR_10    = HUSTR_10;
-const char *s_HUSTR_11    = HUSTR_11;
-const char *s_HUSTR_12    = HUSTR_12;
-const char *s_HUSTR_13    = HUSTR_13;
-const char *s_HUSTR_14    = HUSTR_14;
-const char *s_HUSTR_15    = HUSTR_15;
-const char *s_HUSTR_16    = HUSTR_16;
-const char *s_HUSTR_17    = HUSTR_17;
-const char *s_HUSTR_18    = HUSTR_18;
-const char *s_HUSTR_19    = HUSTR_19;
-const char *s_HUSTR_20    = HUSTR_20;
-const char *s_HUSTR_21    = HUSTR_21;
-const char *s_HUSTR_22    = HUSTR_22;
-const char *s_HUSTR_23    = HUSTR_23;
-const char *s_HUSTR_24    = HUSTR_24;
-const char *s_HUSTR_25    = HUSTR_25;
-const char *s_HUSTR_26    = HUSTR_26;
-const char *s_HUSTR_27    = HUSTR_27;
-const char *s_HUSTR_28    = HUSTR_28;
-const char *s_HUSTR_29    = HUSTR_29;
-const char *s_HUSTR_30    = HUSTR_30;
-const char *s_HUSTR_31    = HUSTR_31;
-const char *s_HUSTR_32    = HUSTR_32;
-const char *s_PHUSTR_1    = PHUSTR_1;
-const char *s_PHUSTR_2    = PHUSTR_2;
-const char *s_PHUSTR_3    = PHUSTR_3;
-const char *s_PHUSTR_4    = PHUSTR_4;
-const char *s_PHUSTR_5    = PHUSTR_5;
-const char *s_PHUSTR_6    = PHUSTR_6;
-const char *s_PHUSTR_7    = PHUSTR_7;
-const char *s_PHUSTR_8    = PHUSTR_8;
-const char *s_PHUSTR_9    = PHUSTR_9;
-const char *s_PHUSTR_10   = PHUSTR_10;
-const char *s_PHUSTR_11   = PHUSTR_11;
-const char *s_PHUSTR_12   = PHUSTR_12;
-const char *s_PHUSTR_13   = PHUSTR_13;
-const char *s_PHUSTR_14   = PHUSTR_14;
-const char *s_PHUSTR_15   = PHUSTR_15;
-const char *s_PHUSTR_16   = PHUSTR_16;
-const char *s_PHUSTR_17   = PHUSTR_17;
-const char *s_PHUSTR_18   = PHUSTR_18;
-const char *s_PHUSTR_19   = PHUSTR_19;
-const char *s_PHUSTR_20   = PHUSTR_20;
-const char *s_PHUSTR_21   = PHUSTR_21;
-const char *s_PHUSTR_22   = PHUSTR_22;
-const char *s_PHUSTR_23   = PHUSTR_23;
-const char *s_PHUSTR_24   = PHUSTR_24;
-const char *s_PHUSTR_25   = PHUSTR_25;
-const char *s_PHUSTR_26   = PHUSTR_26;
-const char *s_PHUSTR_27   = PHUSTR_27;
-const char *s_PHUSTR_28   = PHUSTR_28;
-const char *s_PHUSTR_29   = PHUSTR_29;
-const char *s_PHUSTR_30   = PHUSTR_30;
-const char *s_PHUSTR_31   = PHUSTR_31;
-const char *s_PHUSTR_32   = PHUSTR_32;
-const char *s_THUSTR_1    = THUSTR_1;
-const char *s_THUSTR_2    = THUSTR_2;
-const char *s_THUSTR_3    = THUSTR_3;
-const char *s_THUSTR_4    = THUSTR_4;
-const char *s_THUSTR_5    = THUSTR_5;
-const char *s_THUSTR_6    = THUSTR_6;
-const char *s_THUSTR_7    = THUSTR_7;
-const char *s_THUSTR_8    = THUSTR_8;
-const char *s_THUSTR_9    = THUSTR_9;
-const char *s_THUSTR_10   = THUSTR_10;
-const char *s_THUSTR_11   = THUSTR_11;
-const char *s_THUSTR_12   = THUSTR_12;
-const char *s_THUSTR_13   = THUSTR_13;
-const char *s_THUSTR_14   = THUSTR_14;
-const char *s_THUSTR_15   = THUSTR_15;
-const char *s_THUSTR_16   = THUSTR_16;
-const char *s_THUSTR_17   = THUSTR_17;
-const char *s_THUSTR_18   = THUSTR_18;
-const char *s_THUSTR_19   = THUSTR_19;
-const char *s_THUSTR_20   = THUSTR_20;
-const char *s_THUSTR_21   = THUSTR_21;
-const char *s_THUSTR_22   = THUSTR_22;
-const char *s_THUSTR_23   = THUSTR_23;
-const char *s_THUSTR_24   = THUSTR_24;
-const char *s_THUSTR_25   = THUSTR_25;
-const char *s_THUSTR_26   = THUSTR_26;
-const char *s_THUSTR_27   = THUSTR_27;
-const char *s_THUSTR_28   = THUSTR_28;
-const char *s_THUSTR_29   = THUSTR_29;
-const char *s_THUSTR_30   = THUSTR_30;
-const char *s_THUSTR_31   = THUSTR_31;
-const char *s_THUSTR_32   = THUSTR_32;
+static const char *s_HUSTR_MSGU  = HUSTR_MSGU;
+static const char *s_HUSTR_E1M1  = HUSTR_E1M1;
+static const char *s_HUSTR_E1M2  = HUSTR_E1M2;
+static const char *s_HUSTR_E1M3  = HUSTR_E1M3;
+static const char *s_HUSTR_E1M4  = HUSTR_E1M4;
+static const char *s_HUSTR_E1M5  = HUSTR_E1M5;
+static const char *s_HUSTR_E1M6  = HUSTR_E1M6;
+static const char *s_HUSTR_E1M7  = HUSTR_E1M7;
+static const char *s_HUSTR_E1M8  = HUSTR_E1M8;
+static const char *s_HUSTR_E1M9  = HUSTR_E1M9;
+static const char *s_HUSTR_E2M1  = HUSTR_E2M1;
+static const char *s_HUSTR_E2M2  = HUSTR_E2M2;
+static const char *s_HUSTR_E2M3  = HUSTR_E2M3;
+static const char *s_HUSTR_E2M4  = HUSTR_E2M4;
+static const char *s_HUSTR_E2M5  = HUSTR_E2M5;
+static const char *s_HUSTR_E2M6  = HUSTR_E2M6;
+static const char *s_HUSTR_E2M7  = HUSTR_E2M7;
+static const char *s_HUSTR_E2M8  = HUSTR_E2M8;
+static const char *s_HUSTR_E2M9  = HUSTR_E2M9;
+static const char *s_HUSTR_E3M1  = HUSTR_E3M1;
+static const char *s_HUSTR_E3M2  = HUSTR_E3M2;
+static const char *s_HUSTR_E3M3  = HUSTR_E3M3;
+static const char *s_HUSTR_E3M4  = HUSTR_E3M4;
+static const char *s_HUSTR_E3M5  = HUSTR_E3M5;
+static const char *s_HUSTR_E3M6  = HUSTR_E3M6;
+static const char *s_HUSTR_E3M7  = HUSTR_E3M7;
+static const char *s_HUSTR_E3M8  = HUSTR_E3M8;
+static const char *s_HUSTR_E3M9  = HUSTR_E3M9;
+static const char *s_HUSTR_E4M1  = HUSTR_E4M1;
+static const char *s_HUSTR_E4M2  = HUSTR_E4M2;
+static const char *s_HUSTR_E4M3  = HUSTR_E4M3;
+static const char *s_HUSTR_E4M4  = HUSTR_E4M4;
+static const char *s_HUSTR_E4M5  = HUSTR_E4M5;
+static const char *s_HUSTR_E4M6  = HUSTR_E4M6;
+static const char *s_HUSTR_E4M7  = HUSTR_E4M7;
+static const char *s_HUSTR_E4M8  = HUSTR_E4M8;
+static const char *s_HUSTR_E4M9  = HUSTR_E4M9;
+static const char *s_HUSTR_1     = HUSTR_1;
+static const char *s_HUSTR_2     = HUSTR_2;
+static const char *s_HUSTR_3     = HUSTR_3;
+static const char *s_HUSTR_4     = HUSTR_4;
+static const char *s_HUSTR_5     = HUSTR_5;
+static const char *s_HUSTR_6     = HUSTR_6;
+static const char *s_HUSTR_7     = HUSTR_7;
+static const char *s_HUSTR_8     = HUSTR_8;
+static const char *s_HUSTR_9     = HUSTR_9;
+static const char *s_HUSTR_10    = HUSTR_10;
+static const char *s_HUSTR_11    = HUSTR_11;
+static const char *s_HUSTR_12    = HUSTR_12;
+static const char *s_HUSTR_13    = HUSTR_13;
+static const char *s_HUSTR_14    = HUSTR_14;
+static const char *s_HUSTR_15    = HUSTR_15;
+static const char *s_HUSTR_16    = HUSTR_16;
+static const char *s_HUSTR_17    = HUSTR_17;
+static const char *s_HUSTR_18    = HUSTR_18;
+static const char *s_HUSTR_19    = HUSTR_19;
+static const char *s_HUSTR_20    = HUSTR_20;
+static const char *s_HUSTR_21    = HUSTR_21;
+static const char *s_HUSTR_22    = HUSTR_22;
+static const char *s_HUSTR_23    = HUSTR_23;
+static const char *s_HUSTR_24    = HUSTR_24;
+static const char *s_HUSTR_25    = HUSTR_25;
+static const char *s_HUSTR_26    = HUSTR_26;
+static const char *s_HUSTR_27    = HUSTR_27;
+static const char *s_HUSTR_28    = HUSTR_28;
+static const char *s_HUSTR_29    = HUSTR_29;
+static const char *s_HUSTR_30    = HUSTR_30;
+static const char *s_HUSTR_31    = HUSTR_31;
+static const char *s_HUSTR_32    = HUSTR_32;
+static const char *s_PHUSTR_1    = PHUSTR_1;
+static const char *s_PHUSTR_2    = PHUSTR_2;
+static const char *s_PHUSTR_3    = PHUSTR_3;
+static const char *s_PHUSTR_4    = PHUSTR_4;
+static const char *s_PHUSTR_5    = PHUSTR_5;
+static const char *s_PHUSTR_6    = PHUSTR_6;
+static const char *s_PHUSTR_7    = PHUSTR_7;
+static const char *s_PHUSTR_8    = PHUSTR_8;
+static const char *s_PHUSTR_9    = PHUSTR_9;
+static const char *s_PHUSTR_10   = PHUSTR_10;
+static const char *s_PHUSTR_11   = PHUSTR_11;
+static const char *s_PHUSTR_12   = PHUSTR_12;
+static const char *s_PHUSTR_13   = PHUSTR_13;
+static const char *s_PHUSTR_14   = PHUSTR_14;
+static const char *s_PHUSTR_15   = PHUSTR_15;
+static const char *s_PHUSTR_16   = PHUSTR_16;
+static const char *s_PHUSTR_17   = PHUSTR_17;
+static const char *s_PHUSTR_18   = PHUSTR_18;
+static const char *s_PHUSTR_19   = PHUSTR_19;
+static const char *s_PHUSTR_20   = PHUSTR_20;
+static const char *s_PHUSTR_21   = PHUSTR_21;
+static const char *s_PHUSTR_22   = PHUSTR_22;
+static const char *s_PHUSTR_23   = PHUSTR_23;
+static const char *s_PHUSTR_24   = PHUSTR_24;
+static const char *s_PHUSTR_25   = PHUSTR_25;
+static const char *s_PHUSTR_26   = PHUSTR_26;
+static const char *s_PHUSTR_27   = PHUSTR_27;
+static const char *s_PHUSTR_28   = PHUSTR_28;
+static const char *s_PHUSTR_29   = PHUSTR_29;
+static const char *s_PHUSTR_30   = PHUSTR_30;
+static const char *s_PHUSTR_31   = PHUSTR_31;
+static const char *s_PHUSTR_32   = PHUSTR_32;
+static const char *s_THUSTR_1    = THUSTR_1;
+static const char *s_THUSTR_2    = THUSTR_2;
+static const char *s_THUSTR_3    = THUSTR_3;
+static const char *s_THUSTR_4    = THUSTR_4;
+static const char *s_THUSTR_5    = THUSTR_5;
+static const char *s_THUSTR_6    = THUSTR_6;
+static const char *s_THUSTR_7    = THUSTR_7;
+static const char *s_THUSTR_8    = THUSTR_8;
+static const char *s_THUSTR_9    = THUSTR_9;
+static const char *s_THUSTR_10   = THUSTR_10;
+static const char *s_THUSTR_11   = THUSTR_11;
+static const char *s_THUSTR_12   = THUSTR_12;
+static const char *s_THUSTR_13   = THUSTR_13;
+static const char *s_THUSTR_14   = THUSTR_14;
+static const char *s_THUSTR_15   = THUSTR_15;
+static const char *s_THUSTR_16   = THUSTR_16;
+static const char *s_THUSTR_17   = THUSTR_17;
+static const char *s_THUSTR_18   = THUSTR_18;
+static const char *s_THUSTR_19   = THUSTR_19;
+static const char *s_THUSTR_20   = THUSTR_20;
+static const char *s_THUSTR_21   = THUSTR_21;
+static const char *s_THUSTR_22   = THUSTR_22;
+static const char *s_THUSTR_23   = THUSTR_23;
+static const char *s_THUSTR_24   = THUSTR_24;
+static const char *s_THUSTR_25   = THUSTR_25;
+static const char *s_THUSTR_26   = THUSTR_26;
+static const char *s_THUSTR_27   = THUSTR_27;
+static const char *s_THUSTR_28   = THUSTR_28;
+static const char *s_THUSTR_29   = THUSTR_29;
+static const char *s_THUSTR_30   = THUSTR_30;
+static const char *s_THUSTR_31   = THUSTR_31;
+static const char *s_THUSTR_32   = THUSTR_32;
 const char *s_HUSTR_CHATMACRO1   = HUSTR_CHATMACRO1;
 const char *s_HUSTR_CHATMACRO2   = HUSTR_CHATMACRO2;
 const char *s_HUSTR_CHATMACRO3   = HUSTR_CHATMACRO3;
@@ -380,8 +380,8 @@ const char *s_STSTR_BEHOLD       = STSTR_BEHOLD;
 const char *s_STSTR_BEHOLDX      = STSTR_BEHOLDX;
 const char *s_STSTR_CHOPPERS     = STSTR_CHOPPERS;
 const char *s_STSTR_CLEV         = STSTR_CLEV;
-const char *s_STSTR_COMPON       = STSTR_COMPON;
-const char *s_STSTR_COMPOFF      = STSTR_COMPOFF;
+static const char *s_STSTR_COMPON       = STSTR_COMPON;
+static const char *s_STSTR_COMPOFF      = STSTR_COMPOFF;
 const char *s_E1TEXT     = E1TEXT;
 const char *s_E2TEXT     = E2TEXT;
 const char *s_E3TEXT     = E3TEXT;
@@ -956,30 +956,30 @@ const char **const mapnamest[] = // TNT WAD map names.
 };
 
 // Function prototypes
-void    lfstrip(char *);     // strip the \r and/or \n off of a line
-void    rstrip(char *);      // strip trailing whitespace
-char *  ptr_lstrip(char *);  // point past leading whitespace
-boolean deh_GetData(char *, char *, long *, char **, FILE *);
-boolean deh_procStringSub(char *, char *, char *, FILE *);
-char *  dehReformatStr(char *);
+static void    lfstrip(char *);     // strip the \r and/or \n off of a line
+static void    rstrip(char *);      // strip trailing whitespace
+static char *  ptr_lstrip(char *);  // point past leading whitespace
+static boolean deh_GetData(char *, char *, long *, char **, FILE *);
+static boolean deh_procStringSub(char *, char *, char *, FILE *);
+static char *  dehReformatStr(char *);
 
 // Prototypes for block processing functions
 // Pointers to these functions are used as the blocks are encountered.
 
-void deh_procThing(DEHFILE *, FILE*, char *);
-void deh_procFrame(DEHFILE *, FILE*, char *);
-void deh_procPointer(DEHFILE *, FILE*, char *);
-void deh_procSounds(DEHFILE *, FILE*, char *);
-void deh_procAmmo(DEHFILE *, FILE*, char *);
-void deh_procWeapon(DEHFILE *, FILE*, char *);
-void deh_procSprite(DEHFILE *, FILE*, char *);
-void deh_procCheat(DEHFILE *, FILE*, char *);
-void deh_procMisc(DEHFILE *, FILE*, char *);
-void deh_procText(DEHFILE *, FILE*, char *);
-void deh_procPars(DEHFILE *, FILE*, char *);
-void deh_procStrings(DEHFILE *, FILE*, char *);
-void deh_procError(DEHFILE *, FILE*, char *);
-void deh_procBexCodePointers(DEHFILE *, FILE*, char *);
+static void deh_procThing(DEHFILE *, FILE*, char *);
+static void deh_procFrame(DEHFILE *, FILE*, char *);
+static void deh_procPointer(DEHFILE *, FILE*, char *);
+static void deh_procSounds(DEHFILE *, FILE*, char *);
+static void deh_procAmmo(DEHFILE *, FILE*, char *);
+static void deh_procWeapon(DEHFILE *, FILE*, char *);
+static void deh_procSprite(DEHFILE *, FILE*, char *);
+static void deh_procCheat(DEHFILE *, FILE*, char *);
+static void deh_procMisc(DEHFILE *, FILE*, char *);
+static void deh_procText(DEHFILE *, FILE*, char *);
+static void deh_procPars(DEHFILE *, FILE*, char *);
+static void deh_procStrings(DEHFILE *, FILE*, char *);
+static void deh_procError(DEHFILE *, FILE*, char *);
+static void deh_procBexCodePointers(DEHFILE *, FILE*, char *);
 
 // Structure deh_block is used to hold the block names that can
 // be encountered, and the routines to use to decipher them
@@ -1823,7 +1823,7 @@ OVERLAY void deh_procFrame(DEHFILE *fpin, FILE* fpout, char *line)
 //          line  -- current line in file to process
 // Returns: void
 //
-OVERLAY void deh_procPointer(DEHFILE *fpin, FILE* fpout, char *line) // done
+OVERLAY static void deh_procPointer(DEHFILE *fpin, FILE* fpout, char *line) // done
 {
   char key[DEH_MAXKEYLEN];
   char inbuffer[DEH_BUFFERMAX];
@@ -1898,7 +1898,7 @@ OVERLAY void deh_procPointer(DEHFILE *fpin, FILE* fpout, char *line) // done
 //          line  -- current line in file to process
 // Returns: void
 //
-OVERLAY void deh_procSounds(DEHFILE *fpin, FILE* fpout, char *line)
+OVERLAY static void deh_procSounds(DEHFILE *fpin, FILE* fpout, char *line)
 {
   char key[DEH_MAXKEYLEN];
   char inbuffer[DEH_BUFFERMAX];
@@ -1966,7 +1966,7 @@ OVERLAY void deh_procSounds(DEHFILE *fpin, FILE* fpout, char *line)
 //          line  -- current line in file to process
 // Returns: void
 //
-OVERLAY void deh_procAmmo(DEHFILE *fpin, FILE* fpout, char *line)
+OVERLAY static void deh_procAmmo(DEHFILE *fpin, FILE* fpout, char *line)
 {
   char key[DEH_MAXKEYLEN];
   char inbuffer[DEH_BUFFERMAX];
@@ -2012,7 +2012,7 @@ OVERLAY void deh_procAmmo(DEHFILE *fpin, FILE* fpout, char *line)
 //          line  -- current line in file to process
 // Returns: void
 //
-OVERLAY void deh_procWeapon(DEHFILE *fpin, FILE* fpout, char *line)
+OVERLAY static void deh_procWeapon(DEHFILE *fpin, FILE* fpout, char *line)
 {
   char key[DEH_MAXKEYLEN];
   char inbuffer[DEH_BUFFERMAX];
@@ -2070,7 +2070,7 @@ OVERLAY void deh_procWeapon(DEHFILE *fpin, FILE* fpout, char *line)
 //          line  -- current line in file to process
 // Returns: void
 //
-OVERLAY void deh_procSprite(DEHFILE *fpin, FILE* fpout, char *line) // Not supported
+OVERLAY static void deh_procSprite(DEHFILE *fpin, FILE* fpout, char *line) // Not supported
 {
   char key[DEH_MAXKEYLEN];
   char inbuffer[DEH_BUFFERMAX];
@@ -2104,7 +2104,7 @@ OVERLAY void deh_procSprite(DEHFILE *fpin, FILE* fpout, char *line) // Not suppo
 //          line  -- current line in file to process
 // Returns: void
 //
-OVERLAY void deh_procPars(DEHFILE *fpin, FILE* fpout, char *line) // extension
+OVERLAY static void deh_procPars(DEHFILE *fpin, FILE* fpout, char *line) // extension
 {
   char key[DEH_MAXKEYLEN];
   char inbuffer[DEH_BUFFERMAX];
@@ -2190,7 +2190,7 @@ OVERLAY void deh_procPars(DEHFILE *fpin, FILE* fpout, char *line) // extension
 //          line  -- current line in file to process
 // Returns: void
 //
-OVERLAY void deh_procCheat(DEHFILE *fpin, FILE* fpout, char *line) // done
+OVERLAY static void deh_procCheat(DEHFILE *fpin, FILE* fpout, char *line) // done
 {
   char key[DEH_MAXKEYLEN];
   char inbuffer[DEH_BUFFERMAX];
@@ -2267,7 +2267,7 @@ OVERLAY void deh_procCheat(DEHFILE *fpin, FILE* fpout, char *line) // done
 //          line  -- current line in file to process
 // Returns: void
 //
-OVERLAY void deh_procMisc(DEHFILE *fpin, FILE* fpout, char *line) // done
+OVERLAY static void deh_procMisc(DEHFILE *fpin, FILE* fpout, char *line) // done
 {
   char key[DEH_MAXKEYLEN];
   char inbuffer[DEH_BUFFERMAX];
@@ -2352,7 +2352,7 @@ OVERLAY void deh_procMisc(DEHFILE *fpin, FILE* fpout, char *line) // done
 //          line  -- current line in file to process
 // Returns: void
 //
-OVERLAY void deh_procText(DEHFILE *fpin, FILE* fpout, char *line)
+OVERLAY static void deh_procText(DEHFILE *fpin, FILE* fpout, char *line)
 {
   char key[DEH_MAXKEYLEN];
   char inbuffer[DEH_BUFFERMAX*2];  // can't use line -- double size buffer too.
@@ -2479,7 +2479,7 @@ OVERLAY void deh_procText(DEHFILE *fpin, FILE* fpout, char *line)
   return;
 }
 
-OVERLAY void deh_procError(DEHFILE *fpin, FILE* fpout, char *line)
+OVERLAY static void deh_procError(DEHFILE *fpin, FILE* fpout, char *line)
 {
   char inbuffer[DEH_BUFFERMAX];
 
@@ -2496,7 +2496,7 @@ OVERLAY void deh_procError(DEHFILE *fpin, FILE* fpout, char *line)
 //          line  -- current line in file to process
 // Returns: void
 //
-OVERLAY void deh_procStrings(DEHFILE *fpin, FILE* fpout, char *line)
+OVERLAY static void deh_procStrings(DEHFILE *fpin, FILE* fpout, char *line)
 {
   char key[DEH_MAXKEYLEN];
   char inbuffer[DEH_BUFFERMAX];
@@ -2576,7 +2576,7 @@ OVERLAY void deh_procStrings(DEHFILE *fpin, FILE* fpout, char *line)
 //          fpout     -- file stream pointer for log file (DEHOUT.TXT)
 // Returns: boolean: True if string found, false if not
 //
-OVERLAY boolean deh_procStringSub(char *key, char *lookfor, char *newstring, FILE *fpout)
+OVERLAY static boolean deh_procStringSub(char *key, char *lookfor, char *newstring, FILE *fpout)
 {
   boolean found; // loop exit flag
   int i;  // looper
@@ -2644,7 +2644,7 @@ OVERLAY boolean deh_procStringSub(char *key, char *lookfor, char *newstring, FIL
 // Args:    string -- the string to convert
 // Returns: the converted string (converted in a static buffer)
 //
-OVERLAY char *dehReformatStr(char *string)
+OVERLAY static char *dehReformatStr(char *string)
 {
   static char buff[DEH_BUFFERMAX]; // only processing the changed string,
   //  don't need double buffer
@@ -2673,7 +2673,7 @@ OVERLAY char *dehReformatStr(char *string)
 //
 // killough 10/98: only strip at end of line, not entire string
 
-OVERLAY void lfstrip(char *s)  // strip the \r and/or \n off of a line
+OVERLAY static void lfstrip(char *s)  // strip the \r and/or \n off of a line
 {
   char *p = s+strlen(s);
   while (p > s && (*--p=='\r' || *p=='\n'))
@@ -2686,7 +2686,7 @@ OVERLAY void lfstrip(char *s)  // strip the \r and/or \n off of a line
 // Args:    s -- the string to work on
 // Returns: void -- the string is modified in place
 //
-OVERLAY void rstrip(char *s)  // strip trailing whitespace
+OVERLAY static void rstrip(char *s)  // strip trailing whitespace
 {
   char *p = s+strlen(s);         // killough 4/4/98: same here
   while (p > s && isspace(*--p)) // break on first non-whitespace
@@ -2700,7 +2700,7 @@ OVERLAY void rstrip(char *s)  // strip trailing whitespace
 // Returns: char * pointing to the first nonblank character in the
 //          string.  The original string is not changed.
 //
-OVERLAY char *ptr_lstrip(char *p)  // point past leading whitespace
+OVERLAY static char *ptr_lstrip(char *p)  // point past leading whitespace
 {
   while (isspace(*p))
     p++;
@@ -2721,7 +2721,7 @@ OVERLAY char *ptr_lstrip(char *p)  // point past leading whitespace
 //          as a long just in case.  The passed pointer to hold
 //          the key must be DEH_MAXKEYLEN in size.
 
-OVERLAY boolean deh_GetData(char *s, char *k, long *l, char **strval, FILE *fpout)
+OVERLAY static boolean deh_GetData(char *s, char *k, long *l, char **strval, FILE *fpout)
 {
   char *t;  // current char
   long val; // to hold value of pair

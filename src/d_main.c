@@ -80,9 +80,6 @@ static const char rcsid[] = "$Id: d_main.c,v 1.46 2000/03/27 10:33:49 cph Exp $"
 #define SDL_Delay(a) 0
 #endif
 
-// DEHacked support - Ty 03/09/97 // CPhipps - const char*'s
-void ProcessDehFile(const char *filename, const char *outfilename, int lumpnum);
-
 void GetFirstMap(int *ep, int *map); // Ty 08/29/98 - add "-warp x" functionality
 
 // CPhipps - removed wadfiles[] stuff
