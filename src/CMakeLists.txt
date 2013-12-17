@@ -30,7 +30,6 @@ add_executable(
   doomstat.c
   doomstat.h
   doomtype.h
-  drawasm.h
   dstrings.c
   dstrings.h
   f_finale.c
