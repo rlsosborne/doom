@@ -37,6 +37,8 @@
 #pragma interface
 #endif
 
+#include <string.h>
+
 //
 // TYPES
 //

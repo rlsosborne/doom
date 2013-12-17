@@ -79,6 +79,7 @@ DOOM_OBJS = \
 
 SUPPORT_OBJS = \
   doom_display.o \
+  get_time.o \
   lcd.o \
   ptr_buffers.o
 

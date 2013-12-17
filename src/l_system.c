@@ -41,7 +41,10 @@ rcsid[] = "$Id: l_system.c,v 1.33 2000/02/26 19:18:23 cph Exp $";
 #include <stdlib.h>
 #include <ctype.h>
 #include <signal.h>
-#ifndef __XMOS__
+#ifdef __XMOS__
+#include "xs1.h"
+#include "get_time.h"
+#else
 #include <unistd.h>
 #include "SDL.h"
 #endif
@@ -65,7 +68,11 @@ rcsid[] = "$Id: l_system.c,v 1.33 2000/02/26 19:18:23 cph Exp $";
 
 OVERLAY int I_GetTime_RealTime (void)
 {
+#ifdef __XMOS__
+  return (get_time_uint64() * TICRATE) / XS1_TIMER_HZ;
+#else
   return (SDL_GetTicks()*TICRATE)/1000;
+#endif
 }
 
 /*
@@ -80,8 +87,12 @@ OVERLAY unsigned long I_GetRandomTimeSeed(void)
   struct timezone tz;
   gettimeofday(&tv,&tz);
   return (tv.tv_sec*1000ul + tv.tv_usec/1000ul);
-*/
-  return(SDL_GetTicks());
+ */
+#ifdef __XMOS__
+  return get_time_uint64();
+#else
+  return SDL_GetTicks();
+#endif
 }
 
 /* cphipps - I_SigString

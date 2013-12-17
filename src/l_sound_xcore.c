@@ -2,6 +2,7 @@
 
 #include "sounds.h"
 #include "doomtype.h"
+#include "w_wad.h"
 #include <stddef.h>
 
 #define NUM_CHANNELS		8
@@ -22,24 +23,6 @@ int		vol_lookup[128*256];
 int*		channelleftvol_lookup[NUM_CHANNELS];
 int*		channelrightvol_lookup[NUM_CHANNELS];
 
-void*
-getsfx
-( const char*         sfxname,
-  int*          len )
-{
-  __builtin_trap();
-}
-
-int
-addsfx
-( int		sfxid,
-  int		volume,
-  int		step,
-  int		seperation )
-{
-  __builtin_trap();
-}
-
 void I_SetChannels()
 {
   //__builtin_trap();
@@ -52,7 +35,9 @@ void I_SetSfxVolume(int volume)
 
 int I_GetSfxLumpNum(sfxinfo_t* sfx)
 {
-  __builtin_trap();
+  char namebuf[9];
+  sprintf(namebuf, "ds%s", sfx->name);
+  return W_GetNumForName(namebuf);
 }
 
 int
@@ -63,7 +48,7 @@ I_StartSound
   int		pitch,
   int		priority )
 {
-  __builtin_trap();
+  return 0;
 }
 
 void I_StopSound (int handle)
@@ -73,7 +58,7 @@ void I_StopSound (int handle)
 
 boolean I_SoundIsPlaying(int handle)
 {
-  __builtin_trap();
+  return 0;
 }
 
 void
@@ -134,7 +119,7 @@ void I_UnRegisterSong(int handle)
 
 int I_RegisterSong(const void *data, size_t len)
 {
-  __builtin_trap();
+  return 0;
 }
 
 void I_SetMusicVolume(int volume)
