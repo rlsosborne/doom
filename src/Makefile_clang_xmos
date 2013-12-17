@@ -2,7 +2,7 @@ CC = clang
 COMMON_FLAGS = \
   -Os -fno-inline-functions -D__XMOS__ -DPATH_MAX=64 -DVERSION="\"1\"" -DDOOMWADDIR="\"\""
 CFLAGS = --target=xcore -mcmodel=large $(COMMON_FLAGS)
-XCFLAGS = $(COMMON_FLAGS)
+XCFLAGS = -g $(COMMON_FLAGS)
 LDFLAGS = \
   --target=xcore \
   -Wl,-target=XK-1A \
@@ -27,7 +27,6 @@ DOOM_OBJS = \
   l_main.o \
   l_sound_xcore.o \
   l_system.o \
-  l_video_xcore.o \
   lprintf.o \
   m_argv.o \
   m_bbox.o \
@@ -74,10 +73,12 @@ DOOM_OBJS = \
   w_wad.o \
   wi_stuff.o \
   x_main.o \
+  x_video.o \
   z_bmalloc.o \
   z_zone.o
 
 SUPPORT_OBJS = \
+  doom_display.o \
   lcd.o \
   ptr_buffers.o
 
