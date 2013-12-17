@@ -41,13 +41,8 @@ rcsid[] = "$Id: l_system.c,v 1.33 2000/02/26 19:18:23 cph Exp $";
 #include <stdlib.h>
 #include <ctype.h>
 #include <signal.h>
-#ifdef __XMOS__
-#include "xs1.h"
-#include "get_time.h"
-#else
 #include <unistd.h>
 #include "SDL.h"
-#endif
 
 #include "i_system.h"
 #include "doomtype.h"
@@ -62,17 +57,9 @@ rcsid[] = "$Id: l_system.c,v 1.33 2000/02/26 19:18:23 cph Exp $";
 #include "../config.h"
 #endif
 
-#ifdef __XMOS__
-#define SDL_GetTicks() 0
-#endif
-
 OVERLAY int I_GetTime_RealTime (void)
 {
-#ifdef __XMOS__
-  return (get_time_uint64() * TICRATE) / XS1_TIMER_HZ;
-#else
   return (SDL_GetTicks()*TICRATE)/1000;
-#endif
 }
 
 /*
@@ -88,11 +75,7 @@ OVERLAY unsigned long I_GetRandomTimeSeed(void)
   gettimeofday(&tv,&tz);
   return (tv.tv_sec*1000ul + tv.tv_usec/1000ul);
  */
-#ifdef __XMOS__
-  return get_time_uint64();
-#else
   return SDL_GetTicks();
-#endif
 }
 
 /* cphipps - I_SigString
@@ -111,33 +94,17 @@ OVERLAY const char* I_SigString(char* buf, size_t sz, int signum)
 
 int I_FileExists(const char *path)
 {
-#ifdef __XMOS__
-  return I_FileIsReadable(path);
-#else
   return access(path, F_OK) == 0;
-#endif
 }
 
 int I_FileIsReadable(const char *path)
 {
-#ifdef __XMOS__
-  FILE *fp = fopen(path, "r");
-  if (!fp)
-    return 0;
-  fclose(fp);
-  return 1;
-#else
   return access(path, R_OK) == 0;
-#endif
 }
 
 int I_IsATerminal(int fd)
 {
-#ifdef __XMOS__
-  return 0;
-#else
   return isatty(fd);
-#endif
 }
 
 /********************************************************************************************

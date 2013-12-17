@@ -25,7 +25,6 @@ DOOM_OBJS = \
   info.o \
   l_joy.o \
   l_main.o \
-  l_system.o \
   lprintf.o \
   m_argv.o \
   m_bbox.o \
@@ -73,6 +72,7 @@ DOOM_OBJS = \
   wi_stuff.o \
   x_main.o \
   x_sound.o \
+  x_system.o \
   x_video.o \
   z_bmalloc.o \
   z_zone.o
