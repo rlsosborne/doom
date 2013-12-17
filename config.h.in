@@ -10,6 +10,9 @@
 /* Define on big endian target */
 #cmakedefine __BIG_ENDIAN__
 
+/* Define for dehacked support */
+#cmakedefine DEHACKED
+
 /* Define for high resolution support */
 #cmakedefine HIGHRES
 

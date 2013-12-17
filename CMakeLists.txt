@@ -38,6 +38,7 @@ set(LSDLDOOM_VERSION_TWEAK "")
 set(
   CPACK_PACKAGE_VERSION
   "${LSDLDOOM_VERSION_MAJOR}.${LSDLDOOM_VERSION_MINOR}${LSDLDOOM_VERSION_TWEAK}")
+option(DEHACKED "Dehacked file support" On)
 option(HIGHRES "High resolution support" On)
 option(RANGECHECK "Internal range checking" Off)
 option(INSTRUMENTED "Real-time memory allocation statistics" Off)

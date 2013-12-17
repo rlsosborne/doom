@@ -452,6 +452,8 @@ const char *savegamename = "BOOMSAV";
 // strdups to set these new values that we read from the file, orphaning
 // the original value set above.
 
+#ifdef DEHACKED
+
 // CPhipps - make strings pointed to const
 typedef struct {
   const char **ppstr;  // doubly indirect pointer to string
@@ -781,6 +783,8 @@ static const deh_strs deh_strlookup[] = {
 static int deh_numstrlookup =
 sizeof(deh_strlookup)/sizeof(deh_strlookup[0]);
 
+#endif /* DEHACKED */
+
 const char *deh_newlevel = "NEWLEVEL"; // CPhipps - const
 
 // DOOM shareware/registered/retail (Ultimate) names.
@@ -954,6 +958,8 @@ const char **const mapnamest[] = // TNT WAD map names.
   &s_THUSTR_31,
   &s_THUSTR_32,
 };
+
+#ifdef DEHACKED
 
 // Function prototypes
 static void    lfstrip(char *);     // strip the \r and/or \n off of a line
@@ -2764,6 +2770,8 @@ OVERLAY static boolean deh_GetData(char *s, char *k, long *l, char **strval, FIL
 
   return(okrc);
 }
+
+#endif
 
 //---------------------------------------------------------------------
 //

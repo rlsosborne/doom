@@ -1233,7 +1233,7 @@ OVERLAY void D_DoomMainSetup(void)
   DoLooseFiles();  // Ty 08/29/98 - handle "loose" files on command line
   IdentifyVersion();
 
-  // ty 03/09/98 do dehacked stuff
+#ifdef DEHACKED
   // Note: do this before any other since it is expected by
   // the deh patch author that this is actually part of the EXE itself
   // Using -deh in BOOM, others use -dehacked.
@@ -1260,7 +1260,7 @@ OVERLAY void D_DoomMainSetup(void)
           ProcessDehFile(file,D_dehout(),0);
         }
     }
-  // ty 03/09/98 end of do dehacked stuff
+#endif /* DEHACKED */
 
   // jff 1/24/98 set both working and command line value of play parms
   nomonsters = clnomonsters = M_CheckParm ("-nomonsters");
@@ -1500,9 +1500,14 @@ OVERLAY void D_DoomMainSetup(void)
          */
         const char* ext = NULL;
         if (strlen(fpath)>=4) ext = fpath + strlen(fpath) - 4;
-        if (ext && (!strcasecmp(ext,".deh") || !strcasecmp(ext,".bex"))) 
+        if (ext && (!strcasecmp(ext,".deh") || !strcasecmp(ext,".bex"))) {
+#ifdef DEHACKED
           ProcessDehFile(fpath, D_dehout(), 0);
-        else {
+#else
+          I_Error("Can't load dehacked file (support compiled out): %s\n",
+                  fname);
+#endif
+        } else {
           D_AddFile(fpath,source_auto_load);
         }
         modifiedgame = true; 
@@ -1561,8 +1566,13 @@ OVERLAY void D_DoomMainSetup(void)
 
   lprintf(LO_INFO,"\n");     // killough 3/6/98: add a newline, by popular demand :)
 
-  if ((p = W_CheckNumForName("DEHACKED")) != -1) // cph - add dehacked-in-a-wad support
+  if ((p = W_CheckNumForName("DEHACKED")) != -1) { // cph - add dehacked-in-a-wad support
+#ifdef DEHACKED
     ProcessDehFile(NULL, D_dehout(), p);
+#else
+    I_Error("Can't load dehacked file (support compiled out)\n");
+#endif
+  }
 
   V_InitColorTranslation(); //jff 4/24/98 load color translation lumps
 

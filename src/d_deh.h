@@ -737,7 +737,15 @@ extern const char* startup5;
 // from g_game.c, prefix for savegame name like "boomsav"
 extern const char* savegamename;
 
+#ifdef HAVE_CONFIG_H
+#include "../config.h"
+#endif
+
+#ifdef DEHACKED
+
 void ProcessDehFile(const char *filename, const char *outfilename, int lumpnum);
+
+#endif
 
 #endif
 
