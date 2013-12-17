@@ -1,12 +1,12 @@
 CC = clang
 COMMON_FLAGS = \
-  -Os -fno-inline-functions -D__XMOS__ -DPATH_MAX=64 -DVERSION="\"1\"" -DDOOMWADDIR="\"\""
+  -Os -D__XMOS__ -DPATH_MAX=64 -DVERSION="\"1\"" -DDOOMWADDIR="\"\""
 CFLAGS = --target=xcore -mcmodel=large $(COMMON_FLAGS)
 XCFLAGS = -g $(COMMON_FLAGS)
 LDFLAGS = \
   --target=xcore \
   -Wl,-target=XK-1A \
-  -Wl,-Xmapper,--image-size,-Xmapper,0x10000000,-Xmapper,--image-base,-Xmapper,0x10000000
+  -Wl,-Xmapper,--image-size,-Xmapper,0x1000000,-Xmapper,--image-base,-Xmapper,0x1000000
 
 DOOM_OBJS = \
   am_map.o \
