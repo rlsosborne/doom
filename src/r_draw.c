@@ -133,7 +133,7 @@ const byte    *dc_source;      // first pixel in a column (possibly virtual)
 //  be used. It has also been used with Wolfenstein 3D.
 //
 
-OVERLAY void R_DrawColumn_Normal (void) 
+OVERLAY void R_DrawColumn(void)
 {
   int     count;
   byte    *dest;            // killough
@@ -281,11 +281,6 @@ OVERLAY void R_DrawColumn_Normal (void)
   }
 }
 
-OVERLAY void R_DrawColumn_HighRes (void)
-{
-        R_DrawColumn_Normal();
-}
-
 // Here is the version of R_DrawColumn that deals with translucent  // phares
 // textures and sprites. It's identical to R_DrawColumn except      //    |
 // for the spot where the color index is stuffed into *dest. At     //    V
@@ -298,7 +293,7 @@ OVERLAY void R_DrawColumn_HighRes (void)
 // opaque' decision is made outside this routine, not down where the
 // actual code differences are.
 
-OVERLAY void R_DrawTLColumn_Normal (void)                                           
+OVERLAY void R_DrawTLColumn(void)
 { 
   int      count;
   byte    *dest;           // killough
@@ -376,10 +371,6 @@ OVERLAY void R_DrawTLColumn_Normal (void)
   }
 } 
 
-OVERLAY void R_DrawTLColumn_HighRes (void)
-{
-	R_DrawTLColumn_Normal();
-}
 //
 // Spectre/Invisibility.
 //

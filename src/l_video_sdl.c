@@ -54,9 +54,6 @@ rcsid[] = "$Id: l_video_x.c,v 1.27 1999/10/12 13:01:11 cphipps Exp $";
 #include "w_wad.h"
 #include "lprintf.h"
 
-void (*R_DrawColumn)(void);
-void (*R_DrawTLColumn)(void);
-
 extern void M_QuitDOOM(int choice);
 
 int use_vsync = 0; // Included not to break m_misc, but not relevant to SDL
@@ -408,14 +405,6 @@ void I_SetRes(unsigned int width, unsigned int height)
   SCREENHEIGHT = 
 #endif
     (height+3) & ~3;
-
-  if (SCREENWIDTH == 320) {
-    R_DrawColumn = R_DrawColumn_Normal;
-    R_DrawTLColumn = R_DrawTLColumn_Normal;
-  } else {
-    R_DrawColumn = R_DrawColumn_HighRes;
-    R_DrawTLColumn = R_DrawTLColumn_HighRes;
-  }
   printf("I_SetRes: Using resolution %dx%d\n", SCREENWIDTH, SCREENHEIGHT);
 }
 
