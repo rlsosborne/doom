@@ -34,9 +34,6 @@
 static const char rcsid[] = "$Id: r_main.c,v 1.20 1999/10/31 15:51:45 cphipps Exp $";
 
 #include "compiler.h"
-#ifndef __XMOS__
-#include "SDL.h"
-#endif
 #include "doomstat.h"
 #include "w_wad.h"
 #include "r_main.h"
@@ -50,11 +47,8 @@ static const char rcsid[] = "$Id: r_main.c,v 1.20 1999/10/31 15:51:45 cphipps Ex
 #include "lprintf.h"
 #include "st_stuff.h"
 #include "i_main.h"
+#include "i_system.h"
 #include "g_game.h"
-
-#ifdef __XMOS__
-#define SDL_GetTicks() 0
-#endif
 
 void R_LoadTrigTables(void);
 
@@ -574,16 +568,16 @@ static int lasttime=0, frames=0,elapsed;
 
 OVERLAY static void R_ShowStats(void)
 {
-	int now = SDL_GetTicks();
+  int now = I_GetTime_RealTime();
 
-	++frames;
-	elapsed=(now-lasttime);
-	if( elapsed >= 2000 )
-	{
-		doom_printf("Frame rate: %d\n",(frames/(elapsed/1000)) );
-		lasttime = now;
-		frames = 0;
-	}
+  ++frames;
+  elapsed=(now-lasttime);
+  if (elapsed >= TICRATE * 2)
+  {
+    doom_printf("Frame rate: %d\n",(frames/(elapsed/TICRATE)));
+    lasttime = now;
+    frames = 0;
+  }
 }
 
 //
