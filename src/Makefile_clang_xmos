@@ -4,9 +4,9 @@ COMMON_FLAGS = \
 CFLAGS = --target=xcore -mcmodel=large $(COMMON_FLAGS)
 XCFLAGS = -g $(COMMON_FLAGS)
 LDFLAGS = \
-  --target=xcore \
-  -Wl,-target=XK-1A \
-  -Wl,-Xmapper,--image-size,-Xmapper,0x1000000,-Xmapper,--image-base,-Xmapper,0x1000000
+  -report -target=XK-1A \
+  -Xmapper --image-size -Xmapper 0x1000000 \
+  -Xmapper --image-base -Xmapper 0x1000000
 
 DOOM_OBJS = \
   am_map.o \
@@ -88,7 +88,7 @@ OBJS = $(DOOM_OBJS) $(SUPPORT_OBJS)
 all : doom.xe
 
 doom.xe: $(OBJS)
-	clang $(LDFLAGS) $(OBJS) -o $@
+	xcc $(LDFLAGS) $(OBJS) -o $@
 
 # pull in dependency info for *existing* .o files
 -include $(OBJS:.o=.P)
