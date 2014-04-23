@@ -134,7 +134,7 @@ OVERLAY void S_Init(int sfxVolume, int musicVolume)
     // simultaneously) within zone memory.
     // CPhipps - calloc
     channels =
-      (channel_t *) Z_Calloc(numChannels,sizeof(channel_t), PU_STATIC, 0);
+      (channel_t *) Z_Calloc(numChannels,sizeof(channel_t), PU_STATIC);
 
     // Note that sounds have not been cached (yet).
     for (i=1 ; i<NUMSFX ; i++)

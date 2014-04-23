@@ -57,6 +57,8 @@ rcsid[] = "$Id: l_system.c,v 1.33 2000/02/26 19:18:23 cph Exp $";
 #include "../config.h"
 #endif
 
+int	mb_used = 6;
+
 OVERLAY int I_GetTime_RealTime (void)
 {
   return (SDL_GetTicks()*TICRATE)/1000;
@@ -106,6 +108,13 @@ int I_IsATerminal(int fd)
 {
   return isatty(fd);
 }
+
+byte* I_ZoneBase (int*	size)
+{
+  *size = mb_used*1024*1024;
+  return (byte *) (malloc)(*size);
+}
+
 
 /********************************************************************************************
  * $Log: l_system.c,v $

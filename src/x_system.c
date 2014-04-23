@@ -44,3 +44,13 @@ int I_IsATerminal(int fd)
 {
   return 0;
 }
+
+#define HEAP_MB 6
+
+static byte heap[HEAP_MB*1024*1024];
+
+byte *I_ZoneBase(int *size)
+{
+  *size = HEAP_MB * 1024 * 1024;
+  return heap;
+}

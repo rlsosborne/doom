@@ -32,6 +32,8 @@
 #ifndef __I_SYSTEM__
 #define __I_SYSTEM__
 
+#include "doomtype.h"
+
 #ifdef __GNUG__
 #pragma interface
 #endif
@@ -58,7 +60,10 @@ int I_FileIsReadable(const char *path);
 
 int I_IsATerminal(int fd);
 
-
+// Called by startup code
+// to get the ammount of memory to malloc
+// for the zone management.
+byte*	I_ZoneBase (int *size);
 
 #endif
 

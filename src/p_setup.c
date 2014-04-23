@@ -164,7 +164,7 @@ OVERLAY static void P_LoadSegs (int lump)
   const byte *data; // cph - const
 
   numsegs = W_LumpLength(lump) / sizeof(mapseg_t);
-  segs = Z_Calloc(numsegs,sizeof(seg_t),PU_LEVEL,0);
+  segs = Z_Calloc(numsegs,sizeof(seg_t),PU_LEVEL);
   data = W_CacheLumpNum(lump); // cph - wad lump handling updated
 
   for (i=0; i<numsegs; i++)
@@ -209,7 +209,7 @@ OVERLAY static void P_LoadSubsectors (int lump)
   int  i;
 
   numsubsectors = W_LumpLength (lump) / sizeof(mapsubsector_t);
-  subsectors = Z_Calloc(numsubsectors,sizeof(subsector_t),PU_LEVEL,0);
+  subsectors = Z_Calloc(numsubsectors,sizeof(subsector_t),PU_LEVEL);
   data = W_CacheLumpNum(lump); // cph - wad lump handling updated
 
   for (i=0; i<numsubsectors; i++)
@@ -232,7 +232,7 @@ OVERLAY static void P_LoadSectors (int lump)
   int  i;
 
   numsectors = W_LumpLength (lump) / sizeof(mapsector_t);
-  sectors = Z_Calloc (numsectors,sizeof(sector_t),PU_LEVEL,0);
+  sectors = Z_Calloc (numsectors,sizeof(sector_t),PU_LEVEL);
   data = W_CacheLumpNum (lump); // cph - wad lump handling updated
 
   for (i=0; i<numsectors; i++)
@@ -376,7 +376,7 @@ OVERLAY static void P_LoadLineDefs (int lump)
   int  i;
 
   numlines = W_LumpLength (lump) / sizeof(maplinedef_t);
-  lines = Z_Calloc (numlines,sizeof(line_t),PU_LEVEL,0);
+  lines = Z_Calloc (numlines,sizeof(line_t),PU_LEVEL);
   data = W_CacheLumpNum (lump); // cph - wad lump handling updated
 
   for (i=0; i<numlines; i++)
@@ -484,7 +484,7 @@ OVERLAY static void P_LoadLineDefs2(int lump)
 OVERLAY static void P_LoadSideDefs (int lump)
 {
   numsides = W_LumpLength(lump) / sizeof(mapsidedef_t);
-  sides = Z_Calloc(numsides,sizeof(side_t),PU_LEVEL,0);
+  sides = Z_Calloc(numsides,sizeof(side_t),PU_LEVEL);
 }
 
 // killough 4/4/98: delay using texture names until
@@ -908,7 +908,7 @@ OVERLAY static void P_LoadBlockMap (int lump)
     }
 
   // clear out mobj chains - CPhipps - use calloc
-  blocklinks = Z_Calloc (bmapwidth*bmapheight,sizeof(*blocklinks),PU_LEVEL,0);
+  blocklinks = Z_Calloc (bmapwidth*bmapheight,sizeof(*blocklinks),PU_LEVEL);
   blockmap = blockmaplump+4;
 }
 

@@ -40,6 +40,7 @@ rcsid[] = "$Id: r_things.c,v 1.11 1999/11/01 17:09:14 cphipps Exp $";
 #include "r_segs.h"
 #include "r_draw.h"
 #include "r_things.h"
+#include "z_zone.h"
 #include "lprintf.h"
 
 #define MINZ        (FRACUNIT*4)

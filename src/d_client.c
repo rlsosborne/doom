@@ -280,7 +280,7 @@ OVERLAY void NetUpdate(void)
       case PKT_QUIT: // Player quit
 	// Queue packet to be processed when its tic time is reached
 	queuedpacket = Z_Realloc(queuedpacket, ++numqueuedpackets * sizeof *queuedpacket, 
-				 PU_STATIC, NULL);
+				 PU_STATIC);
 	queuedpacket[numqueuedpackets-1] = Z_Malloc(recvlen, PU_STATIC, NULL);
 	memcpy(queuedpacket[numqueuedpackets-1], packet, recvlen);
 	break;
@@ -391,7 +391,7 @@ OVERLAY static void CheckQueuedPackets(void)
     for (i=0; i<numqueuedpackets; i++)
       if (queuedpacket[i]->tic > gametic) {
 	newqueue = Z_Realloc(newqueue, ++newnum * sizeof *newqueue, 
-			     PU_STATIC, NULL);
+			     PU_STATIC);
 	newqueue[newnum-1] = queuedpacket[i];
       } else Z_Free(queuedpacket[i]);
 

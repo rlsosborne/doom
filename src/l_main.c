@@ -128,11 +128,13 @@ OVERLAY static void I_SignalHandler(int s)
   strcpy(buf,"Exiting on signal: ");
   I_SigString(buf+strlen(buf),2000-strlen(buf),s);
 
+#if 0
   /* If corrupted memory could cause crash, dump memory
    * allocation history, which points out probable causes
    */
   if (s==SIGSEGV || s==SIGILL || s==SIGFPE)
     Z_DumpHistory(buf);
+#endif
 
   I_Error("%s",buf);
 }
