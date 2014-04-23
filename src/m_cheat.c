@@ -521,7 +521,7 @@ OVERLAY static void cheat_massacre()    // jff 2/01/98 kill all monsters
   extern void A_PainDie(mobj_t *);
 
   while ((currentthinker=currentthinker->next)!=&thinkercap)
-    if (currentthinker->function.acp1 == (actionf_p1) P_MobjThinker &&
+    if (currentthinker->function == (actionf_p1) P_MobjThinker &&
         (((mobj_t *) currentthinker)->flags & MF_COUNTKILL ||
          ((mobj_t *) currentthinker)->type == MT_SKULL))
       { // killough 3/6/98: kill even if PE is dead

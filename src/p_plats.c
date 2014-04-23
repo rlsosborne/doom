@@ -226,7 +226,7 @@ OVERLAY int EV_DoPlat
     plat->type = type;
     plat->sector = sec;
     plat->sector->floordata = plat; //jff 2/23/98 multiple thinkers
-    plat->thinker.function.acp1 = (actionf_p1) T_PlatRaise;
+    plat->thinker.function = (actionf_p1) T_PlatRaise;
     plat->crush = false;
     plat->tag = line->tag;
 
@@ -352,7 +352,7 @@ OVERLAY void P_ActivateInStasis(int tag)
         plat->status = plat->oldstatus==up? down : up;
       else
         plat->status = plat->oldstatus;
-      plat->thinker.function.acp1 = (actionf_p1) T_PlatRaise;
+      plat->thinker.function = (actionf_p1) T_PlatRaise;
     }
   }
 }
@@ -377,7 +377,7 @@ OVERLAY int EV_StopPlat(line_t* line)
     {
       plat->oldstatus = plat->status;    // put it in stasis
       plat->status = in_stasis;
-      plat->thinker.function.acv = (actionf_v)NULL;
+      plat->thinker.function = (actionf_p1)NULL;
     }
   }
   return 1;

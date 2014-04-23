@@ -139,9 +139,9 @@ OVERLAY void P_RemoveThinker(thinker_t *thinker)
 {
   /* cph - Different removal function if it's an mobj
    * since for an mobj we have to check references first */
-  thinker->function.acv = 
-    (thinker->function.acp1 == (actionf_p1) P_MobjThinker) 
-    ? (actionf_v)P_RemoveMobjDelayed : (actionf_v)P_RemoveThinkerDelayed;
+  thinker->function =
+    (thinker->function == (actionf_p1) P_MobjThinker)
+    ? (actionf_p1)P_RemoveMobjDelayed : (actionf_p1)P_RemoveThinkerDelayed;
 }
 
 //
@@ -172,8 +172,8 @@ OVERLAY static void P_RunThinkers (void)
   for (currentthinker = thinkercap.next;
        currentthinker != &thinkercap;
        currentthinker = currentthinker->next)
-    if (currentthinker->function.acp1)
-      currentthinker->function.acp1(currentthinker);
+    if (currentthinker->function)
+      (*currentthinker->function)(currentthinker);
 }
 
 //

@@ -63,7 +63,7 @@ typedef union
  *  function pointer to a routine to handle
  *  an actor.
  */
-typedef actionf_t  think_t;
+typedef actionf_p1  think_t;
 
 
 /* Doubly linked list of actors. */
@@ -71,7 +71,7 @@ typedef struct thinker_s
 {
   struct thinker_s*   prev;
   struct thinker_s*   next;
-  think_t             function;
+  think_t          function;
     
 } thinker_t;
 

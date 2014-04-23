@@ -495,14 +495,14 @@ OVERLAY void P_MobjThinker (mobj_t* mobj)
   if (mobj->momx | mobj->momy || mobj->flags & MF_SKULLFLY)
     {
       P_XYMovement(mobj);
-      if (mobj->thinker.function.acv != P_MobjThinker) // cph - Must've been removed
+      if (mobj->thinker.function != P_MobjThinker) // cph - Must've been removed
 	return;       // killough - mobj was removed
     }
 
   if (mobj->z != mobj->floorz || mobj->momz)
     {
       P_ZMovement(mobj);
-      if (mobj->thinker.function.acv != P_MobjThinker) // cph - Must've been removed
+      if (mobj->thinker.function != P_MobjThinker) // cph - Must've been removed
 	return;       // killough - mobj was removed
     }
 
@@ -600,7 +600,7 @@ OVERLAY mobj_t* P_SpawnMobj(fixed_t x,fixed_t y,fixed_t z,mobjtype_t type)
   else
     mobj->z = z;
 
-  mobj->thinker.function.acp1 = (actionf_p1)P_MobjThinker;
+  mobj->thinker.function = (actionf_p1)P_MobjThinker;
   mobj->above_thing = 0;                                            // phares
   mobj->below_thing = 0;                                            // phares
   mobj->friction    = ORIG_FRICTION;                        // phares 3/17/98
