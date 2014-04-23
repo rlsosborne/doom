@@ -29,6 +29,7 @@ rcsid[] = "$Id: z_zone.c,v 1.4 1997/02/03 16:47:58 b1 Exp $";
 #include "doomdef.h"
 #include "doomtype.h"
 #include "lprintf.h"
+#include "compiler.h"
 
 
 //
@@ -66,7 +67,7 @@ memzone_t*	mainzone;
 //
 // Z_ClearZone
 //
-void Z_ClearZone (memzone_t* zone)
+OVERLAY void Z_ClearZone (memzone_t* zone)
 {
   memblock_t*		block;
   
@@ -92,7 +93,7 @@ void Z_ClearZone (memzone_t* zone)
 //
 // Z_Init
 //
-void Z_Init (void)
+OVERLAY void Z_Init (void)
 {
   memblock_t*	block;
   int		size;
@@ -121,7 +122,7 @@ void Z_Init (void)
 //
 // Z_Free
 //
-void Z_Free (void* ptr)
+OVERLAY void Z_Free (void* ptr)
 {
   memblock_t*		block;
   memblock_t*		other;
@@ -185,7 +186,7 @@ void Z_Free (void* ptr)
 #define MINFRAGMENT		64
 
 
-void*
+OVERLAY void*
 Z_Malloc
 ( int		size,
  int		tag,
@@ -298,7 +299,7 @@ Z_Malloc
 //
 // Z_FreeTags
 //
-void
+OVERLAY void
 Z_FreeTags
 ( int		lowtag,
  int		hightag )
@@ -328,7 +329,7 @@ Z_FreeTags
 // Z_DumpHeap
 // Note: TFileDumpHeap( stdout ) ?
 //
-void
+OVERLAY void
 Z_DumpHeap
 ( int		lowtag,
  int		hightag )
@@ -368,7 +369,7 @@ Z_DumpHeap
 //
 // Z_FileDumpHeap
 //
-void Z_FileDumpHeap (FILE* f)
+OVERLAY void Z_FileDumpHeap (FILE* f)
 {
   memblock_t*	block;
   
@@ -401,7 +402,7 @@ void Z_FileDumpHeap (FILE* f)
 //
 // Z_CheckHeap
 //
-void Z_CheckHeap (void)
+OVERLAY void Z_CheckHeap (void)
 {
   memblock_t*	block;
   
@@ -430,7 +431,7 @@ void Z_CheckHeap (void)
 //
 // Z_ChangeTag
 //
-void
+OVERLAY void
 Z_ChangeTag2
 ( void*		ptr,
  int		tag )
@@ -453,7 +454,7 @@ Z_ChangeTag2
 //
 // Z_FreeMemory
 //
-int Z_FreeMemory (void)
+OVERLAY int Z_FreeMemory (void)
 {
   memblock_t*		block;
   int			free;
@@ -470,7 +471,7 @@ int Z_FreeMemory (void)
   return free;
 }
 
-void *Z_Calloc (size_t n, size_t n2, int tag)
+OVERLAY void *Z_Calloc (size_t n, size_t n2, int tag)
 {
   size_t size = n * n2;
   if (!size)
@@ -478,7 +479,7 @@ void *Z_Calloc (size_t n, size_t n2, int tag)
   return memset(Z_Malloc(size, tag, NULL), 0, size);
 }
 
-void *Z_Realloc(void *ptr, size_t n, int tag)
+OVERLAY void *Z_Realloc(void *ptr, size_t n, int tag)
 {
   void *p = Z_Malloc(n, tag, NULL);
   if (ptr)
@@ -490,7 +491,7 @@ void *Z_Realloc(void *ptr, size_t n, int tag)
   return p;
 }
 
-char *Z_Strdup(const char *s, int tag)
+OVERLAY char *Z_Strdup(const char *s, int tag)
 {
   return strcpy(Z_Malloc(strlen(s)+1, tag, NULL), s);
 }
