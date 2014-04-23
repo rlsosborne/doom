@@ -42,7 +42,7 @@ void I_Init(void);
 void I_SafeExit(int rc);
 
 extern int broken_pipe;
-extern int (*I_GetTime)(void);
+extern int I_GetTime(void);
 
 #ifdef SECURE_UID
 extern uid_t stored_euid; /* UID that the SVGALib I_InitGraphics switches to before vga_init() */

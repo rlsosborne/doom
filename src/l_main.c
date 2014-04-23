@@ -55,6 +55,7 @@ rcsid[] = "$Id: l_main.c,v 1.14 2000/03/16 13:27:29 cph Exp $";
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 
 int broken_pipe;
 
@@ -67,6 +68,13 @@ int broken_pipe;
 
 int realtic_clock_rate = 100;
 static int_64_t I_GetTime_Scale = 1<<24;
+typedef enum {
+  GETTIME_ERROR,
+  GETTIME_REALTIME,
+  GETTIME_SCALED,
+  GETTIME_FASTDEMO,
+} gettime_type_t;
+static gettime_type_t I_GetTime_Type = GETTIME_ERROR;
 
 OVERLAY static int I_GetTime_Scaled(void)
 {
@@ -85,21 +93,34 @@ OVERLAY static int I_GetTime_Error(void)
   return 0;
 }
 
-int (*I_GetTime)(void) = I_GetTime_Error;
+OVERLAY int I_GetTime(void)
+{
+  switch (I_GetTime_Type) {
+    default: assert(0 && "Unexpected I_GetTime type");
+    case GETTIME_ERROR:
+      return I_GetTime_Error();
+    case GETTIME_FASTDEMO:
+      return I_GetTime_FastDemo();
+    case GETTIME_REALTIME:
+      return I_GetTime_RealTime();
+    case GETTIME_SCALED:
+      return I_GetTime_Scaled();
+  }
+}
 
 OVERLAY void I_Init(void)
 {
   /* killough 4/14/98: Adjustable speedup based on realtic_clock_rate */
   if (fastdemo)
-    I_GetTime = I_GetTime_FastDemo;
+    I_GetTime_Type = GETTIME_FASTDEMO;
   else
     if (realtic_clock_rate != 100)
       {
         I_GetTime_Scale = ((int_64_t) realtic_clock_rate << 24) / 100;
-        I_GetTime = I_GetTime_Scaled;
+        I_GetTime_Type = GETTIME_SCALED;
       }
     else
-      I_GetTime = I_GetTime_RealTime;
+      I_GetTime_Type = GETTIME_REALTIME;
 
   { 
     /* killough 2/21/98: avoid sound initialization if no sound & no music */
