@@ -25,13 +25,13 @@ SOURCE_DIRS = src
 # If the variable XCC_MAP_FLAGS is set it overrides the flags passed to 
 # xcc for the final link (mapping) stage.
 
-XCC_FLAGS = -foverlay=syscall -Xmapper --errdemote53 -Xmapper --image-size -Xmapper 0x160000 -Xmapper --image-base -Xmapper 0x160000 -Os -save-temps -g -report -Xmapper --map -Xmapper MAPFILE -D__XMOS__
+XCC_FLAGS = -DUSE_OVERLAYS -Xmapper --no-overlay-data -foverlay=syscall -Xmapper --errdemote53 -Xmapper --image-size -Xmapper 0x1000000 -Xmapper --image-base -Xmapper 0x1000000 -Os -save-temps -g -report -Xmapper --map -Xmapper MAPFILE -D__XMOS__
 
 XCC_XC_FLAGS = -fimplicit-overlay $(XCC_FLAGS)
 
-XCC_FLAGS += -DPATH_MAX=64 -DVERSION=1 -DNO_PREDEFINED_LUMPS=1
+XCC_FLAGS += -DPATH_MAX=64 -DVERSION=1 -DDOOMWADDIR="\"\""  -DNO_PREDEFINED_LUMPS=1
 
-EXCLUDE_FILES += l_video_sdl.c l_udp.c l_sound_sdl.c d_server.c drawcol.S drawspan.S 
+EXCLUDE_FILES += l_system.c l_video_sdl.c l_udp.c l_sound_sdl.c d_server.c
 
 # The USED_MODULES variable lists other module used by the application. 
 

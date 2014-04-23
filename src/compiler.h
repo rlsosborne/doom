@@ -1,7 +1,7 @@
 #ifndef __COMPILER_H__
 #define __COMPILER_H__
 
-#if defined(__XMOS__) && defined(XCC_MAJOR_VERSION)
+#if defined(USE_OVERLAYS)
 #define OVERLAY __attribute__((overlay))
 #else
 #define OVERLAY
