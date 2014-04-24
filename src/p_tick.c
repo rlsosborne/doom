@@ -140,8 +140,8 @@ OVERLAY void P_RemoveThinker(thinker_t *thinker)
   /* cph - Different removal function if it's an mobj
    * since for an mobj we have to check references first */
   thinker->function =
-    (thinker->function == (actionf_p1) P_MobjThinker)
-    ? (actionf_p1)P_RemoveMobjDelayed : (actionf_p1)P_RemoveThinkerDelayed;
+    (thinker->function == Think_P_MobjThinker)
+    ? Think_P_RemoveMobjDelayed : Think_P_RemoveThinkerDelayed;
 }
 
 //
@@ -172,8 +172,56 @@ OVERLAY static void P_RunThinkers (void)
   for (currentthinker = thinkercap.next;
        currentthinker != &thinkercap;
        currentthinker = currentthinker->next)
-    if (currentthinker->function)
-      (*currentthinker->function)(currentthinker);
+    if (currentthinker->function != Think_None)
+      switch (currentthinker->function) {
+        case Think_None:
+          break;
+        case Think_P_MobjThinker:
+          P_MobjThinker(currentthinker);
+          break;
+        case Think_T_MoveCeiling:
+          T_MoveCeiling(currentthinker);
+          break;
+        case Think_T_VerticalDoor:
+          T_VerticalDoor(currentthinker);
+          break;
+        case Think_T_MoveFloor:
+          T_MoveFloor(currentthinker);
+          break;
+        case Think_T_MoveElevator:
+          T_MoveElevator(currentthinker);
+          break;
+        case Think_T_PlatRaise:
+          T_PlatRaise(currentthinker);
+          break;
+        case Think_T_FireFlicker:
+          T_FireFlicker(currentthinker);
+          break;
+        case Think_T_LightFlash:
+          T_LightFlash(currentthinker);
+          break;
+        case Think_T_StrobeFlash:
+          T_StrobeFlash(currentthinker);
+          break;
+        case Think_T_Glow:
+          T_Glow(currentthinker);
+          break;
+        case Think_T_Scroll:
+          T_Scroll(currentthinker);
+          break;
+        case Think_T_Friction:
+          T_Friction(currentthinker);
+          break;
+        case Think_T_Pusher:
+          T_Pusher(currentthinker);
+          break;
+        case Think_P_RemoveMobjDelayed:
+          P_RemoveMobjDelayed(currentthinker);
+          break;
+        case Think_P_RemoveThinkerDelayed:
+          P_RemoveThinkerDelayed(currentthinker);
+          break;
+      }
 }
 
 //

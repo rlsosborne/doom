@@ -63,8 +63,25 @@ typedef union
  *  function pointer to a routine to handle
  *  an actor.
  */
-typedef actionf_p1  think_t;
 
+typedef enum {
+  Think_None,
+  Think_P_MobjThinker,
+  Think_T_MoveCeiling,
+  Think_T_VerticalDoor,
+  Think_T_MoveFloor,
+  Think_T_MoveElevator,
+  Think_T_PlatRaise,
+  Think_T_FireFlicker,
+  Think_T_LightFlash,
+  Think_T_StrobeFlash,
+  Think_T_Glow,
+  Think_T_Scroll,
+  Think_T_Friction,
+  Think_T_Pusher,
+  Think_P_RemoveMobjDelayed,
+  Think_P_RemoveThinkerDelayed
+} think_t;
 
 /* Doubly linked list of actors. */
 typedef struct thinker_s

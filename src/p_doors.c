@@ -374,7 +374,7 @@ OVERLAY int EV_DoDoor
     P_AddThinker (&door->thinker);
     sec->ceilingdata = door; //jff 2/22/98
 
-    door->thinker.function = (actionf_p1) T_VerticalDoor;
+    door->thinker.function = Think_T_VerticalDoor;
     door->sector = sec;
     door->type = type;
     door->topwait = VDOORWAIT;
@@ -553,7 +553,7 @@ OVERLAY int EV_VerticalDoor
   door = Z_Malloc (sizeof(*door), PU_LEVSPEC, 0);
   P_AddThinker (&door->thinker);
   sec->ceilingdata = door; //jff 2/22/98
-  door->thinker.function = (actionf_p1) T_VerticalDoor;
+  door->thinker.function = Think_T_VerticalDoor;
   door->sector = sec;
   door->direction = 1;
   door->speed = VDOORSPEED;
@@ -621,7 +621,7 @@ OVERLAY void P_SpawnDoorCloseIn30 (sector_t* sec)
   sec->ceilingdata = door; //jff 2/22/98
   sec->special = 0;
 
-  door->thinker.function = (actionf_p1)T_VerticalDoor;
+  door->thinker.function = Think_T_VerticalDoor;
   door->sector = sec;
   door->direction = 0;
   door->type = normal;
@@ -651,7 +651,7 @@ OVERLAY void P_SpawnDoorRaiseIn5Mins
   sec->ceilingdata = door; //jff 2/22/98
   sec->special = 0;
 
-  door->thinker.function = (actionf_p1)T_VerticalDoor;
+  door->thinker.function = Think_T_VerticalDoor;
   door->sector = sec;
   door->direction = 2;
   door->type = raiseIn5Mins;

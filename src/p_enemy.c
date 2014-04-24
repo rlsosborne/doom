@@ -500,7 +500,7 @@ OVERLAY void A_KeenDie(mobj_t* mo)
   // scan the remaining thinkers to see if all Keens are dead
 
   for (th = thinkercap.next ; th != &thinkercap ; th=th->next)
-    if (th->function == (actionf_p1)P_MobjThinker)
+    if (th->function == Think_P_MobjThinker)
       {
         mobj_t *mo2 = (mobj_t *) th;
         if (mo2 != mo && mo2->type == mo->type && mo2->health > 0)
@@ -1313,7 +1313,7 @@ OVERLAY void A_PainShootSkull(mobj_t *actor, angle_t angle)
       for (currentthinker = thinkercap.next;
            currentthinker != &thinkercap;
            currentthinker = currentthinker->next)
-        if ((currentthinker->function == (actionf_p1) P_MobjThinker)
+        if ((currentthinker->function == Think_P_MobjThinker)
             && ((mobj_t *)currentthinker)->type == MT_SKULL)
           count++;
       if (count > 20)                                               // phares
@@ -1538,7 +1538,7 @@ OVERLAY void A_BossDeath(mobj_t *mo)
     // scan the remaining thinkers to see
     // if all bosses are dead
   for (th = thinkercap.next ; th != &thinkercap ; th=th->next)
-    if (th->function == (actionf_p1)P_MobjThinker)
+    if (th->function == Think_P_MobjThinker)
       {
         mobj_t *mo2 = (mobj_t *) th;
         if (mo2 != mo && mo2->type == mo->type && mo2->health > 0)
@@ -1654,7 +1654,7 @@ OVERLAY void P_SpawnBrainTargets(void)  // killough 3/26/98: renamed old functio
   for (thinker = thinkercap.next ;
        thinker != &thinkercap ;
        thinker = thinker->next)
-    if (thinker->function == (actionf_p1)P_MobjThinker)
+    if (thinker->function == Think_P_MobjThinker)
       {
         mobj_t *m = (mobj_t *) thinker;
 
