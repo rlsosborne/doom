@@ -47,6 +47,9 @@
 
 #include "info.h"
 
+struct player_s;
+struct mobj_s;
+
 #ifdef __GNUG__
 #pragma interface
 #endif
@@ -83,12 +86,32 @@ typedef struct
 extern int weapon_preferences[2][NUMWEAPONS+1];      /* killough 5/2/98 */
 int P_WeaponPreferred(int w1, int w2);
 
-struct player_s;
 int P_SwitchWeapon(struct player_s *player);
 boolean P_CheckAmmo(struct player_s *player);
 void P_SetupPsprites(struct player_s *curplayer);
 void P_MovePsprites(struct player_s *curplayer);
 void P_DropWeapon(struct player_s *player);
+
+void A_WeaponReady(struct player_s *player, pspdef_t *psp);
+void A_ReFire(struct player_s *player, pspdef_t *psp);
+void A_CheckReload(struct player_s *player, pspdef_t *psp);
+void A_Lower(struct player_s *player, pspdef_t *psp);
+void A_Raise(struct player_s *player, pspdef_t *psp);
+void A_GunFlash(struct player_s *player, pspdef_t *psp);
+void A_Punch(struct player_s *player, pspdef_t *psp);
+void A_Saw(struct player_s *player, pspdef_t *psp);
+void A_FireMissile(struct player_s *player, pspdef_t *psp);
+void A_FireBFG(struct player_s *player, pspdef_t *psp);
+void A_FirePlasma(struct player_s *player, pspdef_t *psp);
+void A_FirePistol(struct player_s *player, pspdef_t *psp);
+void A_FireShotgun(struct player_s *player, pspdef_t *psp);
+void A_FireShotgun2(struct player_s *player, pspdef_t *psp);
+void A_FireCGun(struct player_s *player, pspdef_t *psp);
+void A_Light0(struct player_s *player, pspdef_t *psp);
+void A_Light1 (struct player_s *player, pspdef_t *psp);
+void A_Light2 (struct player_s *player, pspdef_t *psp);
+void A_BFGSpray(struct mobj_s *mo);
+void A_BFGsound(struct player_s *player, pspdef_t *psp);
 
 #endif
 

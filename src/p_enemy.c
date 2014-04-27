@@ -1087,13 +1087,6 @@ OVERLAY void A_VileStart(mobj_t *actor)
   S_StartSound(actor, sfx_vilatk);
 }
 
-//
-// A_Fire
-// Keep fire in front of player unless out of sight
-//
-
-void A_Fire(mobj_t *actor);
-
 OVERLAY void A_StartFire(mobj_t *actor)
 {
   S_StartSound(actor,sfx_flamst);
@@ -1106,6 +1099,10 @@ OVERLAY void A_FireCrackle(mobj_t* actor)
   A_Fire(actor);
 }
 
+//
+// A_Fire
+// Keep fire in front of player unless out of sight
+//
 OVERLAY void A_Fire(mobj_t *actor)
 {
   unsigned an;
@@ -1624,8 +1621,6 @@ OVERLAY void A_LoadShotgun2(player_t *player, pspdef_t *psp)
   S_StartSound(player->mo, sfx_dbload);
 }
 
-void A_ReFire(player_t *player, pspdef_t *psp);
-
 OVERLAY void A_CloseShotgun2(player_t *player, pspdef_t *psp)
 {
   S_StartSound(player->mo, sfx_dbcls);
@@ -1737,8 +1732,6 @@ OVERLAY void A_BrainSpit(mobj_t *mo)
 
   S_StartSound(NULL, sfx_bospit);
 }
-
-void A_SpawnFly(mobj_t *mo);
 
 // travelling cube sound
 OVERLAY void A_SpawnSound(mobj_t *mo)
