@@ -49,7 +49,7 @@
 #define SBARHEIGHT st_height
 #define SBARWIDTH ST_TWIDTH
 
-void (*colfunc)(void);
+columndrawtype_t column_draw_type;
 
 //
 // All drawing to the view buffer is accomplished in this file.
@@ -90,7 +90,7 @@ int     dc_yh;
 fixed_t dc_iscale; 
 fixed_t dc_texturemid;
 int     dc_texheight;    // killough
-const byte    *dc_source;      // first pixel in a column (possibly virtual) 
+const byte    *dc_source;      // first pixel in a column (possibly virtual)
 
 //
 // A column is a vertical slice/span from a wall texture that,
@@ -100,7 +100,7 @@ const byte    *dc_source;      // first pixel in a column (possibly virtual)
 //  be used. It has also been used with Wolfenstein 3D.
 //
 
-OVERLAY void R_DrawSimpleColumn(void)
+OVERLAY static void R_DrawSimpleColumn(void)
 {
   int     count;
   byte    *dest;            // killough
@@ -258,7 +258,7 @@ OVERLAY void R_DrawSimpleColumn(void)
 // opaque' decision is made outside this routine, not down where the
 // actual code differences are.
 
-OVERLAY void R_DrawTLColumn(void)
+OVERLAY static void R_DrawTLColumn(void)
 { 
   int      count;
   byte    *dest;           // killough
@@ -365,7 +365,7 @@ static int fuzzpos = 0;
 //  i.e. spectres and invisible players.
 //
 
-OVERLAY void R_DrawFuzzColumn(void) 
+OVERLAY static void R_DrawFuzzColumn(void)
 { 
   int      count; 
   byte     *dest; 
@@ -445,7 +445,7 @@ OVERLAY void R_DrawFuzzColumn(void)
 const byte *dc_translation;
 byte *translationtables;
 
-OVERLAY void R_DrawTranslatedColumn (void) 
+OVERLAY static void R_DrawTranslatedColumn (void) 
 { 
   int      count; 
   byte     *dest; 
@@ -486,7 +486,21 @@ OVERLAY void R_DrawTranslatedColumn (void)
       frac += fracstep; 
     }
   while (count--); 
-} 
+}
+
+OVERLAY void R_DrawColumn(void)
+{
+  switch (column_draw_type) {
+  case SimpleColumn:
+    return R_DrawSimpleColumn();
+  case TLColumn:
+    return R_DrawTLColumn();
+  case FuzzColumn:
+    return R_DrawFuzzColumn();
+  case TranslatedColumn:
+    return R_DrawTranslatedColumn();
+  }
+}
 
 //
 // R_InitTranslationTables

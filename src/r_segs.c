@@ -126,10 +126,10 @@ OVERLAY void R_RenderMaskedSegRange(drawseg_t *ds, int x1, int x2)
 
   // killough 4/11/98: draw translucent 2s normal textures
 
-  colfunc = R_DrawSimpleColumn;
+  column_draw_type = SimpleColumn;
   if (curline->linedef->tranlump >= 0 && general_translucency)
     {
-      colfunc = R_DrawTLColumn;
+      column_draw_type = TLColumn;
       tranmap = main_tranmap;
       if (curline->linedef->tranlump > 0)
         tranmap = W_CacheLumpNum(curline->linedef->tranlump-1);
@@ -327,7 +327,7 @@ OVERLAY static void R_RenderSegLoop (void)
           dc_texturemid = rw_midtexturemid;
           dc_source = R_GetColumn(midtexture, texturecolumn);
 	  dc_texheight = midtexheight;
-          colfunc ();
+          R_DrawColumn();
           ceilingclip[rw_x] = viewheight;
           floorclip[rw_x] = -1;
         }
@@ -351,7 +351,7 @@ OVERLAY static void R_RenderSegLoop (void)
                   dc_texturemid = rw_toptexturemid;
                   dc_source = R_GetColumn(toptexture,texturecolumn);
 		  dc_texheight = toptexheight;
-                  colfunc ();
+                  R_DrawColumn();
                   ceilingclip[rw_x] = mid;
                 }
               else
@@ -381,7 +381,7 @@ OVERLAY static void R_RenderSegLoop (void)
                   dc_source = R_GetColumn(bottomtexture,
                                           texturecolumn);
                   dc_texheight = bottomtexheight;
-                  colfunc ();
+                  R_DrawColumn();
                   floorclip[rw_x] = mid;
                 }
               else

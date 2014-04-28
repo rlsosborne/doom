@@ -49,24 +49,20 @@ extern int      dc_texheight;    // killough
 // first pixel in a column
 extern const byte     *dc_source;
 
+// enum specifying how to draw a column.
+typedef enum {
+  SimpleColumn,
+  TLColumn,
+  FuzzColumn,
+  TranslatedColumn
+} columndrawtype_t;
+
 //
 // Function pointer to switch refresh/drawing functions.
 //
-extern void (*colfunc)(void);
+extern columndrawtype_t column_draw_type;
 
-// The span blitting interface.
 void R_DrawColumn(void);
-void R_DrawSimpleColumn(void);
-void R_DrawTLColumn(void);
-
-
-
-void R_DrawFuzzColumn(void);    // The Spectre/Invisibility effect.
-
-// Draw with color translation tables, for player sprite rendering,
-//  Green/Red/Blue/Indigo shirts.
-
-void R_DrawTranslatedColumn(void);
 
 void R_VideoErase(unsigned ofs, int count);
 

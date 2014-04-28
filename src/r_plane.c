@@ -378,7 +378,7 @@ OVERLAY static void R_DoDrawPlane(visplane_t *pl)
             {
               dc_source = R_GetColumn(texture, ((an + xtoviewangle[x])^flip) >>
 				      ANGLETOSKYSHIFT);
-              colfunc();
+              R_DrawColumn();
             }
     } else {     // regular flat
      

@@ -344,7 +344,7 @@ OVERLAY void R_DrawMaskedColumn(const column_t *column)
 
           // Drawn by either R_DrawSimpleColumn
           //  or (SHADOW) R_DrawFuzzColumn.
-          colfunc ();
+          R_DrawColumn();
         }
       column = (const column_t *)(  (byte *)column + column->length + 4);
     }
@@ -369,22 +369,22 @@ OVERLAY void R_DrawVisSprite(vissprite_t *vis, int x1, int x2)
   // mixed with translucent/non-translucenct 2s normals
 
   if (!dc_colormap)   // NULL colormap = shadow draw
-    colfunc = R_DrawFuzzColumn;    // killough 3/14/98
+    column_draw_type = FuzzColumn;    // killough 3/14/98
   else
     if (vis->mobjflags & MF_TRANSLATION)
       {
-        colfunc = R_DrawTranslatedColumn;
+        column_draw_type = TranslatedColumn;
         dc_translation = translationtables - 256 +
           ((vis->mobjflags & MF_TRANSLATION) >> (MF_TRANSSHIFT-8) );
       }
     else
       if (vis->mobjflags & MF_TRANSLUCENT && general_translucency) // phares
         {
-          colfunc = R_DrawTLColumn;
+          column_draw_type = TLColumn;
           tranmap = main_tranmap;       // killough 4/11/98
         }
       else
-        colfunc = R_DrawSimpleColumn;         // killough 3/14/98, 4/11/98
+        column_draw_type = SimpleColumn;         // killough 3/14/98, 4/11/98
 
 // proff 11/06/98: Changed for high-res
   dc_iscale = FixedDiv (FRACUNIT, vis->scale);
@@ -406,7 +406,7 @@ OVERLAY void R_DrawVisSprite(vissprite_t *vis, int x1, int x2)
                             LONG(patch->columnofs[texturecolumn]));
       R_DrawMaskedColumn (column);
     }
-  colfunc = R_DrawSimpleColumn;         // killough 3/14/98
+  column_draw_type = SimpleColumn;         // killough 3/14/98
   W_UnlockLumpNum(vis->patch+firstspritelump); // cph - release lump
 }
 

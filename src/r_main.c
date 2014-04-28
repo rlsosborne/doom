@@ -464,7 +464,7 @@ OVERLAY void R_Init (void)
 {
   // CPhipps - R_DrawColumn isn't constant anymore, so must 
   //  initialise in code
-  colfunc = R_DrawSimpleColumn;     // current column draw function
+  column_draw_type = SimpleColumn;     // current column draw function
   if (SCREENWIDTH<320) I_Error("Screenwidth(%d) < 320)",SCREENWIDTH);
 #if defined TABLES_AS_LUMPS && defined NO_PREDEFINED_LUMPS
   lprintf(LO_INFO, "\nR_LoadTrigTables: ");
