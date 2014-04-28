@@ -62,7 +62,6 @@ static SDL_Surface *screen;
 
 // Common const strings
 static const char lcase_lxdoom[] = { "lsdldoom" };
-static const char ucase_lxdoom[] = { "LSDLDOOM" };
 
 ////////////////////////////////////////////////////////////////////////////
 // Input code 
