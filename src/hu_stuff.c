@@ -704,22 +704,38 @@ OVERLAY void HU_MoveHud(void)
   static int ohud_distributed=-1;
 
   //jff 3/4/98 move displays around on F5 changing hud_distributed
-  if (hud_distributed!=ohud_distributed)
-  {
-    w_ammo.x =    hud_distributed? HU_AMMOX_D   : HU_AMMOX; 
-    w_ammo.y =    hud_distributed? HU_AMMOY_D   : HU_AMMOY;
-    w_weapon.x =  hud_distributed? HU_WEAPX_D   : HU_WEAPX; 
-    w_weapon.y =  hud_distributed? HU_WEAPY_D   : HU_WEAPY;
-    w_keys.x =    hud_distributed? HU_KEYSX_D   : HU_KEYSX; 
-    w_keys.y =    hud_distributed? HU_KEYSY_D   : HU_KEYSY;
-    w_gkeys.x =   hud_distributed? HU_KEYSGX_D  : HU_KEYSGX; 
-    w_gkeys.y =   hud_distributed? HU_KEYSY_D   : HU_KEYSY;
-    w_monsec.x =  hud_distributed? HU_MONSECX_D : HU_MONSECX; 
-    w_monsec.y =  hud_distributed? HU_MONSECY_D : HU_MONSECY;
-    w_health.x =  hud_distributed? HU_HEALTHX_D : HU_HEALTHX; 
-    w_health.y =  hud_distributed? HU_HEALTHY_D : HU_HEALTHY;
-    w_armor.x =   hud_distributed? HU_ARMORX_D  : HU_ARMORX; 
-    w_armor.y =   hud_distributed? HU_ARMORY_D  : HU_ARMORY;
+  if (hud_distributed == ohud_distributed)
+    return;
+  if (hud_distributed) {
+    w_ammo.x =    HU_AMMOX_D;
+    w_ammo.y =    HU_AMMOY_D;
+    w_weapon.x =  HU_WEAPX_D;
+    w_weapon.y =  HU_WEAPY_D;
+    w_keys.x =    HU_KEYSX_D;
+    w_keys.y =    HU_KEYSY_D;
+    w_gkeys.x =   HU_KEYSGX_D;
+    w_gkeys.y =   HU_KEYSY_D;
+    w_monsec.x =  HU_MONSECX_D;
+    w_monsec.y =  HU_MONSECY_D;
+    w_health.x =  HU_HEALTHX_D;
+    w_health.y =  HU_HEALTHY_D;
+    w_armor.x =   HU_ARMORX_D;
+    w_armor.y =   HU_ARMORY_D;
+  } else {
+    w_ammo.x =    HU_AMMOX;
+    w_ammo.y =    HU_AMMOY;
+    w_weapon.x =  HU_WEAPX;
+    w_weapon.y =  HU_WEAPY;
+    w_keys.x =    HU_KEYSX;
+    w_keys.y =    HU_KEYSY;
+    w_gkeys.x =   HU_KEYSGX;
+    w_gkeys.y =   HU_KEYSY;
+    w_monsec.x =  HU_MONSECX;
+    w_monsec.y =  HU_MONSECY;
+    w_health.x =  HU_HEALTHX;
+    w_health.y =  HU_HEALTHY;
+    w_armor.x =   HU_ARMORX;
+    w_armor.y =   HU_ARMORY;
   }
   ohud_distributed = hud_distributed;
 }
