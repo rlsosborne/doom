@@ -402,7 +402,7 @@ OVERLAY void HU_Start(void)
 {
 
   int   i;
-  char* s;
+  const char *s;
 
   if (headsupactive)                    // stop before starting
     HU_Stop();

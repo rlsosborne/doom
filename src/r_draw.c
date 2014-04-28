@@ -601,7 +601,7 @@ OVERLAY void R_DrawSpan (void)
   unsigned position;
   unsigned step;
 
-  byte *source;
+  const byte *source;
   byte *colormap;
   byte *dest;
     
