@@ -1008,9 +1008,10 @@ OVERLAY void M_DoScreenShot (const char* fname)
     
   // save the pcx file
   //jff 3/30/98 write pcx or bmp depending on mode
-
-  (screenshot_pcx ? WritePCXfile : WriteBMPfile)
-    (fname, linear, SCREENWIDTH, SCREENHEIGHT, pal);
+  if (screenshot_pcx)
+    WritePCXfile(fname, linear, SCREENWIDTH, SCREENHEIGHT, pal);
+  else
+    WriteBMPfile(fname, linear, SCREENWIDTH, SCREENHEIGHT, pal);
 
   // cph - free the palette
   W_UnlockLumpNum(pplump);
