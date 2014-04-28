@@ -31,9 +31,6 @@
  *-----------------------------------------------------------------------------
  */
 
-static const char
-rcsid[] = "$Id: l_system.c,v 1.33 2000/02/26 19:18:23 cph Exp $";
-
 #include "compiler.h"
 #include <stdio.h>
 

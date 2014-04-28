@@ -30,8 +30,6 @@
  *-----------------------------------------------------------------------------
  */
 
-static const char rcsid[] = "$Id: f_wipe.c,v 1.5 1999/10/12 13:01:10 cphipps Exp $";
-
 #include "compiler.h"
 #include "z_zone.h"
 #include "doomdef.h"

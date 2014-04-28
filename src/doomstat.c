@@ -30,9 +30,6 @@
  *-----------------------------------------------------------------------------
  */
 
-static const char
-rcsid[] = "$Id: doomstat.c,v 1.3 1999/10/12 13:01:09 cphipps Exp $";
-
 #ifdef __GNUG__
 #pragma implementation "doomstat.h"
 #endif

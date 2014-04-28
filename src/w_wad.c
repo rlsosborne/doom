@@ -30,9 +30,6 @@
  *-----------------------------------------------------------------------------
  */
 
-static const char
-rcsid[] = "$Id: w_wad.c,v 1.12 1999/10/27 18:35:50 cphipps Exp $";
-
 #include "compiler.h"
 // use config.h if autoconf made one -- josh
 #ifdef HAVE_CONFIG_H

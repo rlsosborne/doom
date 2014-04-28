@@ -43,9 +43,6 @@
  *-----------------------------------------------------------------------------
  */
 
-static const char
-rcsid[] = "$Id: tables.c,v 1.6 1999/10/12 13:01:14 cphipps Exp $";
-
 #include "compiler.h"
 #include <stddef.h>
 #include "w_wad.h"

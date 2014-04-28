@@ -33,9 +33,6 @@
  *
  *-----------------------------------------------------------------------------*/
 
-static const char
-rcsid[] = "$Id: m_menu.c,v 1.24 2000/03/17 20:50:30 cph Exp $";
-
 #include "compiler.h"
 #include <fcntl.h>
 #include <unistd.h>

@@ -30,8 +30,6 @@
  *-----------------------------------------------------------------------------
  */
 
-static const char rcsid[] = "$Id: version.c,v 1.2 1999/10/12 13:00:56 cphipps Exp $";
-
 #include "version.h"
 
 const char version_date[] = __DATE__;

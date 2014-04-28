@@ -33,8 +33,6 @@
  *-----------------------------------------------------------------------------
  */
 
-static const char rcsid[] = "$Id: d_main.c,v 1.46 2000/03/27 10:33:49 cph Exp $";
-
 //#include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>

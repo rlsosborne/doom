@@ -31,9 +31,6 @@
 //
 // 4/25/98, 5/2/98 killough: reformatted, beautified
 
-static const char
-rcsid[] = "$Id: r_segs.c,v 1.14 1999/10/17 08:52:04 cphipps Exp $";
-
 #include "compiler.h"
 #include "doomstat.h"
 #include "r_main.h"

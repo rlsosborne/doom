@@ -33,9 +33,6 @@
  *-----------------------------------------------------------------------------
  */
 
-static const char
-rcsid[] = "$Id: v_video.c,v 1.18 1999/10/27 18:38:03 cphipps Exp $";
-
 #include "compiler.h"
 #include "doomdef.h"
 #include "r_main.h"

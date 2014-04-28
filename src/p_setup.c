@@ -30,9 +30,6 @@
  *
  *-----------------------------------------------------------------------------*/
 
-static const char
-rcsid[] = "$Id: p_setup.c,v 1.14 1999/11/04 12:33:38 cphipps Exp $";
-
 #include "compiler.h"
 #include <math.h>
 

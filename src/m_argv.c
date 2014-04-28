@@ -29,9 +29,6 @@
  *
  *-----------------------------------------------------------------------------*/
 
-static const char
-rcsid[] = "$Id: m_argv.c,v 1.4 1999/10/12 13:01:12 cphipps Exp $";
-
 #include "compiler.h"
 #include <string.h>
 // CPhipps - include the correct header

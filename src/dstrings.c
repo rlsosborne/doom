@@ -30,10 +30,6 @@
  *-----------------------------------------------------------------------------
  */
 
-static const char
-rcsid[] = "$Id: dstrings.c,v 1.2 1999/10/12 13:01:09 cphipps Exp $";
-
-
 #ifdef __GNUG__
 #pragma implementation "dstrings.h"
 #endif

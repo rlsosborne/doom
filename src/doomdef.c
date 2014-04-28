@@ -31,9 +31,6 @@
  *-----------------------------------------------------------------------------
  */
 
-static const char
-rcsid[] = "$Id: doomdef.c,v 1.3 1999/10/12 13:01:09 cphipps Exp $";
-
 #ifdef __GNUG__
 #pragma implementation "doomdef.h"
 #endif

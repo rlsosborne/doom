@@ -30,9 +30,6 @@
  *-----------------------------------------------------------------------------
  */
 
-static const char rcsid[] =
-  "$Id: am_map.c,v 1.19 2000/03/14 18:59:38 cph Exp $";
-
 #ifdef HAVE_CONFIG_H
 #include "../config.h"
 #endif

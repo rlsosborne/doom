@@ -29,9 +29,6 @@
  *-----------------------------------------------------------------------------
  */
 
-static const char
-rcsid[] = "$Id: hu_lib.c,v 1.6 1999/10/12 13:01:10 cphipps Exp $";
-
 #include "compiler.h"
 #include "doomdef.h"
 #include "doomstat.h"

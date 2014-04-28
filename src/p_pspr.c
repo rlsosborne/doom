@@ -30,9 +30,6 @@
  *
  *-----------------------------------------------------------------------------*/
 
-static const char
-rcsid[] = "$Id: p_pspr.c,v 1.4 1999/10/12 13:01:13 cphipps Exp $";
-
 #include "compiler.h"
 #include "doomstat.h"
 #include "r_main.h"

@@ -45,9 +45,6 @@
 #include "compiler.h"
 #include "z_zone.h"  /* memory allocation wrappers -- killough */
 
-static const char
-rcsid[] = "$Id: r_plane.c,v 1.9 1999/11/01 17:09:15 cphipps Exp $";
-
 #include "doomstat.h"
 #include "w_wad.h"
 #include "r_main.h"

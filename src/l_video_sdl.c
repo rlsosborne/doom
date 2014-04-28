@@ -28,9 +28,6 @@
  *-----------------------------------------------------------------------------
  */
 
-static const char
-rcsid[] = "$Id: l_video_x.c,v 1.27 1999/10/12 13:01:11 cphipps Exp $";
-
 #include <stdlib.h>
 #include <unistd.h>
 

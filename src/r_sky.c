@@ -32,9 +32,6 @@
  *
  *-----------------------------------------------------------------------------*/
 
-static const char
-rcsid[] = "$Id: r_sky.c,v 1.2 1999/10/12 13:01:14 cphipps Exp $";
-
 #include "compiler.h"
 #ifdef __GNUG__
 #pragma implementation "r_sky.h"

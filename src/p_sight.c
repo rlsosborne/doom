@@ -29,9 +29,6 @@
  *
  *-----------------------------------------------------------------------------*/
 
-static const char
-rcsid[] = "$Id: p_sight.c,v 1.4 1999/11/01 17:09:15 cphipps Exp $";
-
 #include "compiler.h"
 #include "r_main.h"
 #include "p_maputl.h"

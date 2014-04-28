@@ -31,9 +31,6 @@
  *
  *--------------------------------------------------------------------*/
 
-static const char
-rcsid[] = "$Id: d_deh.c,v 1.16 1999/10/27 18:35:50 cphipps Exp $";
-
 // killough 5/2/98: fixed headers, removed rendunant external declarations:
 #include "compiler.h"
 #include "doomdef.h"

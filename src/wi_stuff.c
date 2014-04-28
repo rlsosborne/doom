@@ -30,9 +30,6 @@
  *-----------------------------------------------------------------------------
  */
 
-static const char
-rcsid[] = "$Id: wi_stuff.c,v 1.14 1999/10/27 18:35:50 cphipps Exp $";
-
 #include "compiler.h"
 #include "doomstat.h"
 #include "m_random.h"

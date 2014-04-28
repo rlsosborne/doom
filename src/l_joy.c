@@ -27,10 +27,6 @@
  *-----------------------------------------------------------------------------
  */
 
-#ifndef lint
-static const char rcsid[] = "$Id: l_joy.c,v 1.12 1999/10/31 09:12:17 cphipps Exp $";
-#endif /* lint */
-
 #include "compiler.h"
 #include "doomdef.h"
 #include "doomtype.h"

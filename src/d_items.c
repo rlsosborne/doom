@@ -30,9 +30,6 @@
  *-----------------------------------------------------------------------------
  */
 
-static const char
-rcsid[] = "$Id: d_items.c,v 1.2 1999/10/12 13:01:09 cphipps Exp $";
-
 // We are referring to sprite numbers.
 #include "info.h"
 

@@ -35,9 +35,6 @@
  *-----------------------------------------------------------------------------
  */
 
-static const char
-rcsid[] = "$Id: info.c,v 1.5 1999/10/12 13:01:10 cphipps Exp $";
-
 #include <unistd.h>
 #include <sys/stat.h>
 #include <fcntl.h>

@@ -32,10 +32,6 @@
  *
  *-----------------------------------------------------------------------------*/
 
-static const char
-rcsid[] = "$Id: m_bbox.c,v 1.3 1999/10/12 13:00:56 cphipps Exp $";
-
-
 #ifdef __GNUG__
 #pragma implementation "m_bbox.h"
 #endif

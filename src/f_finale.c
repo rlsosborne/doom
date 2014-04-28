@@ -30,9 +30,6 @@
  *-----------------------------------------------------------------------------
  */
 
-static const char
-rcsid[] = "$Id: f_finale.c,v 1.14 1999/10/27 12:01:44 cphipps Exp $";
-
 #include "compiler.h"
 #include "doomstat.h"
 #include "d_event.h"

@@ -33,9 +33,6 @@
  *-----------------------------------------------------------------------------
  */
 
-static const char
-rcsid[] = "$Id: g_game.c,v 1.36 2000/03/17 20:50:30 cph Exp $";
-
 #include <stdarg.h>
 
 #ifdef HAVE_CONFIG_H
