@@ -40,6 +40,7 @@
 #include "g_game.h"
 #include "am_map.h"
 #include "lprintf.h"
+#include "r_draw.h"
 
 #define MAXWIDTH  MAX_SCREENWIDTH          /* kilough 2/8/98 */
 #define MAXHEIGHT MAX_SCREENHEIGHT
@@ -47,6 +48,8 @@
 // CPhipps - height of status bar on the screen
 #define SBARHEIGHT st_height
 #define SBARWIDTH ST_TWIDTH
+
+void (*colfunc)(void);
 
 //
 // All drawing to the view buffer is accomplished in this file.

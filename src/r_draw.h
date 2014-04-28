@@ -47,7 +47,12 @@ extern fixed_t  dc_texturemid;
 extern int      dc_texheight;    // killough
 
 // first pixel in a column
-extern const byte     *dc_source;         
+extern const byte     *dc_source;
+
+//
+// Function pointer to switch refresh/drawing functions.
+//
+extern void (*colfunc)(void);
 
 // The span blitting interface.
 void R_DrawColumn(void);

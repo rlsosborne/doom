@@ -105,8 +105,6 @@ lighttable_t **colormaps;
 
 int extralight;                           // bumped light from gun blasts
 
-void (*colfunc)(void);
-
 //
 // R_PointOnSide
 // Traverse BSP (sub) tree,
