@@ -88,18 +88,18 @@ int screenblocks;    // has default
 
 int screenSize;      // temp for screenblocks (0-9)    
 
-int quickSaveSlot;   // -1 = no quicksave slot picked!          
+static int quickSaveSlot;   // -1 = no quicksave slot picked!
 
-int messageToPrint;  // 1 = message to be printed
+static int messageToPrint;  // 1 = message to be printed
 
 // CPhipps - static const
 static const char* messageString; // ...and here is the message string! 
 
-int     messageLastMenuActive;
+static int messageLastMenuActive;
 
-boolean messageNeedsInput; // timed message = no input from user     
+static boolean messageNeedsInput; // timed message = no input from user
 
-void (*messageRoutine)(int response);
+static void (*messageRoutine)(int response);
 
 #define SAVESTRINGSIZE  24
 
@@ -108,11 +108,11 @@ void (*messageRoutine)(int response);
 
 // we are going to be entering a savegame string
 
-int saveStringEnter;              
-int saveSlot;        // which slot to save in
-int saveCharIndex;   // which char we're editing
+static int saveStringEnter;
+static int saveSlot;        // which slot to save in
+static int saveCharIndex;   // which char we're editing
 // old save description before edit
-char saveOldString[SAVESTRINGSIZE];  
+static char saveOldString[SAVESTRINGSIZE];
 
 boolean inhelpscreens; // indicates we are in or just left a help screen
 
@@ -121,9 +121,9 @@ boolean menuactive;    // The menus are up
 #define SKULLXOFF  -32
 #define LINEHEIGHT  16
 
-char savegamestrings[10][SAVESTRINGSIZE];
+static char savegamestrings[10][SAVESTRINGSIZE];
 
-char endstring[160];
+static char endstring[160];
 
 // CPhipps - unused: extern boolean sendpause;
 extern skill_t startskill; //jff 3/24/98 make startskill from D_MAIN accessible
@@ -156,16 +156,16 @@ typedef struct menu_s
   short           lastOn;       // last item user was on in menu
 } menu_t;
 
-short itemOn;           // menu item skull is on (for Big Font menus)
-short skullAnimCounter; // skull animation counter
-short whichSkull;       // which skull to draw (he blinks)
+static short itemOn;           // menu item skull is on (for Big Font menus)
+static short skullAnimCounter; // skull animation counter
+static short whichSkull;       // which skull to draw (he blinks)
 
 // graphic name of skulls
 // warning: initializer-string for array of chars is too long
 
-char skullName[2][/*8*/9] = {"M_SKULL1","M_SKULL2"};
+static char skullName[2][/*8*/9] = {"M_SKULL1","M_SKULL2"};
 
-menu_t* currentMenu; // current menudef                          
+static menu_t* currentMenu; // current menudef
 
 // jff 3/24/98
 extern int defaultskill; // config file specified skill
@@ -308,7 +308,7 @@ void M_DrawEnemy(void);
 void M_DrawMessages(void);
 void M_DrawChatStrings(void);
 
-menu_t NewDef;                                              // phares 5/04/98
+static menu_t NewDef;                                        // phares 5/04/98
 
 // end of prototypes added to support Setup Menus and Extended HELP screens
 
@@ -324,7 +324,7 @@ menu_t NewDef;                                              // phares 5/04/98
 
 // main_e provides numerical values for which Big Font screen you're on
 
-enum
+enum main_e
 {
   newgame = 0,
   loadgame,
@@ -333,7 +333,7 @@ enum
   readthis,
   quitdoom,
   main_end
-} main_e;
+};
 
 //
 // MainMenu is the definition of what the main menu Screen should look
@@ -343,7 +343,7 @@ enum
 // associated with the item.
 //
 
-menuitem_t MainMenu[]=
+static menuitem_t MainMenu[]=
 {
   {1,"M_NGAME", M_NewGame, 'n'},
   {1,"M_LOADG", M_LoadGame,'l'},
@@ -354,7 +354,7 @@ menuitem_t MainMenu[]=
   {1,"M_QUITG", M_QuitDOOM,'q'}
 };
 
-menu_t MainDef =
+static menu_t MainDef =
 {
   main_end,       // number of menu items
   NULL,           // previous menu screen
@@ -382,32 +382,32 @@ OVERLAY void M_DrawMainMenu(void)
 // There are no menu items on the Read This! screens, so read_e just
 // provides a placeholder to maintain structure.
 
-enum
+enum read_e
 {
   rdthsempty1,
   read1_end
-} read_e;
+};
 
-enum
+enum read_e2
 {
   rdthsempty2,
   read2_end
-} read_e2;
+};
 
 
 // The definitions of the Read This! screens
 
-menuitem_t ReadMenu1[] =
+static menuitem_t ReadMenu1[] =
 {
   {1,"",M_ReadThis2,0}
 };
 
-menuitem_t ReadMenu2[]=
+static menuitem_t ReadMenu2[]=
 {
   {1,"",M_FinishReadThis,0}
 };
 
-menu_t ReadDef1 =
+static menu_t ReadDef1 =
 {
   read1_end,
   &MainDef,
@@ -418,7 +418,7 @@ menu_t ReadDef1 =
   0
 };
 
-menu_t ReadDef2 =
+static menu_t ReadDef2 =
 {
   read2_end,
   &ReadDef1,
@@ -517,18 +517,18 @@ OVERLAY void M_DrawReadThis2(void)
 // this is accounted for in the code.
 //
 
-enum
+enum episodes_e
 {
   ep1,
   ep2,
   ep3,
   ep4,
   ep_end
-} episodes_e;
+};
 
 // The definitions of the Episodes menu
 
-menuitem_t EpisodeMenu[]=
+static menuitem_t EpisodeMenu[]=
 {
   {1,"M_EPI1", M_Episode,'k'},
   {1,"M_EPI2", M_Episode,'t'},
@@ -536,7 +536,7 @@ menuitem_t EpisodeMenu[]=
   {1,"M_EPI4", M_Episode,'t'}
 };
 
-menu_t EpiDef =
+static menu_t EpiDef =
 {
   ep_end,        // # of menu items
   &MainDef,      // previous menu
@@ -549,7 +549,7 @@ menu_t EpiDef =
 //
 //    M_Episode
 //
-int epi;
+static int epi;
 
 OVERLAY void M_DrawEpisode(void)
 {
@@ -598,7 +598,7 @@ enum newgame_e
 
 // The definitions of the New Game menu
 
-menuitem_t NewGameMenu[]=
+static menuitem_t NewGameMenu[]=
 {
   {1,"M_JKILL", M_ChooseSkill, 'i'},
   {1,"M_ROUGH", M_ChooseSkill, 'h'},
@@ -607,7 +607,7 @@ menuitem_t NewGameMenu[]=
   {1,"M_NMARE", M_ChooseSkill, 'n'}
 };
 
-menu_t NewDef =
+static menu_t NewDef =
 {
   newg_end,       // # of menu items
   &EpiDef,        // previous menu
@@ -695,7 +695,7 @@ OVERLAY void M_ChooseSkill(int choice)
 
 // numerical values for the Load Game slots
 
-enum
+enum load_e
 {
   load1,
   load2,
@@ -706,11 +706,11 @@ enum
   load7, //jff 3/15/98 extend number of slots
   load8,
   load_end
-} load_e;
+};
 
 // The definitions of the Load Game screen
 
-menuitem_t LoadMenu[]=
+static menuitem_t LoadMenu[]=
   {
   {1,"", M_LoadSelect,'1'},
   {1,"", M_LoadSelect,'2'},
@@ -722,7 +722,7 @@ menuitem_t LoadMenu[]=
   {1,"", M_LoadSelect,'8'},
   };
 
-menu_t LoadDef =
+static menu_t LoadDef =
   {
   load_end,
   &MainDef,
@@ -843,7 +843,7 @@ OVERLAY void M_LoadGame (int choice)
 
 // The definitions of the Save Game screen
 
-menuitem_t SaveMenu[]=
+static menuitem_t SaveMenu[]=
   {
   {1,"", M_SaveSelect,'1'},
   {1,"", M_SaveSelect,'2'},
@@ -855,7 +855,7 @@ menuitem_t SaveMenu[]=
   {1,"", M_SaveSelect,'8'},
   };
 
-menu_t SaveDef =
+static menu_t SaveDef =
   {
   load_end, // same number of slots as the Load Game screen
   &MainDef,
@@ -968,7 +968,7 @@ OVERLAY void M_SaveGame (int choice)
 
 // numerical values for the Options menu items
 
-enum
+enum options_e
 {
   // killough 4/6/98: move setup to be a sub-menu of OPTIONs
   setup,                                                    // phares 3/21/98
@@ -981,11 +981,11 @@ enum
   /* option_empty2, submenu now -- killough */
   soundvol,
   opt_end
-} options_e;
+};
 
 // The definitions of the Options menu
 
-menuitem_t OptionsMenu[]=
+static menuitem_t OptionsMenu[]=
 {
   // killough 4/6/98: move setup to be a sub-menu of OPTIONs
   {1,"M_SETUP",  M_Setup,   's'},                          // phares 3/21/98
@@ -999,7 +999,7 @@ menuitem_t OptionsMenu[]=
   {1,"M_SVOL",   M_Sound,'s'}
 };
 
-menu_t OptionsDef =
+static menu_t OptionsDef =
 {
   opt_end,
   &MainDef,
@@ -1012,8 +1012,8 @@ menu_t OptionsDef =
 //
 // M_Options
 //
-char detailNames[2][9] = {"M_GDHIGH","M_GDLOW"};
-char msgNames[2][9]  = {"M_MSGOFF","M_MSGON"};
+static char detailNames[2][9] = {"M_GDHIGH","M_GDLOW"};
+static char msgNames[2][9]  = {"M_MSGOFF","M_MSGON"};
 
 
 OVERLAY void M_DrawOptions(void)
@@ -1038,7 +1038,7 @@ OVERLAY void M_Options(int choice)
 //
 // M_QuitDOOM
 //
-int quitsounds[8] =
+static int quitsounds[8] =
   {
   sfx_pldeth,
   sfx_dmpain,
@@ -1050,7 +1050,7 @@ int quitsounds[8] =
   sfx_sgtatk
   };
 
-int quitsounds2[8] =
+static int quitsounds2[8] =
   {
   sfx_vilact,
   sfx_getpow,
@@ -1100,18 +1100,18 @@ OVERLAY void M_QuitDOOM(int choice)
 // numerical values for the Sound Volume menu items
 // The 'empty' slots are where the sliding scales appear.
 
-enum
+enum sound_e
 {
   sfx_vol,
   sfx_empty1,
   music_vol,
   sfx_empty2,
   sound_end
-} sound_e;
+};
 
 // The definitions of the Sound Volume menu
 
-menuitem_t SoundMenu[]=
+static menuitem_t SoundMenu[]=
 {
   {2,"M_SFXVOL",M_SfxVol,'s'},
   {-1,"",0},
@@ -1119,7 +1119,7 @@ menuitem_t SoundMenu[]=
   {-1,"",0}
 };
 
-menu_t SoundDef =
+static menu_t SoundDef =
 {
   sound_end,
   &OptionsDef,
@@ -1190,18 +1190,18 @@ OVERLAY void M_MusicVol(int choice)
 // numerical values for the Mouse Sensitivity menu items
 // The 'empty' slots are where the sliding scales appear.
 
-enum
+enum mouse_e
 {
   mouse_horiz,
   mouse_empty1,
   mouse_vert,
   mouse_empty2,
   mouse_end
-} mouse_e;
+};
 
 // The definitions of the Mouse Sensitivity menu
 
-menuitem_t MouseMenu[]=
+static menuitem_t MouseMenu[]=
 {
   {2,"M_HORSEN",M_MouseHoriz,'h'},
   {-1,"",0},
@@ -1209,7 +1209,7 @@ menuitem_t MouseMenu[]=
   {-1,"",0}
 };
 
-menu_t MouseDef =
+static menu_t MouseDef =
 {
   mouse_end,
   &OptionsDef,
@@ -1470,18 +1470,18 @@ OVERLAY void M_SizeDisplay(int choice)
 // the overlay screens (automap colors, reset button message) should be
 // displayed
 
-boolean setup_active      = false; // in one of the setup screens
-boolean set_keybnd_active = false; // in key binding setup screens
-boolean set_weapon_active = false; // in weapons setup screen
-boolean set_status_active = false; // in status bar/hud setup screen
-boolean set_auto_active   = false; // in automap setup screen
-boolean set_enemy_active  = false; // in enemies setup screen
-boolean set_mess_active   = false; // in messages setup screen
-boolean set_chat_active   = false; // in chat string setup screen
-boolean setup_select      = false; // changing an item
-boolean setup_gather      = false; // gathering keys for value
-boolean colorbox_active   = false; // color palette being shown
-boolean default_verify    = false; // verify reset defaults decision
+static boolean setup_active      = false; // in one of the setup screens
+static boolean set_keybnd_active = false; // in key binding setup screens
+static boolean set_weapon_active = false; // in weapons setup screen
+static boolean set_status_active = false; // in status bar/hud setup screen
+static boolean set_auto_active   = false; // in automap setup screen
+static boolean set_enemy_active  = false; // in enemies setup screen
+static boolean set_mess_active   = false; // in messages setup screen
+static boolean set_chat_active   = false; // in chat string setup screen
+static boolean setup_select      = false; // changing an item
+static boolean setup_gather      = false; // gathering keys for value
+static boolean colorbox_active   = false; // color palette being shown
+static boolean default_verify    = false; // verify reset defaults decision
 
 /////////////////////////////
 //
@@ -1521,7 +1521,7 @@ typedef enum {
   m_scrn,       // A key can not be assigned to more than one action
   m_map,        // in the same group. A key can be assigned to one
   m_menu,       // action in one group, and another action in another.
-  } setup_group;
+} setup_group;
 
 /////////////////////////////
 //
@@ -1561,7 +1561,7 @@ typedef struct
 // current_setup_menu is a pointer to the current setup menu table.
 
 static int set_menu_itemon; // which setup item is selected?
-setup_menu_t* current_setup_menu; // points to current setup menu table
+static setup_menu_t* current_setup_menu; // points to current setup menu table
 
 /////////////////////////////
 //
@@ -1574,7 +1574,7 @@ static char menu_buffer[64];
 // The setup_e enum is used to provide a unique number for each group of Setup
 // Screens.
 
-enum
+enum setup_e
   {
   set_key_bindings,                                     
   set_weapons,                                           
@@ -1584,9 +1584,9 @@ enum
   set_messages,
   set_chatstrings,
   set_setup_end
-  } setup_e;
+  };
 
-int setup_screen; // the current setup screen. takes values from setup_e 
+static int setup_screen; // the current setup screen. takes values from setup_e
 
 /////////////////////////////
 //
@@ -1596,7 +1596,7 @@ int setup_screen; // the current setup screen. takes values from setup_e
 // the program which takes over when an item is selected, and the hotkey
 // associated with the item.
 
-menuitem_t SetupMenu[]=
+static menuitem_t SetupMenu[]=
   {
   {1,"M_KEYBND",M_KeyBindings,'k'},
   {1,"M_WEAP"  ,M_Weapons,    'w'},
@@ -1622,19 +1622,19 @@ OVERLAY static void M_DoNothing(int choice)
 // the generic_setup_e enum mimics the 'Big Font' menu structures, but
 // means nothing to the Setup Menus.
 
-enum
-  {
+enum generic_setup_e
+{
   generic_setupempty1,
   generic_setup_end
-  } generic_setup_e;
+};
 
 // Generic_Setup is a do-nothing definition that the mainstream Menu code
 // can understand, while the Setup Menu code is working. Another placeholder.
 
-menuitem_t Generic_Setup[] =
-  {
+static menuitem_t Generic_Setup[] =
+{
   {1,"",M_DoNothing,0}
-  };
+};
 
 /////////////////////////////
 //
@@ -1642,8 +1642,8 @@ menuitem_t Generic_Setup[] =
 // This is used by M_Setup (below) to define what is drawn and what is done
 // with the main Setup screen.
 
-menu_t  SetupDef =
-  {
+static menu_t  SetupDef =
+{
   set_setup_end, // number of Setup Menu items (Key Bindings, etc.)
   &MainDef,      // menu to return to when BACKSPACE is hit on this menu
   SetupMenu,     // definition of items to show on the Setup Screen
@@ -1652,7 +1652,7 @@ menu_t  SetupDef =
                  // drawn). The skull is parked on the upper-left corner
                  // of the Setup screens, since it isn't needed as a cursor
   0              // last item the user was on for this menu
-  };
+};
 
 /////////////////////////////
 //
@@ -1660,67 +1660,67 @@ menu_t  SetupDef =
 // follow the format of the 'Big Font' menu structures. See the comments
 // for SetupDef (above) to help understand what each of these says.
 
-menu_t KeybndDef =
-  {
+static menu_t KeybndDef =
+{
   generic_setup_end,
   &SetupDef,
   Generic_Setup,
   M_DrawKeybnd,
   34,5,      // skull drawn here
   0
-  };
+};
 
-menu_t WeaponDef =
-  {
+static menu_t WeaponDef =
+{
   generic_setup_end,
   &SetupDef,
   Generic_Setup,
   M_DrawWeapons,
   34,5,      // skull drawn here
   0
-  };
+};
 
-menu_t StatusHUDDef =
-  {
+static menu_t StatusHUDDef =
+{
   generic_setup_end,
   &SetupDef,
   Generic_Setup,
   M_DrawStatusHUD,
   34,5,      // skull drawn here
   0
-  };
+};
 
-menu_t AutoMapDef =
-  {
+static menu_t AutoMapDef =
+{
   generic_setup_end,
   &SetupDef,
   Generic_Setup,
   M_DrawAutoMap,
   34,5,      // skull drawn here
   0
-  };
+};
 
-menu_t EnemyDef =                                           // phares 4/08/98
-  {
+static menu_t EnemyDef =                                    // phares 4/08/98
+{
   generic_setup_end,
   &SetupDef,
   Generic_Setup,
   M_DrawEnemy,
   34,5,      // skull drawn here
   0
-  };
+};
 
-menu_t MessageDef =                                         // phares 4/08/98
-  {
+static menu_t MessageDef =                                  // phares 4/08/98
+{
   generic_setup_end,
   &SetupDef,
   Generic_Setup,
   M_DrawMessages,
   34,5,      // skull drawn here
   0
-  };
+};
 
-menu_t ChatStrDef =                                         // phares 4/10/98
+static menu_t ChatStrDef =                                  // phares 4/10/98
   {
   generic_setup_end,
   &SetupDef,
@@ -1779,8 +1779,8 @@ static byte colorblock[(CHIP_SIZE+4)*(CHIP_SIZE+4)];
 #define CHAT_STRING_BFR_SIZE 128
 #define MAXCHATWIDTH         287 // chat strings must fit in this screen space
 
-int   chat_index;
-char* chat_string_buffer; // points to new chat strings while editing
+static int   chat_index;
+static char* chat_string_buffer; // points to new chat strings while editing
 
 /////////////////////////////
 //
@@ -1790,7 +1790,7 @@ char* chat_string_buffer; // points to new chat strings while editing
 // the first screen for each group. It blinks when selected, thus the
 // two patches, which it toggles back and forth.
 
-char ResetButtonName[2][8] = {"M_BUTT1","M_BUTT2"};
+static char ResetButtonName[2][8] = {"M_BUTT1","M_BUTT2"};
 
 /////////////////////////////
 //
@@ -2184,15 +2184,15 @@ OVERLAY static void M_DrawInstructions()
 
 // Definitions of the (in this case) four key binding screens.
 
-setup_menu_t keys_settings1[];       
-setup_menu_t keys_settings2[];       
-setup_menu_t keys_settings3[];       
-setup_menu_t keys_settings4[];       
-setup_menu_t keys_settings5[];       
+static setup_menu_t keys_settings1[];
+static setup_menu_t keys_settings2[];
+static setup_menu_t keys_settings3[];
+static setup_menu_t keys_settings4[];
+static setup_menu_t keys_settings5[];
 
 // The table which gets you from one screen table to the next.
 
-setup_menu_t* keys_settings[] =
+static setup_menu_t* keys_settings[] =
 {
   keys_settings1,
   keys_settings2,
@@ -2202,7 +2202,7 @@ setup_menu_t* keys_settings[] =
   NULL
 };
 
-int mult_screens_index; // the index of the current screen in a set
+static int mult_screens_index; // the index of the current screen in a set
 
 // Here's an example from this first screen, with explanations.
 //
@@ -2241,7 +2241,7 @@ int mult_screens_index; // the index of the current screen in a set
 // to the previous screen. If you leave these off, you can't move from
 // screen to screen.
 
-setup_menu_t keys_settings1[] =  // Key Binding screen strings       
+static setup_menu_t keys_settings1[] =  // Key Binding screen strings
 {
   {"MOVEMENT"    ,(S_SKIP|S_TITLE),m_null,KB_X,KB_Y ,0                  ,0,0,0,0,0,0},
   {"FORWARD"     ,S_KEY       ,m_scrn,KB_X,KB_Y+ 1*8,&key_up            ,&mousebforward,0,0,0,0,0},
@@ -2277,7 +2277,7 @@ setup_menu_t keys_settings1[] =  // Key Binding screen strings
 
 };
 
-setup_menu_t keys_settings2[] =  // Key Binding screen strings       
+static setup_menu_t keys_settings2[] =  // Key Binding screen strings
 {
   {"SCREEN"      ,(S_SKIP|S_TITLE),m_null,KB_X,KB_Y   ,0         ,0,0,0,0,0,0},
 
@@ -2322,7 +2322,7 @@ setup_menu_t keys_settings2[] =  // Key Binding screen strings
 
 };
 
-setup_menu_t keys_settings3[] =  // Key Binding screen strings       
+static setup_menu_t keys_settings3[] =  // Key Binding screen strings
 {
   {"WEAPONS" ,(S_SKIP|S_TITLE),m_null,KB_X,KB_Y   ,0              ,0,0,0,0,0,0},
   {"FIST"    ,S_KEY       ,m_scrn,KB_X,KB_Y+ 1*8,&key_weapon1     ,0,0,0,0,0,0},
@@ -2346,7 +2346,7 @@ setup_menu_t keys_settings3[] =  // Key Binding screen strings
 
 };
 
-setup_menu_t keys_settings4[] =  // Key Binding screen strings       
+static setup_menu_t keys_settings4[] =  // Key Binding screen strings
 {
   {"AUTOMAP"    ,(S_SKIP|S_TITLE),m_null,KB_X,KB_Y   ,0                 ,0,0,0,0,0,0},
   {"FOLLOW"     ,S_KEY       ,m_map ,KB_X,KB_Y+ 1*8,&key_map_follow     ,0,0,0,0,0,0},
@@ -2371,7 +2371,7 @@ setup_menu_t keys_settings4[] =  // Key Binding screen strings
   {0,(S_SKIP|S_END),m_null,0,0,0,0,0,0,0,0,0}
 };
 
-setup_menu_t keys_settings5[] = // Chat keys setup screen
+static setup_menu_t keys_settings5[] = // Chat keys setup screen
 {
 
   {"CHATTING"   ,(S_SKIP|S_TITLE),m_null,KB_X,KB_Y,0                   ,0,0,0,0,0,0},
@@ -2449,15 +2449,15 @@ OVERLAY void M_DrawKeybnd(void)
 // Note that this screen has no PREV or NEXT items, since there are no
 // neighboring screens.
 
-setup_menu_t weap_settings1[];
+static setup_menu_t weap_settings1[];
 
-setup_menu_t* weap_settings[] =
-  {
+static setup_menu_t* weap_settings[] =
+{
   weap_settings1,
   NULL
-  };
+};
 
-setup_menu_t weap_settings1[] =  // Weapons Settings screen       
+static setup_menu_t weap_settings1[] =  // Weapons Settings screen
 {
   {"ENABLE RECOIL"    ,S_YESNO,m_null,WP_X,WP_Y+ 1*8,0,0,0,&default_weapon_recoil ,&weapon_recoil,0,0},
   {"ENABLE BOBBING"   ,S_YESNO,m_null,WP_X,WP_Y+ 2*8,0,0,0,&default_player_bobbing,&player_bobbing,0,0},
@@ -2542,15 +2542,15 @@ int  gather_count;
 
 // Screen table definitions
 
-setup_menu_t stat_settings1[];
+static setup_menu_t stat_settings1[];
 
-setup_menu_t* stat_settings[] =
-  {
+static setup_menu_t* stat_settings[] =
+{
   stat_settings1,
   NULL
-  };
+};
 
-setup_menu_t stat_settings1[] =  // Status Bar and HUD Settings screen       
+static setup_menu_t stat_settings1[] =  // Status Bar and HUD Settings screen
 {
   {"STATUS BAR"        ,(S_SKIP|S_TITLE),m_null,ST_X,ST_Y+ 1*8,0,0,0,0                ,0,0,0  },
   {"USE RED NUMBERS"   ,S_YESNO     ,m_null,ST_X,ST_Y+ 2*8,0,0,0,&sts_always_red      ,0,0,0  },
@@ -2633,17 +2633,17 @@ OVERLAY void M_DrawStatusHUD(void)
 #define AU_PREV KB_PREV
 #define AU_NEXT KB_NEXT
 
-setup_menu_t auto_settings1[];       
-setup_menu_t auto_settings2[];
+static setup_menu_t auto_settings1[];
+static setup_menu_t auto_settings2[];
 
-setup_menu_t* auto_settings[] =
-  {
+static setup_menu_t* auto_settings[] =
+{
   auto_settings1,
   auto_settings2,
   NULL
-  };
+};
 
-setup_menu_t auto_settings1[] =  // 1st AutoMap Settings screen       
+static setup_menu_t auto_settings1[] =  // 1st AutoMap Settings screen
 {
   {"background"                         ,S_COLOR,m_null,AU_X,AU_Y     ,0,0,0,&mapcolor_back,0,0,0},
   {"grid lines"                         ,S_COLOR,m_null,AU_X,AU_Y+ 1*8,0,0,0,&mapcolor_grid,0,0,0},
@@ -2670,7 +2670,7 @@ setup_menu_t auto_settings1[] =  // 1st AutoMap Settings screen
 
 };
 
-setup_menu_t auto_settings2[] =  // 2nd AutoMap Settings screen
+static setup_menu_t auto_settings2[] =  // 2nd AutoMap Settings screen
 {
   {"teleporter line"                ,S_COLOR ,m_null,AU_X,AU_Y     ,0,0,0,&mapcolor_tele   ,0,0,0},
   {"secret sector boundary"         ,S_COLOR ,m_null,AU_X,AU_Y+ 1*8,0,0,0,&mapcolor_secr   ,0,0,0},
@@ -2721,9 +2721,9 @@ OVERLAY void M_Automap(int choice)
 // Data used by the color palette that is displayed for the player to
 // select colors.
 
-int color_palette_x; // X position of the cursor on the color palette
-int color_palette_y; // Y position of the cursor on the color palette
-byte palette_background[16*(CHIP_SIZE+1)+8];
+static int color_palette_x; // X position of the cursor on the color palette
+static int color_palette_y; // Y position of the cursor on the color palette
+static byte palette_background[16*(CHIP_SIZE+1)+8];
 
 // M_DrawColPal() draws the color palette when the user needs to select a
 // color.
@@ -2790,15 +2790,15 @@ OVERLAY void M_DrawAutoMap(void)
 #define E_X 227
 #define E_Y  31
 
-setup_menu_t enem_settings1[];
+static setup_menu_t enem_settings1[];
 
-setup_menu_t* enem_settings[] =
-  {
+static setup_menu_t* enem_settings[] =
+{
   enem_settings1,
   NULL
-  };
+};
 
-setup_menu_t enem_settings1[] =  // Enemy Settings screen       
+static setup_menu_t enem_settings1[] =  // Enemy Settings screen
 {
   {"REMEMBER PREVIOUS TARGET",S_YESNO,m_null,E_X,E_Y+ 1*8,0,0,0,&default_monsters_remember ,&monsters_remember,0,0},
 
@@ -2864,15 +2864,15 @@ OVERLAY void M_DrawEnemy(void)
 #define M_X 238
 #define M_Y  31
 
-setup_menu_t mess_settings1[];
+static setup_menu_t mess_settings1[];
 
-setup_menu_t* mess_settings[] =
+static setup_menu_t* mess_settings[] =
   {
   mess_settings1,
   NULL
   };
 
-setup_menu_t mess_settings1[] =  // Messages screen       
+static setup_menu_t mess_settings1[] =  // Messages screen
 {
   {"MESSAGE BACKGROUND"       ,S_YESNO ,m_null,M_X,M_Y+ 1*8,0,0,0,&hud_list_bgon ,0,0,0 },
   {"# MESSAGE LINES"          ,S_NUM   ,m_null,M_X,M_Y+ 2*8,0,0,0,&hud_msg_lines ,0,1,16},
@@ -2939,15 +2939,15 @@ OVERLAY void M_DrawMessages(void)
 #define CS_X 20
 #define CS_Y (31+8)
 
-setup_menu_t chat_settings1[];
+static setup_menu_t chat_settings1[];
 
-setup_menu_t* chat_settings[] =
+static setup_menu_t* chat_settings[] =
   {
   chat_settings1,
   NULL
   };
 
-setup_menu_t chat_settings1[] =  // Chat Strings screen       
+static setup_menu_t chat_settings1[] =  // Chat Strings screen
 {
   {"1",S_CHAT,m_null,CS_X,CS_Y+ 1*8,0,0,0,(int *)&chat_macros[1],0,0,0},
   {"2",S_CHAT,m_null,CS_X,CS_Y+ 2*8,0,0,0,(int *)&chat_macros[2],0,0,0},
@@ -3033,8 +3033,8 @@ OVERLAY static void M_SelectDone(setup_menu_t* ptr) // CPhipps - static
 // phares 4/21/98:
 // Array of setup screens used by M_ResetDefaults()
 
-setup_menu_t** setup_screens[] =
-  {
+static setup_menu_t** setup_screens[] =
+{
   0,
   keys_settings,
   weap_settings,
@@ -3043,7 +3043,7 @@ setup_menu_t** setup_screens[] =
   enem_settings,
   mess_settings,
   chat_settings
-  };
+};
 
 // phares 4/19/98:
 // M_ResetDefaults() resets all values for a setup screen to default values
@@ -3103,23 +3103,23 @@ OVERLAY static void M_ResetDefaults(void)
 // phares 3/30/98:
 // Extended Help Screen variables
 
-int extended_help_count;   // number of user-defined help screens found
-int extended_help_index;   // index of current extended help screen
+static int extended_help_count;   // number of user-defined help screens found
+static int extended_help_index;   // index of current extended help screen
 
-menuitem_t ExtHelpMenu[] =
+static menuitem_t ExtHelpMenu[] =
 {
   {1,"",M_ExtHelpNextScreen,0}
 };
 
-menu_t ExtHelpDef =
-  {
+static menu_t ExtHelpDef =
+{
   1,             // # of menu items
   &ReadDef1,     // previous menu
   ExtHelpMenu,   // menuitem_t ->
   M_DrawExtHelp, // drawing routine ->
   330,181,       // x,y
   0              // lastOn
-  };
+};
 
 // M_ExtHelpNextScreen establishes the number of the next HELP screen in
 // the series.
@@ -3296,7 +3296,7 @@ OVERLAY int M_GetKeyString(int c,int offset)
 #define KT_Y2 110
 #define KT_Y3 102
 
-setup_menu_t helpstrings[] =  // HELP screen strings       
+static setup_menu_t helpstrings[] =  // HELP screen strings
 {
   {"SCREEN"      ,(S_SKIP|S_TITLE),m_null,KT_X1,KT_Y1   ,0                ,0,0,0,0,0,0},
   {"HELP"        ,(S_SKIP|S_KEY),m_null,KT_X1,KT_Y1+ 1*8,&key_help        ,0,0,0,0,0,0},
