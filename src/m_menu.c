@@ -82,8 +82,6 @@ int showMessages;    // Show messages has default, 0 = off, 1 = on
   
 int traditional_menu;
 
-int hide_setup=1; // killough 5/15/98
-
 // Blocky mode, has default, 0 = high, 1 = normal
 //int     detailLevel;    obsolete -- killough
 int screenblocks;    // has default
@@ -97,9 +95,6 @@ int messageToPrint;  // 1 = message to be printed
 // CPhipps - static const
 static const char* messageString; // ...and here is the message string! 
 
-// message x & y
-int     messx;      
-int     messy;
 int     messageLastMenuActive;
 
 boolean messageNeedsInput; // timed message = no input from user     
