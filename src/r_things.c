@@ -342,7 +342,7 @@ OVERLAY void R_DrawMaskedColumn(const column_t *column)
           dc_source = (const byte *)column + 3;
           dc_texturemid = basetexturemid - (column->topdelta<<FRACBITS);
 
-          // Drawn by either R_DrawColumn
+          // Drawn by either R_DrawSimpleColumn
           //  or (SHADOW) R_DrawFuzzColumn.
           colfunc ();
         }
@@ -384,7 +384,7 @@ OVERLAY void R_DrawVisSprite(vissprite_t *vis, int x1, int x2)
           tranmap = main_tranmap;       // killough 4/11/98
         }
       else
-        colfunc = R_DrawColumn;         // killough 3/14/98, 4/11/98
+        colfunc = R_DrawSimpleColumn;         // killough 3/14/98, 4/11/98
 
 // proff 11/06/98: Changed for high-res
   dc_iscale = FixedDiv (FRACUNIT, vis->scale);
@@ -406,7 +406,7 @@ OVERLAY void R_DrawVisSprite(vissprite_t *vis, int x1, int x2)
                             LONG(patch->columnofs[texturecolumn]));
       R_DrawMaskedColumn (column);
     }
-  colfunc = R_DrawColumn;         // killough 3/14/98
+  colfunc = R_DrawSimpleColumn;         // killough 3/14/98
   W_UnlockLumpNum(vis->patch+firstspritelump); // cph - release lump
 }
 

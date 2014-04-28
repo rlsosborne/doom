@@ -126,7 +126,7 @@ OVERLAY void R_RenderMaskedSegRange(drawseg_t *ds, int x1, int x2)
 
   // killough 4/11/98: draw translucent 2s normal textures
 
-  colfunc = R_DrawColumn;
+  colfunc = R_DrawSimpleColumn;
   if (curline->linedef->tranlump >= 0 && general_translucency)
     {
       colfunc = R_DrawTLColumn;

@@ -56,6 +56,7 @@ extern void (*colfunc)(void);
 
 // The span blitting interface.
 void R_DrawColumn(void);
+void R_DrawSimpleColumn(void);
 void R_DrawTLColumn(void);
 
 

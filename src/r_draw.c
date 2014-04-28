@@ -100,7 +100,7 @@ const byte    *dc_source;      // first pixel in a column (possibly virtual)
 //  be used. It has also been used with Wolfenstein 3D.
 //
 
-OVERLAY void R_DrawColumn(void)
+OVERLAY void R_DrawSimpleColumn(void)
 {
   int     count;
   byte    *dest;            // killough
@@ -135,7 +135,7 @@ OVERLAY void R_DrawColumn(void)
   if ((unsigned)dc_x >= SCREENWIDTH
       || dc_yl < 0
       || dc_yh >= SCREENHEIGHT)
-    I_Error ("R_DrawColumn: %i to %i at %i", dc_yl, dc_yh, dc_x);
+    I_Error ("R_DrawSimpleColumn: %i to %i at %i", dc_yl, dc_yh, dc_x);
 #endif
   
   // Framebuffer destination address.
@@ -246,9 +246,9 @@ OVERLAY void R_DrawColumn(void)
   }
 }
 
-// Here is the version of R_DrawColumn that deals with translucent  // phares
-// textures and sprites. It's identical to R_DrawColumn except      //    |
-// for the spot where the color index is stuffed into *dest. At     //    V
+// Here is the version of R_DrawColumn that deals with translucent
+// textures and sprites. It's identical to R_DrawSimpleColumn except
+// for the spot where the color index is stuffed into *dest. At
 // that point, the existing color index and the new color index
 // are mapped through the TRANMAP lump filters to get a new color
 // index whose RGB values are the average of the existing and new
@@ -275,7 +275,7 @@ OVERLAY void R_DrawTLColumn(void)
   if ((unsigned)dc_x >= SCREENWIDTH
       || dc_yl < 0
       || dc_yh >= SCREENHEIGHT) 
-    I_Error ("R_DrawColumn: %i to %i at %i", dc_yl, dc_yh, dc_x); 
+    I_Error ("R_DrawTLColumn: %i to %i at %i", dc_yl, dc_yh, dc_x);
 #endif 
 
   // Framebuffer destination address.
@@ -460,7 +460,7 @@ OVERLAY void R_DrawTranslatedColumn (void)
   if ((unsigned)dc_x >= SCREENWIDTH
       || dc_yl < 0
       || dc_yh >= SCREENHEIGHT)
-    I_Error ( "R_DrawColumn: %i to %i at %i",
+    I_Error ( "R_DrawTranslatedColumn: %i to %i at %i",
               dc_yl, dc_yh, dc_x);
 #endif 
 
