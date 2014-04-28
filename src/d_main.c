@@ -454,81 +454,8 @@ OVERLAY static void D_DrawTitle2(const char *name)
   D_SetPageName(name);
 }
 
-/* killough 11/98: tabulate demo sequences 
- */
-
-static struct 
-{
-  void (*func)(const char *);
-  const char *name;
-} const demostates[][4] =
-  {
-    {
-      {D_DrawTitle1, "TITLEPIC"},
-      {D_DrawTitle1, "TITLEPIC"},
-      {D_DrawTitle2, "TITLEPIC"},
-      {D_DrawTitle1, "TITLEPIC"},
-    },
-
-    {
-      {G_DeferedPlayDemo, "demo1"},
-      {G_DeferedPlayDemo, "demo1"},
-      {G_DeferedPlayDemo, "demo1"},
-      {G_DeferedPlayDemo, "demo1"},
-    },
-    {
-      {D_SetPageName, "CREDIT"},
-      {D_SetPageName, "CREDIT"},
-      {D_SetPageName, "CREDIT"},
-      {D_SetPageName, "CREDIT"},
-    },
-
-    {
-      {G_DeferedPlayDemo, "demo2"},
-      {G_DeferedPlayDemo, "demo2"},
-      {G_DeferedPlayDemo, "demo2"},
-      {G_DeferedPlayDemo, "demo2"},
-    },
-
-    {
-      {D_SetPageName, "HELP2"},
-      {D_SetPageName, "HELP2"},
-      {D_SetPageName, "CREDIT"},
-      {D_DrawTitle1,  "TITLEPIC"},
-    },
-
-    {
-      {G_DeferedPlayDemo, "demo3"},
-      {G_DeferedPlayDemo, "demo3"},
-      {G_DeferedPlayDemo, "demo3"},
-      {G_DeferedPlayDemo, "demo3"},
-    },
-
-    {
-      {NULL},
-      {NULL},
-      {NULL},
-      {D_SetPageName, "CREDIT"},
-    },
-
-    {
-      {NULL},
-      {NULL},
-      {NULL},
-      {G_DeferedPlayDemo, "demo4"},
-    },
-
-    {
-      {NULL},
-      {NULL},
-      {NULL},
-      {NULL},
-    }
-  };
-
 /*
  * This cycles through the demo sequences.
- * killough 11/98: made table-driven
  */
 
 OVERLAY void D_DoAdvanceDemo(void)
@@ -540,10 +467,82 @@ OVERLAY void D_DoAdvanceDemo(void)
   pagetic = TICRATE * 11;         /* killough 11/98: default behavior */
   gamestate = GS_DEMOSCREEN;
 
-  if (!demostates[++demosequence][gamemode].func)
-    demosequence = 0;
-  demostates[demosequence][gamemode].func
-    (demostates[demosequence][gamemode].name);
+  switch (gamemode) {
+  case shareware:
+  case registered:
+    switch (++demosequence) {
+    default:
+      demosequence = 0;
+      D_DrawTitle1("TITLEPIC");
+      break;
+    case 1:
+      G_DeferedPlayDemo("demo1");
+      break;
+    case 2:
+      D_SetPageName("CREDIT");
+      break;
+    case 3:
+      G_DeferedPlayDemo("demo2");
+      break;
+    case 4:
+      D_SetPageName("HELP2");
+      break;
+    case 5:
+      G_DeferedPlayDemo("demo3");
+      break;
+    }
+    break;
+  case commercial:
+    switch (++demosequence) {
+    default:
+      demosequence = 0;
+      D_DrawTitle2("TITLEPIC");
+      break;
+    case 1:
+      G_DeferedPlayDemo("demo1");
+      break;
+    case 2:
+      D_SetPageName("CREDIT");
+      break;
+    case 3:
+      G_DeferedPlayDemo("demo2");
+      break;
+    case 4:
+      D_SetPageName("CREDIT");
+      break;
+    case 5:
+      G_DeferedPlayDemo("demo3");
+      break;
+    }
+  case retail:
+    switch (++demosequence) {
+    default:
+      demosequence = 0;
+      D_DrawTitle1("TITLEPIC");
+      break;
+    case 1:
+      G_DeferedPlayDemo("demo1");
+      break;
+    case 2:
+      D_SetPageName("CREDIT");
+      break;
+    case 3:
+      G_DeferedPlayDemo("demo2");
+      break;
+    case 4:
+      D_DrawTitle1("TITLEPIC");
+      break;
+    case 5:
+      G_DeferedPlayDemo("demo3");
+      break;
+    case 6:
+      D_SetPageName("CREDIT");
+      break;
+    case 7:
+      G_DeferedPlayDemo("demo4");
+      break;
+    }
+  }
 }
 
 //
