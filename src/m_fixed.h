@@ -59,9 +59,8 @@ typedef int fixed_t;
  * Fixed Point Multiplication
  */
 
-/* CPhipps - made __inline__ to inline, as specified in the gcc docs
- * Also made const */
-inline static const fixed_t FixedMul(fixed_t a, fixed_t b)
+/* CPhipps - made __inline__ to inline, as specified in the gcc docs */
+inline static fixed_t FixedMul(fixed_t a, fixed_t b)
 {
   return (fixed_t)((int_64_t) a*b >> FRACBITS);
 }
@@ -70,9 +69,8 @@ inline static const fixed_t FixedMul(fixed_t a, fixed_t b)
  * Fixed Point Division
  */
 
-/* CPhipps - made __inline__ to inline, as specified in the gcc docs
- * Also made const */
-inline static const fixed_t FixedDiv(fixed_t a, fixed_t b)
+/* CPhipps - made __inline__ to inline, as specified in the gcc docs */
+inline static fixed_t FixedDiv(fixed_t a, fixed_t b)
 {
   return (abs(a)>>14) >= abs(b) ? ((a^b)>>31) ^ INT_MAX :
     (fixed_t)(((int_64_t) a << FRACBITS) / b);
@@ -82,7 +80,7 @@ inline static const fixed_t FixedDiv(fixed_t a, fixed_t b)
  * FixedMod - returns a % b, guaranteeing 0<=a<b
  * (notice that the C standard for % does not guarantee this)
  */
-inline static const fixed_t FixedMod(fixed_t a, fixed_t b)
+inline static fixed_t FixedMod(fixed_t a, fixed_t b)
 {
   if (b & (b-1)) {
     fixed_t r = a % b;

@@ -45,7 +45,7 @@
 // Gives an estimation of distance (not exact)
 //
 
-OVERLAY fixed_t CONSTFUNC P_AproxDistance(fixed_t dx, fixed_t dy)
+OVERLAY fixed_t P_AproxDistance(fixed_t dx, fixed_t dy)
 {
   dx = abs(dx);
   dy = abs(dy);
@@ -60,7 +60,7 @@ OVERLAY fixed_t CONSTFUNC P_AproxDistance(fixed_t dx, fixed_t dy)
 //
 // killough 5/3/98: reformatted, cleaned up
 
-OVERLAY int CONSTFUNC P_PointOnLineSide(fixed_t x, fixed_t y, const line_t *line)
+OVERLAY int P_PointOnLineSide(fixed_t x, fixed_t y, const line_t *line)
 {
   return
     !line->dx ? x <= line->v1->x ? line->dy > 0 : line->dy < 0 :
@@ -76,7 +76,7 @@ OVERLAY int CONSTFUNC P_PointOnLineSide(fixed_t x, fixed_t y, const line_t *line
 //
 // killough 5/3/98: reformatted, cleaned up
 
-OVERLAY int CONSTFUNC P_BoxOnLineSide(const fixed_t *tmbox, const line_t *ld)
+OVERLAY int P_BoxOnLineSide(const fixed_t *tmbox, const line_t *ld)
 {
   switch (ld->slopetype)
     {
@@ -107,7 +107,7 @@ OVERLAY int CONSTFUNC P_BoxOnLineSide(const fixed_t *tmbox, const line_t *ld)
 //
 // killough 5/3/98: reformatted, cleaned up
 
-OVERLAY int CONSTFUNC P_PointOnDivlineSide(fixed_t x, fixed_t y, const divline_t *line)
+OVERLAY int P_PointOnDivlineSide(fixed_t x, fixed_t y, const divline_t *line)
 {
   return
     !line->dx ? x <= line->x ? line->dy > 0 : line->dy < 0 :
@@ -137,7 +137,7 @@ OVERLAY void P_MakeDivline(const line_t *li, divline_t *dl)
 //
 // killough 5/3/98: reformatted, cleaned up
 
-OVERLAY fixed_t CONSTFUNC P_InterceptVector(const divline_t *v2, const divline_t *v1)
+OVERLAY fixed_t P_InterceptVector(const divline_t *v2, const divline_t *v1)
 {
   fixed_t den = FixedMul(v1->dy>>8, v2->dx) - FixedMul(v1->dx>>8, v2->dy);
   return den ? FixedDiv((FixedMul((v1->x-v2->x)>>8, v1->dy) +
@@ -320,7 +320,7 @@ OVERLAY void P_SetThingPosition(mobj_t *thing)
 //
 // A fast function for testing intersections between things and linedefs.
 
-OVERLAY boolean CONSTFUNC ThingIsOnLine(const mobj_t *t, const line_t *l)
+OVERLAY boolean ThingIsOnLine(const mobj_t *t, const line_t *l)
 {
   int dx = l->dx >> FRACBITS;                             // Linedef vector
   int dy = l->dy >> FRACBITS;

@@ -63,18 +63,12 @@ typedef struct {
 
 typedef boolean (*traverser_t)(intercept_t *in);
 
-#ifdef __GNUC__
-#define CONSTFUNC const
-#else
-#define CONSTFUNC
-#endif
-
-fixed_t CONSTFUNC P_AproxDistance (fixed_t dx, fixed_t dy);
-int     CONSTFUNC P_PointOnLineSide (fixed_t x, fixed_t y, const line_t *line);
-int     CONSTFUNC P_PointOnDivlineSide (fixed_t x, fixed_t y, 
+fixed_t P_AproxDistance (fixed_t dx, fixed_t dy);
+int     P_PointOnLineSide (fixed_t x, fixed_t y, const line_t *line);
+int     P_PointOnDivlineSide (fixed_t x, fixed_t y,
 					const divline_t *line);
-int     CONSTFUNC P_BoxOnLineSide (const fixed_t *tmbox, const line_t *ld);
-fixed_t CONSTFUNC P_InterceptVector (const divline_t *v2, const divline_t *v1);
+int     P_BoxOnLineSide (const fixed_t *tmbox, const line_t *ld);
+fixed_t P_InterceptVector (const divline_t *v2, const divline_t *v1);
 
 void    P_MakeDivline (const line_t *li, divline_t *dl);
 void    P_LineOpening (const line_t *linedef);
@@ -82,7 +76,7 @@ void    P_UnsetThingPosition(mobj_t *thing);
 void    P_SetThingPosition(mobj_t *thing);
 boolean P_BlockLinesIterator (int x, int y, boolean func(line_t *));
 boolean P_BlockThingsIterator(int x, int y, boolean func(mobj_t *));
-boolean CONSTFUNC ThingIsOnLine(const mobj_t *t, const line_t *l);  /* killough 3/15/98 */
+boolean ThingIsOnLine(const mobj_t *t, const line_t *l);  /* killough 3/15/98 */
 boolean P_PathTraverse(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2,
                        int flags, boolean trav(intercept_t *));
 
