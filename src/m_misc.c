@@ -1047,7 +1047,7 @@ OVERLAY void M_ScreenShot(void)
 
   M_DoScreenShot(lbmname); // cph
 
-  S_StartSound(NULL,gamemode==commercial ? sfx_radio : sfx_tink); 
+  S_StartSound(NULL,gamemode==commercial ? sfx_radio : sfx_tink);
 }
 
 //----------------------------------------------------------------------------

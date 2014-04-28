@@ -3437,6 +3437,63 @@ OVERLAY void M_DrawHelp (void)
 //
 ////////////////////////////////////////////////////////////////////////////
 
+OVERLAY static boolean M_ResponderSavedGame(int ch)
+{
+  if (ch == key_menu_backspace)                            // phares 3/7/98
+  {
+    if (saveCharIndex > 0)
+    {
+      saveCharIndex--;
+      savegamestrings[saveSlot][saveCharIndex] = 0;
+    }
+  }
+  
+  else if (ch == key_menu_escape)                          // phares 3/7/98
+  {
+    saveStringEnter = 0;
+    strcpy(&savegamestrings[saveSlot][0],saveOldString);
+  }
+  
+  else if (ch == key_menu_enter)                           // phares 3/7/98
+  {
+    saveStringEnter = 0;
+    if (savegamestrings[saveSlot][0])
+      M_DoSave(saveSlot);
+  }
+  
+  else
+  {
+    ch = toupper(ch);
+    if (ch != 32)
+      if (ch-HU_FONTSTART < 0 || ch-HU_FONTSTART >= HU_FONTSIZE)
+        ; // if true, do nothing
+    if (ch >= 32 && ch <= 127 &&
+        saveCharIndex < SAVESTRINGSIZE-1 &&
+        M_StringWidth(savegamestrings[saveSlot]) < (SAVESTRINGSIZE-2)*8)
+    {
+      savegamestrings[saveSlot][saveCharIndex++] = ch;
+      savegamestrings[saveSlot][saveCharIndex] = 0;
+    }
+  }
+  return true;
+}
+
+OVERLAY static boolean M_ResponderMessageToPrint(int ch)
+{
+  if (messageNeedsInput == true &&
+      !(ch == ' ' || ch == 'n' || ch == 'y' || ch == key_escape)) // phares
+    return false;
+  
+  menuactive = messageLastMenuActive;
+  messageToPrint = 0;
+  if (messageRoutine)
+    messageRoutine(ch);
+  
+  menuactive = false;
+  S_StartSound(NULL,sfx_swtchx);
+  return true;
+}
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // M_Responder
@@ -3592,65 +3649,13 @@ OVERLAY boolean M_Responder (event_t* ev)
     return false; // we can't use the event here
 
   // Save Game string input
-
   if (saveStringEnter)
-    {
-    if (ch == key_menu_backspace)                            // phares 3/7/98
-      {
-      if (saveCharIndex > 0)
-        {
-        saveCharIndex--;
-        savegamestrings[saveSlot][saveCharIndex] = 0;
-        }
-      }
-
-    else if (ch == key_menu_escape)                          // phares 3/7/98
-      {
-      saveStringEnter = 0;
-      strcpy(&savegamestrings[saveSlot][0],saveOldString);
-      }
-    
-    else if (ch == key_menu_enter)                           // phares 3/7/98
-      {
-      saveStringEnter = 0;
-      if (savegamestrings[saveSlot][0])
-        M_DoSave(saveSlot);
-      }
-    
-    else
-      {
-      ch = toupper(ch);
-      if (ch != 32)
-        if (ch-HU_FONTSTART < 0 || ch-HU_FONTSTART >= HU_FONTSIZE)
-          ; // if true, do nothing
-      if (ch >= 32 && ch <= 127 &&
-          saveCharIndex < SAVESTRINGSIZE-1 &&
-          M_StringWidth(savegamestrings[saveSlot]) < (SAVESTRINGSIZE-2)*8)
-        {
-        savegamestrings[saveSlot][saveCharIndex++] = ch;
-        savegamestrings[saveSlot][saveCharIndex] = 0;
-        }
-      }
-    return true;
-    }
+    return M_ResponderSavedGame(ch);
   
   // Take care of any messages that need input
 
   if (messageToPrint)
-    {
-    if (messageNeedsInput == true &&
-        !(ch == ' ' || ch == 'n' || ch == 'y' || ch == key_escape)) // phares
-      return false;
-  
-    menuactive = messageLastMenuActive;
-    messageToPrint = 0;
-    if (messageRoutine)
-      messageRoutine(ch);
-    
-    menuactive = false;
-    S_StartSound(NULL,sfx_swtchx);
-    return true;
-    }
+    return M_ResponderMessageToPrint(ch);
 
   // killough 2/22/98: add support for screenshot key:
 
@@ -3807,7 +3812,7 @@ OVERLAY boolean M_Responder (event_t* ev)
         }
       return true;
       }
-    }                               
+    }
   
   // Pop-up Main menu?
 
