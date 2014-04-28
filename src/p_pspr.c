@@ -44,6 +44,7 @@ rcsid[] = "$Id: p_pspr.c,v 1.4 1999/10/12 13:01:13 cphipps Exp $";
 #include "s_sound.h"
 #include "sounds.h"
 #include "d_event.h"
+#include <assert.h>
 
 #define LOWERSPEED   (FRACUNIT*6)
 #define RAISESPEED   (FRACUNIT*6)
@@ -67,6 +68,122 @@ static const int recoil_values[] = {    // phares
   0,  // wp_chainsaw
   80  // wp_supershotgun
 };
+
+OVERLAY static void
+P_DoAction(action_t action, player_t *player, pspdef_t *psp)
+{
+  switch (action) {
+    case Action_A_BFGSpray:
+    case Action_A_KeenDie:
+    case Action_A_Look:
+    case Action_A_Chase:
+    case Action_A_FaceTarget:
+    case Action_A_PosAttack:
+    case Action_A_SPosAttack:
+    case Action_A_CPosAttack:
+    case Action_A_CPosRefire:
+    case Action_A_SpidRefire:
+    case Action_A_BspiAttack:
+    case Action_A_TroopAttack:
+    case Action_A_SargAttack:
+    case Action_A_HeadAttack:
+    case Action_A_CyberAttack:
+    case Action_A_BruisAttack:
+    case Action_A_SkelMissile:
+    case Action_A_Tracer:
+    case Action_A_SkelWhoosh:
+    case Action_A_SkelFist:
+    case Action_A_VileChase:
+    case Action_A_VileStart:
+    case Action_A_StartFire:
+    case Action_A_FireCrackle:
+    case Action_A_Fire:
+    case Action_A_VileTarget:
+    case Action_A_VileAttack:
+    case Action_A_FatRaise:
+    case Action_A_FatAttack1:
+    case Action_A_FatAttack2:
+    case Action_A_FatAttack3:
+    case Action_A_SkullAttack:
+    case Action_A_PainAttack:
+    case Action_A_PainDie:
+    case Action_A_Scream:
+    case Action_A_XScream:
+    case Action_A_Pain:
+    case Action_A_Fall:
+    case Action_A_Explode:
+    case Action_A_BossDeath:
+    case Action_A_Hoof:
+    case Action_A_Metal:
+    case Action_A_BabyMetal:
+    case Action_A_BrainAwake:
+    case Action_A_BrainPain:
+    case Action_A_BrainScream:
+    case Action_A_BrainExplode:
+    case Action_A_BrainDie:
+    case Action_A_BrainSpit:
+    case Action_A_SpawnSound:
+    case Action_A_SpawnFly:
+    case Action_A_PlayerScream:
+    case Action_A_Die:
+    case Action_A_Detonate:
+    case Action_A_Mushroom:
+    case Action_A_Spawn:
+    case Action_A_Turn:
+    case Action_A_Face:
+    case Action_A_Scratch:
+    case Action_A_PlaySound:
+    case Action_A_RandomJump:
+    case Action_A_LineEffect:
+      assert(0 && "Unexpected action");
+    case Action_None:
+      break;
+    case Action_A_WeaponReady:
+      return A_WeaponReady(player, psp);
+    case Action_A_ReFire:
+      return A_ReFire(player, psp);
+    case Action_A_CheckReload:
+      return A_CheckReload(player, psp);
+    case Action_A_Lower:
+      return A_Lower(player, psp);
+    case Action_A_Raise:
+      return A_Raise(player, psp);
+    case Action_A_GunFlash:
+      return A_GunFlash(player, psp);
+    case Action_A_Punch:
+      return A_Punch(player, psp);
+    case Action_A_Saw:
+      return A_Saw(player, psp);
+    case Action_A_FireMissile:
+      return A_FireMissile(player, psp);
+    case Action_A_FireBFG:
+      return A_FireBFG(player, psp);
+    case Action_A_FirePlasma:
+      return A_FirePlasma(player, psp);
+    case Action_A_FirePistol:
+      return A_FirePistol(player, psp);
+    case Action_A_FireShotgun:
+      return A_FireShotgun(player, psp);
+    case Action_A_FireShotgun2:
+      return A_FireShotgun2(player, psp);
+    case Action_A_FireCGun:
+      return A_FireCGun(player, psp);
+    case Action_A_Light0:
+      return A_Light0(player, psp);
+    case Action_A_Light1:
+      return A_Light1(player, psp);
+    case Action_A_Light2:
+      return A_Light2(player, psp);
+    case Action_A_BFGsound:
+      return A_BFGsound(player, psp);
+    case Action_A_OpenShotgun2:
+      return A_OpenShotgun2(player, psp);
+    case Action_A_LoadShotgun2:
+      return A_LoadShotgun2(player, psp);
+    case Action_A_CloseShotgun2:
+      return A_CloseShotgun2(player, psp);
+  }
+}
 
 //
 // P_SetPsprite
@@ -100,12 +217,11 @@ OVERLAY static void P_SetPsprite(player_t *player, int position, statenum_t stnu
 
       // Call action routine.
       // Modified handling.
-      if (state->action.acp2)
-        {
-          state->action.acp2(player, psp);
-          if (!psp->state)
-            break;
-        }
+      if (state->action != Action_None) {
+        P_DoAction(state->action, player, psp);
+        if (!psp->state)
+          break;
+      }
       stnum = psp->state->nextstate;
     }
   while (!psp->tics);     // an initial state of 0 could cycle through

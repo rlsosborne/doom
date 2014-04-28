@@ -40,6 +40,7 @@ rcsid[] = "$Id: p_mobj.c,v 1.13 1999/10/17 09:35:58 cphipps Exp $";
 #include "p_maputl.h"
 #include "p_map.h"
 #include "p_tick.h"
+#include "p_enemy.h"
 #include "sounds.h"
 #include "st_stuff.h"
 #include "hu_stuff.h"
@@ -47,6 +48,162 @@ rcsid[] = "$Id: p_mobj.c,v 1.13 1999/10/17 09:35:58 cphipps Exp $";
 #include "info.h"
 #include "g_game.h"
 #include "lprintf.h"
+#include <assert.h>
+
+OVERLAY void P_DoAction(action_t action, mobj_t *mobj)
+{
+  switch (action) {
+    case Action_A_WeaponReady:
+    case Action_A_ReFire:
+    case Action_A_CheckReload:
+    case Action_A_Lower:
+    case Action_A_Raise:
+    case Action_A_GunFlash:
+    case Action_A_Punch:
+    case Action_A_Saw:
+    case Action_A_FireMissile:
+    case Action_A_FireBFG:
+    case Action_A_FirePlasma:
+    case Action_A_FirePistol:
+    case Action_A_FireShotgun:
+    case Action_A_FireShotgun2:
+    case Action_A_FireCGun:
+    case Action_A_Light0:
+    case Action_A_Light1:
+    case Action_A_Light2:
+    case Action_A_BFGsound:
+    case Action_A_OpenShotgun2:
+    case Action_A_LoadShotgun2:
+    case Action_A_CloseShotgun2:
+      assert(0 && "Unexpected action");
+    case Action_None:
+      break;
+    case Action_A_BFGSpray:
+      return A_BFGSpray(mobj);
+    case Action_A_KeenDie:
+      return A_KeenDie(mobj);
+    case Action_A_Look:
+      return A_Look(mobj);
+    case Action_A_Chase:
+      return A_Chase(mobj);
+    case Action_A_FaceTarget:
+      return A_FaceTarget(mobj);
+    case Action_A_PosAttack:
+      return A_PosAttack(mobj);
+    case Action_A_SPosAttack:
+      return A_SPosAttack(mobj);
+    case Action_A_CPosAttack:
+      return A_CPosAttack(mobj);
+    case Action_A_CPosRefire:
+      return A_CPosRefire(mobj);
+    case Action_A_SpidRefire:
+      return A_SpidRefire(mobj);
+    case Action_A_BspiAttack:
+      return A_BspiAttack(mobj);
+    case Action_A_TroopAttack:
+      return A_TroopAttack(mobj);
+    case Action_A_SargAttack:
+      return A_SargAttack(mobj);
+    case Action_A_HeadAttack:
+      return A_HeadAttack(mobj);
+    case Action_A_CyberAttack:
+      return A_CyberAttack(mobj);
+    case Action_A_BruisAttack:
+      return A_BruisAttack(mobj);
+    case Action_A_SkelMissile:
+      return A_SkelMissile(mobj);
+    case Action_A_Tracer:
+      return A_Tracer(mobj);
+    case Action_A_SkelWhoosh:
+      return A_SkelWhoosh(mobj);
+    case Action_A_SkelFist:
+      return A_SkelFist(mobj);
+    case Action_A_VileChase:
+      return A_VileChase(mobj);
+    case Action_A_VileStart:
+      return A_VileStart(mobj);
+    case Action_A_StartFire:
+      return A_StartFire(mobj);
+    case Action_A_FireCrackle:
+      return A_FireCrackle(mobj);
+    case Action_A_Fire:
+      return A_Fire(mobj);
+    case Action_A_VileTarget:
+      return A_VileTarget(mobj);
+    case Action_A_VileAttack:
+      return A_VileAttack(mobj);
+    case Action_A_FatRaise:
+      return A_FatRaise(mobj);
+    case Action_A_FatAttack1:
+      return A_FatAttack1(mobj);
+    case Action_A_FatAttack2:
+      return A_FatAttack2(mobj);
+    case Action_A_FatAttack3:
+      return A_FatAttack3(mobj);
+    case Action_A_SkullAttack:
+      return A_SkullAttack(mobj);
+    case Action_A_PainAttack:
+      return A_PainAttack(mobj);
+    case Action_A_PainDie:
+      return A_PainDie(mobj);
+    case Action_A_Scream:
+      return A_Scream(mobj);
+    case Action_A_XScream:
+      return A_XScream(mobj);
+    case Action_A_Pain:
+      return A_Pain(mobj);
+    case Action_A_Fall:
+      return A_Fall(mobj);
+    case Action_A_Explode:
+      return A_Explode(mobj);
+    case Action_A_BossDeath:
+      return A_BossDeath(mobj);
+    case Action_A_Hoof:
+      return A_Hoof(mobj);
+    case Action_A_Metal:
+      return A_Metal(mobj);
+    case Action_A_BabyMetal:
+      return A_BabyMetal(mobj);
+    case Action_A_BrainAwake:
+      return A_BrainAwake(mobj);
+    case Action_A_BrainPain:
+      return A_BrainPain(mobj);
+    case Action_A_BrainScream:
+      return A_BrainScream(mobj);
+    case Action_A_BrainExplode:
+      return A_BrainExplode(mobj);
+    case Action_A_BrainDie:
+      return A_BrainDie(mobj);
+    case Action_A_BrainSpit:
+      return A_SpawnSound(mobj);
+    case Action_A_SpawnSound:
+      return A_SpawnSound(mobj);
+    case Action_A_SpawnFly:
+      return A_SpawnFly(mobj);
+    case Action_A_PlayerScream:
+      return A_PlayerScream(mobj);
+    case Action_A_Die:
+      return A_Die(mobj);
+    case Action_A_Detonate:
+      return A_Detonate(mobj);
+    case Action_A_Mushroom:
+      return A_Mushroom(mobj);
+    case Action_A_Spawn:
+      return A_Spawn(mobj);
+    case Action_A_Turn:
+      return A_Turn(mobj);
+    case Action_A_Face:
+      return A_Face(mobj);
+    case Action_A_Scratch:
+      return A_Scratch(mobj);
+    case Action_A_PlaySound:
+      return A_PlaySound(mobj);
+    case Action_A_RandomJump:
+      return A_RandomJump(mobj);
+    case Action_A_LineEffect:
+      return A_LineEffect(mobj);
+  }
+}
 
 //
 // P_SetMobjState
@@ -87,9 +244,7 @@ OVERLAY boolean P_SetMobjState(mobj_t* mobj,statenum_t state)
 
     // Modified handling.
     // Call action functions when the state is set
-
-    if (st->action.acp1)
-      st->action.acp1(mobj);
+    P_DoAction(st->action, mobj);
 
     seenstate[state] = 1 + st->nextstate;   // killough 4/9/98
 

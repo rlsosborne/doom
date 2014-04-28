@@ -49,6 +49,7 @@ rcsid[] = "$Id: p_enemy.c,v 1.12 1999/10/31 11:50:07 cphipps Exp $";
 #include "p_enemy.h"
 #include "p_tick.h"
 #include "lprintf.h"
+#include "p_pspr.h"
 
 typedef enum {
   DI_EAST,

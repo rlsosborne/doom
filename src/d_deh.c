@@ -1139,7 +1139,7 @@ static const char *deh_state[] = // CPhipps - static const*
   "Duration",         // .tics (long)
   "Next frame",       // .nextstate (statenum_t)
   // This is set in a separate "Pointer" block from Dehacked
-  "Codep Frame",      // pointer to first use of action (actionf_t)
+  "Codep Frame",      // pointer to first use of action
   "Unknown 1",        // .misc1 (long)
   "Unknown 2"         // .misc2 (long)
 };
@@ -1335,105 +1335,104 @@ extern void A_RandomJump();      // killough 11/98
 extern void A_LineEffect();      // killough 11/98
 
 typedef struct {
-  actionf_t cptr;  // actual pointer to the subroutine
+  action_t cptr;  // action.
   const char *lookup;  // mnemonic lookup string to be specified in BEX
   // CPhipps - const*
 } deh_bexptr;
 
 static const deh_bexptr deh_bexptrs[] = // CPhipps - static const
 {
-  {{A_Light0},         "A_Light0"},
-  {{A_WeaponReady},    "A_WeaponReady"},
-  {{A_Lower},          "A_Lower"},
-  {{A_Raise},          "A_Raise"},
-  {{A_Punch},          "A_Punch"},
-  {{A_ReFire},         "A_ReFire"},
-  {{A_FirePistol},     "A_FirePistol"},
-  {{A_Light1},         "A_Light1"},
-  {{A_FireShotgun},    "A_FireShotgun"},
-  {{A_Light2},         "A_Light2"},
-  {{A_FireShotgun2},   "A_FireShotgun2"},
-  {{A_CheckReload},    "A_CheckReload"},
-  {{A_OpenShotgun2},   "A_OpenShotgun2"},
-  {{A_LoadShotgun2},   "A_LoadShotgun2"},
-  {{A_CloseShotgun2},  "A_CloseShotgun2"},
-  {{A_FireCGun},       "A_FireCGun"},
-  {{A_GunFlash},       "A_GunFlash"},
-  {{A_FireMissile},    "A_FireMissile"},
-  {{A_Saw},            "A_Saw"},
-  {{A_FirePlasma},     "A_FirePlasma"},
-  {{A_BFGsound},       "A_BFGsound"},
-  {{A_FireBFG},        "A_FireBFG"},
-  {{A_BFGSpray},       "A_BFGSpray"},
-  {{A_Explode},        "A_Explode"},
-  {{A_Pain},           "A_Pain"},
-  {{A_PlayerScream},   "A_PlayerScream"},
-  {{A_Fall},           "A_Fall"},
-  {{A_XScream},        "A_XScream"},
-  {{A_Look},           "A_Look"},
-  {{A_Chase},          "A_Chase"},
-  {{A_FaceTarget},     "A_FaceTarget"},
-  {{A_PosAttack},      "A_PosAttack"},
-  {{A_Scream},         "A_Scream"},
-  {{A_SPosAttack},     "A_SPosAttack"},
-  {{A_VileChase},      "A_VileChase"},
-  {{A_VileStart},      "A_VileStart"},
-  {{A_VileTarget},     "A_VileTarget"},
-  {{A_VileAttack},     "A_VileAttack"},
-  {{A_StartFire},      "A_StartFire"},
-  {{A_Fire},           "A_Fire"},
-  {{A_FireCrackle},    "A_FireCrackle"},
-  {{A_Tracer},         "A_Tracer"},
-  {{A_SkelWhoosh},     "A_SkelWhoosh"},
-  {{A_SkelFist},       "A_SkelFist"},
-  {{A_SkelMissile},    "A_SkelMissile"},
-  {{A_FatRaise},       "A_FatRaise"},
-  {{A_FatAttack1},     "A_FatAttack1"},
-  {{A_FatAttack2},     "A_FatAttack2"},
-  {{A_FatAttack3},     "A_FatAttack3"},
-  {{A_BossDeath},      "A_BossDeath"},
-  {{A_CPosAttack},     "A_CPosAttack"},
-  {{A_CPosRefire},     "A_CPosRefire"},
-  {{A_TroopAttack},    "A_TroopAttack"},
-  {{A_SargAttack},     "A_SargAttack"},
-  {{A_HeadAttack},     "A_HeadAttack"},
-  {{A_BruisAttack},    "A_BruisAttack"},
-  {{A_SkullAttack},    "A_SkullAttack"},
-  {{A_Metal},          "A_Metal"},
-  {{A_SpidRefire},     "A_SpidRefire"},
-  {{A_BabyMetal},      "A_BabyMetal"},
-  {{A_BspiAttack},     "A_BspiAttack"},
-  {{A_Hoof},           "A_Hoof"},
-  {{A_CyberAttack},    "A_CyberAttack"},
-  {{A_PainAttack},     "A_PainAttack"},
-  {{A_PainDie},        "A_PainDie"},
-  {{A_KeenDie},        "A_KeenDie"},
-  {{A_BrainPain},      "A_BrainPain"},
-  {{A_BrainScream},    "A_BrainScream"},
-  {{A_BrainDie},       "A_BrainDie"},
-  {{A_BrainAwake},     "A_BrainAwake"},
-  {{A_BrainSpit},      "A_BrainSpit"},
-  {{A_SpawnSound},     "A_SpawnSound"},
-  {{A_SpawnFly},       "A_SpawnFly"},
-  {{A_BrainExplode},   "A_BrainExplode"},
-  {{A_Detonate},       "A_Detonate"},       // killough 8/9/98
-  {{A_Mushroom},       "A_Mushroom"},       // killough 10/98
-  {{A_Die},            "A_Die"},            // killough 11/98
-  {{A_Spawn},          "A_Spawn"},          // killough 11/98
-  {{A_Turn},           "A_Turn"},           // killough 11/98
-  {{A_Face},           "A_Face"},           // killough 11/98
-  {{A_Scratch},        "A_Scratch"},        // killough 11/98
-  {{A_PlaySound},      "A_PlaySound"},      // killough 11/98
-  {{A_RandomJump},     "A_RandomJump"},     // killough 11/98
-  {{A_LineEffect},     "A_LineEffect"},     // killough 11/98
-
-  // This NULL entry must be the last in the list
-  {{NULL},             "A_NULL"},  // Ty 05/16/98
+  {Action_A_Light0,         "A_Light0"},
+  {Action_A_WeaponReady,    "A_WeaponReady"},
+  {Action_A_Lower,          "A_Lower"},
+  {Action_A_Raise,          "A_Raise"},
+  {Action_A_Punch,          "A_Punch"},
+  {Action_A_ReFire,         "A_ReFire"},
+  {Action_A_FirePistol,     "A_FirePistol"},
+  {Action_A_Light1,         "A_Light1"},
+  {Action_A_FireShotgun,    "A_FireShotgun"},
+  {Action_A_Light2,         "A_Light2"},
+  {Action_A_FireShotgun2,   "A_FireShotgun2"},
+  {Action_A_CheckReload,    "A_CheckReload"},
+  {Action_A_OpenShotgun2,   "A_OpenShotgun2"},
+  {Action_A_LoadShotgun2,   "A_LoadShotgun2"},
+  {Action_A_CloseShotgun2,  "A_CloseShotgun2"},
+  {Action_A_FireCGun,       "A_FireCGun"},
+  {Action_A_GunFlash,       "A_GunFlash"},
+  {Action_A_FireMissile,    "A_FireMissile"},
+  {Action_A_Saw,            "A_Saw"},
+  {Action_A_FirePlasma,     "A_FirePlasma"},
+  {Action_A_BFGsound,       "A_BFGsound"},
+  {Action_A_FireBFG,        "A_FireBFG"},
+  {Action_A_BFGSpray,       "A_BFGSpray"},
+  {Action_A_Explode,        "A_Explode"},
+  {Action_A_Pain,           "A_Pain"},
+  {Action_A_PlayerScream,   "A_PlayerScream"},
+  {Action_A_Fall,           "A_Fall"},
+  {Action_A_XScream,        "A_XScream"},
+  {Action_A_Look,           "A_Look"},
+  {Action_A_Chase,          "A_Chase"},
+  {Action_A_FaceTarget,     "A_FaceTarget"},
+  {Action_A_PosAttack,      "A_PosAttack"},
+  {Action_A_Scream,         "A_Scream"},
+  {Action_A_SPosAttack,     "A_SPosAttack"},
+  {Action_A_VileChase,      "A_VileChase"},
+  {Action_A_VileStart,      "A_VileStart"},
+  {Action_A_VileTarget,     "A_VileTarget"},
+  {Action_A_VileAttack,     "A_VileAttack"},
+  {Action_A_StartFire,      "A_StartFire"},
+  {Action_A_Fire,           "A_Fire"},
+  {Action_A_FireCrackle,    "A_FireCrackle"},
+  {Action_A_Tracer,         "A_Tracer"},
+  {Action_A_SkelWhoosh,     "A_SkelWhoosh"},
+  {Action_A_SkelFist,       "A_SkelFist"},
+  {Action_A_SkelMissile,    "A_SkelMissile"},
+  {Action_A_FatRaise,       "A_FatRaise"},
+  {Action_A_FatAttack1,     "A_FatAttack1"},
+  {Action_A_FatAttack2,     "A_FatAttack2"},
+  {Action_A_FatAttack3,     "A_FatAttack3"},
+  {Action_A_BossDeath,      "A_BossDeath"},
+  {Action_A_CPosAttack,     "A_CPosAttack"},
+  {Action_A_CPosRefire,     "A_CPosRefire"},
+  {Action_A_TroopAttack,    "A_TroopAttack"},
+  {Action_A_SargAttack,     "A_SargAttack"},
+  {Action_A_HeadAttack,     "A_HeadAttack"},
+  {Action_A_BruisAttack,    "A_BruisAttack"},
+  {Action_A_SkullAttack,    "A_SkullAttack"},
+  {Action_A_Metal,          "A_Metal"},
+  {Action_A_SpidRefire,     "A_SpidRefire"},
+  {Action_A_BabyMetal,      "A_BabyMetal"},
+  {Action_A_BspiAttack,     "A_BspiAttack"},
+  {Action_A_Hoof,           "A_Hoof"},
+  {Action_A_CyberAttack,    "A_CyberAttack"},
+  {Action_A_PainAttack,     "A_PainAttack"},
+  {Action_A_PainDie,        "A_PainDie"},
+  {Action_A_KeenDie,        "A_KeenDie"},
+  {Action_A_BrainPain,      "A_BrainPain"},
+  {Action_A_BrainScream,    "A_BrainScream"},
+  {Action_A_BrainDie,       "A_BrainDie"},
+  {Action_A_BrainAwake,     "A_BrainAwake"},
+  {Action_A_BrainSpit,      "A_BrainSpit"},
+  {Action_A_SpawnSound,     "A_SpawnSound"},
+  {Action_A_SpawnFly,       "A_SpawnFly"},
+  {Action_A_BrainExplode,   "A_BrainExplode"},
+  {Action_A_Detonate,       "A_Detonate"},       // killough 8/9/98
+  {Action_A_Mushroom,       "A_Mushroom"},       // killough 10/98
+  {Action_A_Die,            "A_Die"},            // killough 11/98
+  {Action_A_Spawn,          "A_Spawn"},          // killough 11/98
+  {Action_A_Turn,           "A_Turn"},           // killough 11/98
+  {Action_A_Face,           "A_Face"},           // killough 11/98
+  {Action_A_Scratch,        "A_Scratch"},        // killough 11/98
+  {Action_A_PlaySound,      "A_PlaySound"},      // killough 11/98
+  {Action_A_RandomJump,     "A_RandomJump"},     // killough 11/98
+  {Action_A_LineEffect,     "A_LineEffect"},     // killough 11/98
+  // This entry must be the last in the list
+  {Action_None,             "A_NULL"},  // Ty 05/16/98
 };
 
 // to hold startup code pointers from INFO.C
 // CPhipps - static
-static actionf_t deh_codeptr[NUMSTATES];
+static action_t deh_codeptr[NUMSTATES];
 
 // ====================================================================
 // ProcessDehFile
@@ -1881,7 +1880,7 @@ OVERLAY static void deh_procPointer(DEHFILE *fpin, FILE* fpout, char *line) // d
           // Write BEX-oriented line to match:
           for (i=0;i<NUMSTATES;i++)
             {
-              if (!memcmp(&deh_bexptrs[i].cptr,&deh_codeptr[value],sizeof(actionf_t)))
+              if (deh_bexptrs[i].cptr == deh_codeptr[value])
                 {
                   if (fpout) fprintf(fpout,"BEX [CODEPTR] -> FRAME %d = %s\n",
                                      indexnum, &deh_bexptrs[i].lookup[2]);

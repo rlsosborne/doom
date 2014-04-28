@@ -38,29 +38,6 @@
 #pragma interface
 #endif
 
-/*
- * Experimental stuff.
- * To compile this as "ANSI C with classes"
- *  we will need to handle the various
- *  action functions cleanly.
- */
-typedef  void (*actionf_p1)( void* );
-typedef  void (*actionf_p2)( void*, void* );
-
-/* Note: In d_deh.c you will find references to these
- * wherever code pointers and function handlers exist
- */
-typedef union
-{
-  actionf_p1    acp1;
-  actionf_p2    acp2;
-} actionf_t;
-
-/* Historically, "think_t" is yet another
- *  function pointer to a routine to handle
- *  an actor.
- */
-
 typedef enum {
   Think_None,
   Think_P_MobjThinker,
