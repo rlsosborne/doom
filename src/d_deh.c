@@ -49,7 +49,7 @@
 #define TRUE 1
 #define FALSE 0
 
-#if !defined(DJGPP) && !defined(__XMOS__)
+#if !defined(__XMOS__)
 // CPhipps - hmm, odd...
 #include <ctype.h>
 

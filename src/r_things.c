@@ -741,17 +741,7 @@ OVERLAY void R_DrawPlayerSprites(void)
 // linked lists, and to use faster sorting algorithm.
 //
 
-#ifdef DJGPP
-
-// killough 9/22/98: inlined memcpy of pointer arrays
-// CPhipps - added memory as modified
-#define bcopyp(d, s, n) asm(" cld; rep; movsl;" :: "D"(d), "S"(s), "c"(n) : "%cc", "%esi", "%edi", "%ecx", "memory")
-
-#else
-
 #define bcopyp(d, s, n) memcpy(d, s, (n) * sizeof(void *))
-
-#endif
 
 // killough 9/2/98: merge sort
 

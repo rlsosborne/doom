@@ -255,9 +255,6 @@ OVERLAY static void I_EndDoom(void)
       putchar('\n');
       for (i=0; i<l; i++)
         {
-#ifdef DJGPP
-	  textattr(endoom[i][1]);
-#else
 	  if (endoom_mode & endoom_colours) {
 	    if (!(i % 80)) {
 	      /* reset everything when we start a new line */
@@ -292,7 +289,6 @@ OVERLAY static void I_EndDoom(void)
 	    putchar(endoom[i][0]);
 	  else /* Probably a box character, so do #'s */
 	    putchar('#');
-#endif
         }
       putchar('\b');   /* hack workaround for extra newline at bottom of screen */
       putchar('\r');

@@ -176,10 +176,8 @@ extern int tran_filter_pct;            // killough 2/21/98
 extern int screenblocks;
 extern int showMessages;
 
-#ifndef DJGPP
 const char* snd_device;
 int         mus_pause_opt; // 0 = kill music, 1 = pause, 2 = continue
-#endif
 
 extern const char* chat_macros[];
 
