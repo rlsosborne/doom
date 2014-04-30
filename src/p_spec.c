@@ -57,6 +57,7 @@
 #include "d_deh.h"
 #include "r_plane.h"
 #include "lprintf.h"
+#include <assert.h>
 
 //
 // Animating textures and planes
@@ -1121,87 +1122,75 @@ OVERLAY void P_CrossSpecialLine(line_t *line, int side, mobj_t *thing)
   //jff 02/04/98 add check here for generalized lindef types
   if (!demo_compatibility) // generalized types not recognized if old demo
   {
-    // pointer to line function is NULL by default, set non-null if
-    // line special is walkover generalized linedef type
-    int (*linefunc)(line_t *line)=NULL;
-
-    // check each range of generalized linedefs
-    if ((unsigned)line->special >= GenFloorBase)
-    {
-      if (!thing->player)
-        if ((line->special & FloorChange) || !(line->special & FloorModel))
-          return;     // FloorModel is "Allow Monsters" if FloorChange is 0
-      if (!line->tag) //jff 2/27/98 all walk generalized types require tag
-        return;
-      linefunc = EV_DoGenFloor;
-    }
-    else if ((unsigned)line->special >= GenCeilingBase)
-    {
-      if (!thing->player)
-        if ((line->special & CeilingChange) || !(line->special & CeilingModel))
-          return;     // CeilingModel is "Allow Monsters" if CeilingChange is 0
-      if (!line->tag) //jff 2/27/98 all walk generalized types require tag
-        return;
-      linefunc = EV_DoGenCeiling;
-    }
-    else if ((unsigned)line->special >= GenDoorBase)
-    {
-      if (!thing->player)
-      {
-        if (!(line->special & DoorMonster))
-          return;                    // monsters disallowed from this door
-        if (line->flags & ML_SECRET) // they can't open secret doors either
-          return;
+    if ((unsigned)line->special >= GenStairsBase) {
+      int lineTriggerType = (line->special & TriggerType) >> TriggerTypeShift;
+      if (lineTriggerType == WalkOnce || lineTriggerType == WalkMany) {
+        int retval;
+        // check each range of generalized linedefs
+        if ((unsigned)line->special >= GenFloorBase)
+        {
+          if (!thing->player)
+            if ((line->special & FloorChange) || !(line->special & FloorModel))
+              return;     // FloorModel is "Allow Monsters" if FloorChange is 0
+          if (!line->tag) //jff 2/27/98 all walk generalized types require tag
+            return;
+          retval = EV_DoGenFloor(line);
+        }
+        else if ((unsigned)line->special >= GenCeilingBase)
+        {
+          if (!thing->player)
+            if ((line->special & CeilingChange) || !(line->special & CeilingModel))
+              return;     // CeilingModel is "Allow Monsters" if CeilingChange is 0
+          if (!line->tag) //jff 2/27/98 all walk generalized types require tag
+            return;
+          retval = EV_DoGenCeiling(line);
+        }
+        else if ((unsigned)line->special >= GenDoorBase)
+        {
+          if (!thing->player)
+          {
+            if (!(line->special & DoorMonster))
+              return;                    // monsters disallowed from this door
+            if (line->flags & ML_SECRET) // they can't open secret doors either
+              return;
+          }
+          if (!line->tag) //3/2/98 move outside the monster check
+            return;
+          retval = EV_DoGenDoor(line);
+        }
+        else if ((unsigned)line->special >= GenLockedBase)
+        {
+          if (!thing->player)
+            return;                     // monsters disallowed from unlocking doors
+          //jff 4/1/98 check for being a walk type before reporting door type
+            if (!P_CanUnlockGenDoor(line,thing->player))
+              return;
+          retval = EV_DoGenLockedDoor(line);
+        }
+        else if ((unsigned)line->special >= GenLiftBase)
+        {
+          if (!thing->player)
+            if (!(line->special & LiftMonster))
+              return; // monsters disallowed
+          if (!line->tag) //jff 2/27/98 all walk generalized types require tag
+            return;
+          retval = EV_DoGenLift(line);
+        }
+        else
+        {
+          assert((unsigned)line->special >= GenStairsBase);
+          if (!thing->player)
+            if (!(line->special & StairMonster))
+              return; // monsters disallowed
+          if (!line->tag) //jff 2/27/98 all walk generalized types require tag
+            return;
+          retval = EV_DoGenStairs(line);
+        }
+        if (lineTriggerType == WalkOnce && retval)
+          line->special = 0;    // clear special if a walk once type
       }
-      if (!line->tag) //3/2/98 move outside the monster check
-        return;
-      linefunc = EV_DoGenDoor;
+      return;
     }
-    else if ((unsigned)line->special >= GenLockedBase)
-    {
-      if (!thing->player)
-        return;                     // monsters disallowed from unlocking doors
-      if (((line->special&TriggerType)==WalkOnce) || ((line->special&TriggerType)==WalkMany))
-      { //jff 4/1/98 check for being a walk type before reporting door type
-        if (!P_CanUnlockGenDoor(line,thing->player))
-          return;
-      }
-      else
-        return;
-      linefunc = EV_DoGenLockedDoor;
-    }
-    else if ((unsigned)line->special >= GenLiftBase)
-    {
-      if (!thing->player)
-        if (!(line->special & LiftMonster))
-          return; // monsters disallowed
-      if (!line->tag) //jff 2/27/98 all walk generalized types require tag
-        return;
-      linefunc = EV_DoGenLift;
-    }
-    else if ((unsigned)line->special >= GenStairsBase)
-    {
-      if (!thing->player)
-        if (!(line->special & StairMonster))
-          return; // monsters disallowed
-      if (!line->tag) //jff 2/27/98 all walk generalized types require tag
-        return;
-      linefunc = EV_DoGenStairs;
-    }
-
-    if (linefunc) // if it was a valid generalized type
-      switch((line->special & TriggerType) >> TriggerTypeShift)
-      {
-        case WalkOnce:
-          if (linefunc(line))
-            line->special = 0;    // clear special if a walk once type
-          return;
-        case WalkMany:
-          linefunc(line);
-          return;
-        default:                  // if not a walk type, do nothing here
-          return;
-      }
   }
 
   if (!thing->player)
