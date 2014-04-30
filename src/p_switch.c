@@ -38,6 +38,7 @@
 #include "s_sound.h"
 #include "sounds.h"
 #include "lprintf.h"
+#include <assert.h>
 
 // killough 2/8/98: Remove switch limit
 
@@ -232,104 +233,113 @@ P_UseSpecialLine
   //jff 02/04/98 add check here for generalized floor/ceil mover
   if (!demo_compatibility)
   {
-    // pointer to line function is NULL by default, set non-null if
-    // line special is push or switch generalized linedef type
-    int (*linefunc)(line_t *line)=NULL;
-
-    // check each range of generalized linedefs
-    if ((unsigned)line->special >= GenFloorBase)
-    {
-      if (!thing->player)
-        if ((line->special & FloorChange) || !(line->special & FloorModel))
-          return false; // FloorModel is "Allow Monsters" if FloorChange is 0
-      if (!line->tag && ((line->special&6)!=6)) //jff 2/27/98 all non-manual
-        return false;                         // generalized types require tag
-      linefunc = EV_DoGenFloor;
-    }
-    else if ((unsigned)line->special >= GenCeilingBase)
-    {
-      if (!thing->player)
-        if ((line->special & CeilingChange) || !(line->special & CeilingModel))
-          return false;   // CeilingModel is "Allow Monsters" if CeilingChange is 0
-      if (!line->tag && ((line->special&6)!=6)) //jff 2/27/98 all non-manual
-        return false;                         // generalized types require tag
-      linefunc = EV_DoGenCeiling;
-    }
-    else if ((unsigned)line->special >= GenDoorBase)
-    {
-      if (!thing->player)
-      {
-        if (!(line->special & DoorMonster))
-          return false;   // monsters disallowed from this door
-        if (line->flags & ML_SECRET) // they can't open secret doors either
+    if ((unsigned)line->special >= GenCrusherBase) {
+      if ((unsigned)line->special >= GenLockedBase &&
+          (unsigned)line->special < GenDoorBase) {
+        if (!thing->player)
+          return false;   // monsters disallowed from unlocking doors
+        if (!P_CanUnlockGenDoor(line,thing->player))
           return false;
       }
-      if (!line->tag && ((line->special&6)!=6)) //jff 3/2/98 all non-manual
-        return false;                         // generalized types require tag
-      linefunc = EV_DoGenDoor;
-    }
-    else if ((unsigned)line->special >= GenLockedBase)
-    {
-      if (!thing->player)
-        return false;   // monsters disallowed from unlocking doors
-      if (!P_CanUnlockGenDoor(line,thing->player))
-        return false;
-      if (!line->tag && ((line->special&6)!=6)) //jff 2/27/98 all non-manual
-        return false;                         // generalized types require tag
-
-      linefunc = EV_DoGenLockedDoor;
-    }
-    else if ((unsigned)line->special >= GenLiftBase)
-    {
-      if (!thing->player)
-        if (!(line->special & LiftMonster))
-          return false; // monsters disallowed
-      if (!line->tag && ((line->special&6)!=6)) //jff 2/27/98 all non-manual
-        return false;                         // generalized types require tag
-      linefunc = EV_DoGenLift;
-    }
-    else if ((unsigned)line->special >= GenStairsBase)
-    {
-      if (!thing->player)
-        if (!(line->special & StairMonster))
-          return false; // monsters disallowed
-      if (!line->tag && ((line->special&6)!=6)) //jff 2/27/98 all non-manual
-        return false;                         // generalized types require tag
-      linefunc = EV_DoGenStairs;
-    }
-    else if ((unsigned)line->special >= GenCrusherBase)
-    {
-      if (!thing->player)
-        if (!(line->special & CrusherMonster))
-          return false; // monsters disallowed
-      if (!line->tag && ((line->special&6)!=6)) //jff 2/27/98 all non-manual
-        return false;                         // generalized types require tag
-      linefunc = EV_DoGenCrusher;
-    }
-
-    if (linefunc)
-      switch((line->special & TriggerType) >> TriggerTypeShift)
+      int lineTriggerType = (line->special & TriggerType) >> TriggerTypeShift;
+      switch (lineTriggerType) {
+        case PushOnce:
+        case PushMany:
+          if (side)
+            return true;
+          break;
+        case SwitchOnce:
+        case SwitchMany:
+          break;
+        default: // if not a switch/push type, do nothing here
+          return false;
+      }
+      int retval;
+      // check each range of generalized linedefs
+      if ((unsigned)line->special >= GenFloorBase)
+      {
+        if (!thing->player)
+          if ((line->special & FloorChange) || !(line->special & FloorModel))
+            return false; // FloorModel is "Allow Monsters" if FloorChange is 0
+        if (!line->tag && ((line->special&6)!=6)) //jff 2/27/98 all non-manual
+          return false;                         // generalized types require tag
+        retval = EV_DoGenFloor(line);
+      }
+      else if ((unsigned)line->special >= GenCeilingBase)
+      {
+        if (!thing->player)
+          if ((line->special & CeilingChange) || !(line->special & CeilingModel))
+            return false;   // CeilingModel is "Allow Monsters" if CeilingChange is 0
+        if (!line->tag && ((line->special&6)!=6)) //jff 2/27/98 all non-manual
+          return false;                         // generalized types require tag
+        retval = EV_DoGenCeiling(line);
+      }
+      else if ((unsigned)line->special >= GenDoorBase)
+      {
+        if (!thing->player)
+        {
+          if (!(line->special & DoorMonster))
+            return false;   // monsters disallowed from this door
+          if (line->flags & ML_SECRET) // they can't open secret doors either
+            return false;
+        }
+        if (!line->tag && ((line->special&6)!=6)) //jff 3/2/98 all non-manual
+          return false;                         // generalized types require tag
+        retval = EV_DoGenDoor(line);
+      }
+      else if ((unsigned)line->special >= GenLockedBase)
+      {
+        if (!line->tag && ((line->special&6)!=6)) //jff 2/27/98 all non-manual
+          return false;                         // generalized types require tag
+        
+        retval = EV_DoGenLockedDoor(line);
+      }
+      else if ((unsigned)line->special >= GenLiftBase)
+      {
+        if (!thing->player)
+          if (!(line->special & LiftMonster))
+            return false; // monsters disallowed
+        if (!line->tag && ((line->special&6)!=6)) //jff 2/27/98 all non-manual
+          return false;                         // generalized types require tag
+        retval = EV_DoGenLift(line);
+      }
+      else if ((unsigned)line->special >= GenStairsBase)
+      {
+        if (!thing->player)
+          if (!(line->special & StairMonster))
+            return false; // monsters disallowed
+        if (!line->tag && ((line->special&6)!=6)) //jff 2/27/98 all non-manual
+          return false;                         // generalized types require tag
+        retval = EV_DoGenStairs(line);
+      }
+      else
+      {
+        assert((unsigned)line->special >= GenCrusherBase);
+        if (!thing->player)
+          if (!(line->special & CrusherMonster))
+            return false; // monsters disallowed
+        if (!line->tag && ((line->special&6)!=6)) //jff 2/27/98 all non-manual
+          return false;                         // generalized types require tag
+        retval = EV_DoGenCrusher(line);
+      }
+      switch (lineTriggerType)
       {
         case PushOnce:
-          if (!side)
-            if (linefunc(line))
-              line->special = 0;
-          return true;
+          if (retval)
+            line->special = 0;
+          // fallthrough
         case PushMany:
-          if (!side)
-            linefunc(line);
           return true;
         case SwitchOnce:
-          if (linefunc(line))
+          if (retval)
             P_ChangeSwitchTexture(line,0);
           return true;
         case SwitchMany:
-          if (linefunc(line))
+          if (retval)
             P_ChangeSwitchTexture(line,1);
           return true;
-        default:  // if not a switch/push type, do nothing here
-          return false;
       }
+    }
   }
     
   // Switches that other things can activate.
