@@ -86,7 +86,7 @@ int traditional_menu;
 //int     detailLevel;    obsolete -- killough
 int screenblocks;    // has default
 
-int screenSize;      // temp for screenblocks (0-9)    
+static int screenSize;      // temp for screenblocks (0-9)
 
 static int quickSaveSlot;   // -1 = no quicksave slot picked!
 
@@ -282,88 +282,84 @@ int mapcolor_me; // The player colour of the console player
 //
 // PROTOTYPES
 //
-void M_NewGame(int choice);
-void M_Episode(int choice);
-void M_ChooseSkill(int choice);
-void M_LoadGame(int choice);
-void M_SaveGame(int choice);
-void M_Options(int choice);
-void M_EndGame(int choice);
-void M_ReadThis(int choice);
-void M_ReadThis2(int choice);
+static void M_NewGame(int choice);
+static void M_Episode(int choice);
+static void M_ChooseSkill(int choice);
+static void M_LoadGame(int choice);
+static void M_SaveGame(int choice);
+static void M_Options(int choice);
+static void M_EndGame(int choice);
+static void M_ReadThis(int choice);
+static void M_ReadThis2(int choice);
 void M_QuitDOOM(int choice);
 
-void M_ChangeMessages(int choice);
-void M_ChangeSensitivity(int choice);
-void M_SfxVol(int choice);
-void M_MusicVol(int choice);
-/* void M_ChangeDetail(int choice);  unused -- killough */
-void M_SizeDisplay(int choice);
-void M_StartGame(int choice);
-void M_Sound(int choice);
+static void M_ChangeMessages(int choice);
+static void M_ChangeSensitivity(int choice);
+static void M_SfxVol(int choice);
+static void M_MusicVol(int choice);
+static void M_SizeDisplay(int choice);
+extern void M_StartGame(int choice);
+static void M_Sound(int choice);
 
-void M_Mouse(int choice, int *sens);      /* killough */
-void M_MouseVert(int choice);
-void M_MouseHoriz(int choice);
-void M_ChangeSensitivity(int choice);
-void M_DrawMouse(void);
+static void M_Mouse(int choice, int *sens);      /* killough */
+static void M_MouseVert(int choice);
+static void M_MouseHoriz(int choice);
+static void M_ChangeSensitivity(int choice);
+static void M_DrawMouse(void);
 
-void M_FinishReadThis(int choice);
-void M_LoadSelect(int choice);
-void M_SaveSelect(int choice);
-void M_ReadSaveStrings(void);
-void M_QuickSave(void);
-void M_QuickLoad(void);
+static void M_FinishReadThis(int choice);
+static void M_LoadSelect(int choice);
+static void M_SaveSelect(int choice);
+static void M_ReadSaveStrings(void);
+static void M_QuickSave(void);
+static void M_QuickLoad(void);
 
-void M_DrawMainMenu(void);
-void M_DrawReadThis1(void);
-void M_DrawReadThis2(void);
-void M_DrawNewGame(void);
-void M_DrawEpisode(void);
-void M_DrawOptions(void);
-void M_DrawSound(void);
-void M_DrawLoad(void);
-void M_DrawSave(void);
-void M_DrawSetup(void);                                     // phares 3/21/98
-void M_DrawHelp (void);                                     // phares 5/04/98
+static void M_DrawMainMenu(void);
+static void M_DrawReadThis1(void);
+static void M_DrawReadThis2(void);
+static void M_DrawNewGame(void);
+static void M_DrawEpisode(void);
+static void M_DrawOptions(void);
+static void M_DrawSound(void);
+static void M_DrawLoad(void);
+static void M_DrawSave(void);
+static void M_DrawSetup(void);                              // phares 3/21/98
+static void M_DrawHelp (void);                              // phares 5/04/98
 
-void M_DrawSaveLoadBorder(int x,int y);
-void M_SetupNextMenu(menu_t *menudef);
-void M_DrawThermo(int x,int y,int thermWidth,int thermDot);
-void M_DrawEmptyCell(menu_t *menu,int item);
-void M_DrawSelCell(menu_t *menu,int item);
-void M_WriteText(int x, int y, const char *string);
-int  M_StringWidth(const char *string);
-int  M_StringHeight(const char *string);
-void M_StartControlPanel(void);
-void M_StartMessage(const char *string, void *routine, boolean input);
-void M_ClearMenus (void);
+static void M_DrawSaveLoadBorder(int x,int y);
+static void M_SetupNextMenu(menu_t *menudef);
+static void M_DrawThermo(int x,int y,int thermWidth,int thermDot);
+static void M_WriteText(int x, int y, const char *string);
+static int  M_StringWidth(const char *string);
+static int  M_StringHeight(const char *string);
+static void M_StartMessage(const char *string, void *routine, boolean input);
+static void M_ClearMenus (void);
 
 // phares 3/30/98
 // prototypes added to support Setup Menus and Extended HELP screens
 
-int  M_GetKeyString(int,int);
-void M_Setup(int choice);                               
-void M_KeyBindings(int choice);                        
-void M_Weapons(int);
-void M_StatusBar(int);
-void M_Automap(int);
-void M_Enemy(int);
-void M_Messages(int);
-void M_ChatStrings(int);
-void M_InitExtendedHelp(void);
-void M_ExtHelpNextScreen(int);
-void M_ExtHelp(int);
-int  M_GetPixelWidth(char*);
-void M_DrawKeybnd(void);
-void M_DrawWeapons(void);
-void M_DrawMenuString(int,int,int);                    
-void M_DrawStatusHUD(void);
-void M_DrawExtHelp(void);
-void M_DrawAutoMap(void);
-void M_DrawEnemy(void);
-void M_DrawMessages(void);
-void M_DrawChatStrings(void);
+static int  M_GetKeyString(int,int);
+static void M_Setup(int choice);
+static void M_KeyBindings(int choice);
+static void M_Weapons(int);
+static void M_StatusBar(int);
+static void M_Automap(int);
+static void M_Enemy(int);
+static void M_Messages(int);
+static void M_ChatStrings(int);
+static void M_InitExtendedHelp(void);
+static void M_ExtHelpNextScreen(int);
+static void M_ExtHelp(int);
+static int  M_GetPixelWidth(char*);
+static void M_DrawKeybnd(void);
+static void M_DrawWeapons(void);
+static void M_DrawMenuString(int,int,int);
+static void M_DrawStatusHUD(void);
+static void M_DrawExtHelp(void);
+static void M_DrawAutoMap(void);
+static void M_DrawEnemy(void);
+static void M_DrawMessages(void);
+static void M_DrawChatStrings(void);
 
 static menu_t NewDef;                                        // phares 5/04/98
 
@@ -678,7 +674,7 @@ static menu_t NewDef =
 // M_NewGame
 //
 
-OVERLAY void M_DrawNewGame(void)
+OVERLAY static void M_DrawNewGame(void)
 {
   // CPhipps - patch drawing updated
   V_DrawNamePatch(96, 14, 0, "M_NEWG", NULL, VPT_STRETCH);
@@ -699,7 +695,7 @@ OVERLAY static void M_RestartLevelResponse(int ch)
   G_RestartLevel ();
 }
 
-OVERLAY void M_NewGame(int choice)
+OVERLAY static void M_NewGame(int choice)
   {
   if (netgame && !demoplayback) {
     if (compatibility_level < lxdoom_1_compatibility)
@@ -733,7 +729,7 @@ OVERLAY static void M_VerifyNightmare(int ch)
   M_ClearMenus ();
 }
 
-OVERLAY void M_ChooseSkill(int choice)
+OVERLAY static void M_ChooseSkill(int choice)
   {
   if (choice == nightmare)
     {
@@ -795,7 +791,7 @@ static menu_t LoadDef =
 // M_LoadGame & Cie.
 //
 
-OVERLAY void M_DrawLoad(void)
+OVERLAY static void M_DrawLoad(void)
   {
   int i;
 
@@ -814,7 +810,7 @@ OVERLAY void M_DrawLoad(void)
 //
 // CPhipps - patch drawing updated
 
-OVERLAY void M_DrawSaveLoadBorder(int x,int y)
+OVERLAY static void M_DrawSaveLoadBorder(int x,int y)
   {
   int i;
   
@@ -833,7 +829,7 @@ OVERLAY void M_DrawSaveLoadBorder(int x,int y)
 // User wants to load this game
 //
 
-OVERLAY void M_LoadSelect(int choice)
+OVERLAY static void M_LoadSelect(int choice)
 {
   // CPhipps - Modified so savegame filename is worked out only internal 
   //  to g_game.c, this only passes the slot.
@@ -871,7 +867,7 @@ OVERLAY void M_ForcedLoadGame(const char *msg)
 // Selected from DOOM menu
 //
 
-OVERLAY void M_LoadGame (int choice)
+OVERLAY static void M_LoadGame (int choice)
   {
 #if 0
     if (netgame && !demoplayback)     // killough 5/26/98: add !demoplayback
@@ -926,7 +922,7 @@ static menu_t SaveDef =
 // M_ReadSaveStrings
 //  read the strings from the savegame files
 //
-OVERLAY void M_ReadSaveStrings(void)
+OVERLAY static void M_ReadSaveStrings(void)
   {
   int i;
 
@@ -952,7 +948,7 @@ OVERLAY void M_ReadSaveStrings(void)
 //
 //  M_SaveGame & Cie.
 //
-OVERLAY void M_DrawSave(void)
+OVERLAY static void M_DrawSave(void)
   {
   int i;
 
@@ -988,7 +984,7 @@ OVERLAY static void M_DoSave(int slot) // CPhipps - static
 //
 // User wants to save. Start string input for M_Responder
 //
-OVERLAY void M_SaveSelect(int choice)
+OVERLAY static void M_SaveSelect(int choice)
   {
   // we are going to be intercepting all chars
   saveStringEnter = 1;
@@ -1003,7 +999,7 @@ OVERLAY void M_SaveSelect(int choice)
 //
 // Selected from DOOM menu
 //
-OVERLAY void M_SaveGame (int choice)
+OVERLAY static void M_SaveGame (int choice)
   {
   if (!usergame)
     {
@@ -1067,11 +1063,10 @@ static menu_t OptionsDef =
 //
 // M_Options
 //
-static char detailNames[2][9] = {"M_GDHIGH","M_GDLOW"};
 static char msgNames[2][9]  = {"M_MSGOFF","M_MSGON"};
 
 
-OVERLAY void M_DrawOptions(void)
+OVERLAY static void M_DrawOptions(void)
 {
   // CPhipps - patch drawing updated
   // proff/nicolas 09/20/98 -- changed for hi-res
@@ -1084,7 +1079,7 @@ OVERLAY void M_DrawOptions(void)
    9,screenSize);
 }
 
-OVERLAY void M_Options(int choice)
+OVERLAY static void M_Options(int choice)
   {
   M_SetupNextMenu(&OptionsDef);
   }
@@ -1188,7 +1183,7 @@ static menu_t SoundDef =
 // Change Sfx & Music volumes
 //
 
-OVERLAY void M_DrawSound(void)
+OVERLAY static void M_DrawSound(void)
   {
   // CPhipps - patch drawing updated
   V_DrawNamePatch(60, 38, 0, "M_SVOL", NULL, VPT_STRETCH);
@@ -1198,12 +1193,12 @@ OVERLAY void M_DrawSound(void)
   M_DrawThermo(SoundDef.x,SoundDef.y+LINEHEIGHT*(music_vol+1),16,snd_MusicVolume);
   }
 
-OVERLAY void M_Sound(int choice)
+OVERLAY static void M_Sound(int choice)
   {
   M_SetupNextMenu(&SoundDef);
   }
 
-OVERLAY void M_SfxVol(int choice)
+OVERLAY static void M_SfxVol(int choice)
   {
   switch(choice)
       {
@@ -1220,7 +1215,7 @@ OVERLAY void M_SfxVol(int choice)
   S_SetSfxVolume(snd_SfxVolume /* *8 */);
   }
 
-OVERLAY void M_MusicVol(int choice)
+OVERLAY static void M_MusicVol(int choice)
   {
   switch(choice)
       {
@@ -1283,7 +1278,7 @@ static menu_t MouseDef =
 // Change Mouse Sensitivities -- killough
 //
 
-OVERLAY void M_DrawMouse(void)
+OVERLAY static void M_DrawMouse(void)
   {
   int mhmx,mvmx; /* jff 4/3/98 clamp drawn position    99max mead */
 
@@ -1298,7 +1293,7 @@ OVERLAY void M_DrawMouse(void)
   M_DrawThermo(MouseDef.x,MouseDef.y+LINEHEIGHT*(mouse_vert+1),100,mvmx);
   }
 
-OVERLAY void M_ChangeSensitivity(int choice)
+OVERLAY static void M_ChangeSensitivity(int choice)
   {
   M_SetupNextMenu(&MouseDef);      // killough
 
@@ -1315,17 +1310,17 @@ OVERLAY void M_ChangeSensitivity(int choice)
   //      }
   }
 
-OVERLAY void M_MouseHoriz(int choice)
+OVERLAY static void M_MouseHoriz(int choice)
   {
   M_Mouse(choice, &mouseSensitivity_horiz);
   }
 
-OVERLAY void M_MouseVert(int choice)
+OVERLAY static void M_MouseVert(int choice)
   {
   M_Mouse(choice, &mouseSensitivity_vert);
   }
 
-OVERLAY void M_Mouse(int choice, int *sens)
+OVERLAY static void M_Mouse(int choice, int *sens)
   {
   switch(choice)
       {
@@ -1345,7 +1340,7 @@ OVERLAY void M_Mouse(int choice, int *sens)
 //    M_QuickSave
 //
 
-char tempstring[80];
+static char tempstring[80];
 
 OVERLAY static void M_QuickSaveResponse(int ch)
 {
@@ -1355,7 +1350,7 @@ OVERLAY static void M_QuickSaveResponse(int ch)
   }
 }
 
-OVERLAY void M_QuickSave(void)
+OVERLAY static void M_QuickSave(void)
 {
   if (!usergame) {
     S_StartSound(NULL,sfx_oof);
@@ -1389,7 +1384,7 @@ OVERLAY static void M_QuickLoadResponse(int ch)
   }
 }
 
-OVERLAY void M_QuickLoad(void)
+OVERLAY static void M_QuickLoad(void)
 {
   // cph - removed restriction against quickload in a netgame
 
@@ -1426,7 +1421,7 @@ OVERLAY static void M_EndGameResponse(int ch)
   D_StartTitle ();
 }
 
-OVERLAY void M_EndGame(int choice)
+OVERLAY static void M_EndGame(int choice)
   {
   //  choice = 0;
   if (!usergame)
@@ -1449,7 +1444,7 @@ OVERLAY void M_EndGame(int choice)
 //    Toggle messages on/off
 //
 
-OVERLAY void M_ChangeMessages(int choice)
+OVERLAY static void M_ChangeMessages(int choice)
   {
   // warning: unused parameter `int choice'
   choice = 0;
@@ -1472,7 +1467,7 @@ OVERLAY void M_ChangeMessages(int choice)
 // hud_displayed is toggled by + or = in fullscreen
 // hud_displayed is cleared by -
 
-OVERLAY void M_SizeDisplay(int choice)
+OVERLAY static void M_SizeDisplay(int choice)
   {
   switch(choice)
     {
@@ -1781,7 +1776,7 @@ static menu_t ChatStrDef =                                  // phares 4/10/98
 //
 // Draws the Title for the main Setup screen
 
-OVERLAY void M_DrawSetup(void)
+OVERLAY static void M_DrawSetup(void)
   {
   // CPhipps - patch drawing updated
   V_DrawNamePatch(124, 15, 0, "M_SETUP", NULL, VPT_STRETCH);
@@ -1792,7 +1787,7 @@ OVERLAY void M_DrawSetup(void)
 // Uses the SetupDef structure to draw the menu items for the main
 // Setup screen
 
-OVERLAY void M_Setup(int choice)
+OVERLAY static void M_Setup(int choice)
   {
       M_SetupNextMenu(&SetupDef);
   }
@@ -2442,7 +2437,7 @@ static setup_menu_t keys_settings5[] = // Chat keys setup screen
 // locate the first item on the screen where the cursor is allowed to
 // land.
 
-OVERLAY void M_KeyBindings(int choice)
+OVERLAY static void M_KeyBindings(int choice)
   {
   M_SetupNextMenu(&KeybndDef);
 
@@ -2462,7 +2457,7 @@ OVERLAY void M_KeyBindings(int choice)
 // The drawing part of the Key Bindings Setup initialization. Draw the
 // background, title, instruction line, and items.
 
-OVERLAY void M_DrawKeybnd(void)
+OVERLAY static void M_DrawKeybnd(void)
 
   {
   inhelpscreens = true;    // killough 4/6/98: Force status bar redraw
@@ -2534,7 +2529,7 @@ static setup_menu_t weap_settings1[] =  // Weapons Settings screen
 // locate the first item on the screen where the cursor is allowed to
 // land.
 
-OVERLAY void M_Weapons(int choice)
+OVERLAY static void M_Weapons(int choice)
   {
   M_SetupNextMenu(&WeaponDef);
 
@@ -2555,7 +2550,7 @@ OVERLAY void M_Weapons(int choice)
 // The drawing part of the Weapons Setup initialization. Draw the
 // background, title, instruction line, and items.
 
-OVERLAY void M_DrawWeapons(void)
+OVERLAY static void M_DrawWeapons(void)
 
   {
   inhelpscreens = true;    // killough 4/6/98: Force status bar redraw
@@ -2585,7 +2580,7 @@ OVERLAY void M_DrawWeapons(void)
 // of what is gathered is determined by the low/high settings for the item.
 
 #define MAXGATHER 3
-int  gather_count;
+static int  gather_count;
 
 // Screen table definitions
 
@@ -2629,7 +2624,7 @@ static setup_menu_t stat_settings1[] =  // Status Bar and HUD Settings screen
 // locate the first item on the screen where the cursor is allowed to
 // land.
 
-OVERLAY void M_StatusBar(int choice)
+OVERLAY static void M_StatusBar(int choice)
   {
   M_SetupNextMenu(&StatusHUDDef);
 
@@ -2652,7 +2647,7 @@ OVERLAY void M_StatusBar(int choice)
 // The drawing part of the Status Bar / HUD Setup initialization. Draw the
 // background, title, instruction line, and items.
 
-OVERLAY void M_DrawStatusHUD(void)
+OVERLAY static void M_DrawStatusHUD(void)
 
   {
   inhelpscreens = true;    // killough 4/6/98: Force status bar redraw
@@ -2747,7 +2742,7 @@ static setup_menu_t auto_settings2[] =  // 2nd AutoMap Settings screen
 // locate the first item on the screen where the cursor is allowed to
 // land.
 
-OVERLAY void M_Automap(int choice)
+OVERLAY static void M_Automap(int choice)
   {
   M_SetupNextMenu(&AutoMapDef);
 
@@ -2770,7 +2765,6 @@ OVERLAY void M_Automap(int choice)
 
 static int color_palette_x; // X position of the cursor on the color palette
 static int color_palette_y; // Y position of the cursor on the color palette
-static byte palette_background[16*(CHIP_SIZE+1)+8];
 
 // M_DrawColPal() draws the color palette when the user needs to select a
 // color.
@@ -2806,7 +2800,7 @@ OVERLAY static void M_DrawColPal(void) // CPhipps - static, void, formatting
 // The drawing part of the Automap Setup initialization. Draw the
 // background, title, instruction line, and items.
 
-OVERLAY void M_DrawAutoMap(void)
+OVERLAY static void M_DrawAutoMap(void)
 
   {
   inhelpscreens = true;    // killough 4/6/98: Force status bar redraw
@@ -2864,7 +2858,7 @@ static setup_menu_t enem_settings1[] =  // Enemy Settings screen
 // locate the first item on the screen where the cursor is allowed to
 // land.
 
-OVERLAY void M_Enemy(int choice)
+OVERLAY static void M_Enemy(int choice)
   {
   M_SetupNextMenu(&EnemyDef);
 
@@ -2885,7 +2879,7 @@ OVERLAY void M_Enemy(int choice)
 // The drawing part of the Enemies Setup initialization. Draw the
 // background, title, instruction line, and items.
 
-OVERLAY void M_DrawEnemy(void)
+OVERLAY static void M_DrawEnemy(void)
 
   {
   inhelpscreens = true;
@@ -2942,7 +2936,7 @@ static setup_menu_t mess_settings1[] =  // Messages screen
 // locate the first item on the screen where the cursor is allowed to
 // land.
 
-OVERLAY void M_Messages(int choice)
+OVERLAY static void M_Messages(int choice)
   {
   M_SetupNextMenu(&MessageDef);
 
@@ -2965,7 +2959,7 @@ OVERLAY void M_Messages(int choice)
 // The drawing part of the Messages Setup initialization. Draw the
 // background, title, instruction line, and items.
 
-OVERLAY void M_DrawMessages(void)
+OVERLAY static void M_DrawMessages(void)
 
   {
   inhelpscreens = true;
@@ -3021,7 +3015,7 @@ static setup_menu_t chat_settings1[] =  // Chat Strings screen
 // locate the first item on the screen where the cursor is allowed to
 // land.
 
-OVERLAY void M_ChatStrings(int choice)
+OVERLAY static void M_ChatStrings(int choice)
   {
   M_SetupNextMenu(&ChatStrDef);
   setup_active = true;
@@ -3040,7 +3034,7 @@ OVERLAY void M_ChatStrings(int choice)
 // The drawing part of the Chat Strings Setup initialization. Draw the
 // background, title, instruction line, and items.
 
-OVERLAY void M_DrawChatStrings(void)
+OVERLAY static void M_DrawChatStrings(void)
 
   {
   inhelpscreens = true;
@@ -3171,7 +3165,7 @@ static menu_t ExtHelpDef =
 // M_ExtHelpNextScreen establishes the number of the next HELP screen in
 // the series.
 
-OVERLAY void M_ExtHelpNextScreen(int choice)
+OVERLAY static void M_ExtHelpNextScreen(int choice)
   {
   choice = 0;
   if (++extended_help_index > extended_help_count)
@@ -3188,7 +3182,7 @@ OVERLAY void M_ExtHelpNextScreen(int choice)
 // Routine to look for HELPnn screens and create a menu
 // definition structure that defines extended help screens.
 
-OVERLAY void M_InitExtendedHelp(void)
+OVERLAY static void M_InitExtendedHelp(void)
 {
   int index,i;
   char namebfr[10] = { "HELPnn" }; // CPhipps - make local & writable
@@ -3216,7 +3210,7 @@ OVERLAY void M_InitExtendedHelp(void)
 
 // Initialization for the extended HELP screens.
 
-OVERLAY void M_ExtHelp(int choice)
+OVERLAY static void M_ExtHelp(int choice)
 {
   choice = 0;
   extended_help_index = 1; // Start with first extended help screen
@@ -3225,7 +3219,7 @@ OVERLAY void M_ExtHelp(int choice)
 
 // Initialize the drawing part of the extended HELP screens.
 
-OVERLAY void M_DrawExtHelp(void)
+OVERLAY static void M_DrawExtHelp(void)
 {
   char namebfr[10] = { "HELPnn" }; // CPhipps - make it local & writable
 
@@ -3255,7 +3249,7 @@ OVERLAY void M_DrawExtHelp(void)
 // M_GetKeyString finds the correct string to represent the key binding
 // for the current item being drawn.
 
-OVERLAY int M_GetKeyString(int c,int offset)
+OVERLAY static int M_GetKeyString(int c,int offset)
 {
   const char* s = NULL; // CPhipps - CONST please
 
@@ -3411,7 +3405,7 @@ static setup_menu_t helpstrings[] =  // HELP screen strings
 
 // M_DrawMenuString() draws the string in menu_buffer[]
 
-OVERLAY void M_DrawMenuString(int cx, int cy, int color)
+OVERLAY static void M_DrawMenuString(int cx, int cy, int color)
   {
   int   w;
   int   c;
@@ -3443,7 +3437,7 @@ OVERLAY void M_DrawMenuString(int cx, int cy, int color)
 // M_GetPixelWidth() returns the number of pixels in the width of
 // the string, NOT the number of chars in the string.
 
-OVERLAY int M_GetPixelWidth(char* ch)
+OVERLAY static int M_GetPixelWidth(char* ch)
   {
   int len = 0;
   int c;
@@ -3470,7 +3464,7 @@ OVERLAY int M_GetPixelWidth(char* ch)
 //
 // This displays the help screen
 
-OVERLAY void M_DrawHelp (void)
+OVERLAY static void M_DrawHelp (void)
   {
   M_DrawBackground("FLOOR4_6");
 
@@ -3541,7 +3535,7 @@ OVERLAY static boolean M_ResponderMessageToPrint(int ch)
   return true;
 }
 
-OVERLAY void M_DoMenuItem(menuitemfunc_t func, int choice)
+OVERLAY static void M_DoMenuItem(menuitemfunc_t func, int choice)
 {
   switch (func) {
     case M_MENUITEM_NONE:
@@ -4689,7 +4683,7 @@ OVERLAY void M_StartControlPanel (void)
   itemOn = currentMenu->lastOn;   // JDC
   }
 
-OVERLAY void M_DoDMenu(menufunc_t func)
+OVERLAY static void M_DoDMenu(menufunc_t func)
 {
   switch (func) {
   case M_DRAWSETUP:
@@ -4813,7 +4807,7 @@ OVERLAY void M_Drawer (void)
 //
 // Called when leaving the menu screens for the real world
 
-OVERLAY void M_ClearMenus (void)
+OVERLAY static void M_ClearMenus (void)
   {
   menuactive = 0;
   // if (!netgame && usergame && paused)
@@ -4823,7 +4817,7 @@ OVERLAY void M_ClearMenus (void)
 //
 // M_SetupNextMenu
 //
-OVERLAY void M_SetupNextMenu(menu_t *menudef)
+OVERLAY static void M_SetupNextMenu(menu_t *menudef)
   {
   currentMenu = menudef;
   itemOn = currentMenu->lastOn;
@@ -4847,7 +4841,7 @@ OVERLAY void M_Ticker (void)
 // Message Routines
 //
 
-OVERLAY void M_StartMessage (const char* string,void* routine,boolean input)
+OVERLAY static void M_StartMessage (const char* string,void* routine,boolean input)
 {
   messageLastMenuActive = menuactive;
   messageToPrint = 1;
@@ -4870,7 +4864,7 @@ OVERLAY void M_StartMessage (const char* string,void* routine,boolean input)
 // proff/nicolas 09/20/98 -- changed for hi-res
 // CPhipps - patch drawing updated
 //
-OVERLAY void M_DrawThermo(int x,int y,int thermWidth,int thermDot )
+OVERLAY static void M_DrawThermo(int x,int y,int thermWidth,int thermDot )
   {
   int          xx;
   int           i;
@@ -4900,28 +4894,6 @@ OVERLAY void M_DrawThermo(int x,int y,int thermWidth,int thermDot )
   V_DrawNamePatch((x+8)+thermDot*horizScaler,y,0,"M_THERMO",NULL,VPT_STRETCH);
   }
 
-//
-// Draw an empty cell in the thermometer
-//
-
-OVERLAY void M_DrawEmptyCell (menu_t* menu,int item)
-  {
-  // CPhipps - patch drawing updated
-  V_DrawNamePatch(menu->x - 10, menu->y+item*LINEHEIGHT - 1, 0,
-		  "M_CELL1", NULL, VPT_STRETCH);
-  }
-
-//
-// Draw a full cell in the thermometer
-//
-
-OVERLAY void M_DrawSelCell (menu_t* menu,int item)
-  {
-  // CPhipps - patch drawing updated
-  V_DrawNamePatch(menu->x - 10, menu->y+item*LINEHEIGHT - 1, 0,
-		  "M_CELL2", NULL, VPT_STRETCH);
-  }
-
 /////////////////////////////
 //
 // String-drawing Routines
@@ -4931,7 +4903,7 @@ OVERLAY void M_DrawSelCell (menu_t* menu,int item)
 // Find string width from hu_font chars
 //
 // CPhipps - const string
-OVERLAY int M_StringWidth(const char* string)
+OVERLAY static int M_StringWidth(const char* string)
 {
   int i;
   int w = 0;
@@ -4951,7 +4923,7 @@ OVERLAY int M_StringWidth(const char* string)
 //
 //    Find string height from hu_font chars
 //
-OVERLAY int M_StringHeight(const char* string)
+OVERLAY static int M_StringHeight(const char* string)
 {
   int i;
   int h;
@@ -4970,7 +4942,7 @@ OVERLAY int M_StringHeight(const char* string)
 //    Write a string using the hu_font
 //
 // CPhipps - const on string parameter, formatting
-OVERLAY void M_WriteText (int x, int y, const char* string)
+OVERLAY static void M_WriteText (int x, int y, const char* string)
 {
   int   w;
   const char* ch = string;
