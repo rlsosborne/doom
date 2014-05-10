@@ -103,7 +103,26 @@ static void cheat_health();
 //
 //-----------------------------------------------------------------------------
 
-struct cheat_s cheat[] = {
+
+/* killough 4/16/98: Cheat table structure */
+struct cheat_s {
+  const unsigned char *cheat;
+  const char *const deh_cheat;
+  enum {
+    always   = 0,
+    not_dm   = 1,
+    not_coop = 2,
+    not_demo = 4,
+    not_menu = 8,
+    not_deh = 16,
+    not_net = not_dm | not_coop
+  } const when;
+  void (*const func)();
+  const int arg;
+  uint_64_t code, mask;
+};
+
+static struct cheat_s cheat[] = {
   {(const byte *)"idmus",      "Change music",      always,
    cheat_mus,      -2},
 
@@ -662,6 +681,51 @@ OVERLAY static void cheat_pitch()
 //-----------------------------------------------------------------------------
 
 #define CHEAT_ARGS_MAX 8  /* Maximum number of args at end of cheats */
+
+void M_RenameCheat(const char *key, char *strval, FILE *fpout)
+{
+  int ix, iy;   // array indices
+  char *p;  // utility pointer
+
+  // killough 4/18/98: use main cheat code table in st_stuff.c now
+  for (ix = 0; cheat[ix].cheat; ix++)
+    if (cheat[ix].deh_cheat)   // killough 4/18/98: skip non-deh
+    {
+      if (!stricmp(key,cheat[ix].deh_cheat))  // found the cheat, ignored case
+      {
+        // replace it but don't overflow it.  Use current length as limit.
+        // Ty 03/13/98 - add 0xff code
+        // Deal with the fact that the cheats in deh files are extended
+        // with character 0xFF to the original cheat length, which we don't do.
+        for (unsigned iy = 0; strval[iy]; iy++)
+          strval[iy] = (strval[iy]==(char)0xff) ? '\0' : strval[iy];
+        
+        iy = ix;     // killough 4/18/98
+        
+        // Ty 03/14/98 - skip leading spaces
+        p = strval;
+        while (*p == ' ') ++p;
+        // Ty 03/16/98 - change to use a strdup and orphan the original
+        // Also has the advantage of allowing length changes.
+        // strncpy(cheat[iy].cheat,p,strlen(cheat[iy].cheat));
+#if 0
+        {    // killough 9/12/98: disable cheats which are prefixes of this one
+          int i;
+          for (i=0; cheat[i].cheat; i++)
+            if (cheat[i].when & not_deh &&
+                !strncasecmp(cheat[i].cheat,
+                             cheat[iy].cheat,
+                             strlen(cheat[i].cheat)) && i != iy)
+              cheat[i].deh_modified = true;
+        }
+#endif
+        cheat[iy].cheat = (byte *)strdup(p);
+        if (fpout) fprintf(fpout,
+                           "Assigned new cheat '%s' to cheat '%s'at index %d\n",
+                           p, cheat[ix].deh_cheat, iy); // killough 4/18/98
+      }
+    }
+}
 
 OVERLAY boolean M_FindCheats(int key)
 {

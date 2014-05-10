@@ -32,25 +32,7 @@
 #ifndef __M_CHEAT__
 #define __M_CHEAT__
 
-/* killough 4/16/98: Cheat table structure */
-
-extern struct cheat_s {
-  const unsigned char *cheat;
-  const char *const deh_cheat;
-  enum { 
-    always   = 0,
-    not_dm   = 1,
-    not_coop = 2,
-    not_demo = 4, 
-    not_menu = 8,
-    not_deh = 16,
-    not_net = not_dm | not_coop
-  } const when;
-  void (*const func)();
-  const int arg;
-  uint_64_t code, mask;
-} cheat[];
-
+void M_RenameCheat(const char *key, char *strval, FILE *fpout);
 boolean M_FindCheats(int key);
 
 extern int idmusnum;

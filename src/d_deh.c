@@ -2199,8 +2199,6 @@ OVERLAY static void deh_procCheat(DEHFILE *fpin, FILE* fpout, char *line) // don
   long value;      // All deh values are ints or longs
   char ch = 0; // CPhipps - `writable' null string to initialise...
   char *strval = &ch;  // pointer to the value area
-  int ix, iy;   // array indices
-  char *p;  // utility pointer
 
   if (fpout) fprintf(fpout,"Processing Cheat: %s\n",line);
 
@@ -2219,43 +2217,8 @@ OVERLAY static void deh_procCheat(DEHFILE *fpin, FILE* fpout, char *line) // don
       // so look up the key in the array
 
       // killough 4/18/98: use main cheat code table in st_stuff.c now
-      for (ix=0; cheat[ix].cheat; ix++)
-        if (cheat[ix].deh_cheat)   // killough 4/18/98: skip non-deh
-          {
-            if (!stricmp(key,cheat[ix].deh_cheat))  // found the cheat, ignored case
-              {
-                // replace it but don't overflow it.  Use current length as limit.
-                // Ty 03/13/98 - add 0xff code
-                // Deal with the fact that the cheats in deh files are extended
-                // with character 0xFF to the original cheat length, which we don't do.
-                for (iy=0; strval[iy]; iy++)
-                  strval[iy] = (strval[iy]==(char)0xff) ? '\0' : strval[iy];
+      M_RenameCheat(key, strval, fpout);
 
-                iy = ix;     // killough 4/18/98
-
-                // Ty 03/14/98 - skip leading spaces
-                p = strval;
-                while (*p == ' ') ++p;
-                // Ty 03/16/98 - change to use a strdup and orphan the original
-                // Also has the advantage of allowing length changes.
-                // strncpy(cheat[iy].cheat,p,strlen(cheat[iy].cheat));
-#if 0
-                {    // killough 9/12/98: disable cheats which are prefixes of this one
-                  int i;
-                  for (i=0; cheat[i].cheat; i++)
-                    if (cheat[i].when & not_deh &&
-                        !strncasecmp(cheat[i].cheat,
-                                     cheat[iy].cheat,
-                                     strlen(cheat[i].cheat)) && i != iy)
-		      cheat[i].deh_modified = true;
-                }
-#endif
-                cheat[iy].cheat = (byte *)strdup(p);
-                if (fpout) fprintf(fpout,
-                                   "Assigned new cheat '%s' to cheat '%s'at index %d\n",
-                                   p, cheat[ix].deh_cheat, iy); // killough 4/18/98
-              }
-          }
       if (fpout) fprintf(fpout,"- %s\n",inbuffer);
     }
   return;
