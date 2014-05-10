@@ -332,7 +332,8 @@ static void M_DrawThermo(int x,int y,int thermWidth,int thermDot);
 static void M_WriteText(int x, int y, const char *string);
 static int  M_StringWidth(const char *string);
 static int  M_StringHeight(const char *string);
-static void M_StartMessage(const char *string, void *routine, boolean input);
+static void M_StartMessage(const char *string);
+static void M_StartMessageFunc(const char *string, void *routine, boolean input);
 static void M_ClearMenus (void);
 
 // phares 3/30/98
@@ -614,7 +615,7 @@ OVERLAY void M_Episode(int choice)
   {
   if ( (gamemode == shareware) && choice)
     {
-    M_StartMessage(s_SWSTRING,NULL,false); // Ty 03/27/98 - externalized
+    M_StartMessage(s_SWSTRING); // Ty 03/27/98 - externalized
     M_SetupNextMenu(&ReadDef1);
     return;
     }
@@ -699,17 +700,16 @@ OVERLAY static void M_NewGame(int choice)
   {
   if (netgame && !demoplayback) {
     if (compatibility_level < lxdoom_1_compatibility)
-      M_StartMessage(s_NEWGAME,NULL,false); // Ty 03/27/98 - externalized
+      M_StartMessage(s_NEWGAME); // Ty 03/27/98 - externalized
     else // CPhipps - query restarting the level
-      M_StartMessage(s_RESTARTLEVEL,M_RestartLevelResponse,true);
+      M_StartMessageFunc(s_RESTARTLEVEL,M_RestartLevelResponse,true);
     return;
   }
   
   if (demorecording)   // killough 5/26/98: exclude during demo recordings
     {
     M_StartMessage("you can't start a new game\n"
-                   "while recording a demo!\n\n"PRESSKEY,
-                   NULL, false); // killough 5/26/98: not externalized
+                   "while recording a demo!\n\n"PRESSKEY); // killough 5/26/98: not externalized
     return;
     }
   
@@ -733,7 +733,7 @@ OVERLAY static void M_ChooseSkill(int choice)
   {
   if (choice == nightmare)
     {
-    M_StartMessage(s_NIGHTMARE,M_VerifyNightmare,true); // Ty 03/27/98 - externalized
+    M_StartMessageFunc(s_NIGHTMARE,M_VerifyNightmare,true); // Ty 03/27/98 - externalized
     return;
     }
   
@@ -860,7 +860,7 @@ OVERLAY static void M_VerifyForcedLoadGame(int ch)
 
 OVERLAY void M_ForcedLoadGame(const char *msg)
 {
-  M_StartMessage(forced_load_str = strdup(msg), M_VerifyForcedLoadGame, true);
+  M_StartMessageFunc(forced_load_str = strdup(msg), M_VerifyForcedLoadGame, true);
 }
 
 //
@@ -879,9 +879,8 @@ OVERLAY static void M_LoadGame (int choice)
 
     if (demorecording)   // killough 5/26/98: exclude during demo recordings
     {
-    M_StartMessage("you can't load a game\n"
-                   "while recording a demo!\n\n"PRESSKEY,
-                   NULL, false); // killough 5/26/98: not externalized
+      M_StartMessage("you can't load a game\n"
+                     "while recording a demo!\n\n"PRESSKEY); // killough 5/26/98: not externalized
     return;
     }
   
@@ -1003,7 +1002,7 @@ OVERLAY static void M_SaveGame (int choice)
   {
   if (!usergame)
     {
-    M_StartMessage(s_SAVEDEAD,NULL,false); // Ty 03/27/98 - externalized
+      M_StartMessage(s_SAVEDEAD); // Ty 03/27/98 - externalized
     return;
     }
   
@@ -1139,7 +1138,7 @@ OVERLAY void M_QuitDOOM(int choice)
     // killough 3/28/98: Fix incorrect order of s_DOSY:
     sprintf(endstring,"%s\n\n%s", endmsg[gametic%(NUM_QUITMESSAGES-1) + 1], s_DOSY);
   
-  M_StartMessage(endstring,M_QuitResponse,true);
+  M_StartMessageFunc(endstring,M_QuitResponse,true);
   }
 
 /////////////////////////////
@@ -1368,7 +1367,7 @@ OVERLAY static void M_QuickSave(void)
     return;
   }
   sprintf(tempstring,s_QSPROMPT,savegamestrings[quickSaveSlot]); // Ty 03/27/98 - externalized
-  M_StartMessage(tempstring,M_QuickSaveResponse,true);
+  M_StartMessageFunc(tempstring,M_QuickSaveResponse,true);
 }
 
 /////////////////////////////
@@ -1390,17 +1389,16 @@ OVERLAY static void M_QuickLoad(void)
 
   if (demorecording) {  // killough 5/26/98: exclude during demo recordings 
     M_StartMessage("you can't quickload\n"
-                   "while recording a demo!\n\n"PRESSKEY,
-                   NULL, false); // killough 5/26/98: not externalized
+                   "while recording a demo!\n\n"PRESSKEY); // killough 5/26/98: not externalized
     return;
   }
   
   if (quickSaveSlot < 0) {
-    M_StartMessage(s_QSAVESPOT,NULL,false); // Ty 03/27/98 - externalized
+    M_StartMessage(s_QSAVESPOT); // Ty 03/27/98 - externalized
     return;
   }
   sprintf(tempstring,s_QLPROMPT,savegamestrings[quickSaveSlot]); // Ty 03/27/98 - externalized
-  M_StartMessage(tempstring,M_QuickLoadResponse,true);
+  M_StartMessageFunc(tempstring,M_QuickLoadResponse,true);
 }
 
 /////////////////////////////
@@ -1432,11 +1430,11 @@ OVERLAY static void M_EndGame(int choice)
   
   if (netgame)
     {
-    M_StartMessage(s_NETEND,NULL,false); // Ty 03/27/98 - externalized
+    M_StartMessage(s_NETEND); // Ty 03/27/98 - externalized
     return;
     }
 
-  M_StartMessage(s_ENDGAME,M_EndGameResponse,true); // Ty 03/27/98 - externalized
+  M_StartMessageFunc(s_ENDGAME,M_EndGameResponse,true); // Ty 03/27/98 - externalized
   }
 
 /////////////////////////////
@@ -4840,8 +4838,13 @@ OVERLAY void M_Ticker (void)
 //
 // Message Routines
 //
+OVERLAY static void M_StartMessage (const char* string)
+{
+  M_StartMessageFunc(string, NULL, false);
+  return;
+}
 
-OVERLAY static void M_StartMessage (const char* string,void* routine,boolean input)
+OVERLAY static void M_StartMessageFunc (const char* string,void* routine,boolean input)
 {
   messageLastMenuActive = menuactive;
   messageToPrint = 1;
