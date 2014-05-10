@@ -181,12 +181,34 @@ typedef struct
   char  alphaKey; // hotkey in menu
 } menuitem_t;
 
+typedef enum {
+  M_DRAWSETUP,
+  M_DRAWKEYBND,
+  M_DRAWWEAPONS,
+  M_DRAWSTATUSHUD,
+  M_DRAWAUTOMAP,
+  M_DRAWENEMY,
+  M_DRAWMESSAGES,
+  M_DRAWCHATSTRINGS,
+  M_DRAWMAINMENU,
+  M_DRAWREADTHIS1,
+  M_DRAWREADTHIS2,
+  M_DRAWEPISODE,
+  M_DRAWNEWGAME,
+  M_DRAWLOAD,
+  M_DRAWSAVE,
+  M_DRAWOPTIONS,
+  M_DRAWSOUND,
+  M_DRAWMOUSE,
+  M_DRAWEXTHELP,
+} menufunc_t;
+
 typedef struct menu_s
 {                           
   short           numitems;     // # of menu items
   struct menu_s*  prevMenu;     // previous menu
   menuitem_t*     menuitems;    // menu items
-  void            (*routine)(); // draw routine
+  menufunc_t      routine; // draw routine
   short           x;
   short           y;            // x,y of menu
   short           lastOn;       // last item user was on in menu
@@ -395,7 +417,7 @@ static menu_t MainDef =
   main_end,       // number of menu items
   NULL,           // previous menu screen
   MainMenu,       // table that defines menu items
-  M_DrawMainMenu, // drawing routine
+  M_DRAWMAINMENU, // drawing routine
   97,64,          // initial cursor position
   0               // last menu item the user was on
 };
@@ -448,7 +470,7 @@ static menu_t ReadDef1 =
   read1_end,
   &MainDef,
   ReadMenu1,
-  M_DrawReadThis1,
+  M_DRAWREADTHIS1,
   330,175,
 //280,185,              // killough 2/21/98: fix help screens
   0
@@ -459,7 +481,7 @@ static menu_t ReadDef2 =
   read2_end,
   &ReadDef1,
   ReadMenu2,
-  M_DrawReadThis2,
+  M_DRAWREADTHIS2,
   330,175,
   0
 };
@@ -577,7 +599,7 @@ static menu_t EpiDef =
   ep_end,        // # of menu items
   &MainDef,      // previous menu
   EpisodeMenu,   // menuitem_t ->
-  M_DrawEpisode, // drawing routine ->
+  M_DRAWEPISODE, // drawing routine ->
   48,63,         // x,y
   ep1            // lastOn
 };
@@ -648,7 +670,7 @@ static menu_t NewDef =
   newg_end,       // # of menu items
   &EpiDef,        // previous menu
   NewGameMenu,    // menuitem_t ->
-  M_DrawNewGame,  // drawing routine ->
+  M_DRAWNEWGAME,  // drawing routine ->
   48,63,          // x,y
   hurtme          // lastOn
 };
@@ -763,7 +785,7 @@ static menu_t LoadDef =
   load_end,
   &MainDef,
   LoadMenu,
-  M_DrawLoad,
+  M_DRAWLOAD,
   80,34, //jff 3/15/98 move menu up
   0
   };
@@ -896,7 +918,7 @@ static menu_t SaveDef =
   load_end, // same number of slots as the Load Game screen
   &MainDef,
   SaveMenu,
-  M_DrawSave,
+  M_DRAWSAVE,
   80,34, //jff 3/15/98 move menu up
   0
   };
@@ -1038,7 +1060,7 @@ static menu_t OptionsDef =
   opt_end,
   &MainDef,
   OptionsMenu,
-  M_DrawOptions,
+  M_DRAWOPTIONS,
   60,37,
   0
 };
@@ -1158,7 +1180,7 @@ static menu_t SoundDef =
   sound_end,
   &OptionsDef,
   SoundMenu,
-  M_DrawSound,
+  M_DRAWSOUND,
   80,64,
   0
 };
@@ -1248,7 +1270,7 @@ static menu_t MouseDef =
   mouse_end,
   &OptionsDef,
   MouseMenu,
-  M_DrawMouse,
+  M_DRAWMOUSE,
   60,64,
   0
 };
@@ -1673,7 +1695,7 @@ static menu_t  SetupDef =
   set_setup_end, // number of Setup Menu items (Key Bindings, etc.)
   &MainDef,      // menu to return to when BACKSPACE is hit on this menu
   SetupMenu,     // definition of items to show on the Setup Screen
-  M_DrawSetup,   // program that draws the Setup Screen
+  M_DRAWSETUP,   // program that draws the Setup Screen
   59,37,         // x,y position of the skull (modified when the skull is
                  // drawn). The skull is parked on the upper-left corner
                  // of the Setup screens, since it isn't needed as a cursor
@@ -1691,7 +1713,7 @@ static menu_t KeybndDef =
   generic_setup_end,
   &SetupDef,
   Generic_Setup,
-  M_DrawKeybnd,
+  M_DRAWKEYBND,
   34,5,      // skull drawn here
   0
 };
@@ -1701,7 +1723,7 @@ static menu_t WeaponDef =
   generic_setup_end,
   &SetupDef,
   Generic_Setup,
-  M_DrawWeapons,
+  M_DRAWWEAPONS,
   34,5,      // skull drawn here
   0
 };
@@ -1711,7 +1733,7 @@ static menu_t StatusHUDDef =
   generic_setup_end,
   &SetupDef,
   Generic_Setup,
-  M_DrawStatusHUD,
+  M_DRAWSTATUSHUD,
   34,5,      // skull drawn here
   0
 };
@@ -1721,7 +1743,7 @@ static menu_t AutoMapDef =
   generic_setup_end,
   &SetupDef,
   Generic_Setup,
-  M_DrawAutoMap,
+  M_DRAWAUTOMAP,
   34,5,      // skull drawn here
   0
 };
@@ -1731,7 +1753,7 @@ static menu_t EnemyDef =                                    // phares 4/08/98
   generic_setup_end,
   &SetupDef,
   Generic_Setup,
-  M_DrawEnemy,
+  M_DRAWENEMY,
   34,5,      // skull drawn here
   0
 };
@@ -1741,7 +1763,7 @@ static menu_t MessageDef =                                  // phares 4/08/98
   generic_setup_end,
   &SetupDef,
   Generic_Setup,
-  M_DrawMessages,
+  M_DRAWMESSAGES,
   34,5,      // skull drawn here
   0
 };
@@ -1751,7 +1773,7 @@ static menu_t ChatStrDef =                                  // phares 4/10/98
   generic_setup_end,
   &SetupDef,
   Generic_Setup,
-  M_DrawChatStrings,
+  M_DRAWCHATSTRINGS,
   34,5,      // skull drawn here
   0
   };
@@ -3142,7 +3164,7 @@ static menu_t ExtHelpDef =
   1,             // # of menu items
   &ReadDef1,     // previous menu
   ExtHelpMenu,   // menuitem_t ->
-  M_DrawExtHelp, // drawing routine ->
+  M_DRAWEXTHELP, // drawing routine ->
   330,181,       // x,y
   0              // lastOn
 };
@@ -4668,6 +4690,50 @@ OVERLAY void M_StartControlPanel (void)
   itemOn = currentMenu->lastOn;   // JDC
   }
 
+OVERLAY void M_DoDMenu(menufunc_t func)
+{
+  switch (func) {
+  case M_DRAWSETUP:
+    return M_DrawSetup();
+  case M_DRAWKEYBND:
+    return M_DrawKeybnd();
+  case M_DRAWWEAPONS:
+    return M_DrawWeapons();
+  case M_DRAWSTATUSHUD:
+    return M_DrawStatusHUD();
+  case M_DRAWAUTOMAP:
+    return M_DrawAutoMap();
+  case M_DRAWENEMY:
+    return M_DrawEnemy();
+  case M_DRAWMESSAGES:
+    return M_DrawMessages();
+  case M_DRAWCHATSTRINGS:
+    return M_DrawChatStrings();
+  case M_DRAWMAINMENU:
+    return M_DrawMainMenu();
+  case M_DRAWREADTHIS1:
+    return M_DrawReadThis1();
+  case M_DRAWREADTHIS2:
+    return M_DrawReadThis2();
+  case M_DRAWEPISODE:
+    return M_DrawEpisode();
+  case M_DRAWNEWGAME:
+    return M_DrawNewGame();
+  case M_DRAWLOAD:
+    return M_DrawLoad();
+  case M_DRAWSAVE:
+    return M_DrawSave();
+  case M_DRAWOPTIONS:
+    return M_DrawOptions();
+  case M_DRAWSOUND:
+    return M_DrawSound();
+  case M_DRAWMOUSE:
+    return M_DrawMouse();
+  case M_DRAWEXTHELP:
+    return M_DrawExtHelp();
+  }
+}
+
 //
 // M_Drawer
 // Called after the view has been rendered,
@@ -4720,9 +4786,8 @@ OVERLAY void M_Drawer (void)
   if (!menuactive)
     return;
 
-  if (currentMenu->routine)
-    currentMenu->routine();     // call Draw routine
-  
+  M_DoDMenu(currentMenu->routine);
+
   // DRAW MENU
 
   x = currentMenu->x;
@@ -5001,7 +5066,7 @@ OVERLAY void M_Init (void)
       MainDef.numitems--;
       MainDef.y += 8;
       NewDef.prevMenu = &MainDef;
-      ReadDef1.routine = M_DrawReadThis1;
+      ReadDef1.routine = M_DRAWREADTHIS1;
       ReadDef1.x = 330;
       ReadDef1.y = 165;
       ReadMenu1[0].routine = M_FINISHREADTHIS;
