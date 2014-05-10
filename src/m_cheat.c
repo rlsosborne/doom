@@ -103,6 +103,39 @@ static void cheat_health();
 //
 //-----------------------------------------------------------------------------
 
+typedef enum {
+  CHEAT_MUS,
+  CHEAT_CHOPPERS,
+  CHEAT_GOD,
+  CHEAT_FA,
+  CHEAT_K,
+  CHEAT_KFA,
+  CHEAT_NOCLIP,
+  CHEAT_PW,
+  CHEAT_BEHOLD,
+  CHEAT_CLEV,
+  CHEAT_MYPOS,
+  CHEAT_RATE,
+  CHEAT_COMP,
+  CHEAT_FRICTION,
+  CHEAT_PUSHERS,
+  CHEAT_TNTTRAN,
+  CHEAT_MASSACRE,
+  CHEAT_DDT,
+  CHEAT_HOM,
+  CHEAT_FAST,
+  CHEAT_TNTKEY,
+  CHEAT_TNTKEYX,
+  CHEAT_TNTKEYXX,
+  CHEAT_TNTWEAP,
+  CHEAT_TNTWEAPX,
+  CHEAT_TNTAMMO,
+  CHEAT_TNTAMMOX,
+  CHEAT_SMART,
+  CHEAT_PITCH,
+  CHEAT_MEGAARMOUR,
+  CHEAT_HEALTH,
+} cheatfunc_t;
 
 /* killough 4/16/98: Cheat table structure */
 struct cheat_s {
@@ -117,158 +150,153 @@ struct cheat_s {
     not_deh = 16,
     not_net = not_dm | not_coop
   } const when;
-  void (*const func)();
+  cheatfunc_t func;
   const int arg;
   uint_64_t code, mask;
 };
 
 static struct cheat_s cheat[] = {
   {(const byte *)"idmus",      "Change music",      always,
-   cheat_mus,      -2},
+   CHEAT_MUS,      -2},
 
   {(const byte *)"idchoppers", "Chainsaw",          not_net | not_demo,
-   cheat_choppers },
+   CHEAT_CHOPPERS },
 
   {(const byte *)"iddqd",      "God mode",          not_net | not_demo,
-   cheat_god      },
-
-#if 0
-  {(const byte *)"idk",        NULL,                not_net | not_demo | not_deh,
-   cheat_k },  // The most controversial cheat code in Doom history!!!
-#endif
+   CHEAT_GOD      },
 
   {(const byte *)"idkfa",      "Ammo & Keys",       not_net | not_demo,
-   cheat_kfa },
+   CHEAT_KFA },
 
   {(const byte *)"idfa",       "Ammo",              not_net | not_demo,
-   cheat_fa  },
+   CHEAT_FA  },
 
   {(const byte *)"idspispopd", "No Clipping 1",     not_net | not_demo,
-   cheat_noclip },
+   CHEAT_NOCLIP },
 
   {(const byte *)"idclip",     "No Clipping 2",     not_net | not_demo,
-   cheat_noclip },
+   CHEAT_NOCLIP },
 
   {(const byte *)"idbeholdh",  "Invincibility",     not_net | not_demo,
-   cheat_health },
+   CHEAT_HEALTH },
 
   {(const byte *)"idbeholdm",  "Invincibility",     not_net | not_demo,
-   cheat_megaarmour },
+   CHEAT_MEGAARMOUR },
 
   {(const byte *)"idbeholdv",  "Invincibility",     not_net | not_demo,
-   cheat_pw,  pw_invulnerability },
+   CHEAT_PW,  pw_invulnerability },
 
   {(const byte *)"idbeholds",  "Berserk",           not_net | not_demo,
-   cheat_pw,  pw_strength        },
+   CHEAT_PW,  pw_strength        },
 
   {(const byte *)"idbeholdi",  "Invisibility",      not_net | not_demo,
-   cheat_pw,  pw_invisibility    },
+   CHEAT_PW,  pw_invisibility    },
 
   {(const byte *)"idbeholdr",  "Radiation Suit",    not_net | not_demo,
-   cheat_pw,  pw_ironfeet        },
+   CHEAT_PW,  pw_ironfeet        },
 
   {(const byte *)"idbeholda",  "Auto-map",          not_net | not_demo,
-   cheat_pw,  pw_allmap          },
+   CHEAT_PW,  pw_allmap          },
 
   {(const byte *)"idbeholdl",  "Lite-Amp Goggles",  not_net | not_demo,
-   cheat_pw,  pw_infrared        },
+   CHEAT_PW,  pw_infrared        },
 
   {(const byte *)"idbehold",   "BEHOLD menu",       not_net | not_demo,
-   cheat_behold   },
+   CHEAT_BEHOLD   },
 
   {(const byte *)"idclev",     "Level Warp",        not_net | not_demo | not_menu,
-   cheat_clev,    -2},
+   CHEAT_CLEV,    -2},
 
   {(const byte *)"idmypos",    "Player Position",   not_net | not_demo,
-   cheat_mypos    },
+   CHEAT_MYPOS    },
 
   {(const byte *)"idrate",     "Frame rate",        0,
-   cheat_rate     },
+   CHEAT_RATE     },
 
   {(const byte *)"tntcomp",    NULL,                not_net | not_demo,
-   cheat_comp     },     // phares
+   CHEAT_COMP     },     // phares
 
   {(const byte *)"tntem",      NULL,                not_net | not_demo,
-   cheat_massacre },     // jff 2/01/98 kill all monsters
+   CHEAT_MASSACRE },     // jff 2/01/98 kill all monsters
 
   {(const byte *)"iddt",       "Map cheat",         not_dm  | not_demo,
-   cheat_ddt      },     // killough 2/07/98: moved from am_map.c
+   CHEAT_DDT      },     // killough 2/07/98: moved from am_map.c
 
   {(const byte *)"tnthom",     NULL,                not_net | not_demo,
-   cheat_hom      },     // killough 2/07/98: HOM autodetector
+   CHEAT_HOM      },     // killough 2/07/98: HOM autodetector
 
   {(const byte *)"tntkey",     NULL,                not_net | not_demo,
-   cheat_tntkey   },     // killough 2/16/98: generalized key cheats
+   CHEAT_TNTKEY   },     // killough 2/16/98: generalized key cheats
 
   {(const byte *)"tntkeyr",    NULL,                not_net | not_demo,
-   cheat_tntkeyx  },
+   CHEAT_TNTKEYX  },
 
   {(const byte *)"tntkeyy",    NULL,                not_net | not_demo,
-   cheat_tntkeyx  },
+   CHEAT_TNTKEYX  },
 
   {(const byte *)"tntkeyb",    NULL,                not_net | not_demo,
-   cheat_tntkeyx  },
+   CHEAT_TNTKEYX  },
 
   {(const byte *)"tntkeyrc",   NULL,                not_net | not_demo,
-   cheat_tntkeyxx, it_redcard    },
+   CHEAT_TNTKEYXX, it_redcard    },
 
   {(const byte *)"tntkeyyc",   NULL,                not_net | not_demo,
-   cheat_tntkeyxx, it_yellowcard },
+   CHEAT_TNTKEYXX, it_yellowcard },
 
   {(const byte *)"tntkeybc",   NULL,                not_net | not_demo,
-   cheat_tntkeyxx, it_bluecard   },
+   CHEAT_TNTKEYXX, it_bluecard   },
 
   {(const byte *)"tntkeyrs",   NULL,                not_net | not_demo,
-   cheat_tntkeyxx, it_redskull   },
+   CHEAT_TNTKEYXX, it_redskull   },
 
   {(const byte *)"tntkeyys",   NULL,                not_net | not_demo,
-   cheat_tntkeyxx, it_yellowskull},
+   CHEAT_TNTKEYXX, it_yellowskull},
 
   {(const byte *)"tntkeybs",   NULL,                not_net | not_demo,
-   cheat_tntkeyxx, it_blueskull  },  // killough 2/16/98: end generalized keys
+   CHEAT_TNTKEYXX, it_blueskull  },  // killough 2/16/98: end generalized keys
 
   {(const byte *)"tntka",      NULL,                not_net | not_demo,
-   cheat_k    },         // Ty 04/11/98 - Added TNTKA
+   CHEAT_K    },         // Ty 04/11/98 - Added TNTKA
 
   {(const byte *)"tntweap",    NULL,                not_net | not_demo,
-   cheat_tntweap  },     // killough 2/16/98: generalized weapon cheats
+   CHEAT_TNTWEAP  },     // killough 2/16/98: generalized weapon cheats
 
   {(const byte *)"tntweap",    NULL,                not_net | not_demo,
-   cheat_tntweapx, -1},
+   CHEAT_TNTWEAPX, -1},
 
   {(const byte *)"tntammo",    NULL,                not_net | not_demo,
-   cheat_tntammo  },
+   CHEAT_TNTAMMO  },
 
   {(const byte *)"tntammo",    NULL,                not_net | not_demo,
-   cheat_tntammox, -1},  // killough 2/16/98: end generalized weapons
+   CHEAT_TNTAMMOX, -1},  // killough 2/16/98: end generalized weapons
 
   {(const byte *)"tnttran",    NULL,                always,
-   cheat_tnttran  },     // invoke translucency         // phares
+   CHEAT_TNTTRAN  },     // invoke translucency         // phares
 
   {(const byte *)"tntsmart",   NULL,                not_net | not_demo,
-   cheat_smart},         // killough 2/21/98: smart monster toggle
+   CHEAT_SMART},         // killough 2/21/98: smart monster toggle
 
   {(const byte *)"tntpitch",   NULL,                always,
-   cheat_pitch},         // killough 2/21/98: pitched sound toggle
+   CHEAT_PITCH},         // killough 2/21/98: pitched sound toggle
 
   // killough 2/21/98: reduce RSI injury by adding simpler alias sequences:
   {(const byte *)"tntran",     NULL,                always,
-   cheat_tnttran    },   // killough 2/21/98: same as tnttran
+   CHEAT_TNTTRAN    },   // killough 2/21/98: same as tnttran
 
   {(const byte *)"tntamo",     NULL,                not_net | not_demo,
-   cheat_tntammo    },   // killough 2/21/98: same as tntammo
+   CHEAT_TNTAMMO    },   // killough 2/21/98: same as tntammo
 
   {(const byte *)"tntamo",     NULL,                not_net | not_demo,
-   cheat_tntammox, -1},  // killough 2/21/98: same as tntammo
+   CHEAT_TNTAMMOX, -1},  // killough 2/21/98: same as tntammo
 
   {(const byte *)"tntfast",    NULL,                not_net | not_demo,
-   cheat_fast       },   // killough 3/6/98: -fast toggle
+   CHEAT_FAST       },   // killough 3/6/98: -fast toggle
 
   {(const byte *)"tntice",     NULL,                not_net | not_demo,
-   cheat_friction   },   // phares 3/10/98: toggle variable friction effects
+   CHEAT_FRICTION   },   // phares 3/10/98: toggle variable friction effects
 
   {(const byte *)"tntpush",    NULL,                not_net | not_demo, 
-   cheat_pushers    },   // phares 3/10/98: toggle pushers
+   CHEAT_PUSHERS    },   // phares 3/10/98: toggle pushers
 
   {NULL}                 // end-of-list marker
 };
@@ -727,6 +755,74 @@ void M_RenameCheat(const char *key, char *strval, FILE *fpout)
     }
 }
 
+OVERLAY static void M_DoCheat(cheatfunc_t func, char *arg)
+{
+  switch (func) {
+  case CHEAT_MUS:
+    return cheat_mus(arg);
+  case CHEAT_CHOPPERS:
+    return cheat_choppers();
+  case CHEAT_GOD:
+    return cheat_god();
+  case CHEAT_FA:
+    return cheat_fa();
+  case CHEAT_K:
+    return cheat_k();
+  case CHEAT_KFA:
+    return cheat_kfa();
+  case CHEAT_NOCLIP:
+    return cheat_noclip();
+  case CHEAT_PW:
+    return cheat_pw(arg);
+  case CHEAT_BEHOLD:
+    return cheat_behold();
+  case CHEAT_CLEV:
+    return cheat_clev(arg);
+  case CHEAT_MYPOS:
+    return cheat_mypos();
+  case CHEAT_RATE:
+    return cheat_rate();
+  case CHEAT_COMP:
+    return cheat_comp();
+  case CHEAT_FRICTION:
+    return cheat_friction();
+  case CHEAT_PUSHERS:
+    return cheat_pushers();
+  case CHEAT_TNTTRAN:
+    return cheat_tnttran();
+  case CHEAT_MASSACRE:
+    return cheat_massacre();
+  case CHEAT_DDT:
+    return cheat_ddt();
+  case CHEAT_HOM:
+    return cheat_hom();
+  case CHEAT_FAST:
+    return cheat_fast();
+  case CHEAT_TNTKEY:
+    return cheat_tntkey();
+  case CHEAT_TNTKEYX:
+    return cheat_tntkeyx();
+  case CHEAT_TNTKEYXX:
+    return cheat_tntkeyxx(arg);
+  case CHEAT_TNTWEAP:
+    return cheat_tntweap();
+  case CHEAT_TNTWEAPX:
+    return cheat_tntweapx(arg);
+  case CHEAT_TNTAMMO:
+    return cheat_tntammo();
+  case CHEAT_TNTAMMOX:
+    return cheat_tntammox(arg);
+  case CHEAT_SMART:
+    return cheat_smart();
+  case CHEAT_PITCH:
+    return cheat_pitch();
+  case CHEAT_MEGAARMOUR:
+    return cheat_megaarmour();
+  case CHEAT_HEALTH:
+    return cheat_health();
+  }
+}
+
 OVERLAY boolean M_FindCheats(int key)
 {
   static uint_64_t sr;
@@ -739,10 +835,10 @@ OVERLAY boolean M_FindCheats(int key)
 
   if (argsleft)
     {
-      *arg++ = tolower(key);             // store key in arg buffer
-      if (!--argsleft)                   // if last key in arg list,
-        cheat[cht].func(argbuf);         // process the arg buffer
-      return 1;                          // affirmative response
+      *arg++ = tolower(key);                // store key in arg buffer
+      if (!--argsleft)                      // if last key in arg list,
+        M_DoCheat(cheat[cht].func, argbuf); // process the arg buffer
+      return 1;                             // affirmative response
     }
 
   key = tolower(key) - 'a';
@@ -791,8 +887,8 @@ OVERLAY boolean M_FindCheats(int key)
       else
         if (!matchedbefore)               // allow only one cheat at a time 
           {
-            matchedbefore = ret = 1;      // responder has eaten key
-            cheat[i].func(cheat[i].arg);  // call cheat handler
+            matchedbefore = ret = 1;                 // responder has eaten key
+            M_DoCheat(cheat[i].func, cheat[i].arg);  // call cheat handler
           }
     }
   return ret;
