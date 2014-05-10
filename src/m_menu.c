@@ -337,7 +337,6 @@ int  M_StringWidth(const char *string);
 int  M_StringHeight(const char *string);
 void M_StartControlPanel(void);
 void M_StartMessage(const char *string, void *routine, boolean input);
-void M_StopMessage(void);
 void M_ClearMenus (void);
 
 // phares 3/30/98
@@ -4858,12 +4857,6 @@ OVERLAY void M_StartMessage (const char* string,void* routine,boolean input)
   menuactive = true;
   return;
 }
-
-OVERLAY void M_StopMessage(void)
-  {
-  menuactive = messageLastMenuActive;
-  messageToPrint = 0;
-  }
 
 /////////////////////////////
 //
