@@ -133,6 +133,42 @@ extern skill_t startskill; //jff 3/24/98 make startskill from D_MAIN accessible
 // MENU TYPEDEFS
 //
 
+typedef enum {
+  M_MENUITEM_NONE,
+  M_EXTHELP,
+  M_NEWGAME,
+  M_LOADGAME,
+  M_SAVEGAME,
+  M_OPTIONS,
+  M_READTHIS,
+  M_READTHIS2,
+  M_FINISHREADTHIS,
+  M_QUITDOOM,
+  M_DONOTHING,
+  M_EPISODE,
+  M_CHOOSESKILL,
+  M_LOADSELECT,
+  M_SAVESELECT,
+  M_SETUP,
+  M_ENDGAME,
+  M_CHANGEMESSAGES,
+  M_SIZEDISPLAY,
+  M_CHANGESENSITIVITY,
+  M_SOUND,
+  M_SFXVOL,
+  M_MUSICVOL,
+  M_KEYBINDINGS,
+  M_WEAPONS,
+  M_STATUSBAR,
+  M_ENEMY,
+  M_MESSAGES,
+  M_CHATSTRINGS,
+  M_EXTHELPNEXTSCREEN,
+  M_MOUSEHORIZ,
+  M_MOUSEVERT,
+  M_AUTOMAP,
+} menuitemfunc_t;
+
 typedef struct
 {
   short status; // 0 = no cursor here, 1 = ok, 2 = arrows ok
@@ -141,8 +177,8 @@ typedef struct
   // choice = menu item #.
   // if status = 2,
   //   choice=0:leftarrow,1:rightarrow
-  void  (*routine)(int choice);
-  char  alphaKey; // hotkey in menu     
+  menuitemfunc_t routine;
+  char  alphaKey; // hotkey in menu
 } menuitem_t;
 
 typedef struct menu_s
@@ -345,13 +381,13 @@ enum main_e
 
 static menuitem_t MainMenu[]=
 {
-  {1,"M_NGAME", M_NewGame, 'n'},
-  {1,"M_LOADG", M_LoadGame,'l'},
-  {1,"M_SAVEG", M_SaveGame,'s'},
-  {1,"M_OPTION",M_Options, 'o'},
+  {1,"M_NGAME", M_NEWGAME, 'n'},
+  {1,"M_LOADG", M_LOADGAME,'l'},
+  {1,"M_SAVEG", M_SAVEGAME,'s'},
+  {1,"M_OPTION",M_OPTIONS, 'o'},
   // Another hickup with Special edition.
-  {1,"M_RDTHIS",M_ReadThis,'r'},
-  {1,"M_QUITG", M_QuitDOOM,'q'}
+  {1,"M_RDTHIS",M_READTHIS,'r'},
+  {1,"M_QUITG", M_QUITDOOM,'q'}
 };
 
 static menu_t MainDef =
@@ -399,12 +435,12 @@ enum read_e2
 
 static menuitem_t ReadMenu1[] =
 {
-  {1,"",M_ReadThis2,0}
+  {1,"",M_READTHIS2,0}
 };
 
 static menuitem_t ReadMenu2[]=
 {
-  {1,"",M_FinishReadThis,0}
+  {1,"",M_FINISHREADTHIS,0}
 };
 
 static menu_t ReadDef1 =
@@ -530,10 +566,10 @@ enum episodes_e
 
 static menuitem_t EpisodeMenu[]=
 {
-  {1,"M_EPI1", M_Episode,'k'},
-  {1,"M_EPI2", M_Episode,'t'},
-  {1,"M_EPI3", M_Episode,'i'},
-  {1,"M_EPI4", M_Episode,'t'}
+  {1,"M_EPI1", M_EPISODE,'k'},
+  {1,"M_EPI2", M_EPISODE,'t'},
+  {1,"M_EPI3", M_EPISODE,'i'},
+  {1,"M_EPI4", M_EPISODE,'t'}
 };
 
 static menu_t EpiDef =
@@ -600,11 +636,11 @@ enum newgame_e
 
 static menuitem_t NewGameMenu[]=
 {
-  {1,"M_JKILL", M_ChooseSkill, 'i'},
-  {1,"M_ROUGH", M_ChooseSkill, 'h'},
-  {1,"M_HURT",  M_ChooseSkill, 'h'},
-  {1,"M_ULTRA", M_ChooseSkill, 'u'},
-  {1,"M_NMARE", M_ChooseSkill, 'n'}
+  {1,"M_JKILL", M_CHOOSESKILL, 'i'},
+  {1,"M_ROUGH", M_CHOOSESKILL, 'h'},
+  {1,"M_HURT",  M_CHOOSESKILL, 'h'},
+  {1,"M_ULTRA", M_CHOOSESKILL, 'u'},
+  {1,"M_NMARE", M_CHOOSESKILL, 'n'}
 };
 
 static menu_t NewDef =
@@ -712,14 +748,14 @@ enum load_e
 
 static menuitem_t LoadMenu[]=
   {
-  {1,"", M_LoadSelect,'1'},
-  {1,"", M_LoadSelect,'2'},
-  {1,"", M_LoadSelect,'3'},
-  {1,"", M_LoadSelect,'4'},
-  {1,"", M_LoadSelect,'5'},
-  {1,"", M_LoadSelect,'6'},
-  {1,"", M_LoadSelect,'7'}, //jff 3/15/98 extend number of slots
-  {1,"", M_LoadSelect,'8'},
+  {1,"", M_LOADSELECT,'1'},
+  {1,"", M_LOADSELECT,'2'},
+  {1,"", M_LOADSELECT,'3'},
+  {1,"", M_LOADSELECT,'4'},
+  {1,"", M_LOADSELECT,'5'},
+  {1,"", M_LOADSELECT,'6'},
+  {1,"", M_LOADSELECT,'7'}, //jff 3/15/98 extend number of slots
+  {1,"", M_LOADSELECT,'8'},
   };
 
 static menu_t LoadDef =
@@ -845,14 +881,14 @@ OVERLAY void M_LoadGame (int choice)
 
 static menuitem_t SaveMenu[]=
   {
-  {1,"", M_SaveSelect,'1'},
-  {1,"", M_SaveSelect,'2'},
-  {1,"", M_SaveSelect,'3'},
-  {1,"", M_SaveSelect,'4'},
-  {1,"", M_SaveSelect,'5'},
-  {1,"", M_SaveSelect,'6'},
-  {1,"", M_SaveSelect,'7'}, //jff 3/15/98 extend number of slots
-  {1,"", M_SaveSelect,'8'},
+  {1,"", M_SAVESELECT,'1'},
+  {1,"", M_SAVESELECT,'2'},
+  {1,"", M_SAVESELECT,'3'},
+  {1,"", M_SAVESELECT,'4'},
+  {1,"", M_SAVESELECT,'5'},
+  {1,"", M_SAVESELECT,'6'},
+  {1,"", M_SAVESELECT,'7'}, //jff 3/15/98 extend number of slots
+  {1,"", M_SAVESELECT,'8'},
   };
 
 static menu_t SaveDef =
@@ -988,15 +1024,13 @@ enum options_e
 static menuitem_t OptionsMenu[]=
 {
   // killough 4/6/98: move setup to be a sub-menu of OPTIONs
-  {1,"M_SETUP",  M_Setup,   's'},                          // phares 3/21/98
-  {1,"M_ENDGAM", M_EndGame,'e'},
-  {1,"M_MESSG",  M_ChangeMessages,'m'},
-  /*    {1,"M_DETAIL",  M_ChangeDetail,'g'},  unused -- killough */  
-  {2,"M_SCRNSZ", M_SizeDisplay,'s'},
-  {-1,"",0},
-  {1,"M_MSENS",  M_ChangeSensitivity,'m'},
-  /* {-1,"",0},  replaced with submenu -- killough */ 
-  {1,"M_SVOL",   M_Sound,'s'}
+  {1,"M_SETUP",  M_SETUP,   's'},                          // phares 3/21/98
+  {1,"M_ENDGAM", M_ENDGAME,'e'},
+  {1,"M_MESSG",  M_CHANGEMESSAGES,'m'},
+  {2,"M_SCRNSZ", M_SIZEDISPLAY,'s'},
+  {-1,"",M_MENUITEM_NONE},
+  {1,"M_MSENS",  M_CHANGESENSITIVITY,'m'},
+  {1,"M_SVOL",   M_SOUND,'s'}
 };
 
 static menu_t OptionsDef =
@@ -1113,10 +1147,10 @@ enum sound_e
 
 static menuitem_t SoundMenu[]=
 {
-  {2,"M_SFXVOL",M_SfxVol,'s'},
-  {-1,"",0},
-  {2,"M_MUSVOL",M_MusicVol,'m'},
-  {-1,"",0}
+  {2,"M_SFXVOL",M_SFXVOL,'s'},
+  {-1,"",M_MENUITEM_NONE},
+  {2,"M_MUSVOL",M_MUSICVOL,'m'},
+  {-1,"",M_MENUITEM_NONE}
 };
 
 static menu_t SoundDef =
@@ -1203,10 +1237,10 @@ enum mouse_e
 
 static menuitem_t MouseMenu[]=
 {
-  {2,"M_HORSEN",M_MouseHoriz,'h'},
-  {-1,"",0},
-  {2,"M_VERSEN",M_MouseVert,'v'},
-  {-1,"",0}
+  {2,"M_HORSEN",M_MOUSEHORIZ,'h'},
+  {-1,"",M_MENUITEM_NONE},
+  {2,"M_VERSEN",M_MOUSEVERT,'v'},
+  {-1,"",M_MENUITEM_NONE}
 };
 
 static menu_t MouseDef =
@@ -1598,22 +1632,14 @@ static int setup_screen; // the current setup screen. takes values from setup_e
 
 static menuitem_t SetupMenu[]=
   {
-  {1,"M_KEYBND",M_KeyBindings,'k'},
-  {1,"M_WEAP"  ,M_Weapons,    'w'},
-  {1,"M_STAT"  ,M_StatusBar,  's'},               
-  {1,"M_AUTO"  ,M_Automap,    'a'},                    
-  {1,"M_ENEM"  ,M_Enemy,      'e'},                     
-  {1,"M_MESS"  ,M_Messages,   'm'},                     
-  {1,"M_CHAT"  ,M_ChatStrings,'c'},                     
+  {1,"M_KEYBND",M_KEYBINDINGS,'k'},
+  {1,"M_WEAP"  ,M_WEAPONS,    'w'},
+  {1,"M_STAT"  ,M_STATUSBAR,  's'},
+  {1,"M_AUTO"  ,M_AUTOMAP,    'a'},
+  {1,"M_ENEM"  ,M_ENEMY,      'e'},
+  {1,"M_MESS"  ,M_MESSAGES,   'm'},
+  {1,"M_CHAT"  ,M_CHATSTRINGS,'c'},
   };
-
-/////////////////////////////
-//
-// M_DoNothing does just that: nothing. Just a placeholder.
-// CPhipps - so make it static
-OVERLAY static void M_DoNothing(int choice)
-{
-}
 
 /////////////////////////////
 //
@@ -1633,7 +1659,7 @@ enum generic_setup_e
 
 static menuitem_t Generic_Setup[] =
 {
-  {1,"",M_DoNothing,0}
+  {1,"",M_DONOTHING,0}
 };
 
 /////////////////////////////
@@ -3108,7 +3134,7 @@ static int extended_help_index;   // index of current extended help screen
 
 static menuitem_t ExtHelpMenu[] =
 {
-  {1,"",M_ExtHelpNextScreen,0}
+  {1,"",M_EXTHELPNEXTSCREEN,0}
 };
 
 static menu_t ExtHelpDef =
@@ -3155,10 +3181,10 @@ OVERLAY void M_InitExtendedHelp(void)
       if (extended_help_count) {
         if (gamemode == commercial) {
           ExtHelpDef.prevMenu  = &ReadDef1; // previous menu
-          ReadMenu1[0].routine = M_ExtHelp;
+          ReadMenu1[0].routine = M_EXTHELP;
 	} else {
           ExtHelpDef.prevMenu  = &ReadDef2; // previous menu
-          ReadMenu2[0].routine = M_ExtHelp;
+          ReadMenu2[0].routine = M_EXTHELP;
 	}
       }
       return;
@@ -3492,6 +3518,77 @@ OVERLAY static boolean M_ResponderMessageToPrint(int ch)
   menuactive = false;
   S_StartSound(NULL,sfx_swtchx);
   return true;
+}
+
+OVERLAY void M_DoMenuItem(menuitemfunc_t func, int choice)
+{
+  switch (func) {
+    case M_MENUITEM_NONE:
+    case M_DONOTHING:
+      break;
+    case M_EXTHELP:
+      return M_ExtHelp(choice);
+    case M_NEWGAME:
+      return M_NewGame(choice);
+    case M_LOADGAME:
+      return M_LoadGame(choice);
+    case M_SAVEGAME:
+      return M_SaveGame(choice);
+    case M_OPTIONS:
+      return M_Options(choice);
+    case M_READTHIS:
+      return M_ReadThis(choice);
+    case M_READTHIS2:
+      return M_ReadThis2(choice);
+    case M_FINISHREADTHIS:
+      return M_FinishReadThis(choice);
+    case M_QUITDOOM:
+      return M_QuitDOOM(choice);
+    case M_EPISODE:
+      return M_Episode(choice);
+    case M_CHOOSESKILL:
+      return M_ChooseSkill(choice);
+    case M_LOADSELECT:
+      return M_LoadSelect(choice);
+    case M_SAVESELECT:
+      return M_SaveSelect(choice);
+    case M_SETUP:
+      return M_Setup(choice);
+    case M_ENDGAME:
+      return M_EndGame(choice);
+    case M_CHANGEMESSAGES:
+      return M_ChangeMessages(choice);
+    case M_SIZEDISPLAY:
+      return M_SizeDisplay(choice);
+    case M_CHANGESENSITIVITY:
+      return M_ChangeSensitivity(choice);
+    case M_SOUND:
+      return M_Sound(choice);
+    case M_SFXVOL:
+      return M_SfxVol(choice);
+    case M_MUSICVOL:
+      return M_MusicVol(choice);
+    case M_KEYBINDINGS:
+      return M_KeyBindings(choice);
+    case M_WEAPONS:
+      return M_Weapons(choice);
+    case M_STATUSBAR:
+      return M_StatusBar(choice);
+    case M_ENEMY:
+      return M_Enemy(choice);
+    case M_MESSAGES:
+      return M_Messages(choice);
+    case M_CHATSTRINGS:
+      return M_ChatStrings(choice);
+    case M_EXTHELPNEXTSCREEN:
+      return M_ExtHelpNextScreen(choice);
+    case M_MOUSEHORIZ:
+      return M_MouseHoriz(choice);
+    case M_MOUSEVERT:
+      return M_MouseVert(choice);
+    case M_AUTOMAP:
+      return M_Automap(choice);
+  }
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -4442,41 +4539,41 @@ OVERLAY boolean M_Responder (event_t* ev)
 
   if (ch == key_menu_left)                                   // phares 3/7/98
     {
-    if (currentMenu->menuitems[itemOn].routine &&
+    if (currentMenu->menuitems[itemOn].routine != M_MENUITEM_NONE &&
       currentMenu->menuitems[itemOn].status == 2)
       {
-      S_StartSound(NULL,sfx_stnmov);
-      currentMenu->menuitems[itemOn].routine(0);
+        S_StartSound(NULL,sfx_stnmov);
+        M_DoMenuItem(currentMenu->menuitems[itemOn].routine, 0);
       }
     return true;
     }
   
   if (ch == key_menu_right)                                  // phares 3/7/98
     {
-    if (currentMenu->menuitems[itemOn].routine &&
+    if (currentMenu->menuitems[itemOn].routine != M_MENUITEM_NONE &&
       currentMenu->menuitems[itemOn].status == 2)
       {
-      S_StartSound(NULL,sfx_stnmov);
-      currentMenu->menuitems[itemOn].routine(1);
+        S_StartSound(NULL,sfx_stnmov);
+        M_DoMenuItem(currentMenu->menuitems[itemOn].routine, 1);
       }
     return true;
     }
 
   if (ch == key_menu_enter)                                  // phares 3/7/98
     {
-    if (currentMenu->menuitems[itemOn].routine &&
+    if (currentMenu->menuitems[itemOn].routine != M_MENUITEM_NONE &&
         currentMenu->menuitems[itemOn].status)
       {
       currentMenu->lastOn = itemOn;
       if (currentMenu->menuitems[itemOn].status == 2)
         {
-        currentMenu->menuitems[itemOn].routine(1);   // right arrow
-        S_StartSound(NULL,sfx_stnmov);
+          M_DoMenuItem(currentMenu->menuitems[itemOn].routine, 1); // right arrow
+          S_StartSound(NULL,sfx_stnmov);
         }
       else
         {
-        currentMenu->menuitems[itemOn].routine(itemOn);
-        S_StartSound(NULL,sfx_pistol);
+          M_DoMenuItem(currentMenu->menuitems[itemOn].routine, itemOn);
+          S_StartSound(NULL,sfx_pistol);
         }
       }
     if (currentMenu==&NewDef) //jff 3/24/98 remember last skill selected
@@ -4645,7 +4742,7 @@ OVERLAY void M_Drawer (void)
   // CPhipps - patch drawing updated
   V_DrawNamePatch(x + SKULLXOFF, currentMenu->y - 5 + itemOn*LINEHEIGHT,0,
 		  skullName[whichSkull], NULL, VPT_STRETCH);
-  }
+}
 
 //
 // M_ClearMenus
@@ -4907,7 +5004,7 @@ OVERLAY void M_Init (void)
       ReadDef1.routine = M_DrawReadThis1;
       ReadDef1.x = 330;
       ReadDef1.y = 165;
-      ReadMenu1[0].routine = M_FinishReadThis;
+      ReadMenu1[0].routine = M_FINISHREADTHIS;
       break;
     case registered:
       // Episode 2 and 3 are handled,
