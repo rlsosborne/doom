@@ -99,7 +99,18 @@ static int messageLastMenuActive;
 
 static boolean messageNeedsInput; // timed message = no input from user
 
-static void (*messageRoutine)(int response);
+typedef enum {
+  M_MESSAGEROUTINE_NONE,
+  M_RESTARTLEVELRESPONSE,
+  M_VERIFYNIGHTMARE,
+  M_VERIFYFORCEDLOADGAME,
+  M_QUITRESPONSE,
+  M_QUICKSAVERESPONSE,
+  M_QUICKLOADRESPONSE,
+  M_ENDGAMERESPONSE,
+} messageroutinefunc_t;
+
+static messageroutinefunc_t messageRoutine;
 
 #define SAVESTRINGSIZE  24
 
@@ -333,7 +344,8 @@ static void M_WriteText(int x, int y, const char *string);
 static int  M_StringWidth(const char *string);
 static int  M_StringHeight(const char *string);
 static void M_StartMessage(const char *string);
-static void M_StartMessageFunc(const char *string, void *routine, boolean input);
+
+static void M_StartMessageFunc(const char *string, messageroutinefunc_t routine, boolean input);
 static void M_ClearMenus (void);
 
 // phares 3/30/98
@@ -702,7 +714,7 @@ OVERLAY static void M_NewGame(int choice)
     if (compatibility_level < lxdoom_1_compatibility)
       M_StartMessage(s_NEWGAME); // Ty 03/27/98 - externalized
     else // CPhipps - query restarting the level
-      M_StartMessageFunc(s_RESTARTLEVEL,M_RestartLevelResponse,true);
+      M_StartMessageFunc(s_RESTARTLEVEL,M_RESTARTLEVELRESPONSE,true);
     return;
   }
   
@@ -733,7 +745,7 @@ OVERLAY static void M_ChooseSkill(int choice)
   {
   if (choice == nightmare)
     {
-    M_StartMessageFunc(s_NIGHTMARE,M_VerifyNightmare,true); // Ty 03/27/98 - externalized
+    M_StartMessageFunc(s_NIGHTMARE,M_VERIFYNIGHTMARE,true); // Ty 03/27/98 - externalized
     return;
     }
   
@@ -860,7 +872,7 @@ OVERLAY static void M_VerifyForcedLoadGame(int ch)
 
 OVERLAY void M_ForcedLoadGame(const char *msg)
 {
-  M_StartMessageFunc(forced_load_str = strdup(msg), M_VerifyForcedLoadGame, true);
+  M_StartMessageFunc(forced_load_str = strdup(msg), M_VERIFYFORCEDLOADGAME, true);
 }
 
 //
@@ -1138,7 +1150,7 @@ OVERLAY void M_QuitDOOM(int choice)
     // killough 3/28/98: Fix incorrect order of s_DOSY:
     sprintf(endstring,"%s\n\n%s", endmsg[gametic%(NUM_QUITMESSAGES-1) + 1], s_DOSY);
   
-  M_StartMessageFunc(endstring,M_QuitResponse,true);
+  M_StartMessageFunc(endstring,M_QUITRESPONSE,true);
   }
 
 /////////////////////////////
@@ -1367,7 +1379,7 @@ OVERLAY static void M_QuickSave(void)
     return;
   }
   sprintf(tempstring,s_QSPROMPT,savegamestrings[quickSaveSlot]); // Ty 03/27/98 - externalized
-  M_StartMessageFunc(tempstring,M_QuickSaveResponse,true);
+  M_StartMessageFunc(tempstring,M_QUICKSAVERESPONSE,true);
 }
 
 /////////////////////////////
@@ -1398,7 +1410,7 @@ OVERLAY static void M_QuickLoad(void)
     return;
   }
   sprintf(tempstring,s_QLPROMPT,savegamestrings[quickSaveSlot]); // Ty 03/27/98 - externalized
-  M_StartMessageFunc(tempstring,M_QuickLoadResponse,true);
+  M_StartMessageFunc(tempstring,M_QUICKLOADRESPONSE,true);
 }
 
 /////////////////////////////
@@ -1434,7 +1446,7 @@ OVERLAY static void M_EndGame(int choice)
     return;
     }
 
-  M_StartMessageFunc(s_ENDGAME,M_EndGameResponse,true); // Ty 03/27/98 - externalized
+  M_StartMessageFunc(s_ENDGAME,M_ENDGAMERESPONSE,true); // Ty 03/27/98 - externalized
   }
 
 /////////////////////////////
@@ -3517,6 +3529,28 @@ OVERLAY static boolean M_ResponderSavedGame(int ch)
   return true;
 }
 
+OVERLAY static void M_DoMessageRoutine(messageroutinefunc_t func, int ch)
+{
+  switch (func) {
+  case M_MESSAGEROUTINE_NONE:
+    break;
+  case M_RESTARTLEVELRESPONSE:
+    return M_RestartLevelResponse(ch);
+  case M_VERIFYNIGHTMARE:
+    return M_VerifyNightmare(ch);
+  case M_VERIFYFORCEDLOADGAME:
+    return M_VerifyForcedLoadGame(ch);
+  case M_QUITRESPONSE:
+    return M_QuitResponse(ch);
+  case M_QUICKSAVERESPONSE:
+    return M_QuickSaveResponse(ch);
+  case M_QUICKLOADRESPONSE:
+    return M_QuickLoadResponse(ch);
+  case M_ENDGAMERESPONSE:
+    return M_EndGameResponse(ch);
+  }
+}
+
 OVERLAY static boolean M_ResponderMessageToPrint(int ch)
 {
   if (messageNeedsInput == true &&
@@ -3525,8 +3559,7 @@ OVERLAY static boolean M_ResponderMessageToPrint(int ch)
   
   menuactive = messageLastMenuActive;
   messageToPrint = 0;
-  if (messageRoutine)
-    messageRoutine(ch);
+  M_DoMessageRoutine(messageRoutine, ch);
   
   menuactive = false;
   S_StartSound(NULL,sfx_swtchx);
@@ -4840,11 +4873,12 @@ OVERLAY void M_Ticker (void)
 //
 OVERLAY static void M_StartMessage (const char* string)
 {
-  M_StartMessageFunc(string, NULL, false);
+  M_StartMessageFunc(string, M_MESSAGEROUTINE_NONE, false);
   return;
 }
 
-OVERLAY static void M_StartMessageFunc (const char* string,void* routine,boolean input)
+OVERLAY static void
+M_StartMessageFunc(const char* string, messageroutinefunc_t routine, boolean input)
 {
   messageLastMenuActive = menuactive;
   messageToPrint = 1;
