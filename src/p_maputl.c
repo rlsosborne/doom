@@ -109,7 +109,8 @@ OVERLAY int P_BoxOnLineSide(const fixed_t *tmbox, const line_t *ld)
 //
 // killough 5/3/98: reformatted, cleaned up
 
-OVERLAY int P_PointOnDivlineSide(fixed_t x, fixed_t y, const divline_t *line)
+OVERLAY static int
+P_PointOnDivlineSide(fixed_t x, fixed_t y, const divline_t *line)
 {
   return
     !line->dx ? x <= line->x ? line->dy > 0 : line->dy < 0 :
@@ -122,7 +123,7 @@ OVERLAY int P_PointOnDivlineSide(fixed_t x, fixed_t y, const divline_t *line)
 // P_MakeDivline
 //
 
-OVERLAY void P_MakeDivline(const line_t *li, divline_t *dl)
+OVERLAY static void P_MakeDivline(const line_t *li, divline_t *dl)
 {
   dl->x = li->v1->x;
   dl->y = li->v1->y;
@@ -139,7 +140,8 @@ OVERLAY void P_MakeDivline(const line_t *li, divline_t *dl)
 //
 // killough 5/3/98: reformatted, cleaned up
 
-OVERLAY fixed_t P_InterceptVector(const divline_t *v2, const divline_t *v1)
+OVERLAY fixed_t static
+P_InterceptVector(const divline_t *v2, const divline_t *v1)
 {
   fixed_t den = FixedMul(v1->dy>>8, v2->dx) - FixedMul(v1->dx>>8, v2->dy);
   return den ? FixedDiv((FixedMul((v1->x-v2->x)>>8, v1->dy) +
@@ -161,8 +163,8 @@ fixed_t lowfloor;
 // moved front and back outside P-LineOpening and changed    // phares 3/7/98
 // them to these so we can pick up the new friction value
 // in PIT_CheckLine()
-sector_t *openfrontsector; // made global                    // phares
-sector_t *openbacksector;  // made global
+static sector_t *openfrontsector;
+static sector_t *openbacksector;
 
 OVERLAY void P_LineOpening(const line_t *linedef)
 {
@@ -316,42 +318,6 @@ OVERLAY void P_SetThingPosition(mobj_t *thing)
       else        // thing is off the map
         thing->bnext = thing->bprev = NULL;
     }
-}
-
-// killough 3/15/98:
-//
-// A fast function for testing intersections between things and linedefs.
-
-OVERLAY boolean ThingIsOnLine(const mobj_t *t, const line_t *l)
-{
-  int dx = l->dx >> FRACBITS;                             // Linedef vector
-  int dy = l->dy >> FRACBITS;
-  int a = (l->v1->x >> FRACBITS) - (t->x >> FRACBITS);    // Thing-->v1 vector
-  int b = (l->v1->y >> FRACBITS) - (t->y >> FRACBITS);
-  int r = t->radius >> FRACBITS;                          // Thing radius
-
-  // First make sure bounding boxes of linedef and thing intersect.
-  // Leads to quick rejection using only shifts and adds/subs/compares.
-
-  if (abs(a*2+dx)-abs(dx) > r*2 || abs(b*2+dy)-abs(dy) > r*2)
-    return 0;
-
-  // Next, make sure that at least one thing crosshair intersects linedef's
-  // extension. Requires only 3-4 multiplications, the rest adds/subs/
-  // shifts/xors (writing the steps out this way leads to better codegen).
-
-  a *= dy;
-  b *= dx;
-  a -= b;
-  b = dx + dy;
-  b *= r;
-  if (((a-b)^(a+b)) < 0)
-    return 1;
-  dy -= dx;
-  dy *= r;
-  b = a+dy;
-  a -= dy;
-  return (a^b) < 0;
 }
 
 //
@@ -508,7 +474,7 @@ OVERLAY static boolean PIT_AddLineIntercepts(line_t *ld)
 //
 // killough 5/3/98: reformatted, cleaned up
 
-OVERLAY boolean PIT_AddThingIntercepts(mobj_t *thing)
+OVERLAY static boolean PIT_AddThingIntercepts(mobj_t *thing)
 {
   fixed_t   x1, y1;
   fixed_t   x2, y2;
@@ -565,7 +531,7 @@ OVERLAY boolean PIT_AddThingIntercepts(mobj_t *thing)
 //
 // killough 5/3/98: reformatted, cleaned up
 
-OVERLAY boolean P_TraverseIntercepts(traverser_t func, fixed_t maxfrac)
+OVERLAY boolean static P_TraverseIntercepts(traverser_t func, fixed_t maxfrac)
 {
   intercept_t *in = NULL;
   int count = intercept_p - intercepts;
