@@ -52,7 +52,7 @@ typedef struct {
   fixed_t     dy;
 } divline_t;
 
-typedef struct {
+typedef struct intercept_s {
   fixed_t     frac;           /* along trace line */
   boolean     isaline;
   union {
@@ -60,8 +60,6 @@ typedef struct {
     line_t* line;
   } d;
 } intercept_t;
-
-typedef boolean (*traverser_t)(intercept_t *in);
 
 fixed_t P_AproxDistance (fixed_t dx, fixed_t dy);
 int     P_PointOnLineSide (fixed_t x, fixed_t y, const line_t *line);
@@ -80,8 +78,17 @@ typedef enum {
 
 boolean P_BlockLinesIterator (int x, int y, blocklinesfunc_t func);
 boolean P_BlockThingsIterator(int x, int y, boolean func(mobj_t *));
+
+typedef enum {
+  PTR_SLIDETRAVERSE,
+  PTR_AIMTRAVERSE,
+  PTR_SHOOTTRAVERSE,
+  PTR_USETRAVERSE,
+  PTR_NOWAYTRAVERSE,
+} traverserfunc_t;
+
 boolean P_PathTraverse(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2,
-                       int flags, boolean trav(intercept_t *));
+                       int flags, traverserfunc_t func);
 
 extern fixed_t opentop;
 extern fixed_t openbottom;

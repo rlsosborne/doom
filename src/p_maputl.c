@@ -524,6 +524,23 @@ OVERLAY static boolean PIT_AddThingIntercepts(mobj_t *thing)
   return true;          // keep going
 }
 
+OVERLAY static boolean
+P_DoPathTraverseFunc(traverserfunc_t func, intercept_t *in)
+{
+  switch (func) {
+  case PTR_SLIDETRAVERSE:
+    return PTR_SlideTraverse(in);
+  case PTR_AIMTRAVERSE:
+    return PTR_AimTraverse(in);
+  case PTR_SHOOTTRAVERSE:
+    return PTR_ShootTraverse(in);
+  case PTR_USETRAVERSE:
+    return PTR_UseTraverse(in);
+  case PTR_NOWAYTRAVERSE:
+    return PTR_NoWayTraverse(in);
+  }
+}
+
 //
 // P_TraverseIntercepts
 // Returns true if the traverser function returns true
@@ -531,7 +548,8 @@ OVERLAY static boolean PIT_AddThingIntercepts(mobj_t *thing)
 //
 // killough 5/3/98: reformatted, cleaned up
 
-OVERLAY boolean static P_TraverseIntercepts(traverser_t func, fixed_t maxfrac)
+OVERLAY boolean static
+P_TraverseIntercepts(traverserfunc_t func, fixed_t maxfrac)
 {
   intercept_t *in = NULL;
   int count = intercept_p - intercepts;
@@ -544,7 +562,7 @@ OVERLAY boolean static P_TraverseIntercepts(traverser_t func, fixed_t maxfrac)
           dist = (in=scan)->frac;
       if (dist > maxfrac)
         return true;    // checked everything in range
-      if (!func(in))
+      if (!P_DoPathTraverseFunc(func, in))
         return false;           // don't bother going farther
       in->frac = INT_MAX;
     }
@@ -560,8 +578,9 @@ OVERLAY boolean static P_TraverseIntercepts(traverser_t func, fixed_t maxfrac)
 //
 // killough 5/3/98: reformatted, cleaned up
 
-OVERLAY boolean P_PathTraverse(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2,
-                       int flags, boolean trav(intercept_t *))
+OVERLAY boolean
+P_PathTraverse(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2, int flags,
+               traverserfunc_t trav)
 {
   fixed_t xt1, yt1;
   fixed_t xt2, yt2;

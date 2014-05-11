@@ -35,6 +35,8 @@
 #include "r_defs.h"
 #include "d_player.h"
 
+struct intercept_s;
+
 #define USERANGE        (64*FRACUNIT)
 #define MELEERANGE      (64*FRACUNIT)
 #define MISSILERANGE    (32*64*FRACUNIT)
@@ -67,6 +69,12 @@ boolean Check_Sides(mobj_t *, int, int);                    // phares
 boolean PIT_CrossLine (line_t* ld);
 boolean PIT_GetSectors(line_t* ld);
 boolean PIT_CheckLine (line_t* ld);
+
+boolean PTR_SlideTraverse(struct intercept_s* in);
+boolean PTR_AimTraverse(struct intercept_s* in);
+boolean PTR_ShootTraverse(struct intercept_s* in);
+boolean PTR_UseTraverse(struct intercept_s* in);
+boolean PTR_NoWayTraverse(struct intercept_s* in);
 
 // If "floatok" true, move would be ok if within "tmfloorz - tmceilingz".
 extern boolean floatok;

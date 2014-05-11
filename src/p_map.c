@@ -976,11 +976,11 @@ retry:
   bestslidefrac = FRACUNIT+1;
 
   P_PathTraverse ( leadx, leady, leadx+mo->momx, leady+mo->momy,
-     PT_ADDLINES, PTR_SlideTraverse );
+     PT_ADDLINES, PTR_SLIDETRAVERSE );
   P_PathTraverse ( trailx, leady, trailx+mo->momx, leady+mo->momy,
-     PT_ADDLINES, PTR_SlideTraverse );
+     PT_ADDLINES, PTR_SLIDETRAVERSE );
   P_PathTraverse ( leadx, traily, leadx+mo->momx, traily+mo->momy,
-     PT_ADDLINES, PTR_SlideTraverse );
+     PT_ADDLINES, PTR_SLIDETRAVERSE );
 
   // move up to the wall
 
@@ -1308,7 +1308,7 @@ OVERLAY fixed_t P_AimLineAttack(mobj_t* t1,angle_t angle,fixed_t distance)
   attackrange = distance;
   linetarget = NULL;
 
-  P_PathTraverse(t1->x,t1->y,x2,y2,PT_ADDLINES|PT_ADDTHINGS,PTR_AimTraverse);
+  P_PathTraverse(t1->x,t1->y,x2,y2,PT_ADDLINES|PT_ADDTHINGS,PTR_AIMTRAVERSE);
 
   if (linetarget)
     return aimslope;
@@ -1342,7 +1342,7 @@ OVERLAY void P_LineAttack
   attackrange = distance;
   aimslope = slope;
 
-  P_PathTraverse(t1->x,t1->y,x2,y2,PT_ADDLINES|PT_ADDTHINGS,PTR_ShootTraverse);
+  P_PathTraverse(t1->x,t1->y,x2,y2,PT_ADDLINES|PT_ADDTHINGS,PTR_SHOOTTRAVERSE);
   }
 
 
@@ -1438,8 +1438,8 @@ OVERLAY void P_UseLines (player_t*  player)
   //
   // This added test makes the "oof" sound work on 2s lines -- killough:
 
-  if (P_PathTraverse ( x1, y1, x2, y2, PT_ADDLINES, PTR_UseTraverse ))
-    if (!P_PathTraverse ( x1, y1, x2, y2, PT_ADDLINES, PTR_NoWayTraverse ))
+  if (P_PathTraverse ( x1, y1, x2, y2, PT_ADDLINES, PTR_USETRAVERSE ))
+    if (!P_PathTraverse ( x1, y1, x2, y2, PT_ADDLINES, PTR_NOWAYTRAVERSE ))
       S_StartSound (usething, sfx_noway);
   }
 
