@@ -40,6 +40,8 @@
 #include "p_map.h"
 #include "p_setup.h"
 
+OVERLAY static boolean PIT_AddLineIntercepts(line_t *ld);
+
 //
 // P_AproxDistance
 // Gives an estimation of distance (not exact)
@@ -360,6 +362,20 @@ OVERLAY boolean ThingIsOnLine(const mobj_t *t, const line_t *l)
 // exit with false without checking anything else.
 //
 
+OVERLAY static boolean P_DoBlockLineFunc(blocklinesfunc_t func, line_t *line)
+{
+  switch (func) {
+  case PIT_ADDLINEINTERCEPTS:
+    return PIT_AddLineIntercepts(line);
+  case PIT_CROSSLINE:
+    return PIT_CrossLine(line);
+  case PIT_CHECKLINE:
+    return PIT_CheckLine(line);
+  case PIT_GETSECTORS:
+    return PIT_GetSectors(line);
+  }
+}
+
 //
 // P_BlockLinesIterator
 // The validcount flags are used to avoid checking lines
@@ -370,7 +386,7 @@ OVERLAY boolean ThingIsOnLine(const mobj_t *t, const line_t *l)
 //
 // killough 5/3/98: reformatted, cleaned up
 
-OVERLAY boolean P_BlockLinesIterator(int x, int y, boolean func(line_t*))
+OVERLAY boolean P_BlockLinesIterator(int x, int y, blocklinesfunc_t func)
 {
   int        offset;
   const long *list;   // killough 3/1/98: for removal of blockmap limit
@@ -394,7 +410,7 @@ OVERLAY boolean P_BlockLinesIterator(int x, int y, boolean func(line_t*))
       if (ld->validcount == validcount)
         continue;       // line has already been checked
       ld->validcount = validcount;
-      if (!func(ld))
+      if (!P_DoBlockLineFunc(func, ld))
         return false;
     }
   return true;  // everything was checked
@@ -447,7 +463,7 @@ divline_t trace;
 //
 // killough 5/3/98: reformatted, cleaned up
 
-OVERLAY boolean PIT_AddLineIntercepts(line_t *ld)
+OVERLAY static boolean PIT_AddLineIntercepts(line_t *ld)
 {
   int       s1;
   int       s2;
@@ -668,7 +684,7 @@ OVERLAY boolean P_PathTraverse(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2,
   for (count = 0; count < 64; count++)
     {
       if (flags & PT_ADDLINES)
-        if (!P_BlockLinesIterator(mapx, mapy,PIT_AddLineIntercepts))
+        if (!P_BlockLinesIterator(mapx, mapy,PIT_ADDLINEINTERCEPTS))
           return false; // early out
 
       if (flags & PT_ADDTHINGS)

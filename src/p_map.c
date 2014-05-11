@@ -261,8 +261,7 @@ OVERLAY boolean P_TeleportMove (mobj_t* thing,fixed_t x,fixed_t y)
 // longer and probably really isn't worth the effort.
 //
 
-OVERLAY static // killough 3/26/98: make static
-boolean PIT_CrossLine (line_t* ld)
+OVERLAY boolean PIT_CrossLine (line_t* ld)
   {
   if (!(ld->flags & ML_TWOSIDED) ||
       (ld->flags & (ML_BLOCKING|ML_BLOCKMONSTERS)))
@@ -281,8 +280,7 @@ boolean PIT_CrossLine (line_t* ld)
 // Adjusts tmfloorz and tmceilingz as lines are contacted
 //
 
-OVERLAY static // killough 3/26/98: make static
-boolean PIT_CheckLine (line_t* ld)
+OVERLAY boolean PIT_CheckLine (line_t* ld)
   {
   if (tmbbox[BOXRIGHT] <= ld->bbox[BOXLEFT]
    || tmbbox[BOXLEFT] >= ld->bbox[BOXRIGHT]
@@ -514,7 +512,7 @@ OVERLAY boolean Check_Sides(mobj_t* actor, int x, int y)
   validcount++; // prevents checking same line twice
   for (bx = xl ; bx <= xh ; bx++)
     for (by = yl ; by <= yh ; by++)
-      if (!P_BlockLinesIterator(bx,by,PIT_CrossLine))
+      if (!P_BlockLinesIterator(bx,by,PIT_CROSSLINE))
         return true;                                                //   ^
   return(false);                                                    //   |
   }                                                                 // phares
@@ -611,7 +609,7 @@ OVERLAY boolean P_CheckPosition (mobj_t* thing,fixed_t x,fixed_t y)
 
   for (bx=xl ; bx<=xh ; bx++)
     for (by=yl ; by<=yh ; by++)
-      if (!P_BlockLinesIterator (bx,by,PIT_CheckLine))
+      if (!P_BlockLinesIterator (bx,by,PIT_CHECKLINE))
         return false; // doesn't fit
 
   return true;
@@ -1886,7 +1884,7 @@ OVERLAY void P_CreateSecNodeList(mobj_t* thing,fixed_t x,fixed_t y)
 
   for (bx=xl ; bx<=xh ; bx++)
     for (by=yl ; by<=yh ; by++)
-      P_BlockLinesIterator(bx,by,PIT_GetSectors);
+      P_BlockLinesIterator(bx,by,PIT_GETSECTORS);
 
   // Add the sector of the (x,y) point to sector_list.
 
