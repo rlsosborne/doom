@@ -39,8 +39,11 @@
 #include "p_maputl.h"
 #include "p_map.h"
 #include "p_setup.h"
+#include "p_enemy.h"
+#include "p_spec.h"
 
-OVERLAY static boolean PIT_AddLineIntercepts(line_t *ld);
+static boolean PIT_AddLineIntercepts(line_t *ld);
+static boolean PIT_AddThingIntercepts(mobj_t *thing);
 
 //
 // P_AproxDistance
@@ -382,17 +385,37 @@ OVERLAY boolean P_BlockLinesIterator(int x, int y, blocklinesfunc_t func)
   return true;  // everything was checked
 }
 
+OVERLAY static boolean P_DoBlockThingsFunc(blockthingsfunc_t func, mobj_t *mobj)
+{
+  switch (func) {
+  case PIT_VILECHECK:
+    return PIT_VileCheck(mobj);
+  case PIT_STOMPTHING:
+    return PIT_StompThing(mobj);
+  case PIT_CHECKTHING:
+    return PIT_CheckThing(mobj);
+  case PIT_RADIUSATTACK:
+    return PIT_RadiusAttack(mobj);
+  case PIT_CHANGESECTOR:
+    return PIT_ChangeSector(mobj);
+  case PIT_ADDTHINGINTERCEPTS:
+    return PIT_AddThingIntercepts(mobj);
+  case PIT_PUSHTHING:
+    return PIT_PushThing(mobj);
+  }
+}
+
 //
 // P_BlockThingsIterator
 //
 // killough 5/3/98: reformatted, cleaned up
 
-OVERLAY boolean P_BlockThingsIterator(int x, int y, boolean func(mobj_t*))
+OVERLAY boolean P_BlockThingsIterator(int x, int y, blockthingsfunc_t func)
 {
   mobj_t *mobj;
   if (!(x<0 || y<0 || x>=bmapwidth || y>=bmapheight))
     for (mobj = blocklinks[y*bmapwidth+x]; mobj; mobj = mobj->bnext)
-      if (!func(mobj))
+      if (!P_DoBlockThingsFunc(func, mobj))
         return false;
   return true;
 }
@@ -673,7 +696,7 @@ P_PathTraverse(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2, int flags,
           return false; // early out
 
       if (flags & PT_ADDTHINGS)
-        if (!P_BlockThingsIterator(mapx, mapy,PIT_AddThingIntercepts))
+        if (!P_BlockThingsIterator(mapx, mapy,PIT_ADDTHINGINTERCEPTS))
           return false; // early out
 
       if (mapx == xt2 && mapy == yt2)

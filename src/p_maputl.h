@@ -77,7 +77,18 @@ typedef enum {
 } blocklinesfunc_t;
 
 boolean P_BlockLinesIterator (int x, int y, blocklinesfunc_t func);
-boolean P_BlockThingsIterator(int x, int y, boolean func(mobj_t *));
+
+typedef enum {
+  PIT_VILECHECK,
+  PIT_STOMPTHING,
+  PIT_CHECKTHING,
+  PIT_RADIUSATTACK,
+  PIT_CHANGESECTOR,
+  PIT_ADDTHINGINTERCEPTS,
+  PIT_PUSHTHING,
+} blockthingsfunc_t;
+
+boolean P_BlockThingsIterator(int x, int y, blockthingsfunc_t func);
 
 typedef enum {
   PTR_SLIDETRAVERSE,

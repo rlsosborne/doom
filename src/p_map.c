@@ -221,7 +221,7 @@ OVERLAY boolean P_TeleportMove (mobj_t* thing,fixed_t x,fixed_t y)
 
   for (bx=xl ; bx<=xh ; bx++)
     for (by=yl ; by<=yh ; by++)
-      if (!P_BlockThingsIterator(bx,by,PIT_StompThing))
+      if (!P_BlockThingsIterator(bx,by,PIT_STOMPTHING))
         return false;
 
   // the move is ok,
@@ -355,9 +355,8 @@ OVERLAY boolean PIT_CheckLine (line_t* ld)
 // PIT_CheckThing
 //
 
-OVERLAY static // killough 3/26/98: make static
-boolean PIT_CheckThing (mobj_t* thing)
-  {
+OVERLAY boolean PIT_CheckThing(mobj_t* thing)
+{
   fixed_t blockdist;
   boolean solid;
   int     damage;
@@ -597,7 +596,7 @@ OVERLAY boolean P_CheckPosition (mobj_t* thing,fixed_t x,fixed_t y)
 
   for (bx=xl ; bx<=xh ; bx++)
     for (by=yl ; by<=yh ; by++)
-      if (!P_BlockThingsIterator(bx,by,PIT_CheckThing))
+      if (!P_BlockThingsIterator(bx,by,PIT_CHECKTHING))
         return false;
 
   // check lines
@@ -1523,7 +1522,7 @@ OVERLAY void P_RadiusAttack(mobj_t* spot,mobj_t* source,int damage)
 
   for (y=yl ; y<=yh ; y++)
     for (x=xl ; x<=xh ; x++)
-      P_BlockThingsIterator (x, y, PIT_RadiusAttack );
+      P_BlockThingsIterator (x, y, PIT_RADIUSATTACK );
   }
 
 
@@ -1624,7 +1623,7 @@ OVERLAY boolean P_ChangeSector(sector_t* sector,boolean crunch)
 
   for (x=sector->blockbox[BOXLEFT] ; x<= sector->blockbox[BOXRIGHT] ; x++)
     for (y=sector->blockbox[BOXBOTTOM];y<= sector->blockbox[BOXTOP] ; y++)
-      P_BlockThingsIterator (x, y, PIT_ChangeSector);
+      P_BlockThingsIterator (x, y, PIT_CHANGESECTOR);
 
   return nofit;
   }
