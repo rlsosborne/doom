@@ -744,7 +744,7 @@ OVERLAY void R_DrawPlayerSprites(void)
 #define bcopyp(d, s, n) memcpy(d, s, (n) * sizeof(void *))
 
 // killough 9/2/98: merge sort
-
+#pragma stackfunction 1000
 OVERLAY static void msort(vissprite_t **s, vissprite_t **t, int n)
 {
   if (n >= 16)

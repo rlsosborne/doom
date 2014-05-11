@@ -207,6 +207,7 @@ OVERLAY void P_DoAction(action_t action, mobj_t *mobj)
 // Returns true if the mobj is still present.
 //
 
+#pragma stackfunction 1000
 OVERLAY boolean P_SetMobjState(mobj_t* mobj,statenum_t state)
   {
   state_t*  st;

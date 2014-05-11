@@ -185,7 +185,7 @@ P_DoAction(action_t action, player_t *player, pspdef_t *psp)
 //
 // P_SetPsprite
 //
-
+#pragma stackfunction 1000
 OVERLAY static void P_SetPsprite(player_t *player, int position, statenum_t stnum)
 {
   pspdef_t *psp = &player->psprites[position];

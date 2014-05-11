@@ -203,7 +203,7 @@ OVERLAY static boolean P_CrossSubsector(int num)
 // cph - Made to use R_PointOnSide instead of P_DivlineSide, since the latter 
 //  could return 2 which was ambigous, and the former is 
 //  better optimised; also removes two casts :-)
-
+#pragma stackfunction 1000
 OVERLAY static boolean P_CrossBSPNode(int bspnum)
 {
   while (!(bspnum & NF_SUBSECTOR))

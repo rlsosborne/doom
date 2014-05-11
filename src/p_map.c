@@ -544,7 +544,7 @@ OVERLAY boolean Check_Sides(mobj_t* actor, int x, int y)
 //  speciallines[]
 //  numspeciallines
 //
-
+#pragma stackfunction 1000
 OVERLAY boolean P_CheckPosition (mobj_t* thing,fixed_t x,fixed_t y)
   {
   int     xl;
@@ -612,7 +612,7 @@ OVERLAY boolean P_CheckPosition (mobj_t* thing,fixed_t x,fixed_t y)
         return false; // doesn't fit
 
   return true;
-  }
+}
 
 
 //

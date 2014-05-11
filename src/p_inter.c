@@ -725,7 +725,7 @@ OVERLAY static void P_KillMobj(mobj_t *source, mobj_t *target)
 // Source can be NULL for slime, barrel explosions
 // and other environmental stuff.
 //
-
+#pragma stackfunction 1000
 OVERLAY void P_DamageMobj(mobj_t *target,mobj_t *inflictor, mobj_t *source, int damage)
 {
   player_t *player;

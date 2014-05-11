@@ -540,7 +540,7 @@ OVERLAY static void R_Subsector(int num)
 // Just call with BSP root.
 //
 // killough 5/2/98: reformatted, removed tail recursion
-
+#pragma stackfunction 1000
 OVERLAY void R_RenderBSPNode(int bspnum)
 {
   while (!(bspnum & NF_SUBSECTOR))  // Found a subsector?
