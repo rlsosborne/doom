@@ -495,7 +495,7 @@ OVERLAY void G_BuildTiccmd(ticcmd_t* cmd)
 // G_RestartLevel
 //
 
-OVERLAY void G_RestartLevel(void)
+void G_RestartLevel(void)
 {
   special_event = BT_SPECIAL | (BTS_RESTARTLEVEL & BT_SPECIALMASK);
 }
@@ -1163,7 +1163,7 @@ int cpars[32] = {
 
 static boolean secretexit;
 
-OVERLAY void G_ExitLevel (void)
+void G_ExitLevel (void)
 {
   secretexit = false;
   gameaction = ga_completed;
@@ -1349,7 +1349,7 @@ void R_ExecuteSetViewSize(void);
 // killough 5/15/98: add forced loadgames, which allow user to override checks
 //
 
-OVERLAY void G_ForcedLoadGame(void)
+void G_ForcedLoadGame(void)
 {
   // CPhipps - net loadgames are always forced, so we only reach here 
   //  in single player
@@ -2103,7 +2103,7 @@ OVERLAY void G_BeginRecording (void)
 
 static const char *defdemoname;
 
-OVERLAY void G_DeferedPlayDemo (const char* name)
+void G_DeferedPlayDemo (const char* name)
 {
   defdemoname = name;
   gameaction = ga_playdemo;

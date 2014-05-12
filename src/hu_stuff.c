@@ -382,7 +382,7 @@ OVERLAY void HU_Init(void)
 //
 // Passed nothing, returns nothing
 //
-OVERLAY void HU_Stop(void)
+void HU_Stop(void)
 {
   headsupactive = false;
 }

@@ -355,9 +355,9 @@ OVERLAY void R_InitLightTables (void)
 //
 
 boolean setsizeneeded;
-int     setblocks;
+static int setblocks;
 
-OVERLAY void R_SetViewSize(int blocks)
+void R_SetViewSize(int blocks)
 {
   setsizeneeded = true;
   setblocks = blocks;

@@ -283,7 +283,7 @@ OVERLAY void R_InitSprites(const char * const *namelist)
 // Called at frame start.
 //
 
-OVERLAY void R_ClearSprites (void)
+void R_ClearSprites (void)
 {
   num_vissprite = 0;            // killough
 }

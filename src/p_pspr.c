@@ -823,17 +823,17 @@ OVERLAY void A_FireCGun(player_t *player, pspdef_t *psp)
   P_GunShot(player->mo, !player->refire);
 }
 
-OVERLAY void A_Light0(player_t *player, pspdef_t *psp)
+void A_Light0(player_t *player, pspdef_t *psp)
 {
   player->extralight = 0;
 }
 
-OVERLAY void A_Light1 (player_t *player, pspdef_t *psp)
+void A_Light1 (player_t *player, pspdef_t *psp)
 {
   player->extralight = 1;
 }
 
-OVERLAY void A_Light2 (player_t *player, pspdef_t *psp)
+void A_Light2 (player_t *player, pspdef_t *psp)
 {
   player->extralight = 2;
 }

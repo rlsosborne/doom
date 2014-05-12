@@ -505,7 +505,7 @@ OVERLAY static void cheat_mypos()
 }
 
 // cph - cheat to toggle frame rate/rendering stats display
-OVERLAY static void cheat_rate()
+static void cheat_rate()
 {
   rendering_stats ^= 1;
 }

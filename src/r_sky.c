@@ -49,7 +49,7 @@ int skytexturemid;
 // R_InitSkyMap
 // Called whenever the view size changes.
 //
-OVERLAY void R_InitSkyMap (void)
+void R_InitSkyMap (void)
 {
   skytexturemid = 100*FRACUNIT;
 }

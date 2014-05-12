@@ -499,7 +499,7 @@ OVERLAY void AM_initVariables(void)
 //
 // AM_loadPics()
 // 
-OVERLAY void AM_loadPics(void)
+static void AM_loadPics(void)
 {
   // cph - mark numbers no longer needed cached
 }
@@ -507,7 +507,7 @@ OVERLAY void AM_loadPics(void)
 //
 // AM_unloadPics()
 //
-OVERLAY void AM_unloadPics(void)
+static void AM_unloadPics(void)
 {
   // cph - mark numbers no longer needed cached
 }
@@ -520,7 +520,7 @@ OVERLAY void AM_unloadPics(void)
 // Affects the global variable markpointnum
 // Passed nothing, returns nothing
 //
-OVERLAY void AM_clearMarks(void)
+void AM_clearMarks(void)
 {
   markpointnum = 0;
 }

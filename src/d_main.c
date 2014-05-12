@@ -407,7 +407,7 @@ static const char *pagename; // CPhipps - const
 // D_PageTicker
 // Handles timing for warped projection
 //
-OVERLAY void D_PageTicker(void)
+void D_PageTicker(void)
 {
   if (--pagetic < 0)
     D_AdvanceDemo();
@@ -427,7 +427,7 @@ OVERLAY void D_PageDrawer(void)
 // D_AdvanceDemo
 // Called after each demo or intro demosequence finishes
 //
-OVERLAY void D_AdvanceDemo (void)
+void D_AdvanceDemo (void)
 {
   advancedemo = true;
 }
@@ -436,7 +436,7 @@ OVERLAY void D_AdvanceDemo (void)
  * cphipps 10/99: constness fixes
  */
 
-OVERLAY static void D_SetPageName(const char *name)
+static void D_SetPageName(const char *name)
 {
   pagename = name;
 }

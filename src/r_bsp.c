@@ -58,7 +58,7 @@ unsigned  maxdrawsegs;
 // R_ClearDrawSegs
 //
 
-OVERLAY void R_ClearDrawSegs(void)
+void R_ClearDrawSegs(void)
 {
   ds_p = drawsegs;
 }

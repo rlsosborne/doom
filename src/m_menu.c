@@ -4838,34 +4838,34 @@ OVERLAY void M_Drawer (void)
 //
 // Called when leaving the menu screens for the real world
 
-OVERLAY static void M_ClearMenus (void)
-  {
+static void M_ClearMenus (void)
+{
   menuactive = 0;
   // if (!netgame && usergame && paused)
   //     sendpause = true;
-  }
+}
 
 //
 // M_SetupNextMenu
 //
-OVERLAY static void M_SetupNextMenu(menu_t *menudef)
-  {
+static void M_SetupNextMenu(menu_t *menudef)
+{
   currentMenu = menudef;
   itemOn = currentMenu->lastOn;
-  }
+}
 
 /////////////////////////////
 //
 // M_Ticker
 //
-OVERLAY void M_Ticker (void)
-  {
+void M_Ticker (void)
+{
   if (--skullAnimCounter <= 0)
     {
     whichSkull ^= 1;
     skullAnimCounter = 8;
     }
-  }
+}
 
 /////////////////////////////
 //
@@ -4877,7 +4877,7 @@ OVERLAY static void M_StartMessage (const char* string)
   return;
 }
 
-OVERLAY static void
+static void
 M_StartMessageFunc(const char* string, messageroutinefunc_t routine, boolean input)
 {
   messageLastMenuActive = menuactive;

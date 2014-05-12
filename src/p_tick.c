@@ -57,7 +57,7 @@ static thinker_t *currentthinker;
 // P_InitThinkers
 //
 
-OVERLAY void P_InitThinkers(void)
+void P_InitThinkers(void)
 {
   thinkercap.prev = thinkercap.next  = &thinkercap;
 }
@@ -132,7 +132,7 @@ OVERLAY static void P_RemoveMobjDelayed(mobj_t *mobj)
 // promoted to P_RemoveThinker() automatically as part of the thinker process.
 //
 
-OVERLAY void P_RemoveThinker(thinker_t *thinker)
+void P_RemoveThinker(thinker_t *thinker)
 {
   /* cph - Different removal function if it's an mobj
    * since for an mobj we have to check references first */

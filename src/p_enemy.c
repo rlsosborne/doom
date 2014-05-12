@@ -1703,7 +1703,7 @@ OVERLAY void A_BrainExplode(mobj_t *mo)
     th->tics = 1;
 }
 
-OVERLAY void A_BrainDie(mobj_t *mo)
+void A_BrainDie(mobj_t *mo)
 {
   G_ExitLevel();
 }

@@ -78,7 +78,7 @@ OVERLAY static int I_GetTime_Scaled(void)
   return (int_64_t) I_GetTime_RealTime() * I_GetTime_Scale >> 24;
 }
 
-OVERLAY static int  I_GetTime_FastDemo(void)
+static int  I_GetTime_FastDemo(void)
 {
   static int fasttic;
   return fasttic++;
