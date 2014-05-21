@@ -33,22 +33,14 @@
 #ifndef __DOOMTYPE__
 #define __DOOMTYPE__
 
-#ifndef __BYTEBOOL__
-#define __BYTEBOOL__
-/* Fixed to use builtin bool type with C++. */
-#ifdef __cplusplus
-typedef bool boolean;
-#else
-#if __STDC_VERSION__ >= 199901L
 #undef false
-#define false D_false
 #undef true
-#define true D_true
-#endif
+#ifdef __cplusplus
+typedef int boolean;
+#else
 typedef enum {false, true} boolean;
 #endif
 typedef unsigned char byte;
-#endif
 
 typedef signed long long int_64_t; 
 typedef unsigned long long uint_64_t; 
