@@ -374,7 +374,9 @@ static void M_DrawEnemy(void);
 static void M_DrawMessages(void);
 static void M_DrawChatStrings(void);
 
-static menu_t NewDef;
+namespace {
+  extern menu_t NewDef;                                        // phares 5/04/98
+}
 
 // end of prototypes added to support Setup Menus and Extended HELP screens
 
@@ -673,7 +675,8 @@ static menuitem_t NewGameMenu[]=
   {1,"M_NMARE", M_CHOOSESKILL, 'n'}
 };
 
-static menu_t NewDef =
+namespace {
+  menu_t NewDef =
   {
     newg_end,       // # of menu items
     &EpiDef,        // previous menu
@@ -682,6 +685,7 @@ static menu_t NewDef =
     48,63,          // x,y
     hurtme          // lastOn
   };
+}
 
 //
 // M_NewGame
@@ -2235,11 +2239,13 @@ OVERLAY static void M_DrawInstructions()
 #define Y_BUTTON   3
 
 // Definitions of the (in this case) four key binding screens.
-static setup_menu_t keys_settings1[];
-static setup_menu_t keys_settings2[];
-static setup_menu_t keys_settings3[];
-static setup_menu_t keys_settings4[];
-static setup_menu_t keys_settings5[];
+namespace {
+  extern setup_menu_t keys_settings1[];
+  extern setup_menu_t keys_settings2[];
+  extern setup_menu_t keys_settings3[];
+  extern setup_menu_t keys_settings4[];
+  extern setup_menu_t keys_settings5[];
+};
 
 // The table which gets you from one screen table to the next.
 
@@ -2292,7 +2298,8 @@ static int mult_screens_index; // the index of the current screen in a set
 // to the previous screen. If you leave these off, you can't move from
 // screen to screen.
 
-static setup_menu_t keys_settings1[] =  // Key Binding screen strings
+namespace {
+setup_menu_t keys_settings1[] =  // Key Binding screen strings
 {
   {"MOVEMENT"    ,(S_SKIP|S_TITLE),m_null,KB_X,KB_Y ,0                  ,0,0,0,0,0,0},
   {"FORWARD"     ,S_KEY       ,m_scrn,KB_X,KB_Y+ 1*8,&key_up            ,&mousebforward,0,0,0,0,0},
@@ -2328,7 +2335,7 @@ static setup_menu_t keys_settings1[] =  // Key Binding screen strings
 
 };
 
-static setup_menu_t keys_settings2[] =  // Key Binding screen strings
+setup_menu_t keys_settings2[] =  // Key Binding screen strings
 {
   {"SCREEN"      ,(S_SKIP|S_TITLE),m_null,KB_X,KB_Y   ,0         ,0,0,0,0,0,0},
 
@@ -2373,7 +2380,7 @@ static setup_menu_t keys_settings2[] =  // Key Binding screen strings
 
 };
 
-static setup_menu_t keys_settings3[] =  // Key Binding screen strings
+setup_menu_t keys_settings3[] =  // Key Binding screen strings
 {
   {"WEAPONS" ,(S_SKIP|S_TITLE),m_null,KB_X,KB_Y   ,0              ,0,0,0,0,0,0},
   {"FIST"    ,S_KEY       ,m_scrn,KB_X,KB_Y+ 1*8,&key_weapon1     ,0,0,0,0,0,0},
@@ -2397,7 +2404,7 @@ static setup_menu_t keys_settings3[] =  // Key Binding screen strings
 
 };
 
-static setup_menu_t keys_settings4[] =  // Key Binding screen strings
+setup_menu_t keys_settings4[] =  // Key Binding screen strings
 {
   {"AUTOMAP"    ,(S_SKIP|S_TITLE),m_null,KB_X,KB_Y   ,0                 ,0,0,0,0,0,0},
   {"FOLLOW"     ,S_KEY       ,m_map ,KB_X,KB_Y+ 1*8,&key_map_follow     ,0,0,0,0,0,0},
@@ -2422,7 +2429,7 @@ static setup_menu_t keys_settings4[] =  // Key Binding screen strings
   {0,(S_SKIP|S_END),m_null,0,0,0,0,0,0,0,0,0}
 };
 
-static setup_menu_t keys_settings5[] = // Chat keys setup screen
+setup_menu_t keys_settings5[] = // Chat keys setup screen
 {
 
   {"CHATTING"   ,(S_SKIP|S_TITLE),m_null,KB_X,KB_Y,0                   ,0,0,0,0,0,0},
@@ -2441,6 +2448,7 @@ static setup_menu_t keys_settings5[] = // Chat keys setup screen
   {0,(S_SKIP|S_END),m_null,0,0,0,0,0,0,0,0,0}
 
 };
+} // End namespace.
 
 // Setting up for the Key Binding screen. Turn on flags, set pointers,
 // locate the first item on the screen where the cursor is allowed to
@@ -2500,15 +2508,16 @@ OVERLAY static void M_DrawKeybnd(void)
 // Note that this screen has no PREV or NEXT items, since there are no
 // neighboring screens.
 
-static setup_menu_t weap_settings1[];
+namespace {
+extern setup_menu_t weap_settings1[];
 
-static setup_menu_t* weap_settings[] =
+setup_menu_t* weap_settings[] =
 {
   weap_settings1,
   NULL
 };
 
-static setup_menu_t weap_settings1[] =  // Weapons Settings screen
+setup_menu_t weap_settings1[] =  // Weapons Settings screen
 {
   {"ENABLE RECOIL"    ,S_YESNO,m_null,WP_X,WP_Y+ 1*8,0,0,0,&default_weapon_recoil ,&weapon_recoil,0,0},
   {"ENABLE BOBBING"   ,S_YESNO,m_null,WP_X,WP_Y+ 2*8,0,0,0,&default_player_bobbing,&player_bobbing,0,0},
@@ -2532,6 +2541,7 @@ static setup_menu_t weap_settings1[] =  // Weapons Settings screen
   {0,(S_SKIP|S_END),m_null,0,0,0,0,0,0,0,0,0}
 
 };
+} // End namespace.
 
 
 // Setting up for the Weapons screen. Turn on flags, set pointers,
@@ -2593,15 +2603,16 @@ static int  gather_count;
 
 // Screen table definitions
 
-static setup_menu_t stat_settings1[];
+namespace {
+extern setup_menu_t stat_settings1[];
 
-static setup_menu_t* stat_settings[] =
+setup_menu_t* stat_settings[] =
 {
   stat_settings1,
   NULL
 };
 
-static setup_menu_t stat_settings1[] =  // Status Bar and HUD Settings screen
+setup_menu_t stat_settings1[] =  // Status Bar and HUD Settings screen
 {
   {"STATUS BAR"        ,(S_SKIP|S_TITLE),m_null,ST_X,ST_Y+ 1*8,0,0,0,0                ,0,0,0  },
   {"USE RED NUMBERS"   ,S_YESNO     ,m_null,ST_X,ST_Y+ 2*8,0,0,0,&sts_always_red      ,0,0,0  },
@@ -2628,6 +2639,7 @@ static setup_menu_t stat_settings1[] =  // Status Bar and HUD Settings screen
   {0,(S_SKIP|S_END),m_null,0,0,0,0,0,0,0,0,0}
 
 };
+} // Namespace end.
 
 // Setting up for the Status Bar / HUD screen. Turn on flags, set pointers,
 // locate the first item on the screen where the cursor is allowed to
@@ -2684,17 +2696,18 @@ OVERLAY static void M_DrawStatusHUD(void)
 #define AU_PREV KB_PREV
 #define AU_NEXT KB_NEXT
 
-static setup_menu_t auto_settings1[];
-static setup_menu_t auto_settings2[];
+namespace {
+extern setup_menu_t auto_settings1[];
+extern setup_menu_t auto_settings2[];
 
-static setup_menu_t* auto_settings[] =
+setup_menu_t* auto_settings[] =
 {
   auto_settings1,
   auto_settings2,
   NULL
 };
 
-static setup_menu_t auto_settings1[] =  // 1st AutoMap Settings screen
+setup_menu_t auto_settings1[] =  // 1st AutoMap Settings screen
 {
   {"background"                         ,S_COLOR,m_null,AU_X,AU_Y     ,0,0,0,&mapcolor_back,0,0,0},
   {"grid lines"                         ,S_COLOR,m_null,AU_X,AU_Y+ 1*8,0,0,0,&mapcolor_grid,0,0,0},
@@ -2721,7 +2734,7 @@ static setup_menu_t auto_settings1[] =  // 1st AutoMap Settings screen
 
 };
 
-static setup_menu_t auto_settings2[] =  // 2nd AutoMap Settings screen
+setup_menu_t auto_settings2[] =  // 2nd AutoMap Settings screen
 {
   {"teleporter line"                ,S_COLOR ,m_null,AU_X,AU_Y     ,0,0,0,&mapcolor_tele   ,0,0,0},
   {"secret sector boundary"         ,S_COLOR ,m_null,AU_X,AU_Y+ 1*8,0,0,0,&mapcolor_secr   ,0,0,0},
@@ -2745,6 +2758,7 @@ static setup_menu_t auto_settings2[] =  // 2nd AutoMap Settings screen
   {0,(S_SKIP|S_END),m_null,0,0,0,0,0,0,0,0,0}
 
 };
+} // End namespace.
 
 // Setting up for the Automap screen. Turn on flags, set pointers,
 // locate the first item on the screen where the cursor is allowed to
@@ -2839,15 +2853,16 @@ OVERLAY static void M_DrawAutoMap(void)
 #define E_X 227
 #define E_Y  31
 
-static setup_menu_t enem_settings1[];
+namespace {
+extern setup_menu_t enem_settings1[];
 
-static setup_menu_t* enem_settings[] =
+setup_menu_t* enem_settings[] =
 {
   enem_settings1,
   NULL
 };
 
-static setup_menu_t enem_settings1[] =  // Enemy Settings screen
+setup_menu_t enem_settings1[] =  // Enemy Settings screen
 {
   {"REMEMBER PREVIOUS TARGET",S_YESNO,m_null,E_X,E_Y+ 1*8,0,0,0,&default_monsters_remember ,&monsters_remember,0,0},
 
@@ -2860,6 +2875,7 @@ static setup_menu_t enem_settings1[] =  // Enemy Settings screen
   {0,(S_SKIP|S_END),m_null,0,0,0,0,0,0,0,0,0}
 
 };
+} // Namespace end.
 
 
 // Setting up for the Enemies screen. Turn on flags, set pointers,
@@ -2913,15 +2929,16 @@ OVERLAY static void M_DrawEnemy(void)
 #define M_X 238
 #define M_Y  31
 
-static setup_menu_t mess_settings1[];
+namespace {
+extern setup_menu_t mess_settings1[];
 
-static setup_menu_t* mess_settings[] =
+setup_menu_t* mess_settings[] =
   {
   mess_settings1,
   NULL
   };
 
-static setup_menu_t mess_settings1[] =  // Messages screen
+setup_menu_t mess_settings1[] =  // Messages screen
 {
   {"MESSAGE BACKGROUND"       ,S_YESNO ,m_null,M_X,M_Y+ 1*8,0,0,0,&hud_list_bgon ,0,0,0 },
   {"# MESSAGE LINES"          ,S_NUM   ,m_null,M_X,M_Y+ 2*8,0,0,0,&hud_msg_lines ,0,1,16},
@@ -2938,6 +2955,7 @@ static setup_menu_t mess_settings1[] =  // Messages screen
   {0,(S_SKIP|S_END),m_null,0,0,0,0,0,0,0,0,0}
 
 };
+}
 
 
 // Setting up for the Messages screen. Turn on flags, set pointers,
@@ -2988,15 +3006,16 @@ OVERLAY static void M_DrawMessages(void)
 #define CS_X 20
 #define CS_Y (31+8)
 
-static setup_menu_t chat_settings1[];
+namespace {
+extern setup_menu_t chat_settings1[];
 
-static setup_menu_t* chat_settings[] =
+setup_menu_t* chat_settings[] =
   {
   chat_settings1,
   NULL
   };
 
-static setup_menu_t chat_settings1[] =  // Chat Strings screen
+setup_menu_t chat_settings1[] =  // Chat Strings screen
 {
   {"1",S_CHAT,m_null,CS_X,CS_Y+ 1*8,0,0,0,(int *)&chat_macros[1],0,0,0},
   {"2",S_CHAT,m_null,CS_X,CS_Y+ 2*8,0,0,0,(int *)&chat_macros[2],0,0,0},
@@ -3018,6 +3037,7 @@ static setup_menu_t chat_settings1[] =  // Chat Strings screen
   {0,(S_SKIP|S_END),m_null,0,0,0,0,0,0,0,0,0}
 
 };
+} // Namespace end.
 
 // Setting up for the Chat Strings screen. Turn on flags, set pointers,
 // locate the first item on the screen where the cursor is allowed to

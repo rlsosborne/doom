@@ -713,7 +713,7 @@ typedef struct {
   fixed_t last_height; // Last known height of control sector
   fixed_t vdx, vdy;    // Accumulated velocity if accelerative
   int accel;           // Whether it's accelerative
-  enum scrolltype_e type;   // Type of scroll effect
+  scrolltype_e type;   // Type of scroll effect
 } scroll_t;
 
 // phares 3/12/98: added new model of friction for ice/sludge effects
@@ -735,7 +735,7 @@ enum pushertype_e {
 
 typedef struct {
   thinker_t thinker;   // Thinker structure for Pusher
-  enum pushertype_e type;
+  pushertype_e type;
   mobj_t* source;      // Point source if point pusher
   int x_mag;           // X Strength
   int y_mag;           // Y Strength

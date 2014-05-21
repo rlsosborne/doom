@@ -3,44 +3,44 @@ find_package(SDL2 REQUIRED)
 include(CheckCCompilerFlag)
 
 if(${HAVE_NET})
-  set(NET_CLIENT_SRC d_client.c l_udp.c)
+  set(NET_CLIENT_SRC d_client.cpp l_udp.cpp)
 else()
-  set(NET_CLIENT_SRC d_client.c)
+  set(NET_CLIENT_SRC d_client.cpp)
 endif()
 
 add_executable(
   lsdldoom
-  am_map.c
+  am_map.cpp
   am_map.h
-  d_deh.c
+  d_deh.cpp
   d_deh.h
   d_englsh.h
   d_event.h
-  d_items.c
+  d_items.cpp
   d_items.h
-  d_main.c
+  d_main.cpp
   d_main.h
   d_net.h
   d_player.h
   d_think.h
   d_ticcmd.h
   doomdata.h
-  doomdef.c
+  doomdef.cpp
   doomdef.h
-  doomstat.c
+  doomstat.cpp
   doomstat.h
   doomtype.h
-  dstrings.c
+  dstrings.cpp
   dstrings.h
-  f_finale.c
+  f_finale.cpp
   f_finale.h
-  f_wipe.c
+  f_wipe.cpp
   f_wipe.h
-  g_game.c
+  g_game.cpp
   g_game.h
-  hu_lib.c
+  hu_lib.cpp
   hu_lib.h
-  hu_stuff.c
+  hu_stuff.cpp
   hu_stuff.h
   i_joy.h
   i_main.h
@@ -49,102 +49,102 @@ add_executable(
   i_sound.h
   i_system.h
   i_video.h
-  info.c
+  info.cpp
   info.h
-  l_joy.c
-  l_main.c
-  l_sound_sdl.c
-  l_system.c
-  l_video_sdl.c
-  lprintf.c
+  l_joy.cpp
+  l_main.cpp
+  l_sound_sdl.cpp
+  l_system.cpp
+  l_video_sdl.cpp
+  lprintf.cpp
   lprintf.h
-  m_argv.c
+  m_argv.cpp
   m_argv.h
-  m_bbox.c
+  m_bbox.cpp
   m_bbox.h
-  m_cheat.c
+  m_cheat.cpp
   m_cheat.h
   m_fixed.h
-  m_menu.c
+  m_menu.cpp
   m_menu.h
-  m_misc.c
+  m_misc.cpp
   m_misc.h
-  m_random.c
+  m_random.cpp
   m_random.h
   m_swap.h
-  p_ceilng.c
-  p_doors.c
-  p_enemy.c
+  p_ceilng.cpp
+  p_doors.cpp
+  p_enemy.cpp
   p_enemy.h
-  p_floor.c
-  p_genlin.c
-  p_inter.c
+  p_floor.cpp
+  p_genlin.cpp
+  p_inter.cpp
   p_inter.h
-  p_lights.c
-  p_map.c
+  p_lights.cpp
+  p_map.cpp
   p_map.h
-  p_maputl.c
+  p_maputl.cpp
   p_maputl.h
-  p_mobj.c
+  p_mobj.cpp
   p_mobj.h
-  p_plats.c
-  p_pspr.c
+  p_plats.cpp
+  p_pspr.cpp
   p_pspr.h
-  p_saveg.c
+  p_saveg.cpp
   p_saveg.h
-  p_setup.c
+  p_setup.cpp
   p_setup.h
-  p_sight.c
-  p_spec.c
+  p_sight.cpp
+  p_spec.cpp
   p_spec.h
-  p_switch.c
-  p_telept.c
-  p_tick.c
+  p_switch.cpp
+  p_telept.cpp
+  p_tick.cpp
   p_tick.h
-  p_user.c
+  p_user.cpp
   p_user.h
   protocol.h
-  qmus2mid.c
+  qmus2mid.cpp
   qmus2mid.h
-  r_bsp.c
+  r_bsp.cpp
   r_bsp.h
-  r_data.c
+  r_data.cpp
   r_data.h
   r_defs.h
-  r_draw.c
+  r_draw.cpp
   r_draw.h
-  r_main.c
+  r_main.cpp
   r_main.h
-  r_plane.c
+  r_plane.cpp
   r_plane.h
-  r_segs.c
+  r_segs.cpp
   r_segs.h
-  r_sky.c
+  r_sky.cpp
   r_sky.h
   r_state.h
-  r_things.c
+  r_things.cpp
   r_things.h
-  s_sound.c
+  s_sound.cpp
   s_sound.h
-  sounds.c
+  sounds.cpp
   sounds.h
-  st_lib.c
+  st_lib.cpp
   st_lib.h
-  st_stuff.c
+  st_stuff.cpp
   st_stuff.h
-  tables.c
+  tables.cpp
   tables.h
-  v_video.c
+  v_video.cpp
   v_video.h
-  version.c
+  version.cpp
   version.h
-  w_wad.c
+  w_wad.cpp
   w_wad.h
-  wi_stuff.c
+  wi_stuff.cpp
   wi_stuff.h
-  z_bmalloc.c
+  z_bmalloc.cpp
   z_bmalloc.h
-  z_zone.c
+  z_zone.cpp
   z_zone.h
   ${NET_CLIENT_SRC}
   ${CMAKE_CURRENT_BINARY_DIR}/../config.h
@@ -152,10 +152,10 @@ add_executable(
 
 add_executable(
   lsdldoom_game_server
-  d_server.c
-  l_udp.c
+  d_server.cpp
+  l_udp.cpp
   protocol.h
-  l_system.c)
+  l_system.cpp)
 
 set_property(SOURCE ${CMAKE_CURRENT_BINARY_DIR}/../config.h PROPERTY GENERATED)
 

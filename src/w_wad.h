@@ -104,7 +104,7 @@ typedef struct
   int index, next;
 
   // killough 4/17/98: namespace tags, to prevent conflicts between resources
-  enum lumpinfonamespace Namespace;
+  lumpinfonamespace Namespace;
 
   int handle;
   int position;

@@ -281,7 +281,7 @@ OVERLAY static void R_GenerateLookup(int texnum, int *const errors)
 
   struct patchpostpair {
     unsigned short patches, posts;
-  } *count = (struct patchpostpair *)calloc(sizeof *count, texture->width);
+  } *count = (patchpostpair *)calloc(sizeof *count, texture->width);
 
   {
     int i = texture->patchcount;

@@ -86,7 +86,7 @@ typedef struct
   // Limits (for an int)
   int   minvalue;         // jff 3/3/98 minimum allowed value
   int   maxvalue;         // jff 3/3/98 maximum allowed value
-  enum defaultdatatype type; // CPhipps - type of entry
+  defaultdatatype type; // CPhipps - type of entry
   int   setupscreen;      // phares 4/19/98: setup screen where this appears
   // cph - removed the help strings from the config file
   // const char* help;       // jff 3/3/98 description of parameter

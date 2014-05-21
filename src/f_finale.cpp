@@ -75,7 +75,7 @@ OVERLAY void F_StartFinale (void)
 {
   gameaction = ga_nothing;
   gamestate = GS_FINALE;
-  automapmode = (enum automapmode_e)(automapmode & ~am_active);
+  automapmode = (automapmode_e)(automapmode & ~am_active);
 
   // killough 3/28/98: clear accelerative text flags
   acceleratestage = midstage = 0;

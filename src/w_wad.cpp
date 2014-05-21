@@ -229,7 +229,7 @@ OVERLAY static int IsMarker(const char *marker, const char *name)
 
 OVERLAY static void
 W_CoalesceMarkedResource(const char *start_marker, const char *end_marker,
-                         enum lumpinfonamespace Namespace)
+                         lumpinfonamespace Namespace)
 {
   lumpinfo_t *marked = (lumpinfo_t *)malloc(sizeof(*marked) * numlumps);
   size_t i, num_marked = 0, num_unmarked = 0;

@@ -2651,7 +2651,7 @@ OVERLAY void T_Scroll(scroll_t *s)
 // accel: non-zero if this is an accelerative effect
 //
 
-OVERLAY static void Add_Scroller(enum scrolltype_e type, fixed_t dx, fixed_t dy,
+OVERLAY static void Add_Scroller(scrolltype_e type, fixed_t dx, fixed_t dy,
                          int control, int affectee, int accel)
 {
   scroll_t *s = (scroll_t *)Z_Malloc(sizeof *s, PU_LEVSPEC, 0);
@@ -2977,7 +2977,7 @@ OVERLAY static void P_SpawnFriction(void)
 // Add a push thinker to the thinker list
 
 OVERLAY static void
-Add_Pusher(enum pushertype_e type, int x_mag, int y_mag, mobj_t* source,
+Add_Pusher(pushertype_e type, int x_mag, int y_mag, mobj_t* source,
            int affectee)
     {
     pusher_t *p = (pusher_t *)Z_Malloc(sizeof *p, PU_LEVSPEC, 0);
