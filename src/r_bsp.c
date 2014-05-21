@@ -80,11 +80,11 @@ OVERLAY void R_ClipWallSegment(int first, int last, boolean solid)
   byte *p;
   while (first < last) {
     if (solidcol[first]) {
-      if (!(p = memchr(solidcol+first, 0, last-first))) return; // All solid
+      if (!(p = (byte *)memchr(solidcol+first, 0, last-first))) return; // All solid
       first = p - solidcol;
     } else {
       int to;
-      if (!(p = memchr(solidcol+first, 1, last-first))) to = last;
+      if (!(p = (byte *)memchr(solidcol+first, 1, last-first))) to = last;
       else to = p - solidcol;
       R_StoreWallRange(first, to-1);
       if (solid) {

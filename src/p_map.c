@@ -341,7 +341,8 @@ OVERLAY boolean PIT_CheckLine (line_t* ld)
     if (numspechit >= spechit_max)
       {
       spechit_max = spechit_max ? spechit_max*2 : 8;
-      spechit = realloc(spechit,sizeof(*spechit)*spechit_max); // killough
+      spechit =
+        (line_t **)realloc(spechit,sizeof(*spechit)*spechit_max); // killough
       }
 
     spechit[numspechit] = ld;
@@ -396,7 +397,7 @@ OVERLAY boolean PIT_CheckThing(mobj_t* thing)
     tmthing->flags &= ~MF_SKULLFLY;
     tmthing->momx = tmthing->momy = tmthing->momz = 0;
 
-    P_SetMobjState (tmthing, tmthing->info->spawnstate);
+    P_SetMobjState (tmthing, (statenum_t)tmthing->info->spawnstate);
 
     return false;   // stop moving
     }

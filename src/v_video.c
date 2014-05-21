@@ -193,7 +193,7 @@ OVERLAY void V_InitColorTranslation(void)
 {
   const crdef_t *p;
   for (p=crdefs; p->name; p++)
-    *p->map1 = *p->map2 = W_CacheLumpName(p->name);
+    *p->map1 = *p->map2 = (const byte *)W_CacheLumpName(p->name);
 }
 
 //
@@ -267,7 +267,7 @@ OVERLAY void V_CopyRect(int srcx, int srcy, int srcscrn, int width,
 //  implemented, to support highres in the menus
 //
 OVERLAY void V_DrawBlock(int x, int y, int scrn, int width, int height, 
-		 const byte *src, enum patch_translation_e flags)
+		 const byte *src, int flags)
 {
   byte *dest;
 
@@ -332,7 +332,8 @@ OVERLAY void V_DrawBackground(const char* flatname)
   int         lump;
   
   // killough 4/17/98: 
-  src = W_CacheLumpNum(lump = firstflat + R_FlatNumForName(flatname));
+  src =
+    (const byte *)W_CacheLumpNum(lump = firstflat + R_FlatNumForName(flatname));
   
   V_DrawBlock(0, 0, 0, 64, 64, src, 0);
   
@@ -393,7 +394,7 @@ OVERLAY void V_Init (void)
   //  if e.g. it wants a MitSHM buffer instead
 
   for (i=0 ; i<PREALLOCED_SCREENS ; i++)
-    screens[i] = Z_Calloc(SCREENWIDTH*SCREENHEIGHT, 1, PU_STATIC);
+    screens[i] = (byte *)Z_Calloc(SCREENWIDTH*SCREENHEIGHT, 1, PU_STATIC);
   for (; i<4; i++) // Clear the rest (paranoia)
     screens[i] = NULL;
 }
@@ -410,8 +411,8 @@ OVERLAY void V_Init (void)
 // (indeed, laziness of the people who wrote the 'clones' of the original V_DrawPatch
 //  means that their inner loops weren't so well optimised, so merging code may even speed them).
 //
-OVERLAY void V_DrawMemPatch(int x, int y, int scrn, const patch_t *patch, 
-		    const byte *trans, enum patch_translation_e flags)
+OVERLAY void V_DrawMemPatch(int x, int y, int scrn, const patch_t *patch,
+                            const byte *trans, int flags)
 {
   y -= SHORT(patch->topoffset);
   x -= SHORT(patch->leftoffset);
@@ -538,10 +539,10 @@ OVERLAY void V_DrawMemPatch(int x, int y, int scrn, const patch_t *patch,
 // static inline; other compilers have different behaviour.
 // This inline is _only_ for the function below
 #ifdef __GNUC__
-OVERLAY inline
+inline
 #endif
-void V_DrawNumPatch(int x, int y, int scrn, int lump, 
-			   const byte *trans, enum patch_translation_e flags)
+OVERLAY void V_DrawNumPatch(int x, int y, int scrn, int lump,
+                            const byte *trans, int flags)
 {
   V_DrawMemPatch(x, y, scrn, (const patch_t*)W_CacheLumpNum(lump), 
 		 trans, flags);
@@ -549,7 +550,7 @@ void V_DrawNumPatch(int x, int y, int scrn, int lump,
 }
 
 OVERLAY void V_DrawNamePatch(int x, int y, int scrn, const char *name, 
-		     const byte *trans, enum patch_translation_e flags)
+		     const byte *trans, int flags)
 {
   V_DrawNumPatch(x, y, scrn, W_GetNumForName(name), trans, flags);
 }
@@ -568,9 +569,9 @@ OVERLAY byte *V_PatchToBlock(const char* name, const byte *trans,
   byte          *block;
   const patch_t *patch;
 
-  screens[1] = calloc(SCREENWIDTH*SCREENHEIGHT, 1);
+  screens[1] = (byte *)calloc(SCREENWIDTH*SCREENHEIGHT, 1);
 
-  patch = W_CacheLumpName(name);
+  patch = (const patch_t *)W_CacheLumpName(name);
   V_DrawMemPatch(SHORT(patch->leftoffset), SHORT(patch->topoffset), 
 		  1, patch, trans, flags);
 
@@ -584,7 +585,7 @@ OVERLAY byte *V_PatchToBlock(const char* name, const byte *trans,
   W_UnlockLumpName(name);
 
   V_GetBlock(0, 0, 1, *width, *height, 
-	     block = malloc((long)(*width) * (*height)));
+	     block = (byte *)malloc((long)(*width) * (*height)));
 
   free(screens[1]);
   screens[1] = oldscr;

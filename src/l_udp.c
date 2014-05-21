@@ -124,7 +124,7 @@ OVERLAY static int GetInAddr(const char* host, struct sockaddr_in *addr)
 
 OVERLAY static byte ChecksumPacket(const packet_header_t* buffer, size_t len)
 {
-  const byte* p = (void*)buffer; 
+  const byte* p = (const byte*)buffer; 
   byte sum = 0;
 
   while (p++, --len)

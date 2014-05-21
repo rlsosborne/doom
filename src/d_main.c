@@ -218,7 +218,7 @@ OVERLAY void D_Display (void)
   static boolean inhelpscreensstate = false;
   static boolean isborderstate        = false;
   static boolean borderwillneedredraw = false;
-  static gamestate_t oldgamestate = -1;
+  static gamestate_t oldgamestate = (gamestate_t)-1;
   boolean wipe, viewactive = false, isborder = false;
 
   if (nodrawers)                    // for comparative timing / profiling
@@ -257,7 +257,7 @@ OVERLAY void D_Display (void)
 
     if (setsizeneeded) {               // change the view size if needed
       R_ExecuteSetViewSize();
-      oldgamestate = -1;            // force background redraw
+      oldgamestate = (gamestate_t)-1;            // force background redraw
     }
 
     // Work out if the player view is visible, and if there is a border
@@ -300,7 +300,7 @@ OVERLAY void D_Display (void)
 
       if (!x) { // Cache results of x pos calc
 	int lump = W_GetNumForName("M_PAUSE");
-	const patch_t* p = W_CacheLumpNum(lump);
+	const patch_t* p = (const patch_t *)W_CacheLumpNum(lump);
 	x = (320 - SHORT(p->width))/2;
 	W_UnlockLumpNum(lump);
       }
@@ -566,9 +566,10 @@ OVERLAY void D_StartTitle (void)
 //         - modified to allocate & use new wadfiles array
 OVERLAY void D_AddFile (const char *file, wad_source_t source)
 {
-  wadfiles = realloc(wadfiles, sizeof(*wadfiles)*(numwadfiles+1));
+  wadfiles =
+    (struct wadfile_info *)realloc(wadfiles, sizeof(*wadfiles)*(numwadfiles+1));
   wadfiles[numwadfiles].name =
-    AddDefaultExtension(strcpy(malloc(strlen(file)+5), file), ".wad");
+    AddDefaultExtension(strcpy((char *)malloc(strlen(file)+5), file), ".wad");
   wadfiles[numwadfiles].src = source; // Ty 08/29/98
   numwadfiles++;
 }
@@ -585,12 +586,12 @@ OVERLAY char *D_DoomExeDir(void)
   static char *base;
   if (!base)        // cache multiple requests
     {
-      char *home = getenv("HOME");
+      const char *home = getenv("HOME");
       if (!home)
         home = ".";
       size_t len = strlen(home);
 
-      base = malloc(len + strlen(lsdldoom_dir) + 1);
+      base = (char *)malloc(len + strlen(lsdldoom_dir) + 1);
       strcpy(base, home);
       // I've had trouble with trailing slashes before...
       if (base[len-1] == '/') base[len-1] = 0;
@@ -654,7 +655,7 @@ OVERLAY static void CheckIWAD(const char *iwadname,GameMode_t *gmode,boolean *ha
         header.numlumps = LONG(header.numlumps);
         header.infotableofs = LONG(header.infotableofs);
         length = header.numlumps;
-        fileinfo = malloc(length*sizeof(filelump_t));
+        fileinfo = (filelump_t *)malloc(length*sizeof(filelump_t));
         lseek (handle, header.infotableofs, SEEK_SET);
         read (handle, fileinfo, length*sizeof(filelump_t));
         close(handle);
@@ -847,7 +848,7 @@ OVERLAY static char* FindWADFile(const char* wfname, const char* ext)
 #endif
     }
 
-    p = malloc((d ? strlen(d) : 0) + (s ? strlen(s) : 0) + pl);
+    p = (char *)malloc((d ? strlen(d) : 0) + (s ? strlen(s) : 0) + pl);
     sprintf(p, "%s%s%s%s%s", d ? d : "", (d && !HasTrailingSlash(d)) ? "/" : "",
                              s ? s : "", (s && !HasTrailingSlash(s)) ? "/" : "",
                              wfname);
@@ -1005,7 +1006,7 @@ OVERLAY void FindResponseFile (void)
         int  indexinfile;
         char *infile;
         char *file;
-        const char **moreargs = malloc(myargc * sizeof(const char*));
+        const char **moreargs = (const char **)malloc(myargc * sizeof(const char*));
         const char **newargv;
 
         // READ THE RESPONSE FILE INTO MEMORY
@@ -1021,7 +1022,7 @@ OVERLAY void FindResponseFile (void)
         fseek(handle,0,SEEK_END);
         size = ftell(handle);
         fseek(handle,0,SEEK_SET);
-        file = malloc (size);
+        file = (char *)malloc (size);
         fread(file,size,1,handle);
         fclose(handle);
 
@@ -1031,7 +1032,7 @@ OVERLAY void FindResponseFile (void)
 
 	{
 	  const char *firstargv = myargv[0];
-	  newargv = calloc(sizeof(char *),MAXARGVS);
+	  newargv = (const char **)calloc(sizeof(char *),MAXARGVS);
 	  newargv[0] = firstargv;
 	}
 
@@ -1154,7 +1155,7 @@ OVERLAY void DoLooseFiles(void)
 
   // Now go back and redo the whole myargv array with our stuff in it.
   // First, create a new myargv array to copy into
-  tmyargv = calloc(sizeof(char *),MAXARGVS);
+  tmyargv = (const char **)calloc(sizeof(char *),MAXARGVS);
   tmyargv[0] = myargv[0]; // invocation 
   tmyargc = 1;
 
@@ -1352,7 +1353,7 @@ OVERLAY void D_DoomMainSetup(void)
 
   if ((p = M_CheckParm ("-skill")) && p < myargc-1)
     {
-      startskill = myargv[p+1][0]-'1';
+      startskill = (skill_t)(myargv[p+1][0]-'1');
       autostart = true;
     }
 
@@ -1481,7 +1482,7 @@ OVERLAY void D_DoomMainSetup(void)
 	  len = q-p;
 	else len = strlen(p);
 	
-	fname = malloc(len+1);
+	fname = (char *)malloc(len+1);
 	memcpy(fname,p,len);
 	fname[len]=0;
 	p+=len; if (*p) p++;

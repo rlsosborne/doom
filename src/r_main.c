@@ -219,7 +219,7 @@ OVERLAY void R_InitStatusBar(void)
 #endif
   st_height = ST_HEIGHT*st_scaley;
   if ((st_scalex > 1) || (st_scaley > 1))
-    screens[st_fgscreen = 5] = malloc(SCREENWIDTH*ST_HEIGHT); 
+    screens[st_fgscreen = 5] = (byte *)malloc(SCREENWIDTH*ST_HEIGHT);
   else
     st_fgscreen = 0;
 }
@@ -318,8 +318,12 @@ OVERLAY void R_InitLightTables (void)
   int i;
     
   // killough 4/4/98: dynamic colormaps
-  c_zlight = malloc(sizeof(*c_zlight) * numcolormaps);
-  c_scalelight = malloc(sizeof(*c_scalelight) * numcolormaps);
+  c_zlight =
+    (lighttable_t *(*)[LIGHTLEVELS][MAXLIGHTZ])
+      malloc(sizeof(*c_zlight) * numcolormaps);
+  c_scalelight =
+    (lighttable_t *(*)[LIGHTLEVELS][MAXLIGHTSCALE])
+      malloc(sizeof(*c_scalelight) * numcolormaps);
 
   // Calculate the light levels to use
   //  for each level / distance combination.

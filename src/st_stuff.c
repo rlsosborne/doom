@@ -1140,7 +1140,7 @@ OVERLAY void ST_Init(void)
   veryfirsttime = 0;
   ST_loadData();
 // proff 08/18/98: Changed for high-res
-  screens[4] = Z_Malloc(SCREENWIDTH*ST_HEIGHT, PU_STATIC, 0);
+  screens[4] = (byte *)Z_Malloc(SCREENWIDTH*ST_HEIGHT, PU_STATIC, 0);
 //  screens[4] = Z_Malloc(ST_WIDTH*ST_HEIGHT, PU_STATIC, 0);
 }
 

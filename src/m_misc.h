@@ -59,6 +59,17 @@ int M_DrawText (int x,int y,boolean direct,char* string);
 // phares 4/21/98:
 // Moved from m_misc.c so m_menu.c could see it.
 
+enum defaultdatatype {
+  def_none, // Dummy entry
+  def_str,  // A string
+  def_int,  // Integer
+  def_hex,  // Integer (write in hex)
+  def_bool = def_int,  // Boolean
+  def_key = def_hex,   // Key code (byte)
+  def_mouseb = def_int,// Mouse button
+  def_colour = def_hex // Colour (256 colour palette entry)
+};
+
 // CPhipps - struct to hold a value in a config file
 // Cannot be a union, as it must be initialised
 typedef struct
@@ -75,16 +86,7 @@ typedef struct
   // Limits (for an int)
   int   minvalue;         // jff 3/3/98 minimum allowed value
   int   maxvalue;         // jff 3/3/98 maximum allowed value
-  enum {
-    def_none, // Dummy entry
-    def_str,  // A string 
-    def_int,  // Integer
-    def_hex,  // Integer (write in hex)
-    def_bool = def_int,  // Boolean
-    def_key = def_hex,   // Key code (byte)
-    def_mouseb = def_int,// Mouse button
-    def_colour = def_hex // Colour (256 colour palette entry)
-  } type; // CPhipps - type of entry
+  enum defaultdatatype type; // CPhipps - type of entry
   int   setupscreen;      // phares 4/19/98: setup screen where this appears
   // cph - removed the help strings from the config file
   // const char* help;       // jff 3/3/98 description of parameter

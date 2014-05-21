@@ -206,7 +206,7 @@ OVERLAY static visplane_t *new_visplane(unsigned hash)
 {
   visplane_t *check = freetail;
   if (!check)
-    check = calloc(1, sizeof *check);
+    check = (visplane_t *)calloc(1, sizeof *check);
   else
     if (!(freetail = freetail->next))
       freehead = &freetail;
@@ -384,7 +384,8 @@ OVERLAY static void R_DoDrawPlane(visplane_t *pl)
      
       int stop, light;
       
-      ds_source = W_CacheLumpNum(firstflat + flattranslation[pl->picnum]);
+      ds_source =
+        (const byte *)W_CacheLumpNum(firstflat + flattranslation[pl->picnum]);
       
       xoffs = pl->xoffs;  // killough 2/28/98: Add offsets
       yoffs = pl->yoffs;

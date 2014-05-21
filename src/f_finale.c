@@ -75,7 +75,7 @@ OVERLAY void F_StartFinale (void)
 {
   gameaction = ga_nothing;
   gamestate = GS_FINALE;
-  automapmode &= ~am_active;
+  automapmode = (enum automapmode_e)(automapmode & ~am_active);
 
   // killough 3/28/98: clear accelerative text flags
   acceleratestage = midstage = 0;
@@ -227,7 +227,8 @@ OVERLAY void F_Ticker(void)
 
   if (!finalestage)
     {
-      float speed = demo_compatibility ? TEXTSPEED : Get_TextSpeed();
+      float speed;
+      speed = demo_compatibility ? TEXTSPEED : Get_TextSpeed();
       /* killough 2/28/98: changed to allow acceleration */
       if (finalecount > strlen(finaletext)*speed +
           (midstage ? NEWTEXTWAIT : TEXTWAIT) ||
@@ -236,7 +237,7 @@ OVERLAY void F_Ticker(void)
           {                               // with enough time, it's automatic
             finalecount = 0;
             finalestage = 1;
-            wipegamestate = -1;         // force a wipe
+            wipegamestate = (gamestate_t)-1;         // force a wipe
             if (gameepisode == 3)
               S_StartMusic(mus_bunny);
           }
@@ -339,7 +340,7 @@ static const castinfo_t castorder[] = { // CPhipps - static const, initialised h
   { &s_CC_SPIDER,  MT_SPIDER },
   { &s_CC_CYBER,   MT_CYBORG },
   { &s_CC_HERO,    MT_PLAYER },
-  { NULL,         0} 
+  { NULL }
   };
 
 int             castnum;
@@ -358,7 +359,7 @@ extern  gamestate_t     wipegamestate;
 
 OVERLAY void F_StartCast (void)
 {
-  wipegamestate = -1;         // force a screen wipe
+  wipegamestate = (gamestate_t)-1;         // force a screen wipe
   castnum = 0;
   caststate = &states[mobjinfo[castorder[castnum].type].seestate];
   casttics = caststate->tics;
@@ -578,7 +579,7 @@ OVERLAY void F_CastDrawer (void)
 
   // CPhipps - patch drawing updated
   V_DrawNumPatch(160, 170, 0, lump+firstspritelump, NULL, 
-		 VPT_STRETCH | (flip ? VPT_FLIP : 0));
+		 (enum patch_translation_e)(VPT_STRETCH | (flip ? VPT_FLIP : 0)));
 }
 
 //

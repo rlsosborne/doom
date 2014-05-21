@@ -278,7 +278,7 @@ OVERLAY int EV_DoCeiling
   
     // create a new ceiling thinker
     rtn = 1;
-    ceiling = Z_Malloc (sizeof(*ceiling), PU_LEVSPEC, 0);
+    ceiling = (ceiling_t *)Z_Malloc (sizeof(*ceiling), PU_LEVSPEC, 0);
     P_AddThinker (&ceiling->thinker);
     sec->ceilingdata = ceiling;               //jff 2/22/98
     ceiling->thinker.function = Think_T_MoveCeiling;
@@ -420,7 +420,7 @@ OVERLAY int EV_CeilingCrushStop(line_t* line)
 //
 OVERLAY void P_AddActiveCeiling(ceiling_t* ceiling)
 {
-  ceilinglist_t *list = malloc(sizeof *list);
+  ceilinglist_t *list = (ceilinglist_t *)malloc(sizeof *list);
   list->ceiling = ceiling;
   ceiling->list = list;
   if ((list->next = activeceilings))

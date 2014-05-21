@@ -10545,8 +10545,8 @@ static const char dsgetpow[] = {  // sound for getting powerup
 // see also the lump definitions above for additional comments
 
 const lumpinfo_t predefined_lumps[]={
-  { "M_HORSEN", sizeof m_horsen, m_horsen },
-  { "M_VERSEN", sizeof m_versen, m_versen },
+  { { 'M','_','H','O','R','S','E','N' }, sizeof m_horsen, m_horsen },
+  { { 'M','_','V','E','R','S','E','N' }, sizeof m_versen, m_versen },
   { "STBR123",  sizeof stbr123, stbr123 }, //jff 02/16/98 bargraph patches
   { "STBR124",  sizeof stbr124, stbr124 },
   { "STBR125",  sizeof stbr125, stbr125 },
@@ -10605,31 +10605,31 @@ const lumpinfo_t predefined_lumps[]={
   { "BOXLL",    sizeof boxll, boxll },
   { "BOXLC",    sizeof boxlc, boxlc },
   { "BOXLR",    sizeof boxlr, boxlr },
-  { "STTMINUS", sizeof sttminus, sttminus }, //jff 2/27/98 -- for v1.2
+  { { 'S','T','T','M','I','N','U','S' }, sizeof sttminus, sttminus }, //jff 2/27/98 -- for v1.2
   { "WIMINUS",  sizeof wiminus,  wiminus},   // killough 4/25/98 -- for v1.1
   { "M_NMARE",  sizeof m_nmare,  m_nmare},   // killough 4/25/98 -- for v1.1
   { "STBAR",    sizeof stbar,    stbar},     // killough 4/25/98 -- for v1.1
-  { "DSGETPOW", sizeof dsgetpow, dsgetpow},  // killough 4/25/98 -- for v1.1
+  { { 'D','S','G','E','T','P','O','W' }, sizeof dsgetpow, dsgetpow},  // killough 4/25/98 -- for v1.1
   { "ENDBOOM",  sizeof endboom, endboom }, //jff 4/1/98 our own endoom lump
   { "S_START"},                        // phares 3/9/98    killough 3/21/98
   { "TNT1A0",   sizeof invis_sprite, invis_sprite },            // invis sprite
   { "S_END"},                          // phares 3/9/98    killough 3/21/98
-  { "SWITCHES", sizeof switches, switches},   // jff 3/23/98 switch list
-  { "ANIMATED", sizeof animated, animated},   // jff 3/23/98 animation list
+  { { 'S','W','I','T','C','H','E','S' }, sizeof switches, switches},   // jff 3/23/98 switch list
+  { { 'A','N','I','M','A','T','E','D' }, sizeof animated, animated},   // jff 3/23/98 animation list
   { "M_SETUP" , sizeof m_setup,  m_setup },   // phares 3/24/98 menu item
-  { "M_KEYBND", sizeof m_keybnd, m_keybnd},   // phares 3/24/98 menu item
+  { { 'M','_','K','E','Y','B','N','D' }, sizeof m_keybnd, m_keybnd},   // phares 3/24/98 menu item
   { "M_AUTO"  , sizeof m_auto,   m_auto  },   // phares 3/30/98 menu item
   { "M_CHAT"  , sizeof m_chat,   m_chat  },   // phares 4/10/98 menu item
   { "M_ENEM",   sizeof m_enem,   m_enem  },   // phares 4/08/98 menu item
   { "M_STAT",   sizeof m_stat,   m_stat  },   // phares 3/29/98 menu item
   { "M_WEAP",   sizeof m_weap,   m_weap  },   // phares 3/28/98 menu item
   { "M_MESS"  , sizeof m_mess,   m_mess  },   // phares 4/08/98 menu item
-  { "M_COLORS", sizeof m_colors, m_colors},   // phares 4/01/98 menu item
+  { { 'M','_','C','O','L','O','R','S' }, sizeof m_colors, m_colors},   // phares 4/01/98 menu item
   { "M_PALNO",  sizeof m_palno,  m_palno},    // phares 4/01/98 menu item
   { "C_START" },  // killough 4/4/98: colormap markers
-  { "WATERMAP", sizeof watermap, watermap},   // killough 3/21/98, 4/4/98
+  { { 'W','A','T','E','R','M','A','P' }, sizeof watermap, watermap},   // killough 3/21/98, 4/4/98
   { "C_END" },    // killough 4/4/98: end colormap markers
-  { "STCFN096", sizeof stcfn096, stcfn096},   // jff 4/5/98 missing char
+  { { 'S','T','C','F','N','0','9','6' }, sizeof stcfn096, stcfn096},   // jff 4/5/98 missing char
   { "M_BUTT1",  sizeof m_butt1,  m_butt1},    // phares 4/16/98 reset button
   { "M_BUTT2",  sizeof m_butt2,  m_butt2},    // phares 4/16/98 reset button
   { "CRBRICK",  sizeof cr_brick, cr_brick},   // jff 4/24/98 brick color range
@@ -10641,12 +10641,13 @@ const lumpinfo_t predefined_lumps[]={
   { "CRRED",    sizeof cr_red,   cr_red},     // jff 4/24/98 red color range
   { "CRBLUE",   sizeof cr_blue,  cr_blue},    // jff 4/24/98 blue color range
   { "CRBLUE2",  sizeof cr_blue2, cr_blue2},   // jff 4/24/98 blue2 color range
-  { "CRORANGE", sizeof cr_orange,cr_orange},  // jff 4/24/98 orange color range
-  { "CRYELLOW", sizeof cr_yellow,cr_yellow},  // jff 4/24/98 yellow color range
+  { { 'C','R','O','R','A','N','G','E' }, sizeof cr_orange,cr_orange},  // jff 4/24/98 orange color range
+  { { 'C','R','Y','E','L','L','O','W' }, sizeof cr_yellow,cr_yellow},  // jff 4/24/98 yellow color range
 #ifdef TABLES_AS_LUMPS
-  { "SINETABL", sizeof finesine, finesine}, // cphipps - sine lookup
-  {"TANGTABL",sizeof finetangent,finetangent}, // cphipps - tangent lookup
-  {"TANTOANG", sizeof tantoangle,tantoangle}, // cphipps - arctan lookup
+  {
+    { 'S','I','N','E','T','A','B','L' }, sizeof finesine, finesine}, // cphipps - sine lookup
+  { { 'T','A','N','G','T','A','B','L' }, sizeof finetangent,finetangent}, // cphipps - tangent lookup
+  { { 'T','A','N','T','O','A','N','G' }, sizeof tantoangle,tantoangle}, // cphipps - arctan lookup
 #endif
 };
 

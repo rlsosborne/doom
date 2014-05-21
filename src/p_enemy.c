@@ -315,7 +315,7 @@ OVERLAY void P_NewChaseDir(mobj_t *actor)
     I_Error ("P_NewChaseDir: called with no target");
 #endif
 
-  olddir = actor->movedir;
+  olddir = (dirtype_t)(actor->movedir);
   turnaround=opposite[olddir];
 
   deltax = actor->target->x - actor->x;
@@ -350,7 +350,7 @@ OVERLAY void P_NewChaseDir(mobj_t *actor)
     {
       tdir=d[1];
       d[1]=d[2];
-      d[2]=tdir;
+      d[2]=(dirtype_t)tdir;
     }
 
   if (d[1]==turnaround)
@@ -563,7 +563,7 @@ seeyou:
       else
         S_StartSound(actor, sound);
     }
-  P_SetMobjState(actor, actor->info->seestate);
+  P_SetMobjState(actor, (statenum_t)actor->info->seestate);
 }
 
 //
@@ -599,7 +599,7 @@ OVERLAY void A_Chase(mobj_t *actor)
     {
       if (P_LookForPlayers(actor,true))    // look for a new target
         return;                            // got a new target
-      P_SetMobjState(actor, actor->info->spawnstate);
+      P_SetMobjState(actor, (statenum_t)actor->info->spawnstate);
       return;
     }
 
@@ -617,7 +617,7 @@ OVERLAY void A_Chase(mobj_t *actor)
     {
       if (actor->info->attacksound)
         S_StartSound(actor, actor->info->attacksound);
-      P_SetMobjState(actor, actor->info->meleestate);
+      P_SetMobjState(actor, (statenum_t)actor->info->meleestate);
       return;
     }
 
@@ -626,7 +626,7 @@ OVERLAY void A_Chase(mobj_t *actor)
     if (!(gameskill < sk_nightmare && !fastparm && actor->movecount))
       if (P_CheckMissileRange(actor))
         {
-          P_SetMobjState(actor, actor->info->missilestate);
+          P_SetMobjState(actor, (statenum_t)actor->info->missilestate);
           actor->flags |= MF_JUSTATTACKED;
           return;
         }
@@ -730,7 +730,7 @@ OVERLAY void A_CPosRefire(mobj_t *actor)
 
   if (!actor->target || actor->target->health <= 0
       || !P_CheckSight(actor, actor->target))
-    P_SetMobjState(actor, actor->info->seestate);
+    P_SetMobjState(actor, (statenum_t)actor->info->seestate);
 }
 
 OVERLAY void A_SpidRefire(mobj_t* actor)
@@ -743,7 +743,7 @@ OVERLAY void A_SpidRefire(mobj_t* actor)
 
   if (!actor->target || actor->target->health <= 0
       || !P_CheckSight(actor, actor->target))
-    P_SetMobjState(actor, actor->info->seestate);
+    P_SetMobjState(actor, (statenum_t)actor->info->seestate);
 }
 
 OVERLAY void A_BspiAttack(mobj_t *actor)
@@ -1056,7 +1056,7 @@ OVERLAY void A_VileChase(mobj_t* actor)
                   S_StartSound(corpsehit, sfx_slop);
                   info = corpsehit->info;
 
-                  P_SetMobjState(corpsehit,info->raisestate);
+                  P_SetMobjState(corpsehit, (statenum_t)info->raisestate);
 
                   if (compatibility)                                // phares
                     corpsehit->height <<= 2;                        //   |
@@ -1654,7 +1654,7 @@ OVERLAY void P_SpawnBrainTargets(void)  // killough 3/26/98: renamed old functio
         if (m->type == MT_BOSSTARGET )
           {   // killough 2/7/98: remove limit on icon landings:
             if (numbraintargets >= numbraintargets_alloc)
-              braintargets = realloc(braintargets,
+              braintargets = (mobj_t **)realloc(braintargets,
                       (numbraintargets_alloc = numbraintargets_alloc ?
                        numbraintargets_alloc*2 : 32) *sizeof *braintargets);
             braintargets[numbraintargets++] = m;
@@ -1784,7 +1784,7 @@ OVERLAY void A_SpawnFly(mobj_t *mo)
 
   newmobj = P_SpawnMobj(targ->x, targ->y, targ->z, type);
   if (P_LookForPlayers(newmobj, true) )
-    P_SetMobjState(newmobj, newmobj->info->seestate);
+    P_SetMobjState(newmobj, (statenum_t)newmobj->info->seestate);
 
     // telefrag anything in this spot
   P_TeleportMove(newmobj, newmobj->x, newmobj->y);
@@ -1860,7 +1860,7 @@ OVERLAY void A_Spawn(mobj_t *mo)
     {
       /* mobj_t *newmobj = */ 
       P_SpawnMobj(mo->x, mo->y, (mo->state->misc2 << FRACBITS) + mo->z, 
-		  mo->state->misc1 - 1);
+		  (mobjtype_t)(mo->state->misc1 - 1));
       /* CPhipps - no friendlyness (yet) 
 	 newmobj->flags = (newmobj->flags & ~MF_FRIEND) | (mo->flags & MF_FRIEND);
       */
@@ -1892,7 +1892,7 @@ OVERLAY void A_PlaySound(mobj_t *mo)
 OVERLAY void A_RandomJump(mobj_t *mo)
 {
   if (P_Random(pr_randomjump) < mo->state->misc2)
-    P_SetMobjState(mo, mo->state->misc1);
+    P_SetMobjState(mo, (statenum_t)mo->state->misc1);
 }
 
 //

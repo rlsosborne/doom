@@ -137,19 +137,21 @@ typedef enum {
   CHEAT_HEALTH,
 } cheatfunc_t;
 
+enum {
+  always   = 0,
+  not_dm   = 1,
+  not_coop = 2,
+  not_demo = 4,
+  not_menu = 8,
+  not_deh = 16,
+  not_net = not_dm | not_coop
+};
+
 /* killough 4/16/98: Cheat table structure */
 struct cheat_s {
   const unsigned char *cheat;
   const char *const deh_cheat;
-  enum {
-    always   = 0,
-    not_dm   = 1,
-    not_coop = 2,
-    not_demo = 4,
-    not_menu = 8,
-    not_deh = 16,
-    not_net = not_dm | not_coop
-  } const when;
+  const int when;
   cheatfunc_t func;
   const int arg;
   uint_64_t code, mask;
@@ -303,8 +305,7 @@ static struct cheat_s cheat[] = {
 
 //-----------------------------------------------------------------------------
 
-OVERLAY static void cheat_mus(buf)
-char buf[3];
+OVERLAY static void cheat_mus(char buf[3])
 {
   int musnum;
   
@@ -440,7 +441,7 @@ OVERLAY static void cheat_noclip()
 }
 
 // 'behold?' power-up cheats (modified for infinite duration -- killough)
-OVERLAY static void cheat_pw(pw)
+OVERLAY static void cheat_pw(int pw)
 {
   if (plyr->powers[pw])
     plyr->powers[pw] = pw!=pw_strength && pw!=pw_allmap;  // killough
@@ -460,8 +461,7 @@ OVERLAY static void cheat_behold()
 }
 
 // 'clev' change-level cheat
-OVERLAY static void cheat_clev(buf)
-char buf[3];
+OVERLAY static void cheat_clev(char buf[3])
 {
   int epsd, map;
 
@@ -621,7 +621,7 @@ OVERLAY static void cheat_tntkeyx()
   plyr->message = "Card, Skull";        // Ty 03/27/98 - *not* externalized
 }
 
-OVERLAY static void cheat_tntkeyxx(key)
+OVERLAY static void cheat_tntkeyxx(int key)
 {
   plyr->message = (plyr->cards[key] = !plyr->cards[key]) ? 
     "Key Added" : "Key Removed";  // Ty 03/27/98 - *not* externalized
@@ -635,8 +635,7 @@ OVERLAY static void cheat_tntweap()
     "Weapon number 1-9" : "Weapon number 1-8";
 }
 
-OVERLAY static void cheat_tntweapx(buf)
-char buf[3];
+OVERLAY static void cheat_tntweapx(char buf[3])
 {
   int w = *buf - '1';
 
@@ -652,7 +651,7 @@ char buf[3];
         plyr->message = "Weapon Added";  // Ty 03/27/98 - *not* externalized
       else 
         {
-          int P_SwitchWeapon(player_t *player);
+          extern weapontype_t P_SwitchWeapon(player_t *player);
           plyr->message = "Weapon Removed"; // Ty 03/27/98 - *not* externalized
           if (w==plyr->readyweapon)         // maybe switch if weapon removed
             plyr->pendingweapon = P_SwitchWeapon(plyr);
@@ -666,8 +665,7 @@ OVERLAY static void cheat_tntammo()
   plyr->message = "Ammo 1-4, Backpack";  // Ty 03/27/98 - *not* externalized
 }
 
-OVERLAY static void cheat_tntammox(buf)
-char buf[1];
+OVERLAY static void cheat_tntammox(char buf[1])
 {
   int a = *buf - '1';
   if (*buf == 'b')  // Ty 03/27/98 - strings *not* externalized
@@ -773,7 +771,7 @@ OVERLAY static void M_DoCheat(cheatfunc_t func, char *arg)
   case CHEAT_NOCLIP:
     return cheat_noclip();
   case CHEAT_PW:
-    return cheat_pw(arg);
+    return cheat_pw((int)(intptr_t)arg);
   case CHEAT_BEHOLD:
     return cheat_behold();
   case CHEAT_CLEV:
@@ -803,7 +801,7 @@ OVERLAY static void M_DoCheat(cheatfunc_t func, char *arg)
   case CHEAT_TNTKEYX:
     return cheat_tntkeyx();
   case CHEAT_TNTKEYXX:
-    return cheat_tntkeyxx(arg);
+    return cheat_tntkeyxx((int)(intptr_t)arg);
   case CHEAT_TNTWEAP:
     return cheat_tntweap();
   case CHEAT_TNTWEAPX:
@@ -888,7 +886,7 @@ OVERLAY boolean M_FindCheats(int key)
         if (!matchedbefore)               // allow only one cheat at a time 
           {
             matchedbefore = ret = 1;                 // responder has eaten key
-            M_DoCheat(cheat[i].func, cheat[i].arg);  // call cheat handler
+            M_DoCheat(cheat[i].func, (char *)cheat[i].arg);  // call cheat handler
           }
     }
   return ret;

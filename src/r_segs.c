@@ -132,7 +132,7 @@ OVERLAY void R_RenderMaskedSegRange(drawseg_t *ds, int x1, int x2)
       column_draw_type = TLColumn;
       tranmap = main_tranmap;
       if (curline->linedef->tranlump > 0)
-        tranmap = W_CacheLumpNum(curline->linedef->tranlump-1);
+        tranmap = (const byte *)W_CacheLumpNum(curline->linedef->tranlump-1);
     }
   // killough 4/11/98: end translucent 2s normal code
 
@@ -444,7 +444,7 @@ OVERLAY void R_StoreWallRange(const int start, const int stop)
     {
       unsigned pos = ds_p - drawsegs; // jff 8/9/98 fix from ZDOOM1.14a
       unsigned newmax = maxdrawsegs ? maxdrawsegs*2 : 128; // killough
-      drawsegs = realloc(drawsegs,newmax*sizeof(*drawsegs));
+      drawsegs = (drawseg_t *)realloc(drawsegs,newmax*sizeof(*drawsegs));
 //      ds_p = drawsegs+maxdrawsegs;
       ds_p = drawsegs + pos;          // jff 8/9/98 fix from ZDOOM1.14a
       maxdrawsegs = newmax;
@@ -494,7 +494,7 @@ OVERLAY void R_StoreWallRange(const int start, const int stop)
         do
           maxopenings = maxopenings ? maxopenings*2 : 16384;
         while (need > maxopenings);
-        openings = realloc(openings, maxopenings * sizeof(*openings));
+        openings = (short *)realloc(openings, maxopenings * sizeof(*openings));
         lastopening = openings + pos;
 
       // jff 8/9/98 borrowed fix for openings from ZDOOM1.14

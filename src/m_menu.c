@@ -374,7 +374,7 @@ static void M_DrawEnemy(void);
 static void M_DrawMessages(void);
 static void M_DrawChatStrings(void);
 
-static menu_t NewDef;                                        // phares 5/04/98
+static menu_t NewDef;
 
 // end of prototypes added to support Setup Menus and Extended HELP screens
 
@@ -674,14 +674,14 @@ static menuitem_t NewGameMenu[]=
 };
 
 static menu_t NewDef =
-{
-  newg_end,       // # of menu items
-  &EpiDef,        // previous menu
-  NewGameMenu,    // menuitem_t ->
-  M_DRAWNEWGAME,  // drawing routine ->
-  48,63,          // x,y
-  hurtme          // lastOn
-};
+  {
+    newg_end,       // # of menu items
+    &EpiDef,        // previous menu
+    NewGameMenu,    // menuitem_t ->
+    M_DRAWNEWGAME,  // drawing routine ->
+    48,63,          // x,y
+    hurtme          // lastOn
+  };
 
 //
 // M_NewGame
@@ -737,7 +737,7 @@ OVERLAY static void M_VerifyNightmare(int ch)
   if (ch != 'y')
   return;
   
-  G_DeferedInitNew(nightmare,epi+1,1);
+  G_DeferedInitNew((skill_t)nightmare,epi+1,1);
   M_ClearMenus ();
 }
 
@@ -749,7 +749,7 @@ OVERLAY static void M_ChooseSkill(int choice)
     return;
     }
   
-  G_DeferedInitNew(choice,epi+1,1);
+  G_DeferedInitNew((skill_t)choice,epi+1,1);
   M_ClearMenus ();
   }
 
@@ -2112,7 +2112,7 @@ OVERLAY static void M_DrawDefVerify(void)
 {
 #define BOXW 187
 #define BOXH 23
-  byte* bigblock = malloc(BOXW*BOXH);
+  byte* bigblock = (byte *)malloc(BOXW*BOXH);
   int i;
   
   // CPhipps - draw one big block instead of line-by-line, otherwise it doesn't 
@@ -2235,7 +2235,6 @@ OVERLAY static void M_DrawInstructions()
 #define Y_BUTTON   3
 
 // Definitions of the (in this case) four key binding screens.
-
 static setup_menu_t keys_settings1[];
 static setup_menu_t keys_settings2[];
 static setup_menu_t keys_settings3[];
@@ -2746,7 +2745,6 @@ static setup_menu_t auto_settings2[] =  // 2nd AutoMap Settings screen
   {0,(S_SKIP|S_END),m_null,0,0,0,0,0,0,0,0,0}
 
 };
-
 
 // Setting up for the Automap screen. Turn on flags, set pointers,
 // locate the first item on the screen where the cursor is allowed to
@@ -4451,7 +4449,7 @@ OVERLAY boolean M_Responder (event_t* ev)
         // free the old chat string memory and replace it with
         // the (possibly larger) new memory for editing purposes
 
-        chat_string_buffer = malloc(CHAT_STRING_BFR_SIZE);
+        chat_string_buffer = (char *)malloc(CHAT_STRING_BFR_SIZE);
         strncpy(chat_string_buffer,*((char**)(ptr1->m_var1)),CHAT_STRING_BFR_SIZE);
         chat_string_buffer[CHAT_STRING_BFR_SIZE-1] = 0; // gurantee null delimiter
 

@@ -152,7 +152,7 @@ OVERLAY static void R_InstallSpriteLump(int lump, unsigned frame,
 OVERLAY void R_InitSpriteDefs(const char * const * namelist)
 {
   size_t numentries = lastspritelump-firstspritelump+1;
-  struct { int index, next; } *hash;
+  struct hashnode { int index, next; } *hash;
   int i;
 
   if (!numentries || !*namelist)
@@ -164,12 +164,12 @@ OVERLAY void R_InitSpriteDefs(const char * const * namelist)
 
   numsprites = i;
 
-  sprites = Z_Malloc(numsprites *sizeof(*sprites), PU_STATIC, NULL);
+  sprites = (spritedef_t *)Z_Malloc(numsprites *sizeof(*sprites), PU_STATIC, NULL);
 
   // Create hash table based on just the first four letters of each sprite
   // killough 1/31/98
 
-  hash = malloc(sizeof(*hash)*numentries); // allocate hash table
+  hash = (struct hashnode *)malloc(sizeof(*hash)*numentries); // allocate hash table
 
   for (i=0; i<numentries; i++)             // initialize hash table as empty
     hash[i].index = -1;
@@ -249,7 +249,8 @@ OVERLAY void R_InitSpriteDefs(const char * const * namelist)
                   }
               // allocate space for the frames present and copy sprtemp to it
               sprites[i].spriteframes =
-                Z_Malloc (maxframe * sizeof(spriteframe_t), PU_STATIC, NULL);
+                (spriteframe_t *)Z_Malloc (maxframe * sizeof(spriteframe_t),
+                                           PU_STATIC, NULL);
               memcpy (sprites[i].spriteframes, sprtemp,
                       maxframe*sizeof(spriteframe_t));
             }
@@ -297,7 +298,8 @@ OVERLAY vissprite_t *R_NewVisSprite(void)
   if (num_vissprite >= num_vissprite_alloc)             // killough
     {
       num_vissprite_alloc = num_vissprite_alloc ? num_vissprite_alloc*2 : 128;
-      vissprites = realloc(vissprites,num_vissprite_alloc*sizeof(*vissprites));
+      vissprites =
+        (vissprite_t *)realloc(vissprites,num_vissprite_alloc*sizeof(*vissprites));
     }
  return vissprites + num_vissprite++;
 }
@@ -361,7 +363,8 @@ OVERLAY void R_DrawVisSprite(vissprite_t *vis, int x1, int x2)
   const column_t *column;
   int      texturecolumn;
   fixed_t  frac;
-  const patch_t *patch = W_CacheLumpNum (vis->patch+firstspritelump);
+  const patch_t *patch =
+    (const patch_t *)W_CacheLumpNum (vis->patch+firstspritelump);
 
   dc_colormap = vis->colormap;
 
@@ -794,8 +797,9 @@ OVERLAY void R_SortVisSprites (void)
       if (num_vissprite_ptrs < num_vissprite*2)
         {
           free(vissprite_ptrs);  // better than realloc -- no preserving needed
-          vissprite_ptrs = malloc((num_vissprite_ptrs = num_vissprite_alloc*2)
-                                  * sizeof *vissprite_ptrs);
+          vissprite_ptrs =
+            (vissprite_t **)malloc((num_vissprite_ptrs = num_vissprite_alloc*2)
+                                   * sizeof *vissprite_ptrs);
         }
 
       while (--i>=0)

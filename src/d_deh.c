@@ -786,7 +786,7 @@ const char *deh_newlevel = "NEWLEVEL"; // CPhipps - const
 
 // DOOM shareware/registered/retail (Ultimate) names.
 // CPhipps - const**const
-const char **const mapnames[] =  
+extern const char **const mapnames[] =
 {
   &s_HUSTR_E1M1,
   &s_HUSTR_E1M2,
@@ -840,7 +840,7 @@ const char **const mapnames[] =
 };
 
 // CPhipps - const**const
-const char **const mapnames2[] = // DOOM 2 map names.
+extern const char **const mapnames2[] = // DOOM 2 map names.
 {
   &s_HUSTR_1,
   &s_HUSTR_2,
@@ -879,7 +879,7 @@ const char **const mapnames2[] = // DOOM 2 map names.
 };
 
 // CPhipps - const**const
-const char **const mapnamesp[] = // Plutonia WAD map names.
+extern const char **const mapnamesp[] = // Plutonia WAD map names.
 {
   &s_PHUSTR_1,
   &s_PHUSTR_2,
@@ -918,7 +918,7 @@ const char **const mapnamesp[] = // Plutonia WAD map names.
 };
 
 // CPhipps - const**const
-const char **const mapnamest[] = // TNT WAD map names.
+extern const char **const mapnamest[] = // TNT WAD map names.
 {
   &s_THUSTR_1,
   &s_THUSTR_2,
@@ -1467,7 +1467,7 @@ OVERLAY void ProcessDehFile(const char *filename, const char *outfilename, int l
 
   if (filename)
     {
-      if (!(infile.inp = (void *) fopen(filename,"rt")))
+      if (!(infile.inp = (const byte*)fopen(filename,"rt")))
         {
           lprintf(LO_WARN, "-deh file %s not found\n",filename);
           return;  // should be checked up front anyway
@@ -1477,7 +1477,7 @@ OVERLAY void ProcessDehFile(const char *filename, const char *outfilename, int l
   else  // DEH file comes from lump indicated by third argument
     {
       infile.size = W_LumpLength(lumpnum);
-      infile.inp = infile.lump = W_CacheLumpNum(lumpnum);
+      infile.inp = infile.lump = (const byte *)W_CacheLumpNum(lumpnum);
       filename = "(WAD)";
     }
 
@@ -2042,7 +2042,7 @@ OVERLAY static void deh_procWeapon(DEHFILE *fpin, FILE* fpout, char *line)
           continue;
         }
       if (!strcasecmp(key,deh_weapon[0]))  // Ammo type
-        weaponinfo[indexnum].ammo = value;
+        weaponinfo[indexnum].ammo = (ammotype_t)value;
       else
         if (!strcasecmp(key,deh_weapon[1]))  // Deselect frame
           weaponinfo[indexnum].upstate = value;
@@ -2475,7 +2475,7 @@ OVERLAY static void deh_procStrings(DEHFILE *fpin, FILE* fpout, char *line)
 
   if (fpout) fprintf(fpout,"Processing extended string substitution\n");
 
-  if (!holdstring) holdstring = malloc(maxstrlen*sizeof(*holdstring));
+  if (!holdstring) holdstring = (char *)malloc(maxstrlen*sizeof(*holdstring));
 
   *holdstring = '\0';  // empty string to start with
   strncpy(inbuffer,line,DEH_BUFFERMAX);
@@ -2502,7 +2502,7 @@ OVERLAY static void deh_procStrings(DEHFILE *fpin, FILE* fpout, char *line)
           if (fpout) fprintf(fpout,
                              "* increased buffer from to %d for buffer size %d\n",
                              maxstrlen,(int)strlen(inbuffer));
-          holdstring = realloc(holdstring,maxstrlen*sizeof(*holdstring));
+          holdstring = (char *)realloc(holdstring,maxstrlen*sizeof(*holdstring));
         }
       // concatenate the whole buffer if continuation or the value iffirst
       strcat(holdstring,ptr_lstrip(((*holdstring) ? inbuffer : strval)));

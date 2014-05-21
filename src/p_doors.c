@@ -367,7 +367,7 @@ OVERLAY int EV_DoDoor
  
     // new door thinker
     rtn = 1;
-    door = Z_Malloc (sizeof(*door), PU_LEVSPEC, 0);
+    door = (vldoor_t *)Z_Malloc (sizeof(*door), PU_LEVSPEC, 0);
     P_AddThinker (&door->thinker);
     sec->ceilingdata = door; //jff 2/22/98
 
@@ -507,7 +507,7 @@ OVERLAY int EV_VerticalDoor
   // if door already has a thinker, use it
   if (sec->ceilingdata)      //jff 2/22/98
   {
-    door = sec->ceilingdata; //jff 2/22/98
+    door = (vldoor_t *)sec->ceilingdata; //jff 2/22/98
     switch(line->special)
     {
       case  1: // only for "raise" doors, not "open"s
@@ -547,7 +547,7 @@ OVERLAY int EV_VerticalDoor
   }
   
   // new door thinker
-  door = Z_Malloc (sizeof(*door), PU_LEVSPEC, 0);
+  door = (vldoor_t *)Z_Malloc (sizeof(*door), PU_LEVSPEC, 0);
   P_AddThinker (&door->thinker);
   sec->ceilingdata = door; //jff 2/22/98
   door->thinker.function = Think_T_VerticalDoor;
@@ -611,7 +611,7 @@ OVERLAY void P_SpawnDoorCloseIn30 (sector_t* sec)
 {
   vldoor_t* door;
 
-  door = Z_Malloc ( sizeof(*door), PU_LEVSPEC, 0);
+  door = (vldoor_t *)Z_Malloc ( sizeof(*door), PU_LEVSPEC, 0);
 
   P_AddThinker (&door->thinker);
 
@@ -641,7 +641,7 @@ OVERLAY void P_SpawnDoorRaiseIn5Mins
 {
   vldoor_t* door;
 
-  door = Z_Malloc ( sizeof(*door), PU_LEVSPEC, 0);
+  door = (vldoor_t *)Z_Malloc ( sizeof(*door), PU_LEVSPEC, 0);
   
   P_AddThinker (&door->thinker);
 

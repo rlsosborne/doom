@@ -983,8 +983,8 @@ OVERLAY void WI_initDeathmatchStats(void)
   int   i; // looping variables
 
   // CPhipps - allocate data structures needed
-  dm_frags  = calloc(MAXPLAYERS, sizeof(*dm_frags));
-  dm_totals = calloc(MAXPLAYERS, sizeof(*dm_totals));
+  dm_frags  = (short **)calloc(MAXPLAYERS, sizeof(*dm_frags));
+  dm_totals = (short *)calloc(MAXPLAYERS, sizeof(*dm_totals));
 
   state = StatCount;  // We're doing stats
   acceleratestage = 0;
@@ -997,7 +997,7 @@ OVERLAY void WI_initDeathmatchStats(void)
     if (playeringame[i])
     { 
       // CPhipps - allocate frags line
-      dm_frags[i] = calloc(MAXPLAYERS, sizeof(**dm_frags)); // set all counts to zero
+      dm_frags[i] = (short *)calloc(MAXPLAYERS, sizeof(**dm_frags)); // set all counts to zero
 
       dm_totals[i] = 0;
     }
@@ -1254,10 +1254,10 @@ OVERLAY void WI_initNetgameStats(void)
   cnt_pause = TICRATE;
 
   // CPhipps - allocate these dynamically, blank with calloc
-  cnt_kills = calloc(MAXPLAYERS, sizeof(*cnt_kills));
-  cnt_items = calloc(MAXPLAYERS, sizeof(*cnt_items));
-  cnt_secret= calloc(MAXPLAYERS, sizeof(*cnt_secret));
-  cnt_frags = calloc(MAXPLAYERS, sizeof(*cnt_frags));
+  cnt_kills = (short *)calloc(MAXPLAYERS, sizeof(*cnt_kills));
+  cnt_items = (short *)calloc(MAXPLAYERS, sizeof(*cnt_items));
+  cnt_secret= (short *)calloc(MAXPLAYERS, sizeof(*cnt_secret));
+  cnt_frags = (short *)calloc(MAXPLAYERS, sizeof(*cnt_frags));
 
   for (i=0 ; i<MAXPLAYERS ; i++)
     if (playeringame[i])
@@ -1520,9 +1520,9 @@ OVERLAY void WI_initStats(void)
   sp_state = 1;
 
   // CPhipps - allocate (awful code, I know, but saves changing it all) and initialise
-  *(cnt_kills = malloc(sizeof(*cnt_kills))) = 
-  *(cnt_items = malloc(sizeof(*cnt_items))) =
-  *(cnt_secret= malloc(sizeof(*cnt_secret))) = -1;
+  *(cnt_kills = (short *)malloc(sizeof(*cnt_kills))) =
+  *(cnt_items = (short *)malloc(sizeof(*cnt_items))) =
+  *(cnt_secret= (short *)malloc(sizeof(*cnt_secret))) = -1;
   cnt_time = cnt_par = cnt_total_time = -1;
   cnt_pause = TICRATE;
 
@@ -1838,7 +1838,7 @@ OVERLAY void WI_loadData(void)
     for (i=0 ; i<NUMCMAPS ; i++)
     { 
       sprintf(name, "CWILV%2.2d", i);
-      lnames[i] = W_CacheLumpName(name);
+      lnames[i] = (const patch_t *)W_CacheLumpName(name);
     }
   }
   else
@@ -1848,17 +1848,17 @@ OVERLAY void WI_loadData(void)
     for (i=0 ; i<NUMMAPS ; i++)
     {
       sprintf(name, "WILV%d%d", wbs->epsd, i);
-      lnames[i] = W_CacheLumpName(name);
+      lnames[i] = (const patch_t *)W_CacheLumpName(name);
     }
 
     // you are here
-    yah[0] = W_CacheLumpName("WIURH0");
+    yah[0] = (const patch_t *)W_CacheLumpName("WIURH0");
 
     // you are here (alt.)
-    yah[1] = W_CacheLumpName("WIURH1");
+    yah[1] = (const patch_t *)W_CacheLumpName("WIURH1");
 
     // splat
-    splat = W_CacheLumpName("WISPLAT"); 
+    splat = (const patch_t *)W_CacheLumpName("WISPLAT");
   
     if (wbs->epsd < 3)
     {
@@ -1872,7 +1872,7 @@ OVERLAY void WI_loadData(void)
           {
             // animations
             sprintf(name, "WIA%d%.2d%.2d", wbs->epsd, j, i);  
-            a->p[i] = W_CacheLumpName(name);
+            a->p[i] = (const patch_t *)W_CacheLumpName(name);
           }
           else
           {
@@ -1886,16 +1886,17 @@ OVERLAY void WI_loadData(void)
 
   // CPhipps - table driven initialisation of misc patch vars
   for (i=0; wi_data_vars[i].pp; i++) 
-    *(wi_data_vars[i].pp) = W_CacheLumpName(wi_data_vars[i].lumpname);
+    *(wi_data_vars[i].pp) =
+      (const patch_t *)W_CacheLumpName(wi_data_vars[i].lumpname);
 
   for (i=0;i<10;i++)
   {
     // numbers 0-9
     sprintf(name, "WINUM%d", i);     
-    num[i] = W_CacheLumpName(name);
+    num[i] = (const patch_t *)W_CacheLumpName(name);
   }
 
-  facebackp = W_CacheLumpName("STPB0");
+  facebackp = (const patch_t *)W_CacheLumpName("STPB0");
 }
 
 // ====================================================================

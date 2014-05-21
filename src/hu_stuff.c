@@ -371,7 +371,7 @@ OVERLAY void HU_Init(void)
   // CPhipps - load patches for keys and double keys
   for (i=0; i<6; i++) {
     sprintf(buffer, "STKEYS%d", i);
-    hu_fontk[i] = W_CacheLumpName(buffer);
+    hu_fontk[i] = (const patch_t *)W_CacheLumpName(buffer);
   }
 }
 

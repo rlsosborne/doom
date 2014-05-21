@@ -132,10 +132,10 @@ OVERLAY static void P_LoadVertexes (int lump)
   numvertexes = W_LumpLength(lump) / sizeof(mapvertex_t);
 
   // Allocate zone memory for buffer.
-  vertexes = Z_Malloc(numvertexes*sizeof(vertex_t),PU_LEVEL,0);
+  vertexes = (vertex_t *)Z_Malloc(numvertexes*sizeof(vertex_t),PU_LEVEL,0);
 
   // Load data into cache. 
-  data = W_CacheLumpNum(lump); // cph - wad handling updated
+  data = (const byte *)W_CacheLumpNum(lump); // cph - wad handling updated
 
   // Copy and convert vertex coordinates,
   // internal representation as fixed.
@@ -161,8 +161,8 @@ OVERLAY static void P_LoadSegs (int lump)
   const byte *data; // cph - const
 
   numsegs = W_LumpLength(lump) / sizeof(mapseg_t);
-  segs = Z_Calloc(numsegs,sizeof(seg_t),PU_LEVEL);
-  data = W_CacheLumpNum(lump); // cph - wad lump handling updated
+  segs = (seg_t *)Z_Calloc(numsegs,sizeof(seg_t),PU_LEVEL);
+  data = (const byte *)W_CacheLumpNum(lump); // cph - wad lump handling updated
 
   for (i=0; i<numsegs; i++)
     {
@@ -206,8 +206,9 @@ OVERLAY static void P_LoadSubsectors (int lump)
   int  i;
 
   numsubsectors = W_LumpLength (lump) / sizeof(mapsubsector_t);
-  subsectors = Z_Calloc(numsubsectors,sizeof(subsector_t),PU_LEVEL);
-  data = W_CacheLumpNum(lump); // cph - wad lump handling updated
+  subsectors =
+    (subsector_t *)Z_Calloc(numsubsectors,sizeof(subsector_t),PU_LEVEL);
+  data = (const byte *)W_CacheLumpNum(lump); // cph - wad lump handling updated
 
   for (i=0; i<numsubsectors; i++)
     {
@@ -229,8 +230,8 @@ OVERLAY static void P_LoadSectors (int lump)
   int  i;
 
   numsectors = W_LumpLength (lump) / sizeof(mapsector_t);
-  sectors = Z_Calloc (numsectors,sizeof(sector_t),PU_LEVEL);
-  data = W_CacheLumpNum (lump); // cph - wad lump handling updated
+  sectors = (sector_t *)Z_Calloc (numsectors,sizeof(sector_t),PU_LEVEL);
+  data = (const byte *)W_CacheLumpNum (lump); // cph - wad lump handling updated
 
   for (i=0; i<numsectors; i++)
     {
@@ -285,8 +286,8 @@ OVERLAY static void P_LoadNodes (int lump)
   int  i;
 
   numnodes = W_LumpLength (lump) / sizeof(mapnode_t);
-  nodes = Z_Malloc (numnodes*sizeof(node_t),PU_LEVEL,0);
-  data = W_CacheLumpNum (lump); // cph - wad lump handling updated
+  nodes = (node_t *)Z_Malloc (numnodes*sizeof(node_t),PU_LEVEL,0);
+  data = (const byte *)W_CacheLumpNum (lump); // cph - wad lump handling updated
 
   for (i=0; i<numnodes; i++)
     {
@@ -320,7 +321,7 @@ OVERLAY static void P_LoadNodes (int lump)
 OVERLAY static void P_LoadThings (int lump)
 {
   int  i, numthings = W_LumpLength (lump) / sizeof(mapthing_t);
-  const byte *data = W_CacheLumpNum (lump); // cph - wad lump handling updated, const*
+  const byte *data = (const byte *)W_CacheLumpNum (lump); // cph - wad lump handling updated, const*
 
   for (i=0; i<numthings; i++)
     {
@@ -373,8 +374,8 @@ OVERLAY static void P_LoadLineDefs (int lump)
   int  i;
 
   numlines = W_LumpLength (lump) / sizeof(maplinedef_t);
-  lines = Z_Calloc (numlines,sizeof(line_t),PU_LEVEL);
-  data = W_CacheLumpNum (lump); // cph - wad lump handling updated
+  lines = (line_t *)Z_Calloc (numlines,sizeof(line_t),PU_LEVEL);
+  data = (const byte *)W_CacheLumpNum (lump); // cph - wad lump handling updated
 
   for (i=0; i<numlines; i++)
     {
@@ -481,7 +482,7 @@ OVERLAY static void P_LoadLineDefs2(int lump)
 OVERLAY static void P_LoadSideDefs (int lump)
 {
   numsides = W_LumpLength(lump) / sizeof(mapsidedef_t);
-  sides = Z_Calloc(numsides,sizeof(side_t),PU_LEVEL);
+  sides = (side_t *)Z_Calloc(numsides,sizeof(side_t),PU_LEVEL);
 }
 
 // killough 4/4/98: delay using texture names until
@@ -490,7 +491,7 @@ OVERLAY static void P_LoadSideDefs (int lump)
 
 OVERLAY static void P_LoadSideDefs2(int lump)
 {
-  const byte *data = W_CacheLumpNum(lump); // cph - const*, wad lump handling updated
+  const byte *data = (const byte *)W_CacheLumpNum(lump); // cph - const*, wad lump handling updated
   int  i;
 
   for (i=0; i<numsides; i++)
@@ -579,7 +580,7 @@ OVERLAY static void AddBlockLine
   if (done[blockno])
     return;
 
-  l = malloc(sizeof(linelist_t));
+  l = (linelist_t *)malloc(sizeof(linelist_t));
   l->num = lineno;
   l->next = lists[blockno];
   lists[blockno] = l;
@@ -643,16 +644,16 @@ OVERLAY void P_CreateBlockMap()
   // finally make an array in which we can mark blocks done per line
 
   // CPhipps - calloc's
-  blocklists = calloc(NBlocks,sizeof(linelist_t *));
-  blockcount = calloc(NBlocks,sizeof(int));
-  blockdone = malloc(NBlocks*sizeof(int));
+  blocklists = (linelist_t **)calloc(NBlocks,sizeof(linelist_t *));
+  blockcount = (int *)calloc(NBlocks,sizeof(int));
+  blockdone = (int *)malloc(NBlocks*sizeof(int));
 
   // initialize each blocklist, and enter the trailing -1 in all blocklists
   // note the linked list of lines grows backwards
 
   for (i=0;i<NBlocks;i++)
   {
-    blocklists[i] = malloc(sizeof(linelist_t));
+    blocklists[i] = (linelist_t *)malloc(sizeof(linelist_t));
     blocklists[i]->num = -1;
     blocklists[i]->next = NULL;
     blockcount[i]++;
@@ -818,8 +819,9 @@ OVERLAY void P_CreateBlockMap()
 
   // Create the blockmap lump
 
-  blockmaplump = Z_Malloc(sizeof(*blockmaplump) * (4+NBlocks+linetotal),
-                          PU_LEVEL, 0);
+  blockmaplump =
+    (long *)Z_Malloc(sizeof(*blockmaplump) * (4+NBlocks+linetotal), PU_LEVEL,
+                     0);
   // blockmap header
 
   blockmaplump[0] = bmaporgx = xorg << FRACBITS;
@@ -877,8 +879,9 @@ OVERLAY static void P_LoadBlockMap (int lump)
     {
       long i;
       // cph - const*, wad lump handling updated
-      const short *wadblockmaplump = W_CacheLumpNum(lump);
-      blockmaplump = Z_Malloc(sizeof(*blockmaplump) * count, PU_LEVEL, 0);
+      const short *wadblockmaplump = (const short *)W_CacheLumpNum(lump);
+      blockmaplump =
+        (long *)Z_Malloc(sizeof(*blockmaplump) * count, PU_LEVEL, 0);
 
       // killough 3/1/98: Expand wad blockmap into larger internal one,
       // by treating all offsets except -1 as unsigned and zero-extending
@@ -905,7 +908,8 @@ OVERLAY static void P_LoadBlockMap (int lump)
     }
 
   // clear out mobj chains - CPhipps - use calloc
-  blocklinks = Z_Calloc (bmapwidth*bmapheight,sizeof(*blocklinks),PU_LEVEL);
+  blocklinks =
+    (mobj_t **)Z_Calloc (bmapwidth*bmapheight,sizeof(*blocklinks),PU_LEVEL);
   blockmap = blockmaplump+4;
 }
 
@@ -921,7 +925,7 @@ OVERLAY static void P_LoadBlockMap (int lump)
 // cph - convenient sub-function
 OVERLAY static void P_AddLineToSector(line_t* li, sector_t* sector)
 {
-  fixed_t *bbox = (void*)sector->blockbox;
+  fixed_t *bbox = (fixed_t *)sector->blockbox;
   
   sector->lines[sector->linecount++] = li;
   M_AddToBox (bbox, li->v1->x, li->v1->y);
@@ -950,7 +954,8 @@ OVERLAY void P_GroupLines (void)
     }
 
   {  // allocate line tables for each sector
-    line_t **linebuffer = Z_Malloc(total * sizeof(*linebuffer), PU_LEVEL, 0);
+    line_t **linebuffer =
+      (line_t **)Z_Malloc(total * sizeof(*linebuffer), PU_LEVEL, 0);
 
     for (i=0, sector = sectors; i<numsectors; i++, sector++) {
       sector->lines = linebuffer;
@@ -968,7 +973,7 @@ OVERLAY void P_GroupLines (void)
   }
   
   for (i=0, sector = sectors; i<numsectors; i++, sector++) {
-    fixed_t *bbox = (void*)sector->blockbox; // cph - For convenience, so
+    fixed_t *bbox = (fixed_t*)sector->blockbox; // cph - For convenience, so
                                   // I can sue the old code unchanged
     int block;
     
@@ -1043,7 +1048,7 @@ OVERLAY void P_GroupLines (void)
 
 OVERLAY void P_RemoveSlimeTrails(void)                // killough 10/98
 {
-  byte *hit = calloc(1, numvertexes);         // Hitlist for vertices
+  byte *hit = (byte *)calloc(1, numvertexes);         // Hitlist for vertices
   int i;
   for (i=0; i<numsegs; i++)                   // Go through each seg
     {
@@ -1134,7 +1139,7 @@ OVERLAY void P_SetupLevel(int episode, int map, int playermask, skill_t skill)
 
   if (rejectlump != -1)
     W_UnlockLumpNum(rejectlump);
-  rejectmatrix = W_CacheLumpNum(rejectlump = lumpnum+ML_REJECT);
+  rejectmatrix = (const byte *)W_CacheLumpNum(rejectlump = lumpnum+ML_REJECT);
   P_GroupLines();
 
   P_RemoveSlimeTrails();    // killough 10/98: remove slime trails from wad      

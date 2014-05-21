@@ -140,7 +140,7 @@ OVERLAY int M_ReadFile(char const* name,byte** buffer)
     close(handle);
     I_Error ("Couldn't read file %s", name);
   }
-  buf = Z_Malloc (length, PU_STATIC, NULL);
+  buf = (byte *)Z_Malloc (length, PU_STATIC, NULL);
   count = read (handle, buf, length);
   close (handle);
   
@@ -191,7 +191,7 @@ int X_opt;
 //jff 3/3/98 added min, max, and help string to all entries
 //jff 4/10/98 added isstr field to specify whether value is string or int
 // CPhipps - const
-const default_t defaults[] =
+extern const default_t defaults[] =
 {
   {"Misc settings",{NULL},{0},UL,UL,def_none,ss_none},
   {"compatibility_level",{&default_compatibility_level},
@@ -205,7 +205,7 @@ const default_t defaults[] =
    def_int,ss_none}, // 1=take special steps ensuring demo sync, 2=only during recordings
   {"leds_always_off",{&leds_always_off},{0},0,1,
    def_bool,ss_none}, // keep keyboard LEDs turned off (DOS) // killough 3/6/98
-  {"endoom_mode", {&endoom_mode},{5},0,7, // CPhipps - endoom flags
+  {"endoom_mode", {(int *)&endoom_mode},{5},0,7, // CPhipps - endoom flags
    def_hex, ss_none}, // 0, +1 for colours, +2 for non-ascii chars, +4 for skip-last-line
   
   {"Files",{NULL},{0},UL,UL,def_none,ss_none},
@@ -257,9 +257,9 @@ const default_t defaults[] =
 
   {"Video settings",{NULL},{0},UL,UL,def_none,ss_none},
   // CPhipps - default screensize for targets that support high-res
-  {"screen_width",{&desired_screenwidth},{320}, 320, 1600, 
+  {"screen_width",{(int *)&desired_screenwidth},{320}, 320, 1600,
    def_int,ss_none},
-  {"screen_height",{&desired_screenheight},{200},200,1200,
+  {"screen_height",{(int *)&desired_screenheight},{200},200,1200,
    def_int,ss_none},  
   {"use_vsync",{&use_vsync},{1},0,1,             // killough 2/8/98
    def_bool,ss_none}, // enable wait for vsync to avoid display tearing (fullscreen)
@@ -801,7 +801,7 @@ OVERLAY static void WritePCXfile(const char* filename, const byte* data,
   pcx_t* pcx;
   byte*  pack;
   
-  pcx = Z_Malloc (width*height*2+1000, PU_STATIC, NULL);
+  pcx = (pcx_t *)Z_Malloc (width*height*2+1000, PU_STATIC, NULL);
 
   pcx->manufacturer = 0x0a; // PCX id
   pcx->version = 5;         // 256 color
@@ -999,10 +999,10 @@ OVERLAY void M_DoScreenShot (const char* fname)
 
   // munge planar buffer to linear
   // CPhipps - use a malloc()ed buffer instead of screens[2]
-  I_ReadScreen(linear = malloc(SCREENWIDTH * SCREENHEIGHT));
+  I_ReadScreen(linear = (byte *)malloc(SCREENWIDTH * SCREENHEIGHT));
 
   // killough 4/18/98: make palette stay around (PU_CACHE could cause crash)
-  pal = W_CacheLumpNum (pplump);
+  pal = (const byte*)W_CacheLumpNum (pplump);
     
   // save the pcx file
   //jff 3/30/98 write pcx or bmp depending on mode

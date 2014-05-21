@@ -175,8 +175,8 @@ OVERLAY int main(int argc, char** argv)
       case 'w':
 	if (optarg) {
 	  char *p;
-	  wadname = realloc(wadname, ++numwads * sizeof *wadname);
-	  wadget  = realloc(wadget ,   numwads * sizeof *wadget );
+	  wadname = (char **)realloc(wadname, ++numwads * sizeof *wadname);
+	  wadget  = (char **)realloc(wadget ,   numwads * sizeof *wadget );
 	  wadname[numwads-1] = strdup(optarg);
 	  if ((p = strchr(wadname[numwads-1], ','))) {
 	    *p++ = 0; wadget[numwads-1] = p;
@@ -230,7 +230,7 @@ OVERLAY int main(int argc, char** argv)
 
     while (1) {
       {
-	packet_header_t *packet = malloc(10000);
+	packet_header_t *packet = (packet_header_t *)malloc(10000);
 	size_t len;
 	
 	usleep(10000);
@@ -242,8 +242,8 @@ OVERLAY int main(int argc, char** argv)
 	    if (!ingame) {
 	      {
 		int n;
-		struct setup_packet_s *sinfo = (void*)(packet+1);
-		const char *rname = (void*)((short*)(packet+1)+1);
+		struct setup_packet_s *sinfo = (struct setup_packet_s *)(packet+1);
+		const char *rname = (const char *)((short*)(packet+1)+1);
 		
 		// Add player to the game
 		for (n=0; n<MAXPLAYERS; n++)
@@ -310,7 +310,7 @@ OVERLAY int main(int argc, char** argv)
 		packet->type = PKT_RETRANS;
 		I_SendPacketTo(packet, sizeof *packet, remoteaddr+from);
 	      } else {
-		ticcmd_t *newtic = (void*)(((byte*)(packet+1))+2);
+		ticcmd_t *newtic = (ticcmd_t *)(((byte*)(packet+1))+2);
 		if (packet->tic + tics < remoteticfrom[from]) break; // Won't help
 		remoteticfrom[from] = packet->tic;
 		while (tics--)
@@ -361,7 +361,7 @@ OVERLAY int main(int argc, char** argv)
 		I_SendPacketTo(packet, size+1, remoteaddr + from); 
 	      } else {
 		size += strlen(wadname[i]) + strlen(wadget[i]) + 2;
-		reply = malloc(size);
+		reply = (packet_header_t*)malloc(size);
 		reply->type = PKT_WAD; reply->tic = 0;
 		strcpy((char*)(reply+1), wadname[i]);
 		strcpy((char*)(reply+1) + strlen(wadname[i]) + 1, wadget[i]);
@@ -399,9 +399,12 @@ OVERLAY int main(int argc, char** argv)
 	    remoteticto[i] -= xtratics;
 	    tics = lowtic - remoteticto[i]; 
 	    {
-	      packet_header_t *packet = malloc(sizeof(packet_header_t) + 1 +
-				 tics * (1 + numplayers * (1 + sizeof(ticcmd_t))));
-	      byte *p = (void*)(packet+1);
+	      packet_header_t *packet =
+                (packet_header_t *)malloc(sizeof(packet_header_t) + 1 +
+				          tics *
+                                          (1 + numplayers * (1 +
+                                                             sizeof(ticcmd_t))));
+	      byte *p = (byte *)(packet+1);
 	      packet->type = PKT_TICS; packet->tic = remoteticto[i] - xtratics;
 	      *p++ = tics;
 	      if (verbose>1) printf("sending %d tics to %d\n", tics, i);

@@ -240,7 +240,7 @@ OVERLAY static void I_EndDoom(void)
 
   if (lump != -1)
     {
-      const char (*endoom)[2] = (void*)W_CacheLumpNum(lump);
+      const char (*endoom)[2] = (const char (*)[2])W_CacheLumpNum(lump);
       int i, l = W_LumpLength(lump) / 2;
 
       /* cph - colour ENDOOM by rain */

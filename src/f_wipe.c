@@ -52,7 +52,7 @@ static byte *wipe_scr;
 
 OVERLAY static void wipe_shittyColMajorXform(short *array, int width, int height)
 {
-  short *dest = Z_Malloc(width*height*sizeof(short), PU_STATIC, 0);
+  short *dest = (short *)Z_Malloc(width*height*sizeof(short), PU_STATIC, 0);
   int x, y;
 
   for(y=0;y<height;y++)
@@ -152,14 +152,14 @@ OVERLAY static int wipe_exitMelt(int width, int height, int ticks)
 
 OVERLAY int wipe_StartScreen(int x, int y, int width, int height)
 {
-  wipe_scr_start = screens[SRC_SCR] = malloc(SCREENWIDTH * SCREENHEIGHT);
+  wipe_scr_start = screens[SRC_SCR] = (byte *)malloc(SCREENWIDTH * SCREENHEIGHT);
   V_CopyRect(x, y, 0,       width, height, x, y, SRC_SCR ); // Copy start screen to buffer
   return 0;
 }
 
 OVERLAY int wipe_EndScreen(int x, int y, int width, int height)
 {
-  wipe_scr_end = screens[DEST_SCR] = malloc(SCREENWIDTH * SCREENHEIGHT);
+  wipe_scr_end = screens[DEST_SCR] = (byte *)malloc(SCREENWIDTH * SCREENHEIGHT);
   V_CopyRect(x, y, 0,       width, height, x, y, DEST_SCR); // Copy end screen to buffer
   V_CopyRect(x, y, SRC_SCR, width, height, x, y, 0       ); // restore start screen
   return 0;

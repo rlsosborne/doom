@@ -195,7 +195,7 @@ int ddt_cheating = 0;         // killough 2/7/98: make global, rename to ddt_*
 
 static int leveljuststarted = 1;       // kluge until AM_LevelInit() is called
 
-enum automapmode_e automapmode; // Mode that the automap is in
+int automapmode; // Mode that the automap is in
 
 // location of window on screen
 static int  f_x;
@@ -365,9 +365,10 @@ OVERLAY void AM_addMark(void)
   // remove limit on automap marks
 
   if (markpointnum >= markpointnum_max)
-    markpoints = realloc(markpoints,
-                        (markpointnum_max = markpointnum_max ? 
-                         markpointnum_max*2 : 16) * sizeof(*markpoints));
+    markpoints =
+      (mpoint_t *)realloc(markpoints,
+                          (markpointnum_max = markpointnum_max ?
+                           markpointnum_max*2 : 16) * sizeof(*markpoints));
 
   markpoints[markpointnum].x = m_x + m_w/2;
   markpoints[markpointnum].y = m_y + m_h/2;
@@ -559,7 +560,7 @@ OVERLAY void AM_LevelInit(void)
 //
 OVERLAY void AM_Stop (void)
 {
-  static event_t st_notify = { 0, ev_keyup, AM_MSGEXITED };
+  static event_t st_notify = { (evtype_t)0, ev_keyup, AM_MSGEXITED };
 
   AM_unloadPics();
   automapmode &= ~am_active;

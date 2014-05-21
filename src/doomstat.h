@@ -163,7 +163,7 @@ enum automapmode_e {
   am_follow = 8,  // keep the player centred
   am_grid   =16,  // show grid
 };
-extern enum automapmode_e automapmode; // Mode that the automap is in
+extern int automapmode; // Mode that the automap is in
 
 extern  boolean menuactive;    // Menu overlayed?
 extern  boolean paused;        // Game Pause?

@@ -83,6 +83,13 @@ typedef enum {
   source_net        // CPhipps
 } wad_source_t;
 
+enum lumpinfonamespace {
+  ns_global=0,
+  ns_sprites,
+  ns_flats,
+  ns_colormaps
+};
+
 typedef struct
 {
   // WARNING: order of some fields important (see info.c).
@@ -97,12 +104,7 @@ typedef struct
   int index, next;
 
   // killough 4/17/98: namespace tags, to prevent conflicts between resources
-  enum {
-    ns_global=0,
-    ns_sprites,
-    ns_flats,
-    ns_colormaps
-  } namespace;
+  enum lumpinfonamespace Namespace;
 
   int handle;
   int position;

@@ -241,7 +241,7 @@ OVERLAY static void P_BringUpWeapon(player_t *player)
   if (player->pendingweapon == wp_chainsaw)
     S_StartSound (player->mo, sfx_sawup);
 
-  newstate = weaponinfo[player->pendingweapon].upstate;
+  newstate = (statenum_t)weaponinfo[player->pendingweapon].upstate;
 
   player->pendingweapon = wp_nochange;
   player->psprites[ps_weapon].sy = WEAPONBOTTOM;
@@ -265,11 +265,11 @@ int weapon_preferences[2][NUMWEAPONS+1] = {
 // because the raised weapon has no ammo anyway. When called from
 // G_BuildTiccmd you want to toggle to a different weapon regardless.
 
-OVERLAY int P_SwitchWeapon(player_t *player)
+OVERLAY weapontype_t P_SwitchWeapon(player_t *player)
 {
   int *prefer = weapon_preferences[demo_compatibility!=0]; // killough 3/22/98
-  int currentweapon = player->readyweapon;
-  int newweapon = currentweapon;
+  weapontype_t currentweapon = player->readyweapon;
+  weapontype_t newweapon = currentweapon;
   int i = NUMWEAPONS+1;   // killough 5/2/98
 
   // killough 2/8/98: follow preferences and fix BFG/SSG bugs
@@ -373,7 +373,8 @@ OVERLAY boolean P_CheckAmmo(player_t *player)
     {
       player->pendingweapon = P_SwitchWeapon(player);      // phares
       // Now set appropriate weapon overlay.
-      P_SetPsprite(player,ps_weapon,weaponinfo[player->readyweapon].downstate);
+      P_SetPsprite(player,ps_weapon,
+                   (statenum_t)weaponinfo[player->readyweapon].downstate);
     }
 
   return false;
@@ -393,7 +394,7 @@ OVERLAY static void P_FireWeapon(player_t *player)
     return;
 
   P_SetMobjState(player->mo, S_PLAY_ATK1);
-  newstate = weaponinfo[player->readyweapon].atkstate;
+  newstate = (statenum_t)weaponinfo[player->readyweapon].atkstate;
   P_SetPsprite(player, ps_weapon, newstate);
   P_NoiseAlert(player->mo, player->mo);
   lastshottic = gametic;                       // killough 3/22/98
@@ -406,7 +407,8 @@ OVERLAY static void P_FireWeapon(player_t *player)
 
 OVERLAY void P_DropWeapon(player_t *player)
 {
-  P_SetPsprite(player, ps_weapon, weaponinfo[player->readyweapon].downstate);
+  P_SetPsprite(player, ps_weapon,
+               (statenum_t)weaponinfo[player->readyweapon].downstate);
 }
 
 //
@@ -433,7 +435,8 @@ OVERLAY void A_WeaponReady(player_t *player, pspdef_t *psp)
   if (player->pendingweapon != wp_nochange || !player->health)
     {
       // change weapon (pending weapon should already be validated)
-      statenum_t newstate = weaponinfo[player->readyweapon].downstate;
+      statenum_t newstate =
+        (statenum_t)weaponinfo[player->readyweapon].downstate;
       P_SetPsprite(player, ps_weapon, newstate);
       return;
     }
@@ -545,7 +548,7 @@ OVERLAY void A_Raise(player_t *player, pspdef_t *psp)
   // The weapon has been raised all the way,
   //  so change to the ready state.
 
-  newstate = weaponinfo[player->readyweapon].readystate;
+  newstate = (statenum_t)weaponinfo[player->readyweapon].readystate;
 
   P_SetPsprite(player, ps_weapon, newstate);
 }
@@ -561,7 +564,7 @@ OVERLAY void A_Raise(player_t *player, pspdef_t *psp)
 OVERLAY static void A_FireSomething(player_t* player,int adder)
 {
   P_SetPsprite(player, ps_flash,
-               weaponinfo[player->readyweapon].flashstate+adder);
+               (statenum_t)(weaponinfo[player->readyweapon].flashstate+adder));
 
   // killough 3/27/98: prevent recoil in no-clipping mode
   if (!(player->mo->flags & MF_NOCLIP))

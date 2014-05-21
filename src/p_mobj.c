@@ -244,7 +244,7 @@ OVERLAY boolean P_SetMobjState(mobj_t* mobj,statenum_t state)
     // Call action functions when the state is set
     P_DoAction(st->action, mobj);
 
-    seenstate[state] = 1 + st->nextstate;   // killough 4/9/98
+    seenstate[state] = (statenum_t)(1 + st->nextstate);   // killough 4/9/98
 
     state = st->nextstate;
     } while (!mobj->tics && !seenstate[state]);   // killough 4/9/98
@@ -253,8 +253,8 @@ OVERLAY boolean P_SetMobjState(mobj_t* mobj,statenum_t state)
     doom_printf("Warning: State Cycle Detected");
 
   if (!--recursion)
-    for (;(state=seenstate[i]);i=state-1)
-      seenstate[i] = 0;  // killough 4/9/98: erase memory of states
+    for (;(state=seenstate[i]);i = (statenum_t)(state-1))
+      seenstate[i] = S_NULL;  // killough 4/9/98: erase memory of states
 
   return ret;
   }
@@ -268,7 +268,7 @@ OVERLAY void P_ExplodeMissile (mobj_t* mo)
   {
   mo->momx = mo->momy = mo->momz = 0;
 
-  P_SetMobjState (mo, mobjinfo[mo->type].deathstate);
+  P_SetMobjState (mo, (statenum_t)mobjinfo[mo->type].deathstate);
 
   mo->tics -= P_Random(pr_explode)&3;
 
@@ -308,7 +308,7 @@ OVERLAY void P_XYMovement (mobj_t* mo)
       mo->flags &= ~MF_SKULLFLY;
       mo->momx = mo->momy = mo->momz = 0;
 
-      P_SetMobjState (mo, mo->info->spawnstate);
+      P_SetMobjState (mo, (statenum_t)mo->info->spawnstate);
       }
     return;
     }
@@ -709,7 +709,7 @@ OVERLAY mobj_t* P_SpawnMobj(fixed_t x,fixed_t y,fixed_t z,mobjtype_t type)
   state_t*    st;
   mobjinfo_t* info;
 
-  mobj = Z_Malloc (sizeof(*mobj), PU_LEVEL, NULL);
+  mobj = (mobj_t *)Z_Malloc (sizeof(*mobj), PU_LEVEL, NULL);
   memset (mobj, 0, sizeof (*mobj));
   info = &mobjinfo[type];
   mobj->references = 0;
@@ -881,7 +881,7 @@ OVERLAY void P_RespawnSpecials (void)
   else
     z = ONFLOORZ;
 
-  mo = P_SpawnMobj (x,y,z, i);
+  mo = P_SpawnMobj (x,y,z, (mobjtype_t)i);
   mo->spawnpoint = *mthing;
   mo->angle = ANG45 * (mthing->angle/45);
 
@@ -1016,9 +1016,9 @@ OVERLAY void P_SpawnMapThing (mapthing_t* mthing)
       {
       num_deathmatchstarts = num_deathmatchstarts ?
                  num_deathmatchstarts*2 : 16;
-      deathmatchstarts = realloc(deathmatchstarts,
-                   num_deathmatchstarts *
-                   sizeof(*deathmatchstarts));
+      deathmatchstarts =
+        (mapthing_t *)realloc(deathmatchstarts,
+                              num_deathmatchstarts * sizeof(*deathmatchstarts));
       deathmatch_p = deathmatchstarts + offset;
       }
     memcpy(deathmatch_p++, mthing, sizeof(*mthing));
@@ -1101,7 +1101,7 @@ OVERLAY void P_SpawnMapThing (mapthing_t* mthing)
   else
     z = ONFLOORZ;
 
-  mobj = P_SpawnMobj (x,y,z, i);
+  mobj = P_SpawnMobj (x,y,z, (mobjtype_t)i);
   mobj->spawnpoint = *mthing;
 
   if (mobj->tics > 0)

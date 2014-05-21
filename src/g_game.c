@@ -228,7 +228,7 @@ static boolean joyarray[5];
 static boolean *joybuttons = &joyarray[1];    // allow [-1]
 
 // Game events info
-static buttoncode_t special_event; // Event triggered by local player, to send
+static int special_event; // Event triggered by local player, to send
 static byte  savegameslot;         // Slot to load if gameaction == ga_loadgame
 char         savedescription[SAVEDESCLEN];  // Description to save in savegame if gameaction == ga_savegame
 
@@ -552,7 +552,7 @@ OVERLAY void G_DoLoadLevel (void)
   levelstarttic = gametic;        // for time calculation
 
   if (wipegamestate == GS_LEVEL)
-    wipegamestate = -1;             // force a wipe
+    wipegamestate = (gamestate_t)-1;             // force a wipe
 
   gamestate = GS_LEVEL;
 
@@ -1044,7 +1044,7 @@ OVERLAY boolean G_CheckSpot(int playernum, mapthing_t *mthing)
     {
 //    static mobj_t **bodyque;       // phares 8/10/98: moved outside routine
       if (!bodyque)
-        bodyque = calloc(bodyquesize,sizeof*bodyque);
+        bodyque = (mobj_t**)calloc(bodyquesize,sizeof*bodyque);
       if (bodyque[bodyqueslot])
         P_RemoveMobj(bodyque[bodyqueslot]);
       bodyque[bodyqueslot] = players[playernum].mo;
@@ -1449,7 +1449,8 @@ OVERLAY void G_DoLoadGame(void)
 
     if (memcmp(&checksum, save_p, sizeof checksum)) {
       if (!forced_loadgame) {
-        char *msg = malloc(strlen((char *)save_p + sizeof checksum) + 128);
+        char *msg =
+          (char *)malloc(strlen((char *)save_p + sizeof checksum) + 128);
         strcpy(msg,"Incompatible Savegame!!!\n");
         if (save_p[sizeof checksum])
           strcat(strcat(msg,"Wads expected:\n\n"),
@@ -1471,7 +1472,7 @@ OVERLAY void G_DoLoadGame(void)
   else 
     compatibility_level = *save_p++;
 
-  gameskill = *save_p++;
+  gameskill = (skill_t)(*save_p++);
   gameepisode = *save_p++;
   gamemap = *save_p++;
 
@@ -1545,7 +1546,7 @@ OVERLAY void CheckSaveGame(size_t size)
   size_t pos = save_p - savebuffer;
   size += 1024;  // breathing room
   if (pos+size > savegamesize)
-    save_p = (savebuffer = realloc(savebuffer,
+    save_p = (savebuffer = (byte *)realloc(savebuffer,
            savegamesize += (size+1023) & ~1023)) + pos;
 }
 
@@ -1577,7 +1578,7 @@ OVERLAY void G_DoSaveGame (void)
 
   description = savedescription;
 
-  save_p = savebuffer = malloc(savegamesize);
+  save_p = savebuffer = (byte *)malloc(savegamesize);
 
   CheckSaveGame(SAVESTRINGSIZE+VERSIONSIZE+sizeof(unsigned long));
   memcpy (save_p, description, SAVESTRINGSIZE);
@@ -1930,7 +1931,7 @@ OVERLAY void G_WriteDemoTiccmd (ticcmd_t* cmd)
     {
       // no more space
       maxdemosize += 128*1024;   // add another 128K  -- killough
-      demobuffer = realloc(demobuffer,maxdemosize);
+      demobuffer = (byte *)realloc(demobuffer,maxdemosize);
       demo_p = position + demobuffer;  // back on track
       // end of main demo limit changes -- killough
     }
@@ -1952,7 +1953,7 @@ OVERLAY void G_RecordDemo (const char* name)
     maxdemosize = atoi(myargv[i+1])*1024;
   if (maxdemosize < 0x20000)  // killough
     maxdemosize = 0x20000;
-  demobuffer = malloc(maxdemosize); // killough
+  demobuffer = (byte *)malloc(maxdemosize); // killough
   demorecording = true;
 }
 
@@ -2145,9 +2146,9 @@ OVERLAY void G_DoPlayDemo (void)
       // killough 3/6/98: rearrange to fix savegame bugs (moved fastparm,
       // respawnparm, nomonsters flags to G_LoadOptions()/G_SaveOptions())
 
-      if ((skill=demover) >= 100)         // For demos from versions >= 1.4
+      if ((skill = (skill_t)demover) >= 100)         // For demos from versions >= 1.4
         {
-          skill = *demo_p++;
+          skill = (skill_t)(*demo_p++);
           episode = *demo_p++;
           map = *demo_p++;
           deathmatch = *demo_p++;
@@ -2168,7 +2169,7 @@ OVERLAY void G_DoPlayDemo (void)
     {
       demo_p += 6;               // skip signature;
       compatibility_level = 2 - (signed char)(*demo_p++); // CPhipps - load compatibility flag
-      skill = *demo_p++;
+      skill = (skill_t)*demo_p++;
       episode = *demo_p++;
       map = *demo_p++;
       deathmatch = *demo_p++;

@@ -35,6 +35,7 @@
 #ifdef HAVE_CONFIG_H
 #include "../config.h"
 #endif
+#include "m_misc.h"
 #include "doomstat.h"
 #include <unistd.h>
 #include <fcntl.h>
@@ -183,14 +184,14 @@ OVERLAY static void W_AddFile(const char *filename, wad_source_t source)
       header.numlumps = LONG(header.numlumps);
       header.infotableofs = LONG(header.infotableofs);
       length = header.numlumps*sizeof(filelump_t);
-      fileinfo2free = fileinfo = malloc(length);    // killough
+      fileinfo2free = fileinfo = (filelump_t *)malloc(length);    // killough
       lseek(handle, header.infotableofs, SEEK_SET);
       read(handle, fileinfo, length);
       numlumps += header.numlumps;
     }
 
     // Fill in lumpinfo
-    lumpinfo = realloc(lumpinfo, numlumps*sizeof(lumpinfo_t));
+    lumpinfo = (lumpinfo_t *)realloc(lumpinfo, numlumps*sizeof(lumpinfo_t));
 
     lump_p = &lumpinfo[startlump];
 
@@ -202,7 +203,7 @@ OVERLAY static void W_AddFile(const char *filename, wad_source_t source)
 #ifndef NO_PREDEFINED_LUMPS
         lump_p->data = NULL;                        // killough 1/31/98
 #endif
-        lump_p->namespace = ns_global;              // killough 4/17/98
+        lump_p->Namespace = ns_global;              // killough 4/17/98
         strncpy (lump_p->name, fileinfo->name, 8);
 	lump_p->source = source;                    // Ty 08/29/98
 	lump_p->locks = 0;                   // CPhipps - initialise locks
@@ -226,10 +227,11 @@ OVERLAY static int IsMarker(const char *marker, const char *name)
 
 // killough 4/17/98: add namespace tags
 
-OVERLAY static void W_CoalesceMarkedResource(const char *start_marker,
-                                     const char *end_marker, int namespace)
+OVERLAY static void
+W_CoalesceMarkedResource(const char *start_marker, const char *end_marker,
+                         enum lumpinfonamespace Namespace)
 {
-  lumpinfo_t *marked = malloc(sizeof(*marked) * numlumps);
+  lumpinfo_t *marked = (lumpinfo_t *)malloc(sizeof(*marked) * numlumps);
   size_t i, num_marked = 0, num_unmarked = 0;
   int is_marked = 0, mark_end = 0;
   lumpinfo_t *lump = lumpinfo;
@@ -241,7 +243,7 @@ OVERLAY static void W_CoalesceMarkedResource(const char *start_marker,
           {
             strncpy(marked->name, start_marker, 8);
             marked->size = 0;  // killough 3/20/98: force size to be 0
-            marked->namespace = ns_global;        // killough 4/17/98
+            marked->Namespace = ns_global;        // killough 4/17/98
             num_marked = 1;
           }
         is_marked = 1;                            // start marking lumps
@@ -256,7 +258,7 @@ OVERLAY static void W_CoalesceMarkedResource(const char *start_marker,
         if (is_marked)                            // if we are marking lumps,
           {                                       // move lump to marked list
             marked[num_marked] = *lump;
-            marked[num_marked++].namespace = namespace;  // killough 4/17/98
+            marked[num_marked++].Namespace = Namespace;  // killough 4/17/98
           }
         else
           lumpinfo[num_unmarked++] = *lump;       // else move down THIS list
@@ -271,7 +273,7 @@ OVERLAY static void W_CoalesceMarkedResource(const char *start_marker,
   if (mark_end)                                   // add end marker
     {
       lumpinfo[numlumps].size = 0;  // killough 3/20/98: force size to be 0
-      lumpinfo[numlumps].namespace = ns_global;   // killough 4/17/98
+      lumpinfo[numlumps].Namespace = ns_global;   // killough 4/17/98
       strncpy(lumpinfo[numlumps++].name, end_marker, 8);
     }
 }
@@ -315,7 +317,7 @@ OVERLAY unsigned W_LumpNameHash(const char *s)
 // between different resources such as flats, sprites, colormaps
 //
 
-OVERLAY int (W_CheckNumForName)(const char *name, int namespace)
+OVERLAY int (W_CheckNumForName)(const char *name, int Namespace)
 {
   // Hash function maps the name to one of possibly numlump chains.
   // It has been tuned so that the average chain length never exceeds 2.
@@ -329,7 +331,7 @@ OVERLAY int (W_CheckNumForName)(const char *name, int namespace)
   // Doom wads.
 
   while (i >= 0 && (strncasecmp(lumpinfo[i].name, name, 8) ||
-                    lumpinfo[i].namespace != namespace))
+                    lumpinfo[i].Namespace != Namespace))
     i = lumpinfo[i].next;
 
   // Return the matching lump, or -1 if none found.
@@ -402,7 +404,7 @@ OVERLAY void W_Init(void)
   numlumps = num_predefined_lumps;
 
   // lumpinfo will be realloced as lumps are added
-  lumpinfo = malloc(numlumps*sizeof(*lumpinfo));
+  lumpinfo = (lumpinfo_t *)malloc(numlumps*sizeof(*lumpinfo));
 
   memcpy(lumpinfo, predefined_lumps, numlumps*sizeof(*lumpinfo));
   // Ty 08/29/98 - add source flag to the predefined lumps
@@ -439,7 +441,7 @@ OVERLAY void W_Init(void)
   W_CoalesceMarkedResource("C_START", "C_END", ns_colormaps);
 
   // set up caching
-  lumpcache = calloc(sizeof *lumpcache, numlumps); // killough
+  lumpcache = (void **)calloc(sizeof *lumpcache, numlumps); // killough
 
   if (!lumpcache)
     I_Error ("Couldn't allocate lumpcache");
@@ -579,7 +581,7 @@ OVERLAY void WritePredefinedLumpWad(const char *filename)
   // How to write a PWAD will not be explained here.
   if ( (handle = open (filenam, O_RDWR | O_CREAT | O_BINARY, S_IWUSR|S_IRUSR)) != -1)
   {
-    wadinfo_t header = {"PWAD"};
+    wadinfo_t header = { {'P','W','A','D'} };
     size_t filepos = sizeof(wadinfo_t) + num_predefined_lumps * sizeof(filelump_t);
     int i;
 

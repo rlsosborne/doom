@@ -174,46 +174,46 @@ OVERLAY static void P_RunThinkers (void)
         case Think_None:
           break;
         case Think_P_MobjThinker:
-          P_MobjThinker(currentthinker);
+          P_MobjThinker((mobj_t *)currentthinker);
           break;
         case Think_T_MoveCeiling:
-          T_MoveCeiling(currentthinker);
+          T_MoveCeiling((ceiling_t *)currentthinker);
           break;
         case Think_T_VerticalDoor:
-          T_VerticalDoor(currentthinker);
+          T_VerticalDoor((vldoor_t *)currentthinker);
           break;
         case Think_T_MoveFloor:
-          T_MoveFloor(currentthinker);
+          T_MoveFloor((floormove_t *)currentthinker);
           break;
         case Think_T_MoveElevator:
-          T_MoveElevator(currentthinker);
+          T_MoveElevator((elevator_t *)currentthinker);
           break;
         case Think_T_PlatRaise:
-          T_PlatRaise(currentthinker);
+          T_PlatRaise((plat_t *)currentthinker);
           break;
         case Think_T_FireFlicker:
-          T_FireFlicker(currentthinker);
+          T_FireFlicker((fireflicker_t *)currentthinker);
           break;
         case Think_T_LightFlash:
-          T_LightFlash(currentthinker);
+          T_LightFlash((lightflash_t *)currentthinker);
           break;
         case Think_T_StrobeFlash:
-          T_StrobeFlash(currentthinker);
+          T_StrobeFlash((strobe_t *)currentthinker);
           break;
         case Think_T_Glow:
-          T_Glow(currentthinker);
+          T_Glow((glow_t *)currentthinker);
           break;
         case Think_T_Scroll:
-          T_Scroll(currentthinker);
+          T_Scroll((scroll_t *)currentthinker);
           break;
         case Think_T_Friction:
-          T_Friction(currentthinker);
+          T_Friction((friction_t *)currentthinker);
           break;
         case Think_T_Pusher:
-          T_Pusher(currentthinker);
+          T_Pusher((pusher_t *)currentthinker);
           break;
         case Think_P_RemoveMobjDelayed:
-          P_RemoveMobjDelayed(currentthinker);
+          P_RemoveMobjDelayed((mobj_t *)currentthinker);
           break;
         case Think_P_RemoveThinkerDelayed:
           P_RemoveThinkerDelayed(currentthinker);

@@ -146,7 +146,7 @@ OVERLAY void P_InitPicAnims (void)
     if (lastanim >= anims + maxanims)
     {
       size_t newmax = maxanims ? maxanims*2 : MAXANIMS;
-      anims = realloc(anims, newmax*sizeof(*anims));   // killough
+      anims = (anim_t *)realloc(anims, newmax*sizeof(*anims));   // killough
       lastanim = anims + maxanims;
       maxanims = newmax;
     }
@@ -2651,10 +2651,10 @@ OVERLAY void T_Scroll(scroll_t *s)
 // accel: non-zero if this is an accelerative effect
 //
 
-OVERLAY static void Add_Scroller(int type, fixed_t dx, fixed_t dy,
+OVERLAY static void Add_Scroller(enum scrolltype_e type, fixed_t dx, fixed_t dy,
                          int control, int affectee, int accel)
 {
-  scroll_t *s = Z_Malloc(sizeof *s, PU_LEVSPEC, 0);
+  scroll_t *s = (scroll_t *)Z_Malloc(sizeof *s, PU_LEVSPEC, 0);
   s->thinker.function = Think_T_Scroll;
   s->type = type;
   s->dx = dx;
@@ -2826,7 +2826,7 @@ OVERLAY static void P_SpawnScrollers(void)
 
 OVERLAY static void Add_Friction(int friction, int movefactor, int affectee)
     {
-    friction_t *f = Z_Malloc(sizeof *f, PU_LEVSPEC, 0);
+    friction_t *f = (friction_t *)Z_Malloc(sizeof *f, PU_LEVSPEC, 0);
 
     f->thinker.function = Think_T_Friction;
     f->friction = friction;
@@ -2976,9 +2976,11 @@ OVERLAY static void P_SpawnFriction(void)
 //
 // Add a push thinker to the thinker list
 
-OVERLAY static void Add_Pusher(int type, int x_mag, int y_mag, mobj_t* source, int affectee)
+OVERLAY static void
+Add_Pusher(enum pushertype_e type, int x_mag, int y_mag, mobj_t* source,
+           int affectee)
     {
-    pusher_t *p = Z_Malloc(sizeof *p, PU_LEVSPEC, 0);
+    pusher_t *p = (pusher_t *)Z_Malloc(sizeof *p, PU_LEVSPEC, 0);
 
     p->thinker.function = Think_T_Pusher;
     p->source = source;

@@ -116,18 +116,18 @@ enum patch_translation_e {
 // Consolidated into the 3 really useful functions:
 // V_DrawMemPatch - Draws the given patch_t
 void V_DrawMemPatch(int x, int y, int scrn, const patch_t *patch, 
-		    const byte *trans, enum patch_translation_e flags);
+		    const byte *trans, int flags);
 // V_DrawNumPatch - Draws the patch from lump num
 void V_DrawNumPatch(int x, int y, int scrn, int lump, 
-		    const byte *trans, enum patch_translation_e flags);
+		    const byte *trans, int flags);
 // V_DrawNamePatch - Draws the patch from lump "name"
 void V_DrawNamePatch(int x, int y, int scrn, const char *name, 
-		     const byte *trans, enum patch_translation_e flags);
+		     const byte *trans, int flags);
 // Draw a linear block of pixels into the view buffer.
 
 // CPhipps - added const's, patch translation flags for stretching
 void V_DrawBlock(int x, int y, int scrn, int width, int height, 
-		 const byte *src, enum patch_translation_e flags);
+		 const byte *src, int flags);
 
 /* cphipps 10/99: function to tile a flat over the screen */
 void V_DrawBackground(const char* flatname);
@@ -153,7 +153,7 @@ inline static void V_PlotPixel(int scrn, int x, int y, byte colour) {
   screens[scrn][x+SCREENWIDTH*y] = colour;
 }
 
-#define V_AllocScreen(scrn) screens[scrn] = malloc(SCREENWIDTH*SCREENHEIGHT)
+#define V_AllocScreen(scrn) screens[scrn] = (byte *)malloc(SCREENWIDTH*SCREENHEIGHT)
 #define V_FreeScreen(scrn) free(screens[scrn]); screens[scrn] = NULL
 
 #endif

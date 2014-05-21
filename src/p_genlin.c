@@ -107,7 +107,7 @@ manual_floor:
 
     // new floor thinker
     rtn = 1;
-    floor = Z_Malloc (sizeof(*floor), PU_LEVSPEC, 0);
+    floor = (floormove_t *)Z_Malloc (sizeof(*floor), PU_LEVSPEC, 0);
     P_AddThinker (&floor->thinker);
     sec->floordata = floor;
     floor->thinker.function = Think_T_MoveFloor;
@@ -310,7 +310,7 @@ manual_ceiling:
 
     // new ceiling thinker
     rtn = 1;
-    ceiling = Z_Malloc (sizeof(*ceiling), PU_LEVSPEC, 0);
+    ceiling = (ceiling_t *)Z_Malloc (sizeof(*ceiling), PU_LEVSPEC, 0);
     P_AddThinker (&ceiling->thinker);
     sec->ceilingdata = ceiling; //jff 2/22/98
     ceiling->thinker.function = Think_T_MoveCeiling;
@@ -516,7 +516,7 @@ manual_lift:
       
     // Setup the plat thinker
     rtn = 1;
-    plat = Z_Malloc( sizeof(*plat), PU_LEVSPEC, 0);
+    plat = (plat_t *)Z_Malloc( sizeof(*plat), PU_LEVSPEC, 0);
     P_AddThinker(&plat->thinker);
               
     plat->sector = sec;
@@ -553,7 +553,7 @@ manual_lift:
         plat->high = P_FindHighestFloorSurrounding(sec);
         if (plat->high < sec->floorheight)
           plat->high = sec->floorheight;
-        plat->status = P_Random(pr_genlift)&1;
+        plat->status = (plat_e)(P_Random(pr_genlift)&1);
         break;
       default:
         break;
@@ -676,7 +676,7 @@ manual_stair:
       
     // new floor thinker
     rtn = 1;
-    floor = Z_Malloc (sizeof(*floor), PU_LEVSPEC, 0);
+    floor = (floormove_t *)Z_Malloc (sizeof(*floor), PU_LEVSPEC, 0);
     P_AddThinker (&floor->thinker);
     sec->floordata = floor;
     floor->thinker.function = Think_T_MoveFloor;
@@ -774,7 +774,7 @@ manual_stair:
 
         sec = tsec;
         secnum = newsecnum;
-        floor = Z_Malloc (sizeof(*floor), PU_LEVSPEC, 0);
+        floor = (floormove_t *)Z_Malloc (sizeof(*floor), PU_LEVSPEC, 0);
 
         P_AddThinker (&floor->thinker);
 
@@ -858,7 +858,7 @@ manual_crusher:
 
     // new ceiling thinker
     rtn = 1;
-    ceiling = Z_Malloc (sizeof(*ceiling), PU_LEVSPEC, 0);
+    ceiling = (ceiling_t *)Z_Malloc (sizeof(*ceiling), PU_LEVSPEC, 0);
     P_AddThinker (&ceiling->thinker);
     sec->ceilingdata = ceiling; //jff 2/22/98
     ceiling->thinker.function = Think_T_MoveCeiling;
@@ -953,7 +953,7 @@ manual_locked:
   
     // new door thinker
     rtn = 1;
-    door = Z_Malloc (sizeof(*door), PU_LEVSPEC, 0);
+    door = (vldoor_t *)Z_Malloc (sizeof(*door), PU_LEVSPEC, 0);
     P_AddThinker (&door->thinker);
     sec->ceilingdata = door; //jff 2/22/98
 
@@ -1057,7 +1057,7 @@ manual_door:
   
     // new door thinker
     rtn = 1;
-    door = Z_Malloc (sizeof(*door), PU_LEVSPEC, 0);
+    door = (vldoor_t *)Z_Malloc (sizeof(*door), PU_LEVSPEC, 0);
     P_AddThinker (&door->thinker);
     sec->ceilingdata = door; //jff 2/22/98
 

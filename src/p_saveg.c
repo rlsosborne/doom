@@ -97,7 +97,7 @@ OVERLAY void P_UnArchivePlayers (void)
         for (j=0 ; j<NUMPSPRITES ; j++)
           if (players[i]. psprites[j].state)
             players[i]. psprites[j].state =
-              &states[ (int)players[i].psprites[j].state ];
+              &states[ (int)(intptr_t)players[i].psprites[j].state ];
       }
 }
 
@@ -155,9 +155,9 @@ OVERLAY void P_ArchiveWorld (void)
       } else {
 	// killough 10/98: save full floor & ceiling heights, including fraction
         memcpy(put, &sec->floorheight, sizeof sec->floorheight);
-        put = (void *)((char *) put + sizeof sec->floorheight);
+        put = (short *)((char *) put + sizeof sec->floorheight);
         memcpy(put, &sec->ceilingheight, sizeof sec->ceilingheight);
-        put = (void *)((char *) put + sizeof sec->ceilingheight);
+        put = (short *)((char *) put + sizeof sec->ceilingheight);
       }
       *put++ = sec->floorpic;
       *put++ = sec->ceilingpic;
@@ -199,9 +199,9 @@ OVERLAY void P_ArchiveWorld (void)
               // killough 10/98: save full sidedef offsets,
               // preserving fractional scroll offsets 
               memcpy(put, &si->textureoffset, sizeof si->textureoffset);
-              put = (void *)((char *) put + sizeof si->textureoffset);
+              put = (short *)((char *) put + sizeof si->textureoffset);
               memcpy(put, &si->rowoffset, sizeof si->rowoffset);
-              put = (void *)((char *) put + sizeof si->rowoffset);
+              put = (short *)((char *) put + sizeof si->rowoffset);
 	    }
             *put++ = si->toptexture;
             *put++ = si->bottomtexture;
@@ -237,9 +237,9 @@ OVERLAY void P_UnArchiveWorld (void)
         // killough 10/98: load full floor & ceiling heights, including fractions
   
         memcpy(&sec->floorheight, get, sizeof sec->floorheight);
-        get = (void *)((char *) get + sizeof sec->floorheight);
+        get = (short *)((char *) get + sizeof sec->floorheight);
         memcpy(&sec->ceilingheight, get, sizeof sec->ceilingheight);
-        get = (void *)((char *) get + sizeof sec->ceilingheight);
+        get = (short *)((char *) get + sizeof sec->ceilingheight);
       }
       sec->floorpic = *get++;
       sec->ceilingpic = *get++;
@@ -278,9 +278,9 @@ OVERLAY void P_UnArchiveWorld (void)
 	    } else {
               // killough 10/98: load full sidedef offsets, including fractions
               memcpy(&si->textureoffset, get, sizeof si->textureoffset);
-              get = (void *)((char *) get + sizeof si->textureoffset);
+              get = (short *)((char *) get + sizeof si->textureoffset);
               memcpy(&si->rowoffset, get, sizeof si->rowoffset);
-              get = (void *)((char *) get + sizeof si->rowoffset);
+              get = (short *)((char *) get + sizeof si->rowoffset);
  	    }
             si->toptexture = *get++;
             si->bottomtexture = *get++;
@@ -469,14 +469,14 @@ OVERLAY void P_UnArchiveThinkers (void)
       I_Error ("Unknown tclass %i in savegame", *save_p);
 
     // first table entry special: 0 maps to NULL
-    *(mobj_p = malloc(size * sizeof (*mobj_p))) = 0;   // table of pointers
+    *(mobj_p = (mobj_t **)malloc(size * sizeof (*mobj_p))) = 0;   // table of pointers
     save_p = sp;           // restore save pointer
   }
 
   // read in saved thinkers
   for (size = 1; *save_p++ == tc_mobj; size++)    // killough 2/14/98
     {
-      mobj_t *mobj = Z_Malloc(sizeof(mobj_t), PU_LEVEL, NULL);
+      mobj_t *mobj = (mobj_t *)Z_Malloc(sizeof(mobj_t), PU_LEVEL, NULL);
 
       // killough 2/14/98 -- insert pointers to thinkers into table, in order:
       mobj_p[size] = mobj;
@@ -485,10 +485,10 @@ OVERLAY void P_UnArchiveThinkers (void)
       memcpy (mobj, save_p, mobjsize);
       save_p += mobjsize;
       mobj->references = 0;
-      mobj->state = states + (int) mobj->state;
+      mobj->state = states + (int)(intptr_t)mobj->state;
 
       if (mobj->player)
-        (mobj->player = &players[(int) mobj->player - 1]) -> mo = mobj;
+        (mobj->player = &players[(int)(intptr_t)mobj->player - 1]) -> mo = mobj;
 
       P_SetThingPosition (mobj);
       mobj->info = &mobjinfo[mobj->type];
@@ -823,10 +823,10 @@ OVERLAY void P_UnArchiveSpecials (void)
       case tc_ceiling:
         PADSAVEP();
         {
-          ceiling_t *ceiling = Z_Malloc (sizeof(*ceiling), PU_LEVEL, NULL);
+          ceiling_t *ceiling = (ceiling_t *)Z_Malloc (sizeof(*ceiling), PU_LEVEL, NULL);
           memcpy (ceiling, save_p, sizeof(*ceiling));
           save_p += sizeof(*ceiling);
-          ceiling->sector = &sectors[(int)ceiling->sector];
+          ceiling->sector = &sectors[(int)(intptr_t)ceiling->sector];
           ceiling->sector->ceilingdata = ceiling; //jff 2/22/98
 
           if (ceiling->thinker.function != Think_None)
@@ -840,13 +840,15 @@ OVERLAY void P_UnArchiveSpecials (void)
       case tc_door:
         PADSAVEP();
         {
-          vldoor_t *door = Z_Malloc (sizeof(*door), PU_LEVEL, NULL);
+          vldoor_t *door = (vldoor_t *)Z_Malloc (sizeof(*door), PU_LEVEL, NULL);
           memcpy (door, save_p, sizeof(*door));
           save_p += sizeof(*door);
-          door->sector = &sectors[(int)door->sector];
+          door->sector = &sectors[(int)(intptr_t)door->sector];
 
           //jff 1/31/98 unarchive line remembered by door as well
-          door->line = (int)door->line!=-1? &lines[(int)door->line] : NULL;
+          door->line =
+            (int)(intptr_t)door->line != -1 ? &lines[(int)(intptr_t)door->line] :
+                                              NULL;
 
           door->sector->ceilingdata = door;       //jff 2/22/98
           door->thinker.function = Think_T_VerticalDoor;
@@ -857,10 +859,11 @@ OVERLAY void P_UnArchiveSpecials (void)
       case tc_floor:
         PADSAVEP();
         {
-          floormove_t *floor = Z_Malloc (sizeof(*floor), PU_LEVEL, NULL);
+          floormove_t *floor =
+            (floormove_t *)Z_Malloc (sizeof(*floor), PU_LEVEL, NULL);
           memcpy (floor, save_p, sizeof(*floor));
           save_p += sizeof(*floor);
-          floor->sector = &sectors[(int)floor->sector];
+          floor->sector = &sectors[(int)(intptr_t)floor->sector];
           floor->sector->floordata = floor; //jff 2/22/98
           floor->thinker.function = Think_T_MoveFloor;
           P_AddThinker (&floor->thinker);
@@ -870,10 +873,10 @@ OVERLAY void P_UnArchiveSpecials (void)
       case tc_plat:
         PADSAVEP();
         {
-          plat_t *plat = Z_Malloc (sizeof(*plat), PU_LEVEL, NULL);
+          plat_t *plat = (plat_t *)Z_Malloc (sizeof(*plat), PU_LEVEL, NULL);
           memcpy (plat, save_p, sizeof(*plat));
           save_p += sizeof(*plat);
-          plat->sector = &sectors[(int)plat->sector];
+          plat->sector = &sectors[(int)(intptr_t)plat->sector];
           plat->sector->floordata = plat; //jff 2/22/98
 
           if (plat->thinker.function != Think_None)
@@ -887,10 +890,11 @@ OVERLAY void P_UnArchiveSpecials (void)
       case tc_flash:
         PADSAVEP();
         {
-          lightflash_t *flash = Z_Malloc (sizeof(*flash), PU_LEVEL, NULL);
+          lightflash_t *flash =
+            (lightflash_t *)Z_Malloc (sizeof(*flash), PU_LEVEL, NULL);
           memcpy (flash, save_p, sizeof(*flash));
           save_p += sizeof(*flash);
-          flash->sector = &sectors[(int)flash->sector];
+          flash->sector = &sectors[(int)(intptr_t)flash->sector];
           flash->thinker.function = Think_T_LightFlash;
           P_AddThinker (&flash->thinker);
           break;
@@ -899,10 +903,11 @@ OVERLAY void P_UnArchiveSpecials (void)
       case tc_strobe:
         PADSAVEP();
         {
-          strobe_t *strobe = Z_Malloc (sizeof(*strobe), PU_LEVEL, NULL);
+          strobe_t *strobe =
+            (strobe_t *)Z_Malloc (sizeof(*strobe), PU_LEVEL, NULL);
           memcpy (strobe, save_p, sizeof(*strobe));
           save_p += sizeof(*strobe);
-          strobe->sector = &sectors[(int)strobe->sector];
+          strobe->sector = &sectors[(int)(intptr_t)strobe->sector];
           strobe->thinker.function = Think_T_StrobeFlash;
           P_AddThinker (&strobe->thinker);
           break;
@@ -912,10 +917,11 @@ OVERLAY void P_UnArchiveSpecials (void)
       case tc_flicker:
         PADSAVEP();
         {
-          fireflicker_t *flick = Z_Malloc (sizeof(*flick), PU_LEVEL, NULL);
+          fireflicker_t *flick =
+            (fireflicker_t *)Z_Malloc (sizeof(*flick), PU_LEVEL, NULL);
           memcpy (flick, save_p, sizeof(*flick));
           save_p += sizeof(*flick);
-          flick->sector = &sectors[(int)flick->sector];
+          flick->sector = &sectors[(int)(intptr_t)flick->sector];
           flick->thinker.function = Think_T_FireFlicker;
           P_AddThinker (&flick->thinker);
           break;
@@ -924,10 +930,10 @@ OVERLAY void P_UnArchiveSpecials (void)
       case tc_glow:
         PADSAVEP();
         {
-          glow_t *glow = Z_Malloc (sizeof(*glow), PU_LEVEL, NULL);
+          glow_t *glow = (glow_t *)Z_Malloc (sizeof(*glow), PU_LEVEL, NULL);
           memcpy (glow, save_p, sizeof(*glow));
           save_p += sizeof(*glow);
-          glow->sector = &sectors[(int)glow->sector];
+          glow->sector = &sectors[(int)(intptr_t)glow->sector];
           glow->thinker.function = Think_T_Glow;
           P_AddThinker (&glow->thinker);
           break;
@@ -937,10 +943,11 @@ OVERLAY void P_UnArchiveSpecials (void)
       case tc_elevator:
         PADSAVEP();
         {
-          elevator_t *elevator = Z_Malloc (sizeof(*elevator), PU_LEVEL, NULL);
+          elevator_t *elevator =
+            (elevator_t *)Z_Malloc (sizeof(*elevator), PU_LEVEL, NULL);
           memcpy (elevator, save_p, sizeof(*elevator));
           save_p += sizeof(*elevator);
-          elevator->sector = &sectors[(int)elevator->sector];
+          elevator->sector = &sectors[(int)(intptr_t)elevator->sector];
           elevator->sector->floordata = elevator; //jff 2/22/98
           elevator->sector->ceilingdata = elevator; //jff 2/22/98
           elevator->thinker.function = Think_T_MoveElevator;
@@ -950,7 +957,8 @@ OVERLAY void P_UnArchiveSpecials (void)
 
       case tc_scroll:       // killough 3/7/98: scroll effect thinkers
         {
-          scroll_t *scroll = Z_Malloc (sizeof(scroll_t), PU_LEVEL, NULL);
+          scroll_t *scroll =
+            (scroll_t *)Z_Malloc (sizeof(scroll_t), PU_LEVEL, NULL);
           memcpy (scroll, save_p, sizeof(scroll_t));
           save_p += sizeof(scroll_t);
           scroll->thinker.function = Think_T_Scroll;
@@ -960,7 +968,8 @@ OVERLAY void P_UnArchiveSpecials (void)
 
       case tc_friction:   // phares 3/18/98: new friction effect thinkers
         {
-          friction_t *friction = Z_Malloc (sizeof(friction_t), PU_LEVEL, NULL);
+          friction_t *friction =
+            (friction_t *)Z_Malloc (sizeof(friction_t), PU_LEVEL, NULL);
           memcpy (friction, save_p, sizeof(friction_t));
           save_p += sizeof(friction_t);
           friction->thinker.function = Think_T_Friction;
@@ -970,7 +979,8 @@ OVERLAY void P_UnArchiveSpecials (void)
 
       case tc_pusher:   // phares 3/22/98: new Push/Pull effect thinkers
         {
-          pusher_t *pusher = Z_Malloc (sizeof(pusher_t), PU_LEVEL, NULL);
+          pusher_t *pusher =
+            (pusher_t *)Z_Malloc (sizeof(pusher_t), PU_LEVEL, NULL);
           memcpy (pusher, save_p, sizeof(pusher_t));
           save_p += sizeof(pusher_t);
           pusher->thinker.function = Think_T_Pusher;
@@ -1065,7 +1075,7 @@ OVERLAY void P_UnArchiveMap(void)
   if (markpointnum)
     {
       while (markpointnum >= markpointnum_max)
-        markpoints = realloc(markpoints, sizeof *markpoints *
+        markpoints = (mpoint_t *)realloc(markpoints, sizeof *markpoints *
          (markpointnum_max = markpointnum_max ? markpointnum_max*2 : 16));
       memcpy(markpoints, save_p, markpointnum * sizeof *markpoints);
       save_p += markpointnum * sizeof *markpoints;

@@ -523,7 +523,7 @@ OVERLAY void R_InitTranslationTables (void)
   // Remove dependency of colormaps aligned on 256-byte boundary
 
   if (translationtables == NULL) // CPhipps - allow multiple calls
-    translationtables = Z_Malloc(256*MAXTRANS, PU_STATIC, 0);
+    translationtables = (byte *)Z_Malloc(256*MAXTRANS, PU_STATIC, 0);
 
   for (i=0; i<MAXTRANS; i++) transtocolour[i] = 255;
 
@@ -650,7 +650,7 @@ OVERLAY void R_FillBackScreen (void)
 
   flump = firstflat +
           R_FlatNumForName(gamemode == commercial ? "GRNROCK" : "FLOOR7_2");
-  src = W_CacheLumpNum(flump);
+  src = (const byte *)W_CacheLumpNum(flump);
 
   dest = screens[1]; 
          
