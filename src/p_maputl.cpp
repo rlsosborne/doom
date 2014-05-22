@@ -323,67 +323,6 @@ OVERLAY void P_SetThingPosition(mobj_t *thing)
     }
 }
 
-//
-// BLOCK MAP ITERATORS
-// For each line/thing in the given mapblock,
-// call the passed PIT_* function.
-// If the function returns false,
-// exit with false without checking anything else.
-//
-
-OVERLAY static boolean P_DoBlockLineFunc(blocklinesfunc_t func, line_t *line)
-{
-  switch (func) {
-  case PIT_ADDLINEINTERCEPTS:
-    return PIT_AddLineIntercepts(line);
-  case PIT_CROSSLINE:
-    return PIT_CrossLine(line);
-  case PIT_CHECKLINE:
-    return PIT_CheckLine(line);
-  case PIT_GETSECTORS:
-    return PIT_GetSectors(line);
-  }
-}
-
-//
-// P_BlockLinesIterator
-// The validcount flags are used to avoid checking lines
-// that are marked in multiple mapblocks,
-// so increment validcount before the first call
-// to P_BlockLinesIterator, then make one or more calls
-// to it.
-//
-// killough 5/3/98: reformatted, cleaned up
-
-OVERLAY boolean P_BlockLinesIterator(int x, int y, blocklinesfunc_t func)
-{
-  int        offset;
-  const long *list;   // killough 3/1/98: for removal of blockmap limit
-
-  if (x<0 || y<0 || x>=bmapwidth || y>=bmapheight)
-    return true;
-  offset = y*bmapwidth+x;
-  offset = *(blockmap+offset);
-  list = blockmaplump+offset;     // original was reading         // phares
-                                  // delmiting 0 as linedef 0     // phares
-
-  // killough 1/31/98: for compatibility we need to use the old method.
-  // Most demos go out of sync, and maybe other problems happen, if we
-  // don't consider linedef 0. For safety this should be qualified.
-
-  if (!demo_compatibility) // killough 2/22/98: demo_compatibility check
-    list++;     // skip 0 starting delimiter                      // phares
-  for ( ; *list != -1 ; list++)                                   // phares
-    {
-      line_t *ld = &lines[*list];
-      if (ld->validcount == validcount)
-        continue;       // line has already been checked
-      ld->validcount = validcount;
-      if (!P_DoBlockLineFunc(func, ld))
-        return false;
-    }
-  return true;  // everything was checked
-}
 
 OVERLAY static boolean P_DoBlockThingsFunc(blockthingsfunc_t func, mobj_t *mobj)
 {
@@ -492,6 +431,12 @@ OVERLAY static boolean PIT_AddLineIntercepts(line_t *ld)
 
   return true;  // continue
 }
+
+struct PIT_AddLineInterceptsWrapper {
+  boolean operator()(line_t *ld) {
+    return PIT_AddLineIntercepts(ld);
+  }
+};
 
 //
 // PIT_AddThingIntercepts
@@ -693,7 +638,7 @@ P_PathTraverse(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2, int flags,
   for (count = 0; count < 64; count++)
     {
       if (flags & PT_ADDLINES)
-        if (!P_BlockLinesIterator(mapx, mapy,PIT_ADDLINEINTERCEPTS))
+        if (!P_BlockLinesIterator(mapx, mapy,PIT_AddLineInterceptsWrapper()))
           return false; // early out
 
       if (flags & PT_ADDTHINGS)

@@ -261,7 +261,7 @@ OVERLAY boolean P_TeleportMove (mobj_t* thing,fixed_t x,fixed_t y)
 // longer and probably really isn't worth the effort.
 //
 
-OVERLAY boolean PIT_CrossLine (line_t* ld)
+OVERLAY static boolean PIT_CrossLine (line_t* ld)
   {
   if (!(ld->flags & ML_TWOSIDED) ||
       (ld->flags & (ML_BLOCKING|ML_BLOCKMONSTERS)))
@@ -274,6 +274,11 @@ OVERLAY boolean PIT_CrossLine (line_t* ld)
   return(true); // line doesn't block trajectory                    //   |
   }                                                                 // phares
 
+struct PIT_CrossLineWrapper {
+  boolean operator()(line_t *ld) {
+    return PIT_CrossLine(ld);
+  }
+};
 
 //
 // PIT_CheckLine
@@ -351,6 +356,12 @@ OVERLAY boolean PIT_CheckLine (line_t* ld)
 
   return true;
   }
+
+struct Pit_CheckLineWrapper {
+  boolean operator()(line_t* ld) {
+    return PIT_CheckLine(ld);
+  }
+};
 
 //
 // PIT_CheckThing
@@ -512,7 +523,7 @@ OVERLAY boolean Check_Sides(mobj_t* actor, int x, int y)
   validcount++; // prevents checking same line twice
   for (bx = xl ; bx <= xh ; bx++)
     for (by = yl ; by <= yh ; by++)
-      if (!P_BlockLinesIterator(bx,by,PIT_CROSSLINE))
+      if (!P_BlockLinesIterator(bx,by,PIT_CrossLineWrapper()))
         return true;                                                //   ^
   return(false);                                                    //   |
   }                                                                 // phares
@@ -609,7 +620,7 @@ OVERLAY boolean P_CheckPosition (mobj_t* thing,fixed_t x,fixed_t y)
 
   for (bx=xl ; bx<=xh ; bx++)
     for (by=yl ; by<=yh ; by++)
-      if (!P_BlockLinesIterator (bx,by,PIT_CHECKLINE))
+      if (!P_BlockLinesIterator (bx,by,Pit_CheckLineWrapper()))
         return false; // doesn't fit
 
   return true;
@@ -1803,7 +1814,7 @@ OVERLAY void P_DelSeclist(msecnode_t* node)
 // at this location, so don't bother with checking impassable or
 // blocking lines.
 
-OVERLAY boolean PIT_GetSectors(line_t* ld)
+OVERLAY static boolean PIT_GetSectors(line_t* ld)
   {
   if (tmbbox[BOXRIGHT]  <= ld->bbox[BOXLEFT]   ||
       tmbbox[BOXLEFT]   >= ld->bbox[BOXRIGHT]  ||
@@ -1835,6 +1846,12 @@ OVERLAY boolean PIT_GetSectors(line_t* ld)
 
   return true;
   }
+
+struct PIT_GetSectorsWrapper {
+  boolean operator()(line_t* ld) {
+    return PIT_GetSectors(ld);
+  }
+};
 
 
 // phares 3/14/98
@@ -1884,7 +1901,7 @@ OVERLAY void P_CreateSecNodeList(mobj_t* thing,fixed_t x,fixed_t y)
 
   for (bx=xl ; bx<=xh ; bx++)
     for (by=yl ; by<=yh ; by++)
-      P_BlockLinesIterator(bx,by,PIT_GETSECTORS);
+      P_BlockLinesIterator(bx,by,PIT_GetSectorsWrapper());
 
   // Add the sector of the (x,y) point to sector_list.
 

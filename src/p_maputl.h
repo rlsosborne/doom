@@ -33,6 +33,11 @@
 #define __P_MAPUTL__
 
 #include "r_defs.h"
+#include "p_setup.h"
+#include "doomstat.h"
+#include "r_defs.h"
+#include "r_state.h"
+#include "r_main.h"
 
 /* mapblocks are used to check movement against lines and things */
 #define MAPBLOCKUNITS   128
@@ -70,15 +75,6 @@ void    P_UnsetThingPosition(mobj_t *thing);
 void    P_SetThingPosition(mobj_t *thing);
 
 typedef enum {
-  PIT_CROSSLINE,
-  PIT_CHECKLINE,
-  PIT_GETSECTORS,
-  PIT_ADDLINEINTERCEPTS
-} blocklinesfunc_t;
-
-boolean P_BlockLinesIterator (int x, int y, blocklinesfunc_t func);
-
-typedef enum {
   PIT_VILECHECK,
   PIT_STOMPTHING,
   PIT_CHECKTHING,
@@ -106,6 +102,55 @@ extern fixed_t openbottom;
 extern fixed_t openrange;
 extern fixed_t lowfloor;
 extern divline_t trace;
+
+//
+// BLOCK MAP ITERATORS
+// For each line/thing in the given mapblock,
+// call the passed PIT_* function.
+// If the function returns false,
+// exit with false without checking anything else.
+//
+
+//
+// P_BlockLinesIterator
+// The validcount flags are used to avoid checking lines
+// that are marked in multiple mapblocks,
+// so increment validcount before the first call
+// to P_BlockLinesIterator, then make one or more calls
+// to it.
+//
+// killough 5/3/98: reformatted, cleaned up
+
+template <typename T>
+boolean P_BlockLinesIterator(int x, int y, T func)
+{
+  int        offset;
+  const long *list;   // killough 3/1/98: for removal of blockmap limit
+  
+  if (x<0 || y<0 || x>=bmapwidth || y>=bmapheight)
+    return true;
+  offset = y*bmapwidth+x;
+  offset = *(blockmap+offset);
+  list = blockmaplump+offset;     // original was reading         // phares
+  // delmiting 0 as linedef 0     // phares
+  
+  // killough 1/31/98: for compatibility we need to use the old method.
+  // Most demos go out of sync, and maybe other problems happen, if we
+  // don't consider linedef 0. For safety this should be qualified.
+  
+  if (!demo_compatibility) // killough 2/22/98: demo_compatibility check
+    list++;     // skip 0 starting delimiter                      // phares
+  for ( ; *list != -1 ; list++)                                   // phares
+  {
+    line_t *ld = &lines[*list];
+    if (ld->validcount == validcount)
+      continue;       // line has already been checked
+    ld->validcount = validcount;
+    if (!func(ld))
+      return false;
+  }
+  return true;  // everything was checked
+}
 
 #endif  /* __P_MAPUTL__ */
 
