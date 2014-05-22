@@ -27,7 +27,7 @@
 #include "doomtype.h"
 #include "lprintf.h"
 #include "compiler.h"
-
+#include <stdint.h>
 
 //
 // ZONE MEMORY ALLOCATION

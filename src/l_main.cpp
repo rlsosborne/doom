@@ -338,7 +338,7 @@ uid_t stored_euid = -1;
 #ifdef __XMOS__
 #define main doom_main
 #endif
-OVERLAY int main(int argc, char **argv)
+extern "C" OVERLAY int main(int argc, char **argv)
 {
 #ifdef SECURE_UID
   /* First thing, revoke setuid status (if any) */

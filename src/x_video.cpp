@@ -73,7 +73,7 @@ void I_SetPalette (int pal)
 
   if (colours == NULL || cachedgamma != usegamma) {
     int lump = W_GetNumForName("PLAYPAL");
-    const byte *palette = W_CacheLumpNum(lump);
+    const byte *palette = (const byte *)W_CacheLumpNum(lump);
     const byte *const gtable = gammatable[cachedgamma = usegamma];
     int i;
 
@@ -82,7 +82,7 @@ void I_SetPalette (int pal)
 
     if (!colours) {
       // First call - allocate and prepare colour array
-      colours = malloc(sizeof(*colours) * num_pals);
+      colours = (uint16_t *)malloc(sizeof(*colours) * num_pals);
     }
 
     // set the colormap entries

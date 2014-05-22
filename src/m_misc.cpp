@@ -191,7 +191,7 @@ int X_opt;
 //jff 3/3/98 added min, max, and help string to all entries
 //jff 4/10/98 added isstr field to specify whether value is string or int
 // CPhipps - const
-extern const default_t defaults[] =
+static const default_t defaults[] =
 {
   {"Misc settings",{NULL},{0},UL,UL,def_none,ss_none},
   {"compatibility_level",{&default_compatibility_level},
@@ -593,6 +593,11 @@ extern const default_t defaults[] =
 
 int numdefaults;
 static const char* defaultfile; // CPhipps - static, const
+
+OVERLAY const default_t *M_GetDefaults()
+{
+  return defaults;
+}
 
 //
 // M_SaveDefaults

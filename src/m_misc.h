@@ -72,14 +72,14 @@ enum defaultdatatype {
 
 // CPhipps - struct to hold a value in a config file
 // Cannot be a union, as it must be initialised
-typedef struct
+struct default_t
 {
   const char* name;
-  struct {
+  struct location_s {
     int* pi;
     const char** ppsz;
   } location; // CPhipps - pointer to the value
-  struct {
+  struct defaultvalue_s {
     int i;
     const char* psz;
   } defaultvalue; // CPhipps - default value
@@ -91,7 +91,9 @@ typedef struct
   // cph - removed the help strings from the config file
   // const char* help;       // jff 3/3/98 description of parameter
   // CPhipps - remove unused "lousy hack" code
-} default_t;
+};
+
+const default_t *M_GetDefaults();
 
 #define IS_STRING(dv) ((dv).type == def_str)
 // CPhipps - What is the max. key code that X will send us?

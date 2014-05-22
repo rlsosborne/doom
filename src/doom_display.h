@@ -31,8 +31,14 @@ void doom_display(server interface doom_display screen,
 void doom_display_set_pointer(client interface doom_display * movable display);
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 void doom_display_set_palette(const uint16_t new_palette[256]);
 void doom_display_write(const uint8_t frame[SCREEN_WIDTH * SCREEN_HEIGHT]);
 void doom_display_read(uint8_t frame[SCREEN_WIDTH * SCREEN_HEIGHT]);
+#ifdef __cplusplus
+}
+#endif
 
 #endif //_doom_display_h_

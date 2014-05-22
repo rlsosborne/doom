@@ -57,6 +57,7 @@
 #include "m_misc.h"
 #include "lprintf.h"
 #include "am_map.h"
+#include "m_misc.h"
 
 #ifdef __XMOS__
 #define SDL_Delay(a) 0
@@ -283,7 +284,6 @@ extern int hudcolor_list; // color of list of past messages
 extern const char* chat_macros[];  // chat macros
 extern const char* shiftxform;
 extern int map_secret_after; //secrets do not appear til after bagged
-extern default_t defaults[];
 extern int numdefaults;
 
 int mapcolor_me; // The player colour of the console player
@@ -3121,14 +3121,14 @@ static setup_menu_t** setup_screens[] =
 OVERLAY static void M_ResetDefaults(void)
 {
   int i;
-  default_t* d;
+  const default_t* d;
   setup_menu_t** ptr1;
   setup_menu_t*  ptr2;
 
   // Look through the defaults table and reset every variable that
   // belongs to the group we're interested in.
 
-  d = defaults;
+  d = M_GetDefaults();
   for (i = 0 ; i < numdefaults ; i++, d++)
     if (d->setupscreen == setup_screen) {
       if (IS_STRING(*d)) {

@@ -138,7 +138,7 @@ void D_InitNetGame (void)
 {
   int i;
 
-  doomcom = Z_Malloc(sizeof *doomcom, PU_STATIC, NULL);
+  doomcom = (doomcom_t *)Z_Malloc(sizeof *doomcom, PU_STATIC, NULL);
   doomcom->consoleplayer = 0;
   doomcom->numnodes = 0; doomcom->numplayers = 1;
   localcmds = netcmds[consoleplayer]; 

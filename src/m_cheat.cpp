@@ -41,6 +41,7 @@
 #include "dstrings.h"
 #include "r_main.h"
 #include "d_deh.h"  // Ty 03/27/98 - externalized strings
+#include <stdint.h>
 
 #define plyr (players+consoleplayer)     /* the console player */
 
@@ -162,82 +163,82 @@ static struct cheat_s cheat[] = {
    CHEAT_MUS,      -2},
 
   {(const byte *)"idchoppers", "Chainsaw",          not_net | not_demo,
-   CHEAT_CHOPPERS },
+   CHEAT_CHOPPERS, 0 },
 
   {(const byte *)"iddqd",      "God mode",          not_net | not_demo,
-   CHEAT_GOD      },
+   CHEAT_GOD, 0 },
 
   {(const byte *)"idkfa",      "Ammo & Keys",       not_net | not_demo,
-   CHEAT_KFA },
+   CHEAT_KFA, 0 },
 
   {(const byte *)"idfa",       "Ammo",              not_net | not_demo,
-   CHEAT_FA  },
+   CHEAT_FA, 0 },
 
   {(const byte *)"idspispopd", "No Clipping 1",     not_net | not_demo,
-   CHEAT_NOCLIP },
+   CHEAT_NOCLIP, 0 },
 
   {(const byte *)"idclip",     "No Clipping 2",     not_net | not_demo,
-   CHEAT_NOCLIP },
+   CHEAT_NOCLIP, 0 },
 
   {(const byte *)"idbeholdh",  "Invincibility",     not_net | not_demo,
-   CHEAT_HEALTH },
+   CHEAT_HEALTH, 0 },
 
   {(const byte *)"idbeholdm",  "Invincibility",     not_net | not_demo,
-   CHEAT_MEGAARMOUR },
+   CHEAT_MEGAARMOUR, 0 },
 
   {(const byte *)"idbeholdv",  "Invincibility",     not_net | not_demo,
-   CHEAT_PW,  pw_invulnerability },
+   CHEAT_PW,  pw_invulnerability, 0 },
 
   {(const byte *)"idbeholds",  "Berserk",           not_net | not_demo,
-   CHEAT_PW,  pw_strength        },
+   CHEAT_PW,  pw_strength, 0 },
 
   {(const byte *)"idbeholdi",  "Invisibility",      not_net | not_demo,
-   CHEAT_PW,  pw_invisibility    },
+   CHEAT_PW,  pw_invisibility, 0 },
 
   {(const byte *)"idbeholdr",  "Radiation Suit",    not_net | not_demo,
-   CHEAT_PW,  pw_ironfeet        },
+   CHEAT_PW,  pw_ironfeet, 0 },
 
   {(const byte *)"idbeholda",  "Auto-map",          not_net | not_demo,
-   CHEAT_PW,  pw_allmap          },
+   CHEAT_PW,  pw_allmap, 0 },
 
   {(const byte *)"idbeholdl",  "Lite-Amp Goggles",  not_net | not_demo,
-   CHEAT_PW,  pw_infrared        },
+   CHEAT_PW,  pw_infrared, 0 },
 
   {(const byte *)"idbehold",   "BEHOLD menu",       not_net | not_demo,
-   CHEAT_BEHOLD   },
+   CHEAT_BEHOLD , 0 },
 
   {(const byte *)"idclev",     "Level Warp",        not_net | not_demo | not_menu,
-   CHEAT_CLEV,    -2},
+   CHEAT_CLEV, -2 },
 
   {(const byte *)"idmypos",    "Player Position",   not_net | not_demo,
-   CHEAT_MYPOS    },
+   CHEAT_MYPOS, 0 },
 
   {(const byte *)"idrate",     "Frame rate",        0,
-   CHEAT_RATE     },
+   CHEAT_RATE, 0 },
 
   {(const byte *)"tntcomp",    NULL,                not_net | not_demo,
-   CHEAT_COMP     },     // phares
+   CHEAT_COMP, 0 },     // phares
 
   {(const byte *)"tntem",      NULL,                not_net | not_demo,
-   CHEAT_MASSACRE },     // jff 2/01/98 kill all monsters
+   CHEAT_MASSACRE, 0 },     // jff 2/01/98 kill all monsters
 
   {(const byte *)"iddt",       "Map cheat",         not_dm  | not_demo,
-   CHEAT_DDT      },     // killough 2/07/98: moved from am_map.c
+   CHEAT_DDT, 0 },     // killough 2/07/98: moved from am_map.c
 
   {(const byte *)"tnthom",     NULL,                not_net | not_demo,
-   CHEAT_HOM      },     // killough 2/07/98: HOM autodetector
+   CHEAT_HOM, 0 },     // killough 2/07/98: HOM autodetector
 
   {(const byte *)"tntkey",     NULL,                not_net | not_demo,
-   CHEAT_TNTKEY   },     // killough 2/16/98: generalized key cheats
+   CHEAT_TNTKEY, 0 },     // killough 2/16/98: generalized key cheats
 
   {(const byte *)"tntkeyr",    NULL,                not_net | not_demo,
-   CHEAT_TNTKEYX  },
+   CHEAT_TNTKEYX, 0 },
 
   {(const byte *)"tntkeyy",    NULL,                not_net | not_demo,
-   CHEAT_TNTKEYX  },
+   CHEAT_TNTKEYX, 0 },
 
   {(const byte *)"tntkeyb",    NULL,                not_net | not_demo,
-   CHEAT_TNTKEYX  },
+   CHEAT_TNTKEYX, 0 },
 
   {(const byte *)"tntkeyrc",   NULL,                not_net | not_demo,
    CHEAT_TNTKEYXX, it_redcard    },
@@ -258,49 +259,49 @@ static struct cheat_s cheat[] = {
    CHEAT_TNTKEYXX, it_blueskull  },  // killough 2/16/98: end generalized keys
 
   {(const byte *)"tntka",      NULL,                not_net | not_demo,
-   CHEAT_K    },         // Ty 04/11/98 - Added TNTKA
+   CHEAT_K, 0 },         // Ty 04/11/98 - Added TNTKA
 
   {(const byte *)"tntweap",    NULL,                not_net | not_demo,
-   CHEAT_TNTWEAP  },     // killough 2/16/98: generalized weapon cheats
+   CHEAT_TNTWEAP, 0 },     // killough 2/16/98: generalized weapon cheats
 
   {(const byte *)"tntweap",    NULL,                not_net | not_demo,
    CHEAT_TNTWEAPX, -1},
 
   {(const byte *)"tntammo",    NULL,                not_net | not_demo,
-   CHEAT_TNTAMMO  },
+   CHEAT_TNTAMMO, 0 },
 
   {(const byte *)"tntammo",    NULL,                not_net | not_demo,
    CHEAT_TNTAMMOX, -1},  // killough 2/16/98: end generalized weapons
 
   {(const byte *)"tnttran",    NULL,                always,
-   CHEAT_TNTTRAN  },     // invoke translucency         // phares
+   CHEAT_TNTTRAN, 0 },     // invoke translucency         // phares
 
   {(const byte *)"tntsmart",   NULL,                not_net | not_demo,
-   CHEAT_SMART},         // killough 2/21/98: smart monster toggle
+   CHEAT_SMART, 0 },         // killough 2/21/98: smart monster toggle
 
   {(const byte *)"tntpitch",   NULL,                always,
-   CHEAT_PITCH},         // killough 2/21/98: pitched sound toggle
+   CHEAT_PITCH, 0 },         // killough 2/21/98: pitched sound toggle
 
   // killough 2/21/98: reduce RSI injury by adding simpler alias sequences:
   {(const byte *)"tntran",     NULL,                always,
-   CHEAT_TNTTRAN    },   // killough 2/21/98: same as tnttran
+   CHEAT_TNTTRAN, 0 },   // killough 2/21/98: same as tnttran
 
   {(const byte *)"tntamo",     NULL,                not_net | not_demo,
-   CHEAT_TNTAMMO    },   // killough 2/21/98: same as tntammo
+   CHEAT_TNTAMMO, 0 },   // killough 2/21/98: same as tntammo
 
   {(const byte *)"tntamo",     NULL,                not_net | not_demo,
    CHEAT_TNTAMMOX, -1},  // killough 2/21/98: same as tntammo
 
   {(const byte *)"tntfast",    NULL,                not_net | not_demo,
-   CHEAT_FAST       },   // killough 3/6/98: -fast toggle
+   CHEAT_FAST, 0 },   // killough 3/6/98: -fast toggle
 
   {(const byte *)"tntice",     NULL,                not_net | not_demo,
-   CHEAT_FRICTION   },   // phares 3/10/98: toggle variable friction effects
+   CHEAT_FRICTION, 0 },   // phares 3/10/98: toggle variable friction effects
 
   {(const byte *)"tntpush",    NULL,                not_net | not_demo, 
-   CHEAT_PUSHERS    },   // phares 3/10/98: toggle pushers
+   CHEAT_PUSHERS, 0 },   // phares 3/10/98: toggle pushers
 
-  {NULL}                 // end-of-list marker
+  {NULL, NULL, 0, (cheatfunc_t)0, 0 }                 // end-of-list marker
 };
 
 //-----------------------------------------------------------------------------

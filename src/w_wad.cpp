@@ -416,7 +416,7 @@ OVERLAY void W_Init(void)
 #else
   // CPhipps - start with nothing
 
-  numlumps = 0; lumpinfo = malloc(0);
+  numlumps = 0; lumpinfo = (lumpinfo_t *)malloc(0);
 #endif
 
   { // CPhipps - new wadfiles array used 

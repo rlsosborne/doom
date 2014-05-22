@@ -4,6 +4,7 @@
 #include "doomtype.h"
 #include "w_wad.h"
 #include <stddef.h>
+#include <stdio.h>
 
 #define NUM_CHANNELS		8
 
