@@ -3008,7 +3008,7 @@ Add_Pusher(pushertype_e type, int x_mag, int y_mag, mobj_t* source,
 
 pusher_t* tmpusher; // pusher structure for blockmap searches
 
-OVERLAY boolean PIT_PushThing(mobj_t* thing)
+OVERLAY static boolean PIT_PushThing(mobj_t* thing)
     {
     if (thing->player &&
         !(thing->flags & (MF_NOGRAVITY | MF_NOCLIP)))
@@ -3039,6 +3039,12 @@ OVERLAY boolean PIT_PushThing(mobj_t* thing)
         }
     return true;
     }
+
+struct PIT_PushThingWrapper {
+  boolean operator()(mobj_t *thing) {
+    return PIT_PushThing(thing);
+  }
+};
 
 /////////////////////////////
 //
@@ -3104,7 +3110,7 @@ OVERLAY void T_Pusher(pusher_t *p)
         yh = (tmbbox[BOXTOP] - bmaporgy + MAXRADIUS)>>MAPBLOCKSHIFT;
         for (bx=xl ; bx<=xh ; bx++)
             for (by=yl ; by<=yh ; by++)
-                P_BlockThingsIterator(bx,by,PIT_PUSHTHING);
+                P_BlockThingsIterator(bx,by,PIT_PushThingWrapper());
         return;
         }
 

@@ -1007,8 +1007,6 @@ int P_ActivateInStasisCeiling(line_t* line);
 
 mobj_t* P_GetPushThing(int);                                // phares 3/23/98
 
-boolean PIT_PushThing(mobj_t* thing);
-
 #endif
 
 //----------------------------------------------------------------------------

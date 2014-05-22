@@ -75,18 +75,6 @@ void    P_UnsetThingPosition(mobj_t *thing);
 void    P_SetThingPosition(mobj_t *thing);
 
 typedef enum {
-  PIT_VILECHECK,
-  PIT_STOMPTHING,
-  PIT_CHECKTHING,
-  PIT_RADIUSATTACK,
-  PIT_CHANGESECTOR,
-  PIT_ADDTHINGINTERCEPTS,
-  PIT_PUSHTHING,
-} blockthingsfunc_t;
-
-boolean P_BlockThingsIterator(int x, int y, blockthingsfunc_t func);
-
-typedef enum {
   PTR_SLIDETRAVERSE,
   PTR_AIMTRAVERSE,
   PTR_SHOOTTRAVERSE,
@@ -150,6 +138,17 @@ boolean P_BlockLinesIterator(int x, int y, T func)
       return false;
   }
   return true;  // everything was checked
+}
+
+template <typename T>
+boolean P_BlockThingsIterator(int x, int y, T func)
+{
+  mobj_t *mobj;
+  if (!(x<0 || y<0 || x>=bmapwidth || y>=bmapheight))
+    for (mobj = blocklinks[y*bmapwidth+x]; mobj; mobj = mobj->bnext)
+      if (!func(mobj))
+        return false;
+  return true;
 }
 
 #endif  /* __P_MAPUTL__ */

@@ -112,8 +112,6 @@ void A_PlaySound(struct mobj_s *mo);
 void A_RandomJump(struct mobj_s *mo);
 void A_LineEffect(struct mobj_s *mo);
 
-boolean PIT_VileCheck(mobj_t *thing);
-
 #endif // __P_ENEMY__
 
 /*----------------------------------------------------------------------------

@@ -951,7 +951,7 @@ mobj_t* vileobj;
 fixed_t viletryx;
 fixed_t viletryy;
 
-OVERLAY boolean PIT_VileCheck(mobj_t *thing)
+static OVERLAY boolean PIT_VileCheck(mobj_t *thing)
 {
   int     maxdist;
   boolean check;
@@ -1010,6 +1010,12 @@ OVERLAY boolean PIT_VileCheck(mobj_t *thing)
     return false;               // got one, so stop checking
 }
 
+struct PIT_VileCheckWrapper {
+  boolean operator()(mobj_t *thing) {
+    return PIT_VileCheck(thing);
+  }
+};
+
 //
 // A_VileChase
 // Check for ressurecting a body
@@ -1044,7 +1050,7 @@ OVERLAY void A_VileChase(mobj_t* actor)
               // Call PIT_VileCheck to check
               // whether object is a corpse
               // that canbe raised.
-              if (!P_BlockThingsIterator(bx,by,PIT_VILECHECK))
+              if (!P_BlockThingsIterator(bx,by,PIT_VileCheckWrapper()))
                 {
                   // got one!
                   temp = actor->target;

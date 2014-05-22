@@ -323,42 +323,6 @@ OVERLAY void P_SetThingPosition(mobj_t *thing)
     }
 }
 
-
-OVERLAY static boolean P_DoBlockThingsFunc(blockthingsfunc_t func, mobj_t *mobj)
-{
-  switch (func) {
-  case PIT_VILECHECK:
-    return PIT_VileCheck(mobj);
-  case PIT_STOMPTHING:
-    return PIT_StompThing(mobj);
-  case PIT_CHECKTHING:
-    return PIT_CheckThing(mobj);
-  case PIT_RADIUSATTACK:
-    return PIT_RadiusAttack(mobj);
-  case PIT_CHANGESECTOR:
-    return PIT_ChangeSector(mobj);
-  case PIT_ADDTHINGINTERCEPTS:
-    return PIT_AddThingIntercepts(mobj);
-  case PIT_PUSHTHING:
-    return PIT_PushThing(mobj);
-  }
-}
-
-//
-// P_BlockThingsIterator
-//
-// killough 5/3/98: reformatted, cleaned up
-
-OVERLAY boolean P_BlockThingsIterator(int x, int y, blockthingsfunc_t func)
-{
-  mobj_t *mobj;
-  if (!(x<0 || y<0 || x>=bmapwidth || y>=bmapheight))
-    for (mobj = blocklinks[y*bmapwidth+x]; mobj; mobj = mobj->bnext)
-      if (!P_DoBlockThingsFunc(func, mobj))
-        return false;
-  return true;
-}
-
 //
 // INTERCEPT ROUTINES
 //
@@ -492,6 +456,12 @@ OVERLAY static boolean PIT_AddThingIntercepts(mobj_t *thing)
 
   return true;          // keep going
 }
+
+struct PIT_AddThingInterceptsWrapper {
+  boolean operator()(mobj_t *thing) {
+    return PIT_AddThingIntercepts(thing);
+  }
+};
 
 OVERLAY static boolean
 P_DoPathTraverseFunc(traverserfunc_t func, intercept_t *in)
@@ -642,7 +612,7 @@ P_PathTraverse(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2, int flags,
           return false; // early out
 
       if (flags & PT_ADDTHINGS)
-        if (!P_BlockThingsIterator(mapx, mapy,PIT_ADDTHINGINTERCEPTS))
+        if (!P_BlockThingsIterator(mapx, mapy,PIT_AddThingInterceptsWrapper()))
           return false; // early out
 
       if (mapx == xt2 && mapy == yt2)

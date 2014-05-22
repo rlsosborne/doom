@@ -72,11 +72,6 @@ boolean PTR_ShootTraverse(struct intercept_s* in);
 boolean PTR_UseTraverse(struct intercept_s* in);
 boolean PTR_NoWayTraverse(struct intercept_s* in);
 
-boolean PIT_StompThing(mobj_t* thing);
-boolean PIT_CheckThing(mobj_t* thing);
-boolean PIT_RadiusAttack(mobj_t* thing);
-boolean PIT_ChangeSector(mobj_t* thing);
-
 // If "floatok" true, move would be ok if within "tmfloorz - tmceilingz".
 extern boolean floatok;
 extern fixed_t tmfloorz;

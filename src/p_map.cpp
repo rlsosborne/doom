@@ -93,7 +93,7 @@ extern boolean onground; // whether you're on the ground, for ice purposes
 //
 // PIT_StompThing
 //
-OVERLAY boolean PIT_StompThing (mobj_t* thing)
+OVERLAY static boolean PIT_StompThing (mobj_t* thing)
   {
   fixed_t blockdist;
 
@@ -122,6 +122,11 @@ OVERLAY boolean PIT_StompThing (mobj_t* thing)
   return true;
   }
 
+struct PIT_StompThingWrapper {
+  boolean operator()(mobj_t* thing) {
+    return PIT_StompThing(thing);
+  }
+};
 
 // P_GetMoveFactor() returns the value by which the x,y     // phares 3/19/98
 // movements are multiplied to add to player movement.      //     |
@@ -221,7 +226,7 @@ OVERLAY boolean P_TeleportMove (mobj_t* thing,fixed_t x,fixed_t y)
 
   for (bx=xl ; bx<=xh ; bx++)
     for (by=yl ; by<=yh ; by++)
-      if (!P_BlockThingsIterator(bx,by,PIT_STOMPTHING))
+      if (!P_BlockThingsIterator(bx,by,PIT_StompThingWrapper()))
         return false;
 
   // the move is ok,
@@ -367,7 +372,7 @@ struct Pit_CheckLineWrapper {
 // PIT_CheckThing
 //
 
-OVERLAY boolean PIT_CheckThing(mobj_t* thing)
+OVERLAY static boolean PIT_CheckThing(mobj_t* thing)
 {
   fixed_t blockdist;
   boolean solid;
@@ -481,6 +486,11 @@ OVERLAY boolean PIT_CheckThing(mobj_t* thing)
   // return !(thing->flags & MF_SOLID);   // old code -- killough
   }
 
+struct PIT_CheckThingWrapper {
+  boolean operator()(mobj_t* thing) {
+    return PIT_CheckThing(thing);
+  }
+};
 
 // This routine checks for Lost Souls trying to be spawned      // phares
 // across 1-sided lines, impassible lines, or "monsters can't   //   |
@@ -608,7 +618,7 @@ OVERLAY boolean P_CheckPosition (mobj_t* thing,fixed_t x,fixed_t y)
 
   for (bx=xl ; bx<=xh ; bx++)
     for (by=yl ; by<=yh ; by++)
-      if (!P_BlockThingsIterator(bx,by,PIT_CHECKTHING))
+      if (!P_BlockThingsIterator(bx,by,PIT_CheckThingWrapper()))
         return false;
 
   // check lines
@@ -1470,7 +1480,7 @@ int   bombdamage;
 // that caused the explosion at "bombspot".
 //
 
-OVERLAY boolean PIT_RadiusAttack (mobj_t* thing)
+OVERLAY static boolean PIT_RadiusAttack (mobj_t* thing)
   {
   fixed_t dx;
   fixed_t dy;
@@ -1506,6 +1516,11 @@ OVERLAY boolean PIT_RadiusAttack (mobj_t* thing)
   return true;
   }
 
+struct PIT_RadiusAttackWrapper {
+  boolean operator()(mobj_t *thing) {
+    return PIT_RadiusAttack(thing);
+  }
+};
 
 //
 // P_RadiusAttack
@@ -1534,7 +1549,7 @@ OVERLAY void P_RadiusAttack(mobj_t* spot,mobj_t* source,int damage)
 
   for (y=yl ; y<=yh ; y++)
     for (x=xl ; x<=xh ; x++)
-      P_BlockThingsIterator (x, y, PIT_RADIUSATTACK );
+      P_BlockThingsIterator (x, y, PIT_RadiusAttackWrapper() );
   }
 
 
@@ -1615,6 +1630,11 @@ OVERLAY boolean PIT_ChangeSector (mobj_t* thing)
   return true;
   }
 
+struct PIT_ChangeSectorWrapper {
+  boolean operator()(mobj_t* thing) {
+    return PIT_ChangeSector(thing);
+  }
+};
 
 //
 // P_ChangeSector
@@ -1635,7 +1655,7 @@ OVERLAY boolean P_ChangeSector(sector_t* sector,boolean crunch)
 
   for (x=sector->blockbox[BOXLEFT] ; x<= sector->blockbox[BOXRIGHT] ; x++)
     for (y=sector->blockbox[BOXBOTTOM];y<= sector->blockbox[BOXTOP] ; y++)
-      P_BlockThingsIterator (x, y, PIT_CHANGESECTOR);
+      P_BlockThingsIterator (x, y, PIT_ChangeSectorWrapper());
 
   return nofit;
   }
