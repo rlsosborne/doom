@@ -890,7 +890,7 @@ OVERLAY void P_HitSlideLine (line_t* ld)
 // PTR_SlideTraverse
 //
 
-OVERLAY boolean PTR_SlideTraverse (intercept_t* in)
+OVERLAY static boolean PTR_SlideTraverse (intercept_t* in)
   {
   line_t* li;
 
@@ -940,6 +940,11 @@ isblocking:
   return false; // stop
   }
 
+struct PTR_SlideTraverseWrapper {
+  boolean operator()(intercept_t *in) {
+    return PTR_SlideTraverse(in);
+  }
+};
 
 //
 // P_SlideMove
@@ -996,11 +1001,11 @@ retry:
   bestslidefrac = FRACUNIT+1;
 
   P_PathTraverse ( leadx, leady, leadx+mo->momx, leady+mo->momy,
-     PT_ADDLINES, PTR_SLIDETRAVERSE );
+     PT_ADDLINES, PTR_SlideTraverseWrapper() );
   P_PathTraverse ( trailx, leady, trailx+mo->momx, leady+mo->momy,
-     PT_ADDLINES, PTR_SLIDETRAVERSE );
+     PT_ADDLINES, PTR_SlideTraverseWrapper() );
   P_PathTraverse ( leadx, traily, leadx+mo->momx, traily+mo->momy,
-     PT_ADDLINES, PTR_SLIDETRAVERSE );
+     PT_ADDLINES, PTR_SlideTraverseWrapper() );
 
   // move up to the wall
 
@@ -1084,7 +1089,7 @@ static fixed_t  bottomslope;
 // PTR_AimTraverse
 // Sets linetaget and aimslope when a target is aimed at.
 //
-OVERLAY boolean PTR_AimTraverse (intercept_t* in)
+OVERLAY static boolean PTR_AimTraverse (intercept_t* in)
   {
   line_t* li;
   mobj_t* th;
@@ -1167,11 +1172,16 @@ OVERLAY boolean PTR_AimTraverse (intercept_t* in)
   return false;   // don't go any farther
   }
 
+struct PTR_AimTraverseWrapper {
+  boolean operator()(intercept_t *in) {
+    return PTR_AimTraverse(in);
+  }
+};
 
 //
 // PTR_ShootTraverse
 //
-OVERLAY boolean PTR_ShootTraverse (intercept_t* in)
+OVERLAY static boolean PTR_ShootTraverse (intercept_t* in)
   {
   fixed_t x;
   fixed_t y;
@@ -1304,6 +1314,11 @@ hitline:
   return false;
   }
 
+struct PTR_ShootTraverseWrapper {
+  boolean operator()(intercept_t *in) {
+    return PTR_ShootTraverse(in);
+  }
+};
 
 //
 // P_AimLineAttack
@@ -1328,7 +1343,8 @@ OVERLAY fixed_t P_AimLineAttack(mobj_t* t1,angle_t angle,fixed_t distance)
   attackrange = distance;
   linetarget = NULL;
 
-  P_PathTraverse(t1->x,t1->y,x2,y2,PT_ADDLINES|PT_ADDTHINGS,PTR_AIMTRAVERSE);
+  P_PathTraverse(t1->x,t1->y,x2,y2,PT_ADDLINES|PT_ADDTHINGS,
+                 PTR_AimTraverseWrapper());
 
   if (linetarget)
     return aimslope;
@@ -1362,7 +1378,8 @@ OVERLAY void P_LineAttack
   attackrange = distance;
   aimslope = slope;
 
-  P_PathTraverse(t1->x,t1->y,x2,y2,PT_ADDLINES|PT_ADDTHINGS,PTR_SHOOTTRAVERSE);
+  P_PathTraverse(t1->x,t1->y,x2,y2,PT_ADDLINES|PT_ADDTHINGS,
+                 PTR_ShootTraverseWrapper());
   }
 
 
@@ -1372,7 +1389,7 @@ OVERLAY void P_LineAttack
 
 mobj_t*   usething;
 
-OVERLAY boolean PTR_UseTraverse (intercept_t* in)
+OVERLAY static boolean PTR_UseTraverse (intercept_t* in)
   {
   int side;
 
@@ -1407,6 +1424,12 @@ OVERLAY boolean PTR_UseTraverse (intercept_t* in)
           true : false;
 }
 
+struct PTR_UseTraverseWrapper {
+  boolean operator()(intercept_t *in) {
+    return PTR_UseTraverse(in);
+  }
+};
+
 // Returns false if a "oof" sound should be made because of a blocking
 // linedef. Makes 2s middles which are impassable, as well as 2s uppers
 // and lowers which block the player, cause the sound effect when the
@@ -1417,7 +1440,7 @@ OVERLAY boolean PTR_UseTraverse (intercept_t* in)
 // by Lee Killough
 //
 
-OVERLAY boolean PTR_NoWayTraverse(intercept_t* in)
+OVERLAY static boolean PTR_NoWayTraverse(intercept_t* in)
   {
   line_t *ld = in->d.line;
                                            // This linedef
@@ -1430,6 +1453,12 @@ OVERLAY boolean PTR_NoWayTraverse(intercept_t* in)
   )
   );
   }
+
+struct PTR_NoWayTraverseWrapper {
+  boolean operator()(intercept_t *in) {
+    return PTR_NoWayTraverse(in);
+  }
+};
 
 //
 // P_UseLines
@@ -1458,8 +1487,9 @@ OVERLAY void P_UseLines (player_t*  player)
   //
   // This added test makes the "oof" sound work on 2s lines -- killough:
 
-  if (P_PathTraverse ( x1, y1, x2, y2, PT_ADDLINES, PTR_USETRAVERSE ))
-    if (!P_PathTraverse ( x1, y1, x2, y2, PT_ADDLINES, PTR_NOWAYTRAVERSE ))
+  if (P_PathTraverse(x1, y1, x2, y2, PT_ADDLINES, PTR_UseTraverseWrapper()))
+    if (!P_PathTraverse(x1, y1, x2, y2, PT_ADDLINES,
+                        PTR_NoWayTraverseWrapper()))
       S_StartSound (usething, sfx_noway);
   }
 

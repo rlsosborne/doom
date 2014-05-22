@@ -328,7 +328,7 @@ OVERLAY void P_SetThingPosition(mobj_t *thing)
 //
 
 // 1/11/98 killough: Intercept limit removed
-static intercept_t *intercepts, *intercept_p;
+intercept_t *intercepts, *intercept_p;
 
 // Check for limit and double size if necessary -- killough
 OVERLAY static void check_intercept(void)
@@ -463,63 +463,8 @@ struct PIT_AddThingInterceptsWrapper {
   }
 };
 
-OVERLAY static boolean
-P_DoPathTraverseFunc(traverserfunc_t func, intercept_t *in)
-{
-  switch (func) {
-  case PTR_SLIDETRAVERSE:
-    return PTR_SlideTraverse(in);
-  case PTR_AIMTRAVERSE:
-    return PTR_AimTraverse(in);
-  case PTR_SHOOTTRAVERSE:
-    return PTR_ShootTraverse(in);
-  case PTR_USETRAVERSE:
-    return PTR_UseTraverse(in);
-  case PTR_NOWAYTRAVERSE:
-    return PTR_NoWayTraverse(in);
-  }
-}
-
-//
-// P_TraverseIntercepts
-// Returns true if the traverser function returns true
-// for all lines.
-//
-// killough 5/3/98: reformatted, cleaned up
-
-OVERLAY boolean static
-P_TraverseIntercepts(traverserfunc_t func, fixed_t maxfrac)
-{
-  intercept_t *in = NULL;
-  int count = intercept_p - intercepts;
-  while (count--)
-    {
-      fixed_t dist = INT_MAX;
-      intercept_t *scan;
-      for (scan = intercepts; scan < intercept_p; scan++)
-        if (scan->frac < dist)
-          dist = (in=scan)->frac;
-      if (dist > maxfrac)
-        return true;    // checked everything in range
-      if (!P_DoPathTraverseFunc(func, in))
-        return false;           // don't bother going farther
-      in->frac = INT_MAX;
-    }
-  return true;                  // everything was traversed
-}
-
-//
-// P_PathTraverse
-// Traces a line from x1,y1 to x2,y2,
-// calling the traverser function for each.
-// Returns true if the traverser function returns true
-// for all lines.
-//
-// killough 5/3/98: reformatted, cleaned up
-
 OVERLAY boolean
-P_PathTraverse(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2, int flags,
-               traverserfunc_t trav)
+P_PathTraverseSort(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2, int flags)
 {
   fixed_t xt1, yt1;
   fixed_t xt2, yt2;
@@ -529,110 +474,108 @@ P_PathTraverse(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2, int flags,
   int     mapx, mapy;
   int     mapxstep, mapystep;
   int     count;
-
+  
   validcount++;
   intercept_p = intercepts;
-
+  
   if (!((x1-bmaporgx)&(MAPBLOCKSIZE-1)))
     x1 += FRACUNIT;     // don't side exactly on a line
-
+  
   if (!((y1-bmaporgy)&(MAPBLOCKSIZE-1)))
     y1 += FRACUNIT;     // don't side exactly on a line
-
+  
   trace.x = x1;
   trace.y = y1;
   trace.dx = x2 - x1;
   trace.dy = y2 - y1;
-
+  
   x1 -= bmaporgx;
   y1 -= bmaporgy;
   xt1 = x1>>MAPBLOCKSHIFT;
   yt1 = y1>>MAPBLOCKSHIFT;
-
+  
   x2 -= bmaporgx;
   y2 -= bmaporgy;
   xt2 = x2>>MAPBLOCKSHIFT;
   yt2 = y2>>MAPBLOCKSHIFT;
-
+  
   if (xt2 > xt1)
-    {
-      mapxstep = 1;
-      partial = FRACUNIT - ((x1>>MAPBTOFRAC)&(FRACUNIT-1));
-      ystep = FixedDiv (y2-y1,abs(x2-x1));
-    }
+  {
+    mapxstep = 1;
+    partial = FRACUNIT - ((x1>>MAPBTOFRAC)&(FRACUNIT-1));
+    ystep = FixedDiv (y2-y1,abs(x2-x1));
+  }
   else
     if (xt2 < xt1)
-      {
-        mapxstep = -1;
-        partial = (x1>>MAPBTOFRAC)&(FRACUNIT-1);
-        ystep = FixedDiv (y2-y1,abs(x2-x1));
-      }
-    else
-      {
-        mapxstep = 0;
-        partial = FRACUNIT;
-        ystep = 256*FRACUNIT;
-      }
-
-  yintercept = (y1>>MAPBTOFRAC) + FixedMul(partial, ystep);
-
-  if (yt2 > yt1)
     {
-      mapystep = 1;
-      partial = FRACUNIT - ((y1>>MAPBTOFRAC)&(FRACUNIT-1));
-      xstep = FixedDiv (x2-x1,abs(y2-y1));
+      mapxstep = -1;
+      partial = (x1>>MAPBTOFRAC)&(FRACUNIT-1);
+      ystep = FixedDiv (y2-y1,abs(x2-x1));
     }
+    else
+    {
+      mapxstep = 0;
+      partial = FRACUNIT;
+      ystep = 256*FRACUNIT;
+    }
+  
+  yintercept = (y1>>MAPBTOFRAC) + FixedMul(partial, ystep);
+  
+  if (yt2 > yt1)
+  {
+    mapystep = 1;
+    partial = FRACUNIT - ((y1>>MAPBTOFRAC)&(FRACUNIT-1));
+    xstep = FixedDiv (x2-x1,abs(y2-y1));
+  }
   else
     if (yt2 < yt1)
-      {
-        mapystep = -1;
-        partial = (y1>>MAPBTOFRAC)&(FRACUNIT-1);
-        xstep = FixedDiv (x2-x1,abs(y2-y1));
-      }
+    {
+      mapystep = -1;
+      partial = (y1>>MAPBTOFRAC)&(FRACUNIT-1);
+      xstep = FixedDiv (x2-x1,abs(y2-y1));
+    }
     else
-      {
-        mapystep = 0;
-        partial = FRACUNIT;
-        xstep = 256*FRACUNIT;
-      }
-
+    {
+      mapystep = 0;
+      partial = FRACUNIT;
+      xstep = 256*FRACUNIT;
+    }
+  
   xintercept = (x1>>MAPBTOFRAC) + FixedMul (partial, xstep);
-
+  
   // Step through map blocks.
   // Count is present to prevent a round off error
   // from skipping the break.
-
+  
   mapx = xt1;
   mapy = yt1;
-
+  
   for (count = 0; count < 64; count++)
+  {
+    if (flags & PT_ADDLINES)
+      if (!P_BlockLinesIterator(mapx, mapy,PIT_AddLineInterceptsWrapper()))
+        return false; // early out
+    
+    if (flags & PT_ADDTHINGS)
+      if (!P_BlockThingsIterator(mapx, mapy,PIT_AddThingInterceptsWrapper()))
+        return false; // early out
+    
+    if (mapx == xt2 && mapy == yt2)
+      break;
+    
+    if ((yintercept >> FRACBITS) == mapy)
     {
-      if (flags & PT_ADDLINES)
-        if (!P_BlockLinesIterator(mapx, mapy,PIT_AddLineInterceptsWrapper()))
-          return false; // early out
-
-      if (flags & PT_ADDTHINGS)
-        if (!P_BlockThingsIterator(mapx, mapy,PIT_AddThingInterceptsWrapper()))
-          return false; // early out
-
-      if (mapx == xt2 && mapy == yt2)
-        break;
-
-      if ((yintercept >> FRACBITS) == mapy)
-        {
-          yintercept += ystep;
-          mapx += mapxstep;
-        }
-      else
-        if ((xintercept >> FRACBITS) == mapx)
-          {
-            xintercept += xstep;
-            mapy += mapystep;
-          }
+      yintercept += ystep;
+      mapx += mapxstep;
     }
-
-  // go through the sorted list
-  return P_TraverseIntercepts(trav, FRACUNIT);
+    else
+      if ((xintercept >> FRACBITS) == mapx)
+      {
+        xintercept += xstep;
+        mapy += mapystep;
+      }
+  }
+  return true;
 }
 
 //----------------------------------------------------------------------------

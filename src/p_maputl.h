@@ -74,22 +74,13 @@ void    P_LineOpening (const line_t *linedef);
 void    P_UnsetThingPosition(mobj_t *thing);
 void    P_SetThingPosition(mobj_t *thing);
 
-typedef enum {
-  PTR_SLIDETRAVERSE,
-  PTR_AIMTRAVERSE,
-  PTR_SHOOTTRAVERSE,
-  PTR_USETRAVERSE,
-  PTR_NOWAYTRAVERSE,
-} traverserfunc_t;
-
-boolean P_PathTraverse(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2,
-                       int flags, traverserfunc_t func);
-
 extern fixed_t opentop;
 extern fixed_t openbottom;
 extern fixed_t openrange;
 extern fixed_t lowfloor;
 extern divline_t trace;
+extern intercept_t *intercepts;
+extern intercept_t *intercept_p;
 
 //
 // BLOCK MAP ITERATORS
@@ -149,6 +140,58 @@ boolean P_BlockThingsIterator(int x, int y, T func)
       if (!func(mobj))
         return false;
   return true;
+}
+
+//
+// P_TraverseIntercepts
+// Returns true if the traverser function returns true
+// for all lines.
+//
+// killough 5/3/98: reformatted, cleaned up
+
+template <typename T>
+boolean P_TraverseIntercepts(T func, fixed_t maxfrac)
+{
+  intercept_t *in = NULL;
+  int count = intercept_p - intercepts;
+  while (count--)
+  {
+    fixed_t dist = INT_MAX;
+    intercept_t *scan;
+    for (scan = intercepts; scan < intercept_p; scan++)
+      if (scan->frac < dist)
+        dist = (in=scan)->frac;
+    if (dist > maxfrac)
+      return true;    // checked everything in range
+    if (!func(in))
+      return false;           // don't bother going farther
+    in->frac = INT_MAX;
+  }
+  return true;                  // everything was traversed
+}
+
+boolean P_PathTraverseSort(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2,
+                           int flags);
+
+//
+// P_PathTraverse
+// Traces a line from x1,y1 to x2,y2,
+// calling the traverser function for each.
+// Returns true if the traverser function returns true
+// for all lines.
+//
+// killough 5/3/98: reformatted, cleaned up
+
+template <typename T>
+boolean
+P_PathTraverse(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2, int flags,
+               T trav)
+{
+  if (!P_PathTraverseSort(x1, y1, x2, y2, flags))
+    return false;
+  
+  // go through the sorted list
+  return P_TraverseIntercepts(trav, FRACUNIT);
 }
 
 #endif  /* __P_MAPUTL__ */

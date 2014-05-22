@@ -66,12 +66,6 @@ void    P_CreateSecNodeList(mobj_t*,fixed_t,fixed_t);       // phares 3/14/98
 int     P_GetMoveFactor(mobj_t* mo);                        // phares  3/6/98
 boolean Check_Sides(mobj_t *, int, int);                    // phares
 
-boolean PTR_SlideTraverse(struct intercept_s* in);
-boolean PTR_AimTraverse(struct intercept_s* in);
-boolean PTR_ShootTraverse(struct intercept_s* in);
-boolean PTR_UseTraverse(struct intercept_s* in);
-boolean PTR_NoWayTraverse(struct intercept_s* in);
-
 // If "floatok" true, move would be ok if within "tmfloorz - tmceilingz".
 extern boolean floatok;
 extern fixed_t tmfloorz;
