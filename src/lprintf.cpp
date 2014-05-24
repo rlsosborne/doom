@@ -52,6 +52,7 @@ int cons_output_mask = -1;        /* all output enabled */
  */
 #define MAX_MESSAGE_SIZE 2048
 
+#ifdef DEBUG_PRINT_SUPPORT
 OVERLAY int lprintf(OutputLevels pri, const char *s, ...)
 {
   int r=0;
@@ -99,6 +100,7 @@ OVERLAY void I_Error(const char *error, ...)
 
   I_SafeExit(-1);
 }
+#endif
 
 /*----------------------------------------------------------------------------
  *

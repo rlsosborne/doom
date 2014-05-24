@@ -30,6 +30,10 @@
 #ifndef __G_GAME__
 #define __G_GAME__
 
+#ifdef HAVE_CONFIG_H
+#include "../config.h"
+#endif
+
 #include "doomdef.h"
 #include "d_event.h"
 #include "d_ticcmd.h"
@@ -84,9 +88,13 @@ void G_DoVictory(void);
 void G_BuildTiccmd (ticcmd_t* cmd); // CPhipps - move decl to header
 void G_ChangedPlayerColour(int pn, int cl); // CPhipps - On-the-fly player colour changing
 
+#ifdef DEBUG_PRINT_SUPPORT
 // killough 1/18/98: Doom-style printf;   killough 4/25/98: add gcc attributes
 // CPhipps - renames to doom_printf to avoid name collision with glibc
 void doom_printf(const char *, ...) __attribute__((format(printf,1,2)));
+#else
+#define doom_printf(format, ...)
+#endif
 
 // killough 5/2/98: moved from m_misc.c:
 

@@ -13,6 +13,12 @@
 /* Define for dehacked support */
 #cmakedefine DEHACKED
 
+/* Define for config file support */
+#cmakedefine CONFIG_FILE_SUPPORT
+
+/* Define for debug printing support */
+#cmakedefine DEBUG_PRINT_SUPPORT
+
 /* Define for high resolution support */
 #cmakedefine HIGHRES
 

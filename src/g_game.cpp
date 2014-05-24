@@ -2289,6 +2289,7 @@ OVERLAY boolean G_CheckDemoStatus (void)
 
 #define MAX_MESSAGE_SIZE 1024
 
+#ifdef DEBUG_PRINT_SUPPORT
 // CPhipps - renamed to doom_printf to avoid name collision with glibc
 OVERLAY void doom_printf(const char *s, ...)
 {
@@ -2303,6 +2304,7 @@ OVERLAY void doom_printf(const char *s, ...)
   va_end(v);
   players[consoleplayer].message = msg;  // set new message
 }
+#endif
 
 //----------------------------------------------------------------------------
 //

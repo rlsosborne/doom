@@ -649,6 +649,7 @@ OVERLAY void M_SaveDefaults (void)
 
 #define NUMCHATSTRINGS 10 // phares 4/13/98
 
+#ifdef CONFIG_FILE_SUPPORT
 OVERLAY void M_LoadDefaults (void)
 {
   int   i;
@@ -758,7 +759,11 @@ OVERLAY void M_LoadDefaults (void)
     }
   //jff 3/4/98 redundant range checks for hud deleted here
 }
-
+#else
+OVERLAY void M_LoadDefaults (void)
+{
+}
+#endif
 
 //
 // SCREEN SHOTS

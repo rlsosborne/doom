@@ -31,6 +31,10 @@
 #ifndef __LPRINTF__
 #define __LPRINTF__
 
+#ifdef HAVE_CONFIG_H
+#include "../config.h"
+#endif
+
 typedef enum                /* Logical output levels */
 {
   LO_INFO=1,                /* One of these is used in each physical output    */
@@ -46,14 +50,23 @@ typedef enum                /* Logical output levels */
 #define __attribute__(x)
 #endif
 
-extern int lprintf(OutputLevels pri, const char *fmt, ...) __attribute__((format(printf,2,3)));
 extern int cons_output_mask;
 extern int cons_error_mask;
+
+#ifdef DEBUG_PRINT_SUPPORT
+extern int lprintf(OutputLevels pri, const char *fmt, ...) __attribute__((format(printf,2,3)));
 
 /* killough 3/20/98: add const
  * killough 4/25/98: add gcc attributes
  * cphipps 01/11- moved from i_system.h */
 void I_Error(const char *error, ...) __attribute__((format(printf,1,2)));
+#else
+extern void I_SafeExit(int rc);
+
+#define lprintf(pri, fmt, ...) do { ; } while(0)
+#define I_Error(error, ...) I_SafeExit(-1)
+
+#endif
 
 #endif
 
