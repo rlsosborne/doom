@@ -49,10 +49,10 @@ static const char*   finaleflat; // made static const
 
 // defines for the end mission display text                     // phares
 
-#define TEXTSPEED    3     // original value                    // phares
-#define TEXTWAIT     250   // original value                    // phares
-#define NEWTEXTSPEED 0.01  // new value                         // phares
-#define NEWTEXTWAIT  1000  // new value                         // phares
+#define TEXTSPEED    (3 * FRACUNIT) // original value           // phares
+#define TEXTWAIT     (250 * FRACUNIT)  // original value        // phares
+#define NEWTEXTSPEED ((FRACUNIT + 50) / 100) // new value       // phares
+#define NEWTEXTWAIT  (1000 * FRACUNIT)  // new value            // phares
 
 // CPhipps - removed the old finale screen text message strings;
 // they were commented out for ages already
@@ -188,7 +188,7 @@ OVERLAY boolean F_Responder (event_t *event)
 // Get_TextSpeed() returns the value of the text display speed  // phares
 // Rewritten to allow user-directed acceleration -- killough 3/28/98
 
-OVERLAY static float Get_TextSpeed(void)
+OVERLAY static fixed_t Get_TextSpeed(void)
 {
   return midstage ? NEWTEXTSPEED : (midstage=acceleratestage) ? 
     acceleratestage=0, NEWTEXTSPEED : TEXTSPEED;
@@ -227,11 +227,12 @@ OVERLAY void F_Ticker(void)
 
   if (!finalestage)
     {
-      float speed;
+      fixed_t speed, endcount;
       speed = demo_compatibility ? TEXTSPEED : Get_TextSpeed();
+      endcount = FixedMul(strlen(finaletext) * FRACUNIT, speed);
+      endcount += (midstage ? NEWTEXTWAIT : TEXTWAIT);
       /* killough 2/28/98: changed to allow acceleration */
-      if (finalecount > strlen(finaletext)*speed +
-          (midstage ? NEWTEXTWAIT : TEXTWAIT) ||
+      if (finalecount > endcount ||
           (midstage && acceleratestage)) {       
         if (gamemode != commercial)       // Doom 1 / Ultimate Doom episode end
           {                               // with enough time, it's automatic
@@ -277,7 +278,8 @@ OVERLAY void F_TextWrite (void)
     int         cx = 10;
     int         cy = 10;
     const char* ch = finaletext; // CPhipps - const
-    int         count = (finalecount - 10)/Get_TextSpeed();                 // phares
+    int         count =
+      FixedDiv(((finalecount - 10) * FRACUNIT), Get_TextSpeed()) >> FRACBITS;
     int         w;
     
     if (count < 0)
